@@ -1,8 +1,6 @@
 
     </div>
 </div>
-<!-- jQuery and bootstrtap js -->
-<script src="assets/bundles/lib.vendor.bundle.js"></script>
 
 <!-- start plugin js file  -->
 <script src="assets/bundles/selectize.bundle.js"></script>
@@ -17,7 +15,8 @@
 <script src="assets/plugins/dropify/js/dropify.min.js"></script>
 <script src="assets/bundles/dataTables.bundle.js"></script>
 
-<script src="assets/js/core.js"></script>
+<script src="assets/bundles/apexcharts.bundle.js"></script>
+
 <script src="assets/js/vendors/selectize.js"></script>
 <script src="assets/plugins/select2/js/select2.min.js"></script>
 <script src="assets/js/custom.js"></script>

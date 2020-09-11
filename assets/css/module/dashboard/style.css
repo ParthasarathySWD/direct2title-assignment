@@ -1,0 +1,67 @@
+.main-section td i.icon-image{
+	font-size: 40px;
+	width: 75px;
+	border-radius: 50%;
+	color: #fff;
+	line-height: 75px;
+	text-align: center;
+	display: block;
+	height: 75px;
+}
+.main-section td i.icon-image.color1{
+	background: #45aaf2;
+}
+.main-section td i.icon-image.color2{
+	background: #00b5ad;
+}
+.main-section td i.icon-image.color3{
+	background: #17a2b8;
+}
+.main-section td{
+	vertical-align: middle;
+}
+.main-section p{
+	margin-bottom:0;
+	opacity: .5;
+}
+.main-section td{
+	color:#062942;
+	padding-bottom:30px;
+}
+.main-section td h5{
+	margin-bottom:5px;
+}
+.main-section td.border-img-middle{
+	position:relative;
+	z-index:1;
+	vertical-align:top;
+}
+.main-section td.border-img-middle::before {
+    background-color: #E0E4E8;
+    content: "";
+    height: 50%;
+    position: absolute;
+    left: 45px;
+    top: 0;
+    width: 9px;
+    z-index: -1;
+}
+.main-section td.border-img-middle::after {
+    background-color: #E0E4E8;
+    content: "";
+    height: 50%;
+    position: absolute;
+    left: 45px;
+    top: 50%;
+    width: 9px;
+    z-index: -1;
+}
+.main-section:first-child td.border-img-middle::before {
+	display:none;
+}
+.main-section:last-child td.border-img-middle::after {
+	display:none;
+}
+.create-dropdown a i{
+	margin-right:8px;
+}

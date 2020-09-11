@@ -26,7 +26,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-6 col-lg-6 pl-0">
-                                    <h3 class="card-title pt-3">Product Info</h3>
+                                    <h3 class="card-title pt-2">Product Info</h3>
                                 </div>
 
                                 <div class="col-md-6 col-lg-6 text-right pr-0 pt-2">
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pb-4 pt-2">
                         <div class="row">
 
                             <div class="col-md-4 col-lg-4">

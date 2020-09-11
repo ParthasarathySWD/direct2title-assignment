@@ -25,6 +25,10 @@
 <link rel="stylesheet" href="assets/css/theme1.css" id="stylesheet"/>
 <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="assets/css/custom.css" rel="stylesheet" />
+
+<!-- jQuery and bootstrtap js -->
+<script src="assets/bundles/lib.vendor.bundle.js"></script>
+<script src="assets/js/core.js"></script>
 </head>
 
 <body class="font-poppins">

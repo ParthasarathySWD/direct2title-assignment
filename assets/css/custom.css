@@ -97,3 +97,58 @@
 .btn:focus{
 	box-shadow: none;
 }
+.nowrap{
+	white-space: nowrap;
+}
+.btn-red {
+	color: #fff;
+	background-color: #b1403b;
+	border-color: #b1403b;
+}
+.btn-red:hover {
+	color: #fff;
+	background-color: #b1403b;
+	border-color: #b1403b;
+}
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-primary.dropdown-toggle:focus{
+	box-shadow: none;
+}
+
+table.order-summary-head tr td{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 15px;
+	padding-right: 0;
+	color: #fff;
+	border-right: 1px solid #5c98c5!important;
+	font-weight: 500;
+
+}
+table.order-summary-head tr td:first-child{
+	padding-left: 0px;
+}
+table.order-summary-head tr td:last-child{
+	border-right: 0!important;
+}
+table.order-summary-head tr td .text-muted {
+	color: #eee!important;
+	font-weight:normal;
+}
+.order-sum-header{
+	background: #2185d0;
+	border-top-left-radius: 8px!important;
+	border-top-right-radius: 8px!important;
+}
+.order-sum-header table tr{
+	background: transparent!important;
+}
+.card-body {
+	padding: 20px 20px 5px 20px;
+}
+.order-sum-tab .nav-tabs .nav-link {
+	padding-top:8px;
+	padding-bottom:8px;
+}
+.page .section-light, .page .section-dark, .page .section-white, .page .section-gray, .page .section-body {
+    padding: 0 0px;
+}

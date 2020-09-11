@@ -7,4 +7,8 @@ $(document).ready(function() {
 	$('.btn-preview-success').on('click', function(){
 		$('.upload-preview').slideToggle();
 	})
+
+	$('.custom-datatable').DataTable({
+		scrollX:true,
+	});
 });

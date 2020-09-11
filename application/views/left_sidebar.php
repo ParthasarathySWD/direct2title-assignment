@@ -89,9 +89,9 @@
                 <nav class="sidebar-nav">
                     <ul class="metismenu ci-effect-1">
                         <li class="g_heading">Directories</li>
-                        <li><a href="Order_entry"><i class="icon-home"></i><span data-hover="Dashboard">Dashboard</span></a></li>
-                        <li class="active"><a href="Order_entry"><i class="icon-calendar"></i><span data-hover="Place&nbsp;Order">Place Order</span></a></li>
-                        <li><a href="Order_entry"><i class="icon-speech"></i><span data-hover="My&nbsp;Orders">My Orders</span></a></li>
+                        <li class="active"><a href="Dashboard"><i class="icon-home"></i><span data-hover="Dashboard">Dashboard</span></a></li>
+                        <li><a href="Order_entry"><i class="icon-calendar"></i><span data-hover="Place&nbsp;Order">Place Order</span></a></li>
+                        <li><a href="Myorders"><i class="icon-speech"></i><span data-hover="My&nbsp;Orders">My Orders</span></a></li>
                         <li><a href="Order_entry"><i class="icon-notebook"></i><span data-hover="Review&nbsp;Orders">Review Orders</span></a></li>
                         <li><a href="Order_entry"><i class="icon-globe"></i><span data-hover="Printing&nbsp;Orders">Printing Orders</span></a></li>
 

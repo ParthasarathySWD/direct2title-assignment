@@ -1,10 +1,10 @@
 
 <!-- start body header -->
-<div id="page_top" class="section-body">
+<div id="page_top" class="section-body" style="">
     <div class="container-fluid">
         <div class="page-header">
             <div class="left">
-                <h1 class="page-title">Place Order</h1> 
+                <h1 class="page-title">Order Summary</h1> 
             </div>
             <div class="right">
                 <div class="notification d-flex">
@@ -18,25 +18,69 @@
 </div>
 <div class="section-body">
     <div class="container-fluid">
-        <h5 class="pb-1 inner-page-head">Single Order</h5>
         <div class="row">
             <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header pb-0 pt-0 pl-3 pr-3 order-sum-header">
+                        <table class="table table-vcenter text-nowrap table_custom mb-0 order-summary-head">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="small text-muted">Order Number</div>
+                                        <div>F19088674</div>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Loan Number</div>
+                                        <div>123456789</div>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Product/SubProduct</div>
+                                        <div>F-Life Of Loan</div>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Property Address</div>
+                                        <div>3133 LONGWOOD DRIVE, JACKSON, MS, 39212</div>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Borrower Name</div>
+                                        <div>WILLIAM</div>
+                                    </td>
+                                    <td>
+                                        <span class="tag tag-cyan">New</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-header pb-0 pt-0 pl-3 pr-3 order-sum-tab">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#All" aria-expanded="true">Summary</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Images" aria-expanded="true">Order Info</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Video" aria-expanded="false">Reports</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false">Attachments</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false">Notes</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false">History</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-6 col-lg-6 pl-0">
-                                    <h3 class="card-title pt-3">Product Info</h3>
+                                    <h3 class="card-title pt-2">Product Info</h3>
                                 </div>
 
-                                <div class="col-md-6 col-lg-6 text-right pr-0 pt-2">
+                                <div class="col-md-6 col-lg-6 text-right pr-0 pt-1">
 
-                                    <a href="Order_entry/bulk_entry" class="btn btn-info btn-sm">Bulk Order</a>
+                                    <a href="" class="btn btn-secondary btn-sm"> Raise Request</a>
+                                    <a href="" class="btn btn-info btn-sm"> Quick Order Entry</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pt-2">
                         <div class="col-md-12 col-lg-12 add-product-div p-0">
                             <div class="row">
                                 <div class="col-md-3 col-lg-3">
@@ -297,19 +341,17 @@
 
                         </div>
                     </div>
-                </div>
-                <div class="card">
+
                     <div class="card-header pb-0">
 
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-6 col-lg-6 pl-0">
-                                    <h3 class="card-title pt-3">Property Roles</h3>
+                                    <h3 class="card-title">Property Roles</h3>
                                 </div>
 
-                                <div class="col-md-6 col-lg-6 text-right pr-0 pt-2">
-
-                                    <a class="btn btn-info btn-sm">Add New</a>
+                                <div class="col-md-6 col-lg-6 text-right pr-0">
+                                    <a class="btn btn-info btn-sm" style="margin-top:-15px;">Add New</a>
                                 </div>
                             </div>
                         </div>
@@ -513,7 +555,7 @@
                                     <input type="text" class="form-control" name="" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-md-12 col-lg-12 mb-3">
+                            <div class="col-md-12 col-lg-12 mb-4">
                                 <div class="btn-list  text-right">
                                     <a href="#" class="btn btn-secondary">Cancel</a>
                                     <a href="#" class="btn btn-primary">Save</a>
