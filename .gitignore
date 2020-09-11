@@ -4,5 +4,7 @@ application/logs/
 application/config/config.php
 application/config/email.php
 application/config/database.php
-application/helpers/serverconfig_helper.php
+Templates/Pdf/
+assets/OCR/OCRImages/
+assets/lib/tinymce/plugins/jbimages/ci/application/config/uploader_settings.php
 .htaccess
