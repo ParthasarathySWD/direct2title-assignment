@@ -17,7 +17,8 @@ class Order_entry extends MY_Controller {
 			$this->load->helper('form');
 			$this->lang->load('keywords');
 			$this->load->helper('customer_pricing');
-			// $this->load->model('users/Mlogin');
+			/* No need to do static state managament here*/
+/*			// $this->load->model('users/Mlogin');
 			// $this->loggedid = $this->session->userdata('UserUID');
 			// $this->RoleUID = $this->session->userdata('RoleUID');
 			// $this->UserName = $this->session->userdata('UserName');
@@ -27,7 +28,7 @@ class Order_entry extends MY_Controller {
 			$this->RoleUID ='1';
 			$this->UserName ='techorg';
 			$this->RoleType ='Administrator';
-		}
+*/		}
 
 	}
 
