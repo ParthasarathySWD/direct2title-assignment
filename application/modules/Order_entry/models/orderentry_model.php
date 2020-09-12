@@ -961,9 +961,9 @@ class Orderentry_model extends CI_Model {
 		$this->load->model('Order_Complete/Order_complete_model');
 
 		if(strlen($Zipcode) > 5){ // Zip Validation added @Auth Uba On May 22 2020
-			if(strlen($Zipcode) == 10 && $Zipcode{5} == '-'){ // Digit 10 and has - @ 6 Pos
+			if(strlen($Zipcode) == 10 && substr($Zipcode, 5, 1) == '-'){ // Digit 10 and has - @ 6 Pos
 
-			}else if(strlen($Zipcode) == 9 && $Zipcode{5} != '-'){ // Digit 9 and should not - @ 6 Pos
+			}else if(strlen($Zipcode) == 9 && substr($Zipcode, 5, 1) != '-'){ // Digit 9 and should not - @ 6 Pos
 
 			}else {
 				return false;
