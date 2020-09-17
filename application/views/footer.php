@@ -20,8 +20,15 @@
 <script src="assets/js/vendors/selectize.js"></script>
 <script src="assets/plugins/select2/js/select2.min.js"></script>
 <script src="assets/js/custom.js"></script>
+<script src="assets/vendor/toastr/toastr.js" type="text/javascript"></script>
 
 <script src="assets/js/form-advanced.js"></script>
 <script src="assets/js/datatable.js"></script>
 </body>
 </html>
+<script type="text/javascript">
+	 $(function() {
+    	$('.select2').select2();
+    }	);
+</script>
+  

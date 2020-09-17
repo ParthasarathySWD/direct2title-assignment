@@ -27,8 +27,11 @@
 <link rel="stylesheet" href="assets/css/custom.css" rel="stylesheet" />
 
 <!-- jQuery and bootstrtap js -->
+<link rel="stylesheet" href="assets/vendor/toastr/toastr.css">
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script src="assets/js/core.js"></script>
+
+
 </head>
 
 <body class="font-poppins">

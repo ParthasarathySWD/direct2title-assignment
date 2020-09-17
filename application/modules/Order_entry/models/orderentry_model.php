@@ -247,8 +247,8 @@ class Orderentry_model extends CI_Model {
 				$this->IsInhouseExternal = 0;
 			}
 
-			$this->OrderDueDateTime = calculate_duedate($this->OrderEntryDatetime,$this->CustomerUID,$this->SubProductUID,$this->PriorityUID);
-			$this->OriginalOrderDueDateTime = $this->OrderDueDateTime;
+			// $this->OrderDueDateTime = calculate_duedate($this->OrderEntryDatetime,$this->CustomerUID,$this->SubProductUID,$this->PriorityUID);
+			// $this->OriginalOrderDueDateTime = $this->OrderDueDateTime;
 			$this->OrderDocsPath ='uploads/searchdocs/'.$date.'/'.$OrderNo.'/';
 
 
@@ -958,7 +958,7 @@ class Orderentry_model extends CI_Model {
 	function getzipdetails($Zipcode)
 	{
 	
-		$this->load->model('Order_Complete/Order_complete_model');
+		// $this->load->model('Order_Complete/Order_complete_model');
 
 		if(strlen($Zipcode) > 5){ // Zip Validation added @Auth Uba On May 22 2020
 			if(strlen($Zipcode) == 10 && substr($Zipcode, 5, 1) == '-'){ // Digit 10 and has - @ 6 Pos
@@ -991,9 +991,13 @@ class Orderentry_model extends CI_Model {
 		    	$Zipcode = substr($Zipcode, 0,5);	
 		    }
 		    
-  			$City = $this->Order_complete_model->getCityDetail($Zipcode);
-			$State = $this->Order_complete_model->getStateDetail($Zipcode);
-			$County = $this->Order_complete_model->getCountyDetail($Zipcode);
+  	// 		$City = $this->Order_complete_model->getCityDetail($Zipcode);
+			// $State = $this->Order_complete_model->getStateDetail($Zipcode);
+			// $County = $this->Order_complete_model->getCountyDetail($Zipcode);
+
+			$City = $this->getCityDetail($Zipcode);
+			$State = $this->getStateDetail($Zipcode);
+			$County = $this->getCountyDetail($Zipcode);
 			if(count($State) > 0 && count($County) > 0 && count($City) > 0){
 
 				return true;
@@ -1006,7 +1010,28 @@ class Orderentry_model extends CI_Model {
 			return false;
 		}
 	}
+	function getCityDetail($zipcode) {
 
+      /*$this->db->join('mstates','mcities.StateUID=mstates.StateUID','left');
+      $this->db->join('mcounties','mcities.StateUID=mcounties.StateUID','left');*/
+      $query = $this->db->get_where('mcities', array('ZipCode' => $zipcode));
+      return $query->result();
+
+  }
+
+  function getStateDetail($zipcode) {
+
+  	$this->db->join('mstates','mcities.StateUID=mstates.StateUID','left');
+  	$query = $this->db->get_where('mcities', array('ZipCode' => $zipcode));
+  	return $query->result();
+  }
+
+  function getCountyDetail($zipcode) {
+
+  	$this->db->join('mcounties','mcities.CountyUID=mcounties.CountyUID','left');
+  	$query = $this->db->get_where('mcities', array('ZipCode' => $zipcode));
+  	return $query->result();
+  }
 
 	function get_mordertypes($OrderTypeName){
 
