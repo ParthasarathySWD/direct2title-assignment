@@ -8184,7 +8184,7 @@ body.rtl.email_page .inbox_body .inbox_list {
 }
 
 body *::-webkit-scrollbar {
-    width: 0px;
+    width: 4px;
     height: 6px;
     transition: .3s background
 }
@@ -9099,7 +9099,7 @@ a:hover {
     width: 330px;
     background-color: #fff;
     border-right: 1px solid #E6E9ED;
-    padding: 15px 15px 20px 85px;
+    padding: 15px 15px 0px 85px;
     height: 100vh;
     left: 0;
     overflow-y: auto;

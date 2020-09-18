@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="assets/plugins/datatable/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="assets/plugins/datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
 <link rel="stylesheet" href="assets/plugins/datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
+<link rel="stylesheet" href="assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"/>
+
 <!-- Core css -->
 <link rel="stylesheet" href="assets/css/main.css"/>
 <link rel="stylesheet" href="assets/css/theme1.css" id="stylesheet"/>
