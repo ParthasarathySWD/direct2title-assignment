@@ -10612,7 +10612,8 @@ a.card-tabs-item.active {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1070
+    z-index: 1070;
+    overflow: auto;
 }
 
 .card-icon {

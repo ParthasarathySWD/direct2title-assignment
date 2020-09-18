@@ -23,7 +23,7 @@
             <div class="col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header pb-0 pt-0 pl-3 pr-3 order-sum-header">
-                        <table class="table table-vcenter text-nowrap table_custom mb-0 order-summary-head">
+                        <table class="table table-vcenter table_custom mb-0 order-summary-head">
                             <tbody>
                                 <tr>
                                     <td>
@@ -66,21 +66,17 @@
                     </div>
                 </div>
                 <div class="card">
-<!--                     <div class="card-header pb-0">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 pl-0">
-                                    <h3 class="card-title pt-2">Order Info</h3>
-                                </div>
-                            </div>
+
+                    <div class="card-header">
+                        <h3 class="card-title mb-2 pt-2">Template List</h3>
+                        <div class="card-options">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="card-body pt-2">
                         <div class="col-md-12 col-lg-12 add-product-div p-0">
                             <div class="row">
-                                <div class="col-md-6 col-lg-6">
-
-                                    <h3 class="card-title pt-2 mb-3">Template List</h3>
+                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
 
                                     <div class="form-group">
                                         <select name="beast" class="form-control select2">
