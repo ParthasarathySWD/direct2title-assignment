@@ -34,7 +34,6 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
 <!-- start body header -->
 <div id="page_top" class="section-body">
     <div class="container-fluid">
-        <form id="frmOrderEntry" enctype="multipart/form-data">
         <div class="page-header">
             <div class="left">
                 <h1 class="page-title">Place Order</h1> 
@@ -51,6 +50,7 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
 </div>
 <div class="section-body">
     <div class="container-fluid">
+        <form id="frmOrderEntry" enctype="multipart/form-data">
         <h5 class="pb-1 inner-page-head">Single Order</h5>
         <div class="row">
             <div class="col-md-12 col-lg-12">
@@ -391,9 +391,8 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
                             </div> -->
                         </div>
 
-</form>
-                    </div>
                 </div>
+            </div>
 
                 <div class="col-md-12 col-lg-12 mb-3 mt-4">
                     <div class="btn-list text-right">
@@ -404,6 +403,9 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
         
         </div>
     </div>
+</form>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script type="text/javascript">
