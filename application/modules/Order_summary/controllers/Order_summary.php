@@ -338,10 +338,9 @@ class Order_summary extends MY_Controller {
 */
 				//RUN ADDRESS STANDARDIZATION REQUEST
 				$verified_address = $this->usps->address_standardization($addresses);
-				//OUTPUT RESULTS	
-
+				// OUTPUT RESULTS	
 				$PropertyAddresses = $verified_address->Address->Error->Description;
-
+				
 				if($PropertyAddresses == null){
 
 					$UspsAddress = $verified_address;
