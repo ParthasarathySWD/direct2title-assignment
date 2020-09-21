@@ -723,9 +723,9 @@ public function previewtemplate()
 		$GetOrderInfoStyle=$this->Order_info_model->GetOrderInfoStyle($this->loggedid);
 		if($GetOrderInfoStyle == 1)
 		{
-			$rowtest = 'col-sm-12';
-			$colsm3 = 'col-sm-4';
-			$colsm12 = 'col-sm-8';
+			$rowtest = '';
+			$colsm3 = 'form-label';
+			$colsm12 = 'col-sm-12';
 			$style="<style>
 			label.col-sm-4 {
 				padding: 0px;
@@ -949,9 +949,9 @@ public function previewtemplate()
 		$GetOrderInfoStyle=$this->Order_info_model->GetOrderInfoStyle($this->loggedid);
 		if($GetOrderInfoStyle == 1)
 		{
-			$rowtest = 'col-sm-12';
-			$colsm3 = 'col-sm-4';
-			$colsm12 = 'col-sm-8';
+			$rowtest = '';
+			$colsm3 = 'form-label';
+			$colsm12 = 'col-sm-12';
 			$style="<style>
 			label.col-sm-4 {
 				padding: 0px;
@@ -1164,16 +1164,16 @@ public function previewtemplate()
 		      		{                                                    
 		      			if( in_array($Orderinfo->$value, ["0000-00-00", "", " ", "--", "__", "0000-00-00 00:00:00",NULL]) ) 
 		      			{
-		      				$str.= '<input size="16" type="text" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " class="form-control input-xs" '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
+		      				$str.= '<input size="16" type="date" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " class="form-control input-xs" '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
 		      			} 
 		      			else
 		      			{
-		      				$str.= '<input size="16" type="text" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value="'. date('m/d/Y',strtotime($Orderinfo->$value)) .'" class="form-control input-xs"  '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
+		      				$str.= '<input size="16" type="date" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value="'. date('m/d/Y',strtotime($Orderinfo->$value)) .'" class="form-control input-xs"  '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
 		      			}
 		      		}
 		      		else
 		      		{
-		      			$str.= '<input size="16" type="text" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " class="form-control input-xs" '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
+		      			$str.= '<input size="16" type="date" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " class="form-control input-xs" '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
 		      		}
 		      		$str.= '</div>
 		      		</div>';
@@ -1274,7 +1274,7 @@ public function previewtemplate()
 		        		$str.= '<div class="'.$rowtest.' form-group input_style">
 		        		<label for="exampleInputuname" style="font-weight:bold" class="'.$colsm3.'">'. $row->FieldName.'</label>
 		        		<div class="'.$colsm12.'"">
-		        		<select class=" mdl-select2 select2 legal_change input-xs" name="LegDesc"  id="LegDesc" '.$Disable.'>
+		        		<select class="form-control mdl-select2 select2 legal_change input-xs" name="LegDesc"  id="LegDesc" '.$Disable.'>
 		        		';  
 
 
@@ -1437,7 +1437,7 @@ public function previewtemplate()
 		          	$str.= '<div class="'.$rowtest.' form-group input_style">
 		          	<label for="exampleInputuname" style="font-weight:bold" class="'.$colsm3.'">'. $row->FieldName.'</label>
 		          	<div class="'.$colsm12.'">
-		          	<select class=" mdl-select2 select2 projectselect2 input-xs" name="'. $row->FieldName.'"  id="'. $row->FieldName.'" '.$Disable.'>
+		          	<select class="form-control mdl-select2 select2 projectselect2 input-xs" name="'. $row->FieldName.'"  id="'. $row->FieldName.'" '.$Disable.'>
 		          	';  
 		          	$str.= "<option value='' data-keyword='".$Keyword."'></option>";
 
@@ -1479,7 +1479,7 @@ public function previewtemplate()
 		          $str.= '<div class="'.$rowtest.' form-group input_style">
 		          <label for="exampleInputuname" style="font-weight:bold" class="'.$colsm3.'">'. $row->FieldName.'</label>
 		          <div  class="'.$colsm12.'">
-		          <select class=" mdl-select2 select2 input-xs" name="'. $row->FieldName.'"  id="'. $row->FieldName.'" '.$Disable.'>
+		          <select class="form-control mdl-select2 select2 input-xs" name="'. $row->FieldName.'"  id="'. $row->FieldName.'" '.$Disable.'>
 		           ';  
 
 		            $str.= "<option value=''></option>";
@@ -1505,7 +1505,7 @@ public function previewtemplate()
 		          $str.= '<div class="'.$rowtest.' form-group input_style">
 		          <label for="exampleInputuname" style="font-weight:bold" class="'.$colsm3.'">'. $row->FieldName.'</label>
 		          <div class="'.$colsm12.'">
-		          <select class=" mdl-select2 select2 input-xs" name="'. $row->FieldName.'"  id="'. $row->FieldName.'" '.$Disable.'>
+		          <select class="form-control mdl-select2 select2 input-xs" name="'. $row->FieldName.'"  id="'. $row->FieldName.'" '.$Disable.'>
 		           ';  
 
 		            $str.= "<option value=''></option>";

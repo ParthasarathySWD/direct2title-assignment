@@ -61,10 +61,10 @@
                                    <input id="OrderUID" name="OrderUID" type="hidden" value="<?php echo $order_details->OrderUID ?>"/>
                                  <iframe id="iFramePDF" src="" height="450" width="100%"></iframe>
                                  <div class="col-sm-12 text-right p-0 mt-4 mb-3">
-                                  <a href="" id="reportsDownload" class="btn btn-md btn-default text-success" download>
+                                  <a href="" id="reportsDownload" class="btn btn-md btn-success" download>
                                     Download
-                                </a>
-
+                                  </a>
+                                <!--   <button class="btn btn-info  active" id="reportsDownload">Download</button>  -->
                                         <!-- <button id="addReport" data-id="<?php echo $order_details->OrderUID ?>" class="btn btn-success">Add Report to Attachments</button>
                                      <?php if($order_details->TemplateUID == 1): ?>
                                         <button class="btn btn-info" type="button" id="AddAttachment" data-id="<?php echo $order_details->OrderUID ?>">Add Tax 

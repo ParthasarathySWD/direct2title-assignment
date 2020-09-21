@@ -105,7 +105,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                                 </div>
                             </div>  
 
-                            <div class="row">
+                            <div class="row MainContent">
                               <!-- <form method="POST" name="myForm1" id="myForm1" enctype="multipart/form-data"> -->
 
                                 <div class="col-md-3 col-lg-3">
@@ -156,23 +156,21 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                             </form>
                         </div>
 
-
-
-                                <div class="col-md-9 col-lg-9">
-
-                                    <h3 class="card-title pt-2 mb-3">Preview Panel</h3>
-                                    <div class="btn-list text-left mt-3" id="preview-container">
-                                        <button class="btn btn-info save save_order_info"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button> 
-                                        <button class="btn btn-secondary Reset"><i class="fa fa-mail-reply-all" aria-hidden="true"></i>Reset</button> 
-                                        <button class="btn btn-primary EditTemplate"> <i class="fa fa-pencil" aria-hidden="true"></i>Edit</button>
-                                    </div><br>
-                                    <textarea id="mymce1" name="content"></textarea>
-                                    <div class="btn-list text-left mt-3">
-                                     <button class="btn btn-info save save_order_info"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button> 
-                                     <button class="btn btn-secondary Reset"><i class="fa fa-mail-reply-all" aria-hidden="true"></i>Reset</button> 
-                                     <button class="btn btn-primary EditTemplate"> <i class="fa fa-pencil" aria-hidden="true"></i>Edit</button>
-                                 </div>
-
+                        <div class="col-md-9 col-lg-9">
+                          <h3 class="card-title pt-2 mb-3">Preview Panel</h3>
+                          <div class="btn-list text-left mt-3" id="preview-container">
+                            <button class="btn btn-info save save_order_info"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button> 
+                            <button class="btn btn-secondary Reset"><i class="fa fa-mail-reply-all" aria-hidden="true"></i>Reset</button> 
+                            <button class="btn btn-primary EditTemplate"> <i class="fa fa-pencil" aria-hidden="true"></i>Edit</button>
+                          </div><br>
+                          <textarea id="mymce" name="content"></textarea>
+                          <div class="btn-list text-left mt-3">
+                           <button class="btn btn-info save save_order_info"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button> 
+                           <button class="btn btn-secondary Reset"><i class="fa fa-mail-reply-all" aria-hidden="true"></i>Reset</button> 
+                           <button class="btn btn-primary EditTemplate"> <i class="fa fa-pencil" aria-hidden="true"></i>Edit</button>
+                         </div>
+                       </div>
+                             </div>
                                  <div class="row TemplateMappingContent">
                                     <div class="col-md-12">
                                       <div class="col-sm-12 form-group" style="padding: 0px;">
@@ -207,7 +205,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                         </div>
 
                         <div class="col-sm-8 md-editor-left1">
-                            <div class="col-md-9 col-lg-9">
+                            <div class="col-md-12 col-lg-12">
                                 <h6 class="card-title pt-2 mb-3">Preview Panel</h6>
                                 <div id="preview-container">
                                  <!--  <button class="btn btn-space btn-success active" id="EditContentTemplate"> <i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
@@ -216,6 +214,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                                   <button class="btn btn-info  active" id="EditContentTemplate"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button> 
 
                                   <button class="btn btn-primary CloseEditContentTemplate"> <i class="fa fa-close" aria-hidden="true"></i> Close</button>
+                                </br>
                                   <!-- <a target="_blank" href=" " id="ViewTemplate" name="ViewTemplate" class="ViewTemplate btn btn-space btn-primary active pull-right" style="font-size:12px;"><i class="fa fa-eye " ></i> View Template</a> -->
                                   <textarea id="mymce1" name="content"></textarea>
                               </div>
@@ -241,6 +240,9 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
         <div class="col-md-12 col-lg-12 mb-3 mt-0 p-0">
 
             <div class="btn-list text-right">
+
+                <p data-modal="confirmModal" class="md-trigger trigger_typing_complete " ></p>
+                    <p data-modal="ReviewModal" class="md-trigger trigger_typing_review_complete " ></p>
 
              <?php if($this->common_model->GetExceptionOrderStatus($order_details->OrderUID)>0  && $this->common_model->check_revieworder_is_assignedtouser($order_details->OrderUID) <= 0){?>
               <button data-placement="top" data-toggle="exceptionclear_popover" data-container="body" type="button" data-html="true" class="btn btn-success" id="Exceptionbutton" style=""><i class="mdi mdi-smartphone-erase" style="color: #fff;"></i> &nbsp; Clear Exception</button>
@@ -273,6 +275,41 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
           <button data-placement="top" data-toggle="reviewonholdpopover" data-container="body" type="button" data-html="true" class="btn btn-md btn-danger hide-btn" id="holdorder" ><i class="fa fa-ban" style="color: #fff;"></i> &nbsp; Review On-Hold</button>  
       <?php } ?>
   <?php     } ?>
+
+  <?php if($checkholdstatus == 0 ){ ?>
+    <p class="btn btn-danger auto_save_info md-trigger typing_complete" ><i class="fa fa-save" style="color: #fff;margin-top: 12px;"></i> &nbsp; Typing Complete</p>
+     <button data-placement="top" data-toggle="popover" data-container="body" type="button" data-html="true" class="btn btn-danger" id="holdorder" style=""><i class="fa fa-ban" style="color: #fff;"></i> &nbsp; Hold Order</button>
+    <!--  <div id="popover-content" class="hide">
+      <form class="form-inline" id="onholdform" action="#" method="post">
+        <input class="OrderUID" name="OrderUID" type="hidden" value="<?php echo $OrderrUID;?>">
+        <select class="form-control" id="selectonholdtype" name="selectonholdtype" style="width: 244px;height: 31px;padding: 0px;" >
+          <option value="">--Select--</option>
+          <?php $monholddetails = $this->common_model->getmonholddetails();
+          foreach ($monholddetails as $key => $value) {?>
+            <option value="<?php echo $value->OnHoldTypeUID;?>"><?php echo $value->OnHoldName;?></option>
+          <?php } ?>
+        </select>
+
+        <br><br>
+
+        <textarea  class="remarkstext"  placeholder="Enter Remarks Here..." name="remarks" style="width:244px;"></textarea>
+        <div class="input-group">
+          <br>
+          <select class="form-control onholdbutton" name="selectreason" >
+            <?php
+            $sections = $this->Common_model->Get_sections();
+            foreach ($sections as $key => $section) { ?>
+              <option value="<?php echo $section->SectionUID; ?>"><?php echo $section->SectionName;?></option>;
+            <?php } ?>
+          </select> &nbsp;         
+          <button class="btn btn-primary onholdsubmit" type="submit" style="height: 30px;" >Submit</button>
+        </div>
+      </form> 
+    </div> -->
+  <?php } else { ?>
+    <button class="btn btn-md btn-danger unholdorder" id="unholdorder" name="<?php echo $OrderrUID;?>" ><i class="fa fa-ban" style="color: #fff;"></i> &nbsp; Release Order</button>
+  <?php } ?>
+
   <?php if ($canrevise) { ?>
       <button type="button" class="btn btn-success" id="enablerevise" data-toggle="dropdown">
           <i class="fa fa-recycle" style="color: #fff;"></i> Enable Revise</button>
@@ -562,7 +599,44 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
     $(this).closest('tr').find('.choose').addClass('btn-twitter');       
 
    });
+   $(document).ready(function () {
 
+      trigger_fun();
+
+
+      //$('#TemplatesMappingUID').trigger('change');
+
+          App.formElements();
+
+          // select_mdl();
+
+          //         $('.select2').select2({
+          //           theme: "bootstrap",
+          //         });
+
+  
+        //initialize the javascript
+      $(".datepicker").datetimepicker({
+        format: "mm/dd/yyyy",
+        autoclose: true,
+        minView : 2,
+        componentIcon: '.mdi.mdi-calendar',
+        navIcons:{
+          rightIcon: 'mdi mdi-chevron-right',
+          leftIcon: 'mdi mdi-chevron-left'
+        }
+      });
+
+      /*$('.datepicker').datetimepicker({ 
+        format: 'mm/dd/yyyy', 
+        minView : 2,
+        autoclose: true,
+        pickTime: false,
+        pickerPosition: "bottom-left",
+      });
+      */
+
+      });
 
   // select_mdl();
 
@@ -1091,6 +1165,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
 
     $('#TemplatesMappingUID').change(function(event) {
       event.preventDefault();
+      alert("HAi");
       var TemplateUID = $(this).val();
       var OrderUID = $('#OrderUID').val();
       var IsTemplateSaved = $('#IsTemplateSaved').val();
@@ -1447,5 +1522,13 @@ $("body").on("change" , "#PropertyCountyName,#PropertyCityName,#PropertyStateCod
           .val($(this).attr('data-value'));
       });
     } 
+     function call_event(){
+      show_content();   
+      componentHandler.upgradeDom();
+      select_mdl();
+     /* $('.select2').select2({
+        theme: "bootstrap",
+      }); */
+    }
 
 </script>
