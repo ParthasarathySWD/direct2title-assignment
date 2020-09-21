@@ -40,7 +40,7 @@
                                         <th>Template Code</th>
                                         <th>Template Name</th>
                                         <th>Status</th>
-                                        <th class="text-center" style="width:120px">Actions</th>
+                                        <th class="text-center" style="width:100px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
