@@ -153,3 +153,21 @@ table.order-summary-head tr td .text-muted {
 .page .section-light, .page .section-dark, .page .section-white, .page .section-gray, .page .section-body {
 	padding: 0 0px;
 }
+.select2-selection--multiple {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff!important;
+    background-clip: padding-box;
+    border: 1px solid #E8E9E9!important;
+    border-radius: .25rem!important;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.display-inline-block{
+	display: inline-block;
+}
+.width-auto{
+	width:auto;
+}

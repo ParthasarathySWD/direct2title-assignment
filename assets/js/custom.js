@@ -11,4 +11,14 @@ $(document).ready(function() {
 	$('.custom-datatable').DataTable({
 		scrollX:true,
 	});
+	
+	$(window).resize(function() {
+		$($.fn.dataTable.tables( true ) ).css('width', '100%');
+		$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+	});
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+		$($.fn.dataTable.tables( true ) ).css('width', '100%');
+		$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+	});
+
 });
