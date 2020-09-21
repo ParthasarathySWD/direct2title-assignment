@@ -25,12 +25,9 @@
                     <div class="card-header pb-0">
                         <div class="col-md-12">
                             <div class="row">
-  <!--                               <div class="col-md-6 col-lg-6 pl-0">
-                                    <h3 class="card-title pt-2">Assignment Orders</h3>
-                                </div> -->
                                 <div class="col-md-12 col-lg-12 text-right pr-0 pt-1">
-                                    <button type="button" class="btn btn-red btn-sm"><i class="fe fe-plus"></i> Add New Template
-                                    </button>
+                                    <a href="template/add" type="button" class="btn btn-red btn-sm"><i class="fe fe-plus"></i> Add New Template
+                                    </a>
                                 </div>
                             </div>
                         </div>
