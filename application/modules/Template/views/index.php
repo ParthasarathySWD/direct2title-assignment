@@ -22,14 +22,13 @@
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <div class="card">
-                    <div class="card-header pb-0">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 text-right pr-0 pt-1">
-                                    <a href="template/add" type="button" class="btn btn-red btn-sm"><i class="fe fe-plus"></i> Add New Template
+
+
+                    <div class="card-header">
+                        <a href="Template/add" type="button" class="btn btn-red btn-sm mt-2"><i class="fe fe-plus"></i> Add New Template
                                     </a>
-                                </div>
-                            </div>
+                        <div class="card-options">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
                         </div>
                     </div>
                     <div class="card-body pb-4 pt-3">

@@ -20,5 +20,9 @@ $(document).ready(function() {
 		$($.fn.dataTable.tables( true ) ).css('width', '100%');
 		$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 	});
+	$('.card-options-fullscreen').on('click', function(e){
+		$($.fn.dataTable.tables( true ) ).css('width', '100%');
+		$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+	});
 
 });

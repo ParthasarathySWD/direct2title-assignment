@@ -21,11 +21,17 @@
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <div class="card">
-                    <div class="col-md-12 col-lg-12">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#add-template" aria-expanded="true">Add Template</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#audit-log" aria-expanded="true">Audit Log</a></li>
-                        </ul>
+
+                    <div class="card-header">
+                        <div class="col-md-12 col-lg-12 p-0">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active pt-2 pb-3" data-toggle="tab" href="#add-template" aria-expanded="true">Add Template</a></li>
+                                <li class="nav-item"><a class="nav-link pt-2 pb-3" data-toggle="tab" href="#audit-log" aria-expanded="true">Audit Log</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-options" style="position: absolute;right: 25px;">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                        </div>
                     </div>
 
                     <div class="tab-content">
@@ -252,9 +258,10 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script src="<?php echo base_url('assets/lib/tinymce/tinymce.min.js'); ?>"></script>
-    <script type="text/javascript">
+<script src="<?php echo base_url('assets/lib/tinymce/tinymce.min.js'); ?>"></script>
+<script type="text/javascript">
 
     //Init tinymce 
     if($("#mymce1").length > 0){
