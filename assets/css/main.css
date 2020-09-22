@@ -11207,7 +11207,7 @@ textarea[cols] {
 .custom-checkbox .custom-control-label {
     vertical-align: middle;
     top: 1px;
-    position: absolute
+    /*position: absolute*/
 }
 
 .custom-checkbox .custom-control-label:before {
