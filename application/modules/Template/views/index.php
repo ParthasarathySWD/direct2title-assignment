@@ -25,7 +25,7 @@
 
 
                     <div class="card-header">
-                        <a href="Template/add" type="button" class="btn btn-red btn-sm mt-2"><i class="fe fe-plus"></i> Add New Template
+                        <a href="Template/add_template" type="button" class="btn btn-red btn-sm mt-2"><i class="fe fe-plus"></i> Add New Template
                                     </a>
                         <div class="card-options">
                             <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
@@ -39,82 +39,33 @@
                                     <tr>
                                         <th>Template Code</th>
                                         <th>Template Name</th>
-                                        <th>Status</th>
+                                        <!-- <th>Status</th> -->
                                         <th class="text-center" style="width:100px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>12345</td>
-                                        <td>Deed</td>
-                                        <td>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                                    <?php foreach ($TemplateDetails as $row): ?>
+                                        <tr>
+                                           <td style="text-align: left;"><?php echo $row->TemplateCode; ?></td> 
+                                           <td style="text-align: left;"><?php echo $row->TemplateName; ?></td>
+                                           <!-- <td>
+                                            <label class="custom-switch"> -->
+                                               <!--  <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input"> -->
+                                               <!-- <?php if ($row->IsDynamicTemplate==0): ?>
+                                                <input type="checkbox" class="custom-switch-input" name="IsDynamicTemplate<?php echo $row->TemplateUID; ?>" id="IsDynamicTemplate<?php echo $row->TemplateUID; ?>"  value="<?php echo $row->TemplateUID; ?>" onClick="saveToDatabaseStatus(1,'IsDynamicTemplate','<?php echo $row->TemplateUID; ?>')">
+                                                <?php elseif ($row->IsDynamicTemplate==1): ?>
+                                                    <input type="checkbox" name="IsDynamicTemplate<?php echo $row->TemplateUID; ?>" class="custom-switch-input" id="IsDynamicTemplate<?php echo $row->TemplateUID; ?>" value="<?php echo $row->TemplateUID; ?>"  checked="strue" onClick="saveToDatabaseStatus(0,'IsDynamicTemplate','<?php echo $row->TemplateUID; ?>')">
+                                                <?php endif; ?>
                                                 <span class="custom-switch-indicator"></span>
                                                 <span class="custom-switch-description"></span>
                                             </label>
-                                        </td>
+                                        </td> -->
                                         <td class="actions text-center">
-                                            <a href="Order_summary" class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></a>
+                                            <a href="<?php echo base_url()."template/edit/".$row->TemplateUID; ?>" class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>12345</td>
-                                        <td>Deed</td>
-                                        <td>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description"></span>
-                                            </label>
-                                        </td>
-                                        <td class="actions text-center">
-                                            <a href="Order_summary" class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>12345</td>
-                                        <td>Deed</td>
-                                        <td>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description"></span>
-                                            </label>
-                                        </td>
-                                        <td class="actions text-center">
-                                            <a href="Order_summary" class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>12345</td>
-                                        <td>Deed</td>
-                                        <td>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description"></span>
-                                            </label>
-                                        </td>
-                                        <td class="actions text-center">
-                                            <a href="Order_summary" class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>12345</td>
-                                        <td>Deed</td>
-                                        <td>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description"></span>
-                                            </label>
-                                        </td>
-                                        <td class="actions text-center">
-                                            <a href="Order_summary" class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <?php endforeach; ?>
+                            </tbody>
                             </table>
                         </div>
                     </div>
