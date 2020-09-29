@@ -92,9 +92,9 @@
                         <li class="active"><a href="Dashboard"><i class="icon-home"></i><span data-hover="Dashboard">Dashboard</span></a></li>
                         <li><a href="Order_entry"><i class="icon-calendar"></i><span data-hover="Place&nbsp;Order">Place Order</span></a></li>
                         <li><a href="Myorders"><i class="icon-speech"></i><span data-hover="My&nbsp;Orders">My Orders</span></a></li>
-                        <li><a href="Order_entry"><i class="icon-notebook"></i><span data-hover="Review&nbsp;Orders">Review Orders</span></a></li>
-                        <li><a href="Order_entry"><i class="icon-globe"></i><span data-hover="Printing&nbsp;Orders">Printing Orders</span></a></li>
-
+                        <li><a href="Review_orders"><i class="icon-notebook"></i><span data-hover="Review&nbsp;Orders">Review Orders</span></a></li>
+                        <li><a href="Printing_Orders"><i class="icon-globe"></i><span data-hover="Printing&nbsp;Orders">Printing Orders</span></a></li>
+                        <li><a href="Completed_Orders"><i class="fa fa-list" data-toggle="tooltip" title="" data-original-title="fa fa-list"></i><span data-hover="Completed&nbsp;Orders">Completed Orders</span></a></li>
                     </ul>
                 </nav>
             </div>

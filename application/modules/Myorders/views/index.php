@@ -39,7 +39,7 @@
                     <div class="card-body pb-4 pt-3">
 
                         <div class="col-md-12 col-lg-12">
-                            <table class="table table-vcenter table-new custom-datatable text-nowrap" cellspacing="0" id="myordertable" style="width:100%; ">
+                            <table class="table table-vcenter table-new text-nowrap" cellspacing="0" id="myordertable" style="width:100%; ">
                                 <thead>
                                     <tr>
                                         <th>Order No</th>
