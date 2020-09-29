@@ -18,6 +18,9 @@
 <script src="assets/js/vendors/selectize.js"></script>
 <script src="assets/plugins/select2/js/select2.min.js"></script>
 <script src="assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="assets/plugins/jquery-steps/jquery.steps.js"></script>
+<script src="assets/lib/tinymce/tinymce.min.js"></script>
+<script src="assets/lib/fSelect-Selectall/fSelect.js"></script>
 
 <script src="assets/js/custom.js"></script>
 <script src="assets/vendor/toastr/toastr.js" type="text/javascript"></script>

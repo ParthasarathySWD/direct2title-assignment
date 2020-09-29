@@ -1,0 +1,142 @@
+.top-box{
+    background: #17a2b8;
+    padding-bottom: 6px;
+    border-top-right-radius: .55rem;
+    border-top-left-radius: .55rem;
+} 
+.top-box .box-left p.name-p{
+
+    margin:0;
+    line-height:1.8;
+    color: #fdfdfd;
+    font-weight:normal;
+    font-size:12px;
+}
+.top-box .box-left p.name-p span{
+
+    color:#fff;
+    font-weight:600;
+    font-size: 14px;
+}
+.top-box .box-center p.name-p{
+
+    margin:0;
+    padding-top:4px;
+    line-height:1.8;
+    color: #fdfdfd;
+    font-weight:normal;
+    font-size:12px;
+}
+.top-box .box-center p.name-p span{
+
+    color:#fff;
+    font-weight:600;
+    font-size: 14px;
+}
+.top-box .box-center h4{
+    font-size: 14px;
+}
+.top-box .box-right p.name-p{
+
+    margin:0;
+    line-height:1.8;
+    color: #fdfdfd;
+    font-weight:normal;
+    font-size:12px;
+}
+.top-box .box-right p.name-p span{
+
+    color:#fff;
+    font-weight:600;
+    font-size: 14px;
+}
+.order-sum-tab{
+    background: #f4f5f8;
+}
+.order-sum-tab .nav-tabs .nav-link{
+    font-size: 12px;
+    color: #212529;
+    padding: 10px 12px;
+    font-weight: 500;
+}
+.order-sum-tab .nav-tabs .nav-item{
+    padding-left:0;
+    padding-right:0;
+}
+.order-sum-tab .nav-tabs .nav-link i.menu-icon{
+    font-size: 17px!important;
+    margin-right: 10px!important;
+}
+.top-box .list-group-item {
+    background-color: transparent;
+    border:0;
+    color:#fff;
+}
+.top-box .box-left p.name-p .badge {
+    font-size: 11px;
+}
+.top-box i.fe {
+    color:#fff;
+}
+.top-box i.fe-check-circle {
+    position: relative;
+    top: 2px;
+    margin-right: 3px;
+}
+.display-block{
+    display: block;
+}
+.custom-file-input:lang(en)~.custom-file-label::after {
+    content: "\e9ee";
+    font-family: 'feather' !important;
+}
+.custom-file-input{
+    cursor: pointer;
+}
+.custom-file-label {
+    font-size: 12px;
+    padding-right: 35px;
+}
+.add-product-div .input-group-text{
+    height: 33px;
+}
+.contact-wizard.wizard .steps>ul>li {
+    width: 33.33%;
+}
+.custom-switch-description {
+    color: #202121;
+    font-size: 14px;
+}
+.contact-wizard.wizard > .content > .body {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.contact-wizard.wizard .content {
+    min-height: auto;
+}
+.contact-wizard.wizard .content .add-another-cnt {
+    font-size:13px;
+    cursor: pointer;
+}
+.contact-wizard.wizard .content .add-another-cnt:hover{
+    text-decoration:underline;
+}
+.contact-wizard.wizard > .content > .body input {
+    border: 1px solid #E8E9E9!important;
+}
+.contact-wizard.wizard > .content {
+    border: 1px solid #E8E9E9;
+    background : #fff;
+}
+.action-icon i.fe{
+    font-size:20px;
+}
+.select2-selection--multiple {
+    font-size: 13px;
+}
+.add_toogle_cust_icon:before{
+    content: "\e98c";
+    font-family: 'feather' !important;
+    color:#b1403b;
+}

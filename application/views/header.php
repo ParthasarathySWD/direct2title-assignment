@@ -22,6 +22,8 @@
 <link rel="stylesheet" href="assets/plugins/datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
 <link rel="stylesheet" href="assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"/>
 
+<link rel="stylesheet" href="assets/plugins/jquery-steps/jquery.steps.css">
+<link rel="stylesheet" type="text/css" href="assets/lib/fSelect-Selectall/fSelect.css">
 <!-- Core css -->
 <link rel="stylesheet" href="assets/css/main.css"/>
 <link rel="stylesheet" href="assets/css/theme1.css" id="stylesheet"/>
