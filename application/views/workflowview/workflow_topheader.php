@@ -197,7 +197,7 @@ background: #f4f5f8;   ">
   <div class="container-fluid">
     <div class="row" style="margin-left:-15px;margin-right:-15px;">
       <div class="col-12 col-md-12 hh-grayBox">
-        <div class="row justify-content-between">
+        <div class="row justify-content-between ">
           <div class="order-tracking completed">
             <span class="is-complete"></span>
             <p>Order Placed</p>
