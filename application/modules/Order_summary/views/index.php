@@ -93,7 +93,7 @@ if($order_details->PriorityUID == '1'){
 <div class="section-body">
     <div class="container-fluid">
     <form action="#" name="frm_OrderSummary" id="frm_OrderSummary" onsubmit="return false;">
-
+        <input class="mdl-textfield__input  input-xs" type="hidden" id="OrderUID" name="OrderUID" value="<?php echo $order_details->OrderUID ?>">
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <div class="card">
@@ -1094,8 +1094,6 @@ if($order_details->PriorityUID == '1'){
 
     event.preventDefault();
 
-    alert("Hai");
-
     button = $(this);
     button_val = $(this).val();
     button_text = $(this).html();
@@ -1130,37 +1128,13 @@ if($order_details->PriorityUID == '1'){
     {
       $('.loading').hide()
       if(data['validation_error'] == 0){
-        // $.gritter.add({
-        //   title: data['message'],
-        //       // text: data['message'],
-        //       class_name: 'color success',
-        //       fade: true,
-        //       speed:'slow',
-        //       time : 100,
-        //       after_close: function(){
-        //         if(button_val == 1)
-        //         {
-        //           $OrderUID = OrderUID;
-
-        //           window.location.reload();
-        //         }
-        //       }
-        //     });
-
-            toastr["success"]("", data['message']);
+        
+        toastr["success"]("", data['message']);
 
 
       }else{
-        // $.gritter.add({
-        //   title: data['message'],
-        //       // text: data['message'],
-        //       class_name: 'color danger',
-        //       fade: true,
-        //       time: 100,
-        //       speed:'slow',
-
-        //     });
-  toastr["error"]("", data['message']);
+        
+        toastr["error"]("", data['message']);
         button.html(button_text);
         button.removeAttr("disabled");
 

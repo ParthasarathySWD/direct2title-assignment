@@ -342,6 +342,55 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
     <script src="<?php echo base_url('assets/lib/tinymce/tinymce.min.js'); ?>"></script>
     <script type="text/javascript">
 
+$(document).ready(function(){
+      //Init tinymce 
+    // if($("#mymce1").length > 0){
+      tinymce.init({
+        selector: "textarea#mymce1",
+        theme: "modern",
+        height: 600,
+        statusbar: true,
+        branding: false,
+        content_style: ".mce-content-body {font-size:11px;font-family:Arial;}",
+        fontsize_formats: "8px 9px 10px 11px 12px 14px 16px 18px 24px 36px",
+        lineheight_formats: " 3pt 4pt 5pt 6pt 7pt 8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 26pt 36pt",
+        plugins: [
+        "advlist autolink lists link charmap preview anchor",
+        "searchreplace visualblocks code fullscreen fullpage",
+        "insertdatetime table contextmenu paste template jbimages",
+        "pagebreak","textcolor","colorpicker", "textpattern","lineheight"
+        ],
+        toolbar: 'formatselect fontselect fontsizeselect | bold italic underline strikethrough | forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | jbimages | lineheightselect ',
+        pagebreak_separator: '<p style="page-break-after: always;"></p>',
+        setup: function (editor) {        
+        }
+    });
+  // }
+
+  // if($("#mymce").length > 0){
+      tinymce.init({
+        selector: "textarea#mymce",
+        theme: "modern",
+        height: 600,
+        statusbar: true,
+        branding: false,
+        content_style: ".mce-content-body {font-size:11px;font-family:Arial;}",
+        fontsize_formats: "8px 9px 10px 11px 12px 14px 16px 18px 24px 36px",
+        lineheight_formats: " 3pt 4pt 5pt 6pt 7pt 8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 26pt 36pt",
+        plugins: [
+        "advlist autolink lists link charmap preview anchor",
+        "searchreplace visualblocks code fullscreen fullpage",
+        "insertdatetime table contextmenu paste template jbimages",
+        "pagebreak","textcolor","colorpicker", "textpattern","lineheight"
+        ],
+        toolbar: 'formatselect fontselect fontsizeselect | bold italic underline strikethrough | forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | jbimages | lineheightselect ',
+        pagebreak_separator: '<p style="page-break-after: always;"></p>',
+        setup: function (editor) {        
+        }
+    });
+  // }
+
+})
 
     $('.Preview_Complete').click(function(e){
       e.preventDefault();
@@ -464,6 +513,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
     };
   })();
           function show_content(){
+            console.trace('trace');
         var editorContent=tinymce.get('mymce').getContent();
         var formData = new FormData($('#myForm1')[0]);
         formData.append('content',editorContent);
@@ -511,52 +561,6 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
       }, 300 );
   }
 
-    //Init tinymce 
-    if($("#mymce1").length > 0){
-      tinymce.init({
-        selector: "textarea#mymce1",
-        theme: "modern",
-        height: 600,
-        statusbar: true,
-        branding: false,
-        content_style: ".mce-content-body {font-size:11px;font-family:Arial;}",
-        fontsize_formats: "8px 9px 10px 11px 12px 14px 16px 18px 24px 36px",
-        lineheight_formats: " 3pt 4pt 5pt 6pt 7pt 8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 26pt 36pt",
-        plugins: [
-        "advlist autolink lists link charmap preview anchor",
-        "searchreplace visualblocks code fullscreen fullpage",
-        "insertdatetime table contextmenu paste template jbimages",
-        "pagebreak","textcolor","colorpicker", "textpattern","lineheight"
-        ],
-        toolbar: 'formatselect fontselect fontsizeselect | bold italic underline strikethrough | forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | jbimages | lineheightselect ',
-        pagebreak_separator: '<p style="page-break-after: always;"></p>',
-        setup: function (editor) {        
-        }
-    });
-  }
-
-  if($("#mymce").length > 0){
-      tinymce.init({
-        selector: "textarea#mymce",
-        theme: "modern",
-        height: 600,
-        statusbar: true,
-        branding: false,
-        content_style: ".mce-content-body {font-size:11px;font-family:Arial;}",
-        fontsize_formats: "8px 9px 10px 11px 12px 14px 16px 18px 24px 36px",
-        lineheight_formats: " 3pt 4pt 5pt 6pt 7pt 8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 26pt 36pt",
-        plugins: [
-        "advlist autolink lists link charmap preview anchor",
-        "searchreplace visualblocks code fullscreen fullpage",
-        "insertdatetime table contextmenu paste template jbimages",
-        "pagebreak","textcolor","colorpicker", "textpattern","lineheight"
-        ],
-        toolbar: 'formatselect fontselect fontsizeselect | bold italic underline strikethrough | forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | jbimages | lineheightselect ',
-        pagebreak_separator: '<p style="page-break-after: always;"></p>',
-        setup: function (editor) {        
-        }
-    });
-  }
   //   //Init tinymce 
   //   if($("#mymce").length > 0){
   //       tinymce.init({
@@ -606,7 +610,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
 
       //$('#TemplatesMappingUID').trigger('change');
 
-          App.formElements();
+          // App.formElements();
 
           // select_mdl();
 
@@ -741,7 +745,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                   $('.save').attr("disabled", false);
                   $('.save').html('<i class="fa fa-floppy-o"></i> Save');
                   $('#IsTemplateSaved').val('1');
-                  attach();
+                  // attach();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                 },
@@ -769,11 +773,13 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                 //console.log(response);
                 show_content();
                 call_event(); 
+                console.log(response);
                 //$( ".currency" ).trigger( "change" );
                 $('.save').attr("disabled", false);
                 $('.save').html('<i class="fa fa-floppy-o"></i> Save');
                 $('#IsTemplateSaved').val('1');
-                attach();            
+
+                // attach();            
               },
               error: function (jqXHR, textStatus, errorThrown) {
               },
@@ -1116,7 +1122,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
               $('.Reset').html('<i class="fa fa-mail-reply-all"></i> Reset');
 
           
-              componentHandler.upgradeDom();
+              // componentHandler.upgradeDom();
               // select_mdl();
               // $('.select2').select2({
               //   theme: "bootstrap",
@@ -1144,7 +1150,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
                 $('.Reset').trigger( "click" );
               }
 
-              enableorderedit();
+              // enableorderedit();
             },
             error: function (jqXHR, textStatus, errorThrown) {
             },
@@ -1188,7 +1194,7 @@ $Template=$this->Order_info_model->GetTemplateMappingByOrderUIDFieldRow($torders
             $('#FieldSectionTableView').html(data.FieldSectionTableView);
           }  
       
-          componentHandler.upgradeDom();
+          // componentHandler.upgradeDom();
           // select_mdl();
           // $('.select2').select2({
           //   theme: "bootstrap",
@@ -1421,7 +1427,7 @@ $("body").on("change" , "#PropertyCountyName,#PropertyCityName,#PropertyStateCod
             $('.MultiOrderedcounty').html(' ');
             $('.MultiOrderedstate').html(' ');
 
-            componentHandler.upgradeDom();
+            // componentHandler.upgradeDom();
 
             if(data != ''){
 
@@ -1524,8 +1530,8 @@ $("body").on("change" , "#PropertyCountyName,#PropertyCityName,#PropertyStateCod
     } 
      function call_event(){
       show_content();   
-      componentHandler.upgradeDom();
-      select_mdl();
+      // componentHandler.upgradeDom();
+      // select_mdl();
      /* $('.select2').select2({
         theme: "bootstrap",
       }); */

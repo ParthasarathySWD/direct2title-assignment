@@ -2818,6 +2818,8 @@ function assignmentOrders(){
     $this->db->join ('mproducts','mproducts.ProductUID = msubproducts.ProductUID','left');
     $this->db->join ('morderstatus','morderstatus.StatusUID = torders.StatusUID','left');
 	$this->db->join ('morderpriority','morderpriority.PriorityUID = torders.PriorityUID','left');
+	$ProductUID=7;
+	$this->db->where('mproducts.ProductUID',$ProductUID);
 	$query = $this->db->get();
 	return $query->result();
 

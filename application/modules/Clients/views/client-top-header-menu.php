@@ -24,25 +24,40 @@
                     </div>
                 </div>
 
-                <div class="card-header pb-0 pt-0 pl-3 pr-3 order-sum-tab">
+              <div class="card-header pb-0 pt-0 pl-3 pr-3 order-sum-tab">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs pr-3 clients-intab" role="tablist">
+                      <?php if($Action == 'AddDetails'){ ?> 
                             <li class="nav-item"><a class="nav-link" href="Clients/add" aria-expanded="true">Client Info</a></li>
-                            <li class="nav-item"><a class="nav-link" href="Clients/contacts" aria-expanded="true">Contacts</a></li>
+                             <!-- <li class="nav-item"><a class="nav-link" href="Clients/contacts" aria-expanded="true">Contacts</a></li>  -->
                             <li class="nav-item"><a class="nav-link" href="Clients/pricing" aria-expanded="true">Pricing</a></li>
                             <li class="nav-item"><a class="nav-link" href="Clients/products" aria-expanded="true">Products</a></li>
                             <li class="nav-item"><a class="nav-link" href="Clients/workflows" aria-expanded="true">Workflows &amp; Templates</a></li>
-                            <li class="nav-item"><a class="nav-link" href="Clients/task_management" aria-expanded="true">Task Management</a></li>
+                         <!--  <li class="nav-item"><a class="nav-link" href="Clients/task_management" aria-expanded="true">Task Management</a></li>  -->
                             <li class="nav-item"><a class="nav-link" href="Clients/priority_tat" aria-expanded="true">Priority &amp; TAT</a></li>
-                            <li class="nav-item"><a class="nav-link" href="Clients/pass_through_cost" aria-expanded="true">Pass Through cost</a></li>
+                             <!-- <li class="nav-item"><a class="nav-link" href="Clients/pass_through_cost" aria-expanded="true">Pass Through cost</a></li>
                             <li class="nav-item"><a class="nav-link" href="Clients/billing" aria-expanded="true">Billing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="Clients/audit_log" aria-expanded="true">Audit Logs</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<CENTER></CENTER>lients/audit_log" aria-expanded="true">Audit Logs</a></li> -->
+                        <?php } elseif($Action == 'EditDetails'){ ?>
+                            <li class="nav-item"><a class="nav-link"  href= "<?php echo base_url().'Clients/Edit/'.$Customers->CustomerUID?>" aria-expanded="true">Client Info</a></li>
+                            <li class="nav-item"><a class="nav-link" href= "<?php echo base_url().'Clients/contacts/'.$Customers->CustomerUID?>"   aria-expanded="true">Contacts</a></li>
+                            <li class="nav-item"><a class="nav-link" href= "<?php echo base_url().'Clients/pricing/'.$Customers->CustomerUID?>" aria-expanded="true">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href= "<?php echo base_url().'Clients/products/'.$Customers->CustomerUID?>"aria-expanded="true">Products</a></li>
+                            <li class="nav-item"><a class="nav-link" href= "<?php echo base_url().'Clients/workflows/'.$Customers->CustomerUID?>"aria-expanded="true">Workflows &amp; Templates</a></li>
+                            <li class="nav-item"><a class="nav-link"  href= "<?php echo base_url().'Clients/task_management/'.$Customers->CustomerUID?>"aria-expanded="true">Task Management</a></li>
+                            <li class="nav-item"><a class="nav-link"  href= "<?php echo base_url().'Clients/priority_tat/'.$Customers->CustomerUID?>"aria-expanded="true">Priority &amp; TAT</a></li>
+                            <li class="nav-item"><a class="nav-link"  href= "<?php echo base_url().'Clients/pass_through_cost/'.$Customers->CustomerUID?>"aria-expanded="true">Pass Through cost</a></li>   
+                            <li class="nav-item"><a class="nav-link"  href= "<?php echo base_url().'Clients/billing/'.$Customers->CustomerUID?>"aria-expanded="true">Billing</a></li>
+                            <li class="nav-item"><a class="nav-link"  href= "<?php echo base_url().'Clients/audit_log/'.$Customers->CustomerUID?>"aria-expanded="true">Audit Logs</a></li>
+
+                        <?php } ?>
+
                         </ul>
                     </div>
                     <div class="card-options" style="position: absolute;right: 20px;">
                         <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
                     </div>
-                </div>
+                </div> 
 
                 <script type="text/javascript">
                     $(function(){

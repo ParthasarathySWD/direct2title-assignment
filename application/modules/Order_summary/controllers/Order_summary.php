@@ -337,11 +337,15 @@ class Order_summary extends MY_Controller {
 				$result = array("validation_error" => 0,"id" => $order_id,'message'=>'Successful ');
 */
 				//RUN ADDRESS STANDARDIZATION REQUEST
-				$verified_address = $this->usps->address_standardization($addresses);
+				// $verified_address = $this->usps->address_standardization($addresses);
+
+
+				$verified_address= '';
 				// OUTPUT RESULTS	
-				$PropertyAddresses = $verified_address->Address->Error->Description;
-				
+				// $PropertyAddresses = $verified_address->Address->Error->Description;
+				$PropertyAddresses ='';
 				if($PropertyAddresses == null){
+
 
 					$UspsAddress = $verified_address;
 
@@ -349,7 +353,7 @@ class Order_summary extends MY_Controller {
 					$order_id = $this->Order_Summary_Model->insert_order($OrderDetails,$LoanAmount,$UspsAddress,$USPS,$status);
 					$Msg = $this->lang->line('Success');
 					$result = array("validation_error" => 0,"id" => $order_id,'message'=>$Msg);
-
+               
 					
 				}else{
 

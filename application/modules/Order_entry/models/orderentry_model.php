@@ -419,7 +419,7 @@ class Orderentry_model extends CI_Model {
         }
         /* End - Redirect to the order in the success of the order - Single Order Entry*/
 
-        $OrderResponse = array('OrderUID' => $order_id, 'Rep_msg' => $Rep_msg);
+        $OrderResponse = array('OrderUID' => $order_id, 'Rep_msg' => $Rep_msg, 'OrderNumber' => $OrderNumbers);
 		return $OrderResponse;
 	}
 

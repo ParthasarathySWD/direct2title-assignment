@@ -21,7 +21,7 @@
 <script src="assets/plugins/jquery-steps/jquery.steps.js"></script>
 <script src="assets/lib/tinymce/tinymce.min.js"></script>
 <script src="assets/lib/fSelect-Selectall/fSelect.js"></script>
-
+<script src="<?php echo base_url();?>assets/lib/datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 <script src="assets/js/custom.js"></script>
 <script src="assets/vendor/toastr/toastr.js" type="text/javascript"></script>
 
