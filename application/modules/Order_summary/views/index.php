@@ -62,11 +62,11 @@ $is_customer_login = $this->Common_model->is_customerlogin();
 $pricheck =0;
 if($order_details->PriorityUID == '1'){
 
- $pricheck ='checked';
- 
+   $pricheck ='checked';
 
 
- 
+
+
 
 }
 
@@ -86,8 +86,8 @@ if($order_details->PriorityUID == '1'){
                 <div class="col-md-12 col-lg-12 p-0">
                   <div class="card m-0" style="border-radius:0;">
                       <?php $this->load->view('workflowview/workflow_menu'); ?>
-                      
-                      
+
+
                       <div class="card-header pb-2">
                         <h3 class="card-title mb-2"></h3>
                         <div class="card-options" style="position: absolute;right: 20px;top: 60px;z-index:1;">
@@ -102,7 +102,7 @@ if($order_details->PriorityUID == '1'){
                             </div>
 
                             <div class="col-md-6 col-lg-6 text-right pr-0 pt-1">
-                             <?php if($is_exception_enabled == 1 && !$is_vendor_login) { ?>
+                               <?php if($is_exception_enabled == 1 && !$is_vendor_login) { ?>
                                 <a href="" class="btn btn-secondary  btn-sm" id="RaiseException"> Raise Request</a>
                             <?php }?>
                             <a href="" id="EntryCopySummary" class="btn btn-info btn-sm"> Quick Order Entry</a>
@@ -425,7 +425,7 @@ if($order_details->PriorityUID == '1'){
                                 </tr>
                             </thead>
                             <tbody>
-                                
+
                                        <!--      <tr>
                                                 <td>
                                                     <p class="mb-0">Name</p>
@@ -465,18 +465,18 @@ if($order_details->PriorityUID == '1'){
                                                 <input type="hidden" class="MailingAddressNotes" name="MailingAddressNotes[]" value="<?php echo $prop->MailingAddressNotes; ?>">
 
                                                 <?php if ($order_details->IsClosingProduct == 1) { ?>
-                                                 <input type="hidden" class="chk_Signing" name="chk_Signing[]" value="<?php echo $prop->IsSigningAddress; ?>">
-                                                 <input type="hidden" class="SigningAddress1" name="SigningAddress1[]" value="<?php echo $prop->SigningAddress1; ?>">
-                                                 <input type="hidden" class="SigningAddress2" name="SigningAddress2[]" value="<?php echo $prop->SigningAddress2; ?>">
-                                                 <input type="hidden" class="SigningZipCode" name="SigningZipCode[]" value="<?php echo $prop->SigningZipCode; ?>">
-                                                 <input type="hidden" class="SigningCityName" name="SigningCityName[]" value="<?php echo $prop->SigningCityName; ?>">
-                                                 <input type="hidden" class="SigningStateCode" name="SigningStateCode[]" value="<?php echo $prop->SigningStateCode; ?>">
-                                                 <input type="hidden" class="SigningCountyName" name="SigningCountyName[]" value="<?php echo $prop->SigningCountyName; ?>">
-                                                 <input type="hidden" class="SigningAddressNotes" name="SigningAddressNotes[]" value="<?php echo $prop->SigningAddressNotes; ?>">
-                                                 <input type="hidden" class="SigningSpecialInstruction" name="SigningSpecialInstruction[]" value="<?php echo $prop->SigningSpecialInstruction; ?>">
-                                             <?php } ?>
+                                                   <input type="hidden" class="chk_Signing" name="chk_Signing[]" value="<?php echo $prop->IsSigningAddress; ?>">
+                                                   <input type="hidden" class="SigningAddress1" name="SigningAddress1[]" value="<?php echo $prop->SigningAddress1; ?>">
+                                                   <input type="hidden" class="SigningAddress2" name="SigningAddress2[]" value="<?php echo $prop->SigningAddress2; ?>">
+                                                   <input type="hidden" class="SigningZipCode" name="SigningZipCode[]" value="<?php echo $prop->SigningZipCode; ?>">
+                                                   <input type="hidden" class="SigningCityName" name="SigningCityName[]" value="<?php echo $prop->SigningCityName; ?>">
+                                                   <input type="hidden" class="SigningStateCode" name="SigningStateCode[]" value="<?php echo $prop->SigningStateCode; ?>">
+                                                   <input type="hidden" class="SigningCountyName" name="SigningCountyName[]" value="<?php echo $prop->SigningCountyName; ?>">
+                                                   <input type="hidden" class="SigningAddressNotes" name="SigningAddressNotes[]" value="<?php echo $prop->SigningAddressNotes; ?>">
+                                                   <input type="hidden" class="SigningSpecialInstruction" name="SigningSpecialInstruction[]" value="<?php echo $prop->SigningSpecialInstruction; ?>">
+                                               <?php } ?>
 
-                                             <td>
+                                               <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="">
                                                         <a href="javascript:void(0);" title="Name" data-toggle="tooltip" data-placement="top"><?php echo $prop->PRName; ?></a>
@@ -490,19 +490,19 @@ if($order_details->PriorityUID == '1'){
                                             <td><?php echo $prop->PRCellNumber; ?></td>
                                             <td><?php echo $prop->PREmailID; ?></td>
                                             <td>
-                                               <!--  <button type="button" class="btn btn-sm btn-default text-primary edit_property_info" title="View" data-toggle="tooltip" data-id="<?php echo $prop->Id; ?>" data-placement="top" data-type="confirm"><i class="icon-eye"></i></button> -->
-                                               <button class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></button>
-                                               <button class="btn btn-sm btn-icon text-danger" title="Delete"><i class="icon-trash"></i></button>
-                                           </td>
+                                             <!--  <button type="button" class="btn btn-sm btn-default text-primary edit_property_info" title="View" data-toggle="tooltip" data-id="<?php echo $prop->Id; ?>" data-placement="top" data-type="confirm"><i class="icon-eye"></i></button> -->
+                                             <button class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></button>
+                                             <button class="btn btn-sm btn-icon text-danger" title="Delete"><i class="icon-trash"></i></button>
+                                         </td>
 
-                                       </tr>
-                                   <?php } ?>
+                                     </tr>
+                                 <?php } ?>
 
-                                   
-                               </tbody>
-                           </table>
-                       </div>
-                   </div>
+
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
                           <!--   <div class="col-md-12 col-lg-12">
                                 <h3 class="card-title pb-4 pt-2">Add Property Role</h3>
                             </div>
@@ -642,19 +642,13 @@ if($order_details->PriorityUID == '1'){
                                     </div>
                                 </div>
                             </div>
-                           <!--  <div class="col-md-12 col-lg-12 mb-4">
-                                <div class="btn-list  text-right">
-                                    <a href="#" class="btn btn-secondary">Cancel</a>
-                                    <a href="#" class="btn btn-primary">Save</a>
+                            <div class="col-md-12 col-lg-12 mb-3 mt-4">
+                                <div class="btn-list text-right">
+                                    <a href="javascript:void();" class="btn btn-success single_submit" id="UpdateRoles" value="1">Update</a>
                                 </div>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
+                            </div>
 
-                <div class="col-md-12 col-lg-12 mb-3 mt-4">
-                    <div class="btn-list text-right">
-                        <a href="#" class="btn btn-success single_submit" id="UpdateRoles" value="1">Update</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -664,7 +658,7 @@ if($order_details->PriorityUID == '1'){
 
 
 <script type="text/javascript">
-    
+
 /**
         * @author Sathis Kannn P
         * @purpose Add Property Role Onchange to View a Add Columns
@@ -728,7 +722,7 @@ if($order_details->PriorityUID == '1'){
              {                                                              
                 ?>
                 multiplePropertyFields += '<option value="<?php echo $value->PropertyRoleName; ?>"><?php echo $value->PropertyRoleName; ?></option>';
-                
+
             <?php } ?>
             multiplePropertyFields  += ' </select>';
             multiplePropertyFields  += '</div>';
@@ -819,28 +813,28 @@ if($order_details->PriorityUID == '1'){
             multiplePropertyFields  += '</div>';
 
             if(Button == 'Save'){
-               multiplePropertyFields  += '<div class="col-md-12 col-lg-12 mb-3">';
-               multiplePropertyFields  += '<div class="btn-list  text-right">';
-               multiplePropertyFields  += '<a href="#" class="btn btn-secondary add_cancel" id="add_cancel">Cancel</a>';
-               multiplePropertyFields  += '<a href="#" class="btn btn-primary add_role" id="add_role">Save</a>';
-               multiplePropertyFields  += '</div>';
-               multiplePropertyFields  += '</div>';
-           }
-           else{
-               multiplePropertyFields  += '<div class="col-md-12 col-lg-12 mb-3">';
-               multiplePropertyFields  += '<div class="btn-list  text-right">';
-               multiplePropertyFields  += '<a href="#" class="btn btn-secondary add_cancel" id="add_cancel">Cancel</a>&nbsp;&nbsp;';
-               multiplePropertyFields  += '<a href="#" class="btn btn-success edit_role" id="edit_role" data-rowID="'+Count+'">Update</a>';
-               multiplePropertyFields  += '</div>';
-               multiplePropertyFields  += '</div>';
+             multiplePropertyFields  += '<div class="col-md-12 col-lg-12 mb-3">';
+             multiplePropertyFields  += '<div class="btn-list  text-right">';
+             multiplePropertyFields  += '<a href="#" class="btn btn-secondary add_cancel" id="add_cancel">Cancel</a>';
+             multiplePropertyFields  += '<a href="#" class="btn btn-primary add_role" id="add_role">Save</a>';
+             multiplePropertyFields  += '</div>';
+             multiplePropertyFields  += '</div>';
+         }
+         else{
+             multiplePropertyFields  += '<div class="col-md-12 col-lg-12 mb-3">';
+             multiplePropertyFields  += '<div class="btn-list  text-right">';
+             multiplePropertyFields  += '<a href="#" class="btn btn-secondary add_cancel" id="add_cancel">Cancel</a>&nbsp;&nbsp;';
+             multiplePropertyFields  += '<a href="#" class="btn btn-success edit_role" id="edit_role" data-rowID="'+Count+'">Update</a>';
+             multiplePropertyFields  += '</div>';
+             multiplePropertyFields  += '</div>';
 
-           }
+         }
 
 
-           
-           $('.select2').select2();
-           return multiplePropertyFields;
-       }
+
+         $('.select2').select2();
+         return multiplePropertyFields;
+     }
 
 
 
@@ -988,7 +982,7 @@ if($order_details->PriorityUID == '1'){
             // }
 
             var table;
-            
+
             table  = '<tr id="rowID_'+btnCount+'">';
             table  += '<td>';
             table  +='<div class="d-flex align-items-center">';
@@ -1104,12 +1098,12 @@ $('#UpdateRoles').click(function(event) {
 
   var formData=$('#frm_OrderSummary').serialize()+'&'+$.param({ 'LoanAmount': LoanAmount });
   $.ajax({
-     type: "POST",
-     url: '<?php echo base_url();?>Order_summary/save_roles',
-     data: formData,
-     dataType:'json',
-     cache: false,
-     beforeSend: function(){
+   type: "POST",
+   url: '<?php echo base_url();?>Order_summary/save_roles',
+   data: formData,
+   dataType:'json',
+   cache: false,
+   beforeSend: function(){
       $('.loading').show()
       button.attr("disabled", true);
       button.html('Loading ...');
@@ -1118,12 +1112,12 @@ $('#UpdateRoles').click(function(event) {
   {
       $('.loading').hide()
       if(data['validation_error'] == 0){
-        
+
         toastr["success"]("", data['message']);
 
 
     }else{
-        
+
         toastr["error"]("", data['message']);
         button.html(button_text);
         button.removeAttr("disabled");
