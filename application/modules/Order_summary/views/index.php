@@ -74,119 +74,109 @@ if($order_details->PriorityUID == '1'){
 
 ?>
 <!-- start body header -->
-<div id="page_top" class="section-body" style="">
-    <div class="container-fluid">
-        <div class="page-header">
-            <div class="left">
-                <h1 class="page-title">Order Summary</h1> 
-            </div>
-            <div class="right">
-                <div class="notification d-flex">
-                    <button type="button" class="btn btn-facebook"><i class="fa fa-info-circle mr-2"></i>Need Help</button>
-                    <button type="button" class="btn btn-facebook"><i class="fa fa-file-text mr-2"></i>Data export</button>
-                    <button type="button" class="btn btn-facebook"><i class="fa fa-power-off mr-2"></i>Sign Out</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+<?php $this->load->view('workflowview/workflow_topheader'); ?>
+
 <div class="section-body">
     <div class="container-fluid">
-    <form action="#" name="frm_OrderSummary" id="frm_OrderSummary" onsubmit="return false;">
-        <input class="mdl-textfield__input  input-xs" type="hidden" id="OrderUID" name="OrderUID" value="<?php echo $order_details->OrderUID ?>">
-        <div class="row">
-            <div class="col-md-12 col-lg-12">
-                <div class="card">
-                   <?php $this->load->view('workflowview/workflow_header'); ?>
-                    <div class="card-header pb-0 pt-0 pl-3 pr-3 order-sum-tab">
+        <form action="#" name="frm_OrderSummary" id="frm_OrderSummary" onsubmit="return false;">
+            <input class="mdl-textfield__input  input-xs" type="hidden" id="OrderUID" name="OrderUID" value="<?php echo $order_details->OrderUID ?>">
 
+            <div class="row" style="margin:0 -15px;">
+                <div class="col-md-12 col-lg-12 p-0">
+                  <div class="card m-0" style="border-radius:0;">
                       <?php $this->load->view('workflowview/workflow_menu'); ?>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header pb-0">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 pl-0">
-                                    <h3 class="card-title pt-2">Product Info</h3>
-                                </div>
-
-                                <div class="col-md-6 col-lg-6 text-right pr-0 pt-1">
-                                     <?php if($is_exception_enabled == 1 && !$is_vendor_login) { ?>
-                                    <a href="" class="btn btn-secondary  btn-sm" id="RaiseException"> Raise Request</a>
-                                     <?php }?>
-                                    <a href="" id="EntryCopySummary" class="btn btn-info btn-sm"> Quick Order Entry</a>
-                                </div>
+                      
+                      
+                      <div class="card-header pb-2">
+                        <h3 class="card-title mb-2"></h3>
+                        <div class="card-options" style="position: absolute;right: 20px;top: 60px;z-index:1;">
+                          <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><span class="font-14 mr-2" style="position:relative;top:-2px;">View Fullscreen</span><i class="fe fe-maximize"></i></a>
+                      </div>
+                  </div>
+                  <div class="card-header pb-0">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 pl-0">
+                                <h3 class="card-title pt-2">Product Info</h3>
                             </div>
+
+                            <div class="col-md-6 col-lg-6 text-right pr-0 pt-1">
+                             <?php if($is_exception_enabled == 1 && !$is_vendor_login) { ?>
+                                <a href="" class="btn btn-secondary  btn-sm" id="RaiseException"> Raise Request</a>
+                            <?php }?>
+                            <a href="" id="EntryCopySummary" class="btn btn-info btn-sm"> Quick Order Entry</a>
                         </div>
                     </div>
-                    <div class="card-body pt-2">
-                        <div class="col-md-12 col-lg-12 add-product-div p-0">
-                            <div class="row">
-                                <div class="col-md-3 col-lg-3">
+                </div>
+            </div>
+            <div class="card-body pt-2">
+                <div class="col-md-12 col-lg-12 add-product-div p-0">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3">
 
-                                    <div class="form-group">
-                                        <label class="form-label">Client</label>
-                                       <select class="form-control mdl-textfield__input input-xs mdl-select2 select2" id="customer" name="customer">
-                              <?php foreach ($Customers as $key => $customer) {
-                                if($customer->CustomerUID == $order_details->CustomerUID) {?>
-                                  <option value="<?php echo $customer->CustomerUID; ?>" selected><?php echo $customer->CustomerNumber.' / '.$customer->CustomerName; ?></option>';
-                                <?php }
+                            <div class="form-group">
+                                <label class="form-label">Client</label>
+                                <select class="form-control mdl-textfield__input input-xs mdl-select2 select2" id="customer" name="customer">
+                                  <?php foreach ($Customers as $key => $customer) {
+                                    if($customer->CustomerUID == $order_details->CustomerUID) {?>
+                                      <option value="<?php echo $customer->CustomerUID; ?>" selected><?php echo $customer->CustomerNumber.' / '.$customer->CustomerName; ?></option>';
+                                  <?php }
                               } ?>
-                            </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-label">Product</label>
-                                        <select class="form-control mdl-textfield__input input-xs select2 mdl-select2" id="ProductUID" name="ProductUID">
-                                            <?php $prod = $this->Order_Summary_Model->GetProductBySubproducts($order_details->SubProductUID);?>
-                                            <?php foreach ($CustProducts as $key => $product) { ?>
-                                              <?php if($product->ProductUID == $prod->ProductUID) { ?>
-                                                <option value="<?php echo $product->ProductUID; ?>" selected><?php echo $product->ProductName;?></option>;
-                                            <?php } 
-                                        } ?>
-                                    </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-label">SubProduct</label>
-                                        <select class="form-control mdl-textfield__input input-xs select2 mdl-select2" id="SubProductUID" name="SubProductUID" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?> >
-                              <?php foreach ($Sub_products as $key => $Sub_product) {
-                                if($Sub_product->SubProductUID == $order_details->SubProductUID) {?>
-                                  <option value="<?php echo $Sub_product->SubProductUID; ?>" selected><?php echo $Sub_product->SubProductName;?></option>';
-                                <?php }else{ ?>
-                                  <option value="<?php echo $Sub_product->SubProductUID; ?>"><?php echo $Sub_product->SubProductName;?></option>';
-                                <?php }
-                              } ?>
-                            </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-label">Priority </label>
-                                        <select class="form-control mdl-textfield__input input-xs select2 mdl-select2 " id="PriorityUID" name="PriorityUID" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">Product</label>
+                        <select class="form-control mdl-textfield__input input-xs select2 mdl-select2" id="ProductUID" name="ProductUID">
+                            <?php $prod = $this->Order_Summary_Model->GetProductBySubproducts($order_details->SubProductUID);?>
+                            <?php foreach ($CustProducts as $key => $product) { ?>
+                              <?php if($product->ProductUID == $prod->ProductUID) { ?>
+                                <option value="<?php echo $product->ProductUID; ?>" selected><?php echo $product->ProductName;?></option>;
+                            <?php } 
+                        } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-3">
+                <div class="form-group">
+                    <label class="form-label">SubProduct</label>
+                    <select class="form-control mdl-textfield__input input-xs select2 mdl-select2" id="SubProductUID" name="SubProductUID" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?> >
+                      <?php foreach ($Sub_products as $key => $Sub_product) {
+                        if($Sub_product->SubProductUID == $order_details->SubProductUID) {?>
+                          <option value="<?php echo $Sub_product->SubProductUID; ?>" selected><?php echo $Sub_product->SubProductName;?></option>';
+                      <?php }else{ ?>
+                          <option value="<?php echo $Sub_product->SubProductUID; ?>"><?php echo $Sub_product->SubProductName;?></option>';
+                      <?php }
+                  } ?>
+              </select>
+          </div>
+      </div>
+      <div class="col-md-2 col-lg-2">
+        <div class="form-group">
+            <label class="form-label">Priority </label>
+            <select class="form-control mdl-textfield__input input-xs select2 mdl-select2 " id="PriorityUID" name="PriorityUID" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
 
-                              <?php foreach ($Prioritys as $key => $priority) {
-                                if($priority->PriorityUID == $order_details->PriorityUID) {?>
-                                  <option value="<?php echo $priority->PriorityUID; ?>" selected><?php echo $priority->PriorityName;?></option>';
-                                <?php }else{ ?>
-                                  <option value="<?php echo $priority->PriorityUID; ?>"><?php echo $priority->PriorityName;?></option>
-                                <?php }
+              <?php foreach ($Prioritys as $key => $priority) {
+                if($priority->PriorityUID == $order_details->PriorityUID) {?>
+                  <option value="<?php echo $priority->PriorityUID; ?>" selected><?php echo $priority->PriorityName;?></option>';
+              <?php }else{ ?>
+                  <option value="<?php echo $priority->PriorityUID; ?>"><?php echo $priority->PriorityName;?></option>
+              <?php }
 
-                              } ?>
+          } ?>
 
-                            </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-1 col-lg-1 text-right">
-                                    <div class="form-group mt-4 pt-1">
-                                        <a href="Order_entry" class="btn btn-primary btn-sm"><i class="fe fe-plus"></i></a>
-                                    </div>
-                                </div>
+      </select>
+  </div>
+</div>
+<div class="col-md-1 col-lg-1 text-right">
+    <div class="form-group mt-4 pt-1">
+        <a href="Order_entry" class="btn btn-primary btn-sm"><i class="fe fe-plus"></i></a>
+    </div>
+</div>
 
-                            </div>
+</div>
                             <!-- <div class="row ">
                                 <div class="col-md-3 col-lg-3">
 
@@ -286,156 +276,156 @@ if($order_details->PriorityUID == '1'){
                             <div class="col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label">APN</label>
-                                   <input class="form-control mdl-textfield__input  input-xs <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="APN" name="APN" value="<?php echo $order_details->APN ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
+                                    <input class="form-control mdl-textfield__input  input-xs <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="APN" name="APN" value="<?php echo $order_details->APN ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
                                 </div>
                             </div>
                             <div class="col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label">Borrower Type</label>
-                                   <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs BorrowerType" id="BorrowerType" name="BorrowerType" >
-                                  <option value=""></option>
-                                  <?php 
-                                  foreach ($BorrowerDetails as $key => $value) { if($value->BorrowerTypeUID == $order_details->BorrowerType){?>
+                                    <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs BorrowerType" id="BorrowerType" name="BorrowerType" >
+                                      <option value=""></option>
+                                      <?php 
+                                      foreach ($BorrowerDetails as $key => $value) { if($value->BorrowerTypeUID == $order_details->BorrowerType){?>
 
-                                    <option value="<?php echo $value->BorrowerTypeUID;?>" selected><?php echo $value->BorrowerTypeName;?></option>
-                                  <?php } else{?>
-                                    <option value="<?php echo $value->BorrowerTypeUID;?>"><?php echo $value->BorrowerTypeName;?></option>
-                                  <?php } }?>
+                                        <option value="<?php echo $value->BorrowerTypeUID;?>" selected><?php echo $value->BorrowerTypeName;?></option>
+                                    <?php } else{?>
+                                        <option value="<?php echo $value->BorrowerTypeUID;?>"><?php echo $value->BorrowerTypeName;?></option>
+                                    <?php } }?>
                                 </select>
-                                </div>
                             </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Property Type </label>
-                                     <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs PropertyType" id="PropertyType" name="PropertyType" >
+                        </div>
+                        <div class="col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label">Property Type </label>
+                                <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs PropertyType" id="PropertyType" name="PropertyType" >
                                   <option value=""></option>
                                   <?php 
                                   foreach ($PropertyTypeDetails as $key => $value) { if($value->PropertyUseUID == $order_details->PropertyType){?>
 
                                     <option value="<?php echo $value->PropertyUseUID;?>" selected><?php echo $value->PropertyUseName;?></option>
-                                  <?php } else{?>
+                                <?php } else{?>
                                     <option value="<?php echo $value->PropertyUseUID;?>"><?php echo $value->PropertyUseName;?></option>
-                                  <?php } }?>
-                                </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Transaction Type </label>
-                                   <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs TransactionType" id="TransactionType" name="TransactionType" >
-                                  <option value=""></option>
-                                  <?php 
-                                  foreach ($TransactionTypeDetails as $key => $value) { if($value->TransactionTypeUID == $order_details->TransactionType){?>
-
-                                    <option value="<?php echo $value->TransactionTypeUID;?>" selected><?php echo $value->TransactionTypeName;?></option>
-                                  <?php } else{?>
-                                    <option value="<?php echo $value->TransactionTypeUID;?>"><?php echo $value->TransactionTypeName;?></option>
-                                  <?php } }?>
-                                </select>
-                                </div>
-                            </div>
-
+                                <?php } }?>
+                            </select>
                         </div>
                     </div>
-                    <div class="card-header">
-                        <h3 class="card-title">Property Address</h3>
+                    <div class="col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">Transaction Type </label>
+                            <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs TransactionType" id="TransactionType" name="TransactionType" >
+                              <option value=""></option>
+                              <?php 
+                              foreach ($TransactionTypeDetails as $key => $value) { if($value->TransactionTypeUID == $order_details->TransactionType){?>
+
+                                <option value="<?php echo $value->TransactionTypeUID;?>" selected><?php echo $value->TransactionTypeName;?></option>
+                            <?php } else{?>
+                                <option value="<?php echo $value->TransactionTypeUID;?>"><?php echo $value->TransactionTypeName;?></option>
+                            <?php } }?>
+                        </select>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
+                </div>
 
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Address Line 1</label>
-                                    <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="PropertyAddress1" name="PropertyAddress1" value="<?php echo $order_details->PropertyAddress1 ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Address Line 2</label>
-                                    <input class="form-control mdl-textfield__input  input-xs dup_bg_color <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="PropertyAddress2" name="PropertyAddress2" value="<?php echo $order_details->PropertyAddress2 ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Zipcode</label>
-                                   <input class="form-control mdl-textfield__input  input-xs dup_bg_color <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" maxlength="10" type="text" id="PropertyZipcode" name="PropertyZipcode" value="<?php echo $order_details->PropertyZipcode ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">City</label>
-                                   <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color form-control select dropdown-toggle size <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" value="<?php echo $order_details->PropertyCityName ?>" id="PropertyCityName" name="PropertyCityName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">County</label>
-                                   <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color form-control select dropdown-toggle size <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" value="<?php echo $order_details->PropertyCountyName ?>" id="PropertyCountyName" name="PropertyCountyName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">State</label>
-                                     <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color form-control select dropdown-toggle size <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" value="<?php echo $order_details->PropertyStateCode ?>" id="PropertyStateCode" name="PropertyStateCode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
-                                </div>
-                            </div>
+            </div>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Property Address</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
 
-                        </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">Address Line 1</label>
+                        <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="PropertyAddress1" name="PropertyAddress1" value="<?php echo $order_details->PropertyAddress1 ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
                     </div>
-                    <div class="card-header">
-                        <h3 class="card-title">Additional Info</h3>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">Address Line 2</label>
+                        <input class="form-control mdl-textfield__input  input-xs dup_bg_color <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="PropertyAddress2" name="PropertyAddress2" value="<?php echo $order_details->PropertyAddress2 ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Send Report To</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Email Report To</label>
-                                  <input class="form-control mdl-textfield__input  input-xs" type="text" id="EmailReportTo" name="EmailReportTo" value="<?php echo $order_details->EmailReportTo ?>">
-                                </div>
-                            </div>
-
-                        </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">Zipcode</label>
+                        <input class="form-control mdl-textfield__input  input-xs dup_bg_color <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" maxlength="10" type="text" id="PropertyZipcode" name="PropertyZipcode" value="<?php echo $order_details->PropertyZipcode ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
                     </div>
-                    <div class="card-header pb-0">
-
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 pl-0">
-                                    <h3 class="card-title">Property Roles</h3>
-                                </div>
-
-                                <div class="col-md-6 col-lg-6 text-right pr-0">
-                                    <a class="btn btn-info btn-sm add_property_role" style="margin-top:-15px;">Add New</a>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color form-control select dropdown-toggle size <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" value="<?php echo $order_details->PropertyCityName ?>" id="PropertyCityName" name="PropertyCityName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
                     </div>
-                    <div class="card-body">
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">County</label>
+                        <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color form-control select dropdown-toggle size <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" value="<?php echo $order_details->PropertyCountyName ?>" id="PropertyCountyName" name="PropertyCountyName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">State</label>
+                        <input class="form-control ClassForClientBranch mdl-textfield__input  input-xs dup_bg_color form-control select dropdown-toggle size <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" value="<?php echo $order_details->PropertyStateCode ?>" id="PropertyStateCode" name="PropertyStateCode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
+                    </div>
+                </div>
 
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12">
+            </div>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Additional Info</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
 
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-vcenter table-new" cellspacing="0" id="propertyRoleTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Role Details</th>
-                                                <th>Telephone</th>
-                                                <th>Work No</th>
-                                                <th>Cell No</th>
-                                                <th>Email</th>
-                                                <th class="text-center" style="width:120px">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">Send Report To</label>
+                        <input type="text" class="form-control" name="" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label class="form-label">Email Report To</label>
+                        <input class="form-control mdl-textfield__input  input-xs" type="text" id="EmailReportTo" name="EmailReportTo" value="<?php echo $order_details->EmailReportTo ?>">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-header pb-0">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 pl-0">
+                        <h3 class="card-title">Property Roles</h3>
+                    </div>
+
+                    <div class="col-md-6 col-lg-6 text-right pr-0">
+                        <a class="btn btn-info btn-sm add_property_role" style="margin-top:-15px;">Add New</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-vcenter table-new" cellspacing="0" id="propertyRoleTable">
+                            <thead>
+                                <tr>
+                                    <th>Role Details</th>
+                                    <th>Telephone</th>
+                                    <th>Work No</th>
+                                    <th>Cell No</th>
+                                    <th>Email</th>
+                                    <th class="text-center" style="width:120px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
                                        <!--      <tr>
                                                 <td>
                                                     <p class="mb-0">Name</p>
@@ -452,67 +442,67 @@ if($order_details->PriorityUID == '1'){
                                             </tr> -->
                                             <?php foreach ($prop_details as $key => $prop) { 
 
-                                      $prop->PRSocialNumber = $encrypt->decrypt($prop->PRSocialNumber,$this->config->item('encryption_key'),256);
-                                    ?>
-                                      <tr>
-                                        <input type="hidden" class="OrderPropertyRoleUID" name="OrderPropertyRoleUID[]" value="<?php echo $prop->Id; ?>">
-                                        <input type="hidden" class="PropertyRoleUID" name="PropertyRoleUID[]" value="<?php echo $prop->PropertyRoleUID; ?>">
-                                        <input type="hidden" class="PropertyRoleName" name="PropertyRoleName[]" value="<?php echo $prop->PropertyRoleName; ?>">
-                                        <input type="hidden" class="PRName" name="PRName[]" value="<?php echo $prop->PRName; ?>">
-                                        <input type="hidden" class="PRTitle" name="PRTitle[]" value="<?php echo $prop->PRTitle; ?>">
-                                        <input type="hidden" class="PRHomeNumber" name="PRHomeNumber[]" value="<?php echo $prop->PRHomeNumber; ?>">
-                                        <input type="hidden" class="PRWorkNumber" name="PRWorkNumber[]" value="<?php echo $prop->PRWorkNumber; ?>">
-                                        <input type="hidden" class="PRCellNumber" name="PRCellNumber[]" value="<?php echo $prop->PRCellNumber; ?>">
-                                        <input type="hidden" class="PRSocialNumber" name="PRSocialNumber[]" value="<?php echo $prop->PRSocialNumber; ?>">
-                                        <input type="hidden" class="PREmailID" name="PREmailID[]" value="<?php echo $prop->PREmailID; ?>">
-                                         <input type="hidden" class="chk_mailing" name="chk_mailing[]" value="<?php echo $prop->IsMailingAddress; ?>">
-                                         <input type="hidden" class="MailingAddress1" name="MailingAddress1[]" value="<?php echo $prop->MailingAddress1; ?>">
-                                         <input type="hidden" class="MailingAddress2" name="MailingAddress2[]" value="<?php echo $prop->MailingAddress2; ?>">
-                                         <input type="hidden" class="MailingZipCode" name="MailingZipCode[]" value="<?php echo $prop->MailingZipCode; ?>">
-                                         <input type="hidden" class="MailingCityName" name="MailingCityName[]" value="<?php echo $prop->MailingCityName; ?>">
-                                         <input type="hidden" class="MailingStateCode" name="MailingStateCode[]" value="<?php echo $prop->MailingStateCode; ?>">
-                                         <input type="hidden" class="MailingCountyName" name="MailingCountyName[]" value="<?php echo $prop->MailingCountyName; ?>">
-                                         <input type="hidden" class="MailingAddressNotes" name="MailingAddressNotes[]" value="<?php echo $prop->MailingAddressNotes; ?>">
+                                              $prop->PRSocialNumber = $encrypt->decrypt($prop->PRSocialNumber,$this->config->item('encryption_key'),256);
+                                              ?>
+                                              <tr>
+                                                <input type="hidden" class="OrderPropertyRoleUID" name="OrderPropertyRoleUID[]" value="<?php echo $prop->Id; ?>">
+                                                <input type="hidden" class="PropertyRoleUID" name="PropertyRoleUID[]" value="<?php echo $prop->PropertyRoleUID; ?>">
+                                                <input type="hidden" class="PropertyRoleName" name="PropertyRoleName[]" value="<?php echo $prop->PropertyRoleName; ?>">
+                                                <input type="hidden" class="PRName" name="PRName[]" value="<?php echo $prop->PRName; ?>">
+                                                <input type="hidden" class="PRTitle" name="PRTitle[]" value="<?php echo $prop->PRTitle; ?>">
+                                                <input type="hidden" class="PRHomeNumber" name="PRHomeNumber[]" value="<?php echo $prop->PRHomeNumber; ?>">
+                                                <input type="hidden" class="PRWorkNumber" name="PRWorkNumber[]" value="<?php echo $prop->PRWorkNumber; ?>">
+                                                <input type="hidden" class="PRCellNumber" name="PRCellNumber[]" value="<?php echo $prop->PRCellNumber; ?>">
+                                                <input type="hidden" class="PRSocialNumber" name="PRSocialNumber[]" value="<?php echo $prop->PRSocialNumber; ?>">
+                                                <input type="hidden" class="PREmailID" name="PREmailID[]" value="<?php echo $prop->PREmailID; ?>">
+                                                <input type="hidden" class="chk_mailing" name="chk_mailing[]" value="<?php echo $prop->IsMailingAddress; ?>">
+                                                <input type="hidden" class="MailingAddress1" name="MailingAddress1[]" value="<?php echo $prop->MailingAddress1; ?>">
+                                                <input type="hidden" class="MailingAddress2" name="MailingAddress2[]" value="<?php echo $prop->MailingAddress2; ?>">
+                                                <input type="hidden" class="MailingZipCode" name="MailingZipCode[]" value="<?php echo $prop->MailingZipCode; ?>">
+                                                <input type="hidden" class="MailingCityName" name="MailingCityName[]" value="<?php echo $prop->MailingCityName; ?>">
+                                                <input type="hidden" class="MailingStateCode" name="MailingStateCode[]" value="<?php echo $prop->MailingStateCode; ?>">
+                                                <input type="hidden" class="MailingCountyName" name="MailingCountyName[]" value="<?php echo $prop->MailingCountyName; ?>">
+                                                <input type="hidden" class="MailingAddressNotes" name="MailingAddressNotes[]" value="<?php echo $prop->MailingAddressNotes; ?>">
 
-                                        <?php if ($order_details->IsClosingProduct == 1) { ?>
-                                         <input type="hidden" class="chk_Signing" name="chk_Signing[]" value="<?php echo $prop->IsSigningAddress; ?>">
-                                         <input type="hidden" class="SigningAddress1" name="SigningAddress1[]" value="<?php echo $prop->SigningAddress1; ?>">
-                                         <input type="hidden" class="SigningAddress2" name="SigningAddress2[]" value="<?php echo $prop->SigningAddress2; ?>">
-                                         <input type="hidden" class="SigningZipCode" name="SigningZipCode[]" value="<?php echo $prop->SigningZipCode; ?>">
-                                         <input type="hidden" class="SigningCityName" name="SigningCityName[]" value="<?php echo $prop->SigningCityName; ?>">
-                                         <input type="hidden" class="SigningStateCode" name="SigningStateCode[]" value="<?php echo $prop->SigningStateCode; ?>">
-                                         <input type="hidden" class="SigningCountyName" name="SigningCountyName[]" value="<?php echo $prop->SigningCountyName; ?>">
-                                         <input type="hidden" class="SigningAddressNotes" name="SigningAddressNotes[]" value="<?php echo $prop->SigningAddressNotes; ?>">
-                                         <input type="hidden" class="SigningSpecialInstruction" name="SigningSpecialInstruction[]" value="<?php echo $prop->SigningSpecialInstruction; ?>">
-                                       <?php } ?>
+                                                <?php if ($order_details->IsClosingProduct == 1) { ?>
+                                                 <input type="hidden" class="chk_Signing" name="chk_Signing[]" value="<?php echo $prop->IsSigningAddress; ?>">
+                                                 <input type="hidden" class="SigningAddress1" name="SigningAddress1[]" value="<?php echo $prop->SigningAddress1; ?>">
+                                                 <input type="hidden" class="SigningAddress2" name="SigningAddress2[]" value="<?php echo $prop->SigningAddress2; ?>">
+                                                 <input type="hidden" class="SigningZipCode" name="SigningZipCode[]" value="<?php echo $prop->SigningZipCode; ?>">
+                                                 <input type="hidden" class="SigningCityName" name="SigningCityName[]" value="<?php echo $prop->SigningCityName; ?>">
+                                                 <input type="hidden" class="SigningStateCode" name="SigningStateCode[]" value="<?php echo $prop->SigningStateCode; ?>">
+                                                 <input type="hidden" class="SigningCountyName" name="SigningCountyName[]" value="<?php echo $prop->SigningCountyName; ?>">
+                                                 <input type="hidden" class="SigningAddressNotes" name="SigningAddressNotes[]" value="<?php echo $prop->SigningAddressNotes; ?>">
+                                                 <input type="hidden" class="SigningSpecialInstruction" name="SigningSpecialInstruction[]" value="<?php echo $prop->SigningSpecialInstruction; ?>">
+                                             <?php } ?>
 
-                                      <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="">
-                                                <a href="javascript:void(0);" title="Name" data-toggle="tooltip" data-placement="top"><?php echo $prop->PRName; ?></a>
-                                                <p class="mb-0" title="Role" data-toggle="tooltip" data-placement="top"><?php echo $prop->PropertyRoleName; ?></p>
-                                            </div>
-                                        </div>
-                                      </td>
+                                             <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="">
+                                                        <a href="javascript:void(0);" title="Name" data-toggle="tooltip" data-placement="top"><?php echo $prop->PRName; ?></a>
+                                                        <p class="mb-0" title="Role" data-toggle="tooltip" data-placement="top"><?php echo $prop->PropertyRoleName; ?></p>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                       <td><?php echo $prop->PRHomeNumber; ?></td>
-                                       <td><?php echo $prop->PRWorkNumber; ?></td>
-                                       <td><?php echo $prop->PRCellNumber; ?></td>
-                                       <td><?php echo $prop->PREmailID; ?></td>
-                                       <td>
-                                       <!--  <button type="button" class="btn btn-sm btn-default text-primary edit_property_info" title="View" data-toggle="tooltip" data-id="<?php echo $prop->Id; ?>" data-placement="top" data-type="confirm"><i class="icon-eye"></i></button> -->
-                                        <button class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></button>
-                                        <button class="btn btn-sm btn-icon text-danger" title="Delete"><i class="icon-trash"></i></button>
-                                       </td>
+                                            <td><?php echo $prop->PRHomeNumber; ?></td>
+                                            <td><?php echo $prop->PRWorkNumber; ?></td>
+                                            <td><?php echo $prop->PRCellNumber; ?></td>
+                                            <td><?php echo $prop->PREmailID; ?></td>
+                                            <td>
+                                               <!--  <button type="button" class="btn btn-sm btn-default text-primary edit_property_info" title="View" data-toggle="tooltip" data-id="<?php echo $prop->Id; ?>" data-placement="top" data-type="confirm"><i class="icon-eye"></i></button> -->
+                                               <button class="btn btn-sm btn-icon button-edit text-primary" title="Edit"><i class="icon-pencil"></i></button>
+                                               <button class="btn btn-sm btn-icon text-danger" title="Delete"><i class="icon-trash"></i></button>
+                                           </td>
 
-                                     </tr>
+                                       </tr>
                                    <?php } ?>
 
-                                           
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                   
+                               </tbody>
+                           </table>
+                       </div>
+                   </div>
                           <!--   <div class="col-md-12 col-lg-12">
                                 <h3 class="card-title pb-4 pt-2">Add Property Role</h3>
                             </div>
@@ -610,48 +600,48 @@ if($order_details->PriorityUID == '1'){
                                     </label>
                                 </div>
                             </div> -->
-                             <div class="col-md-12 col-lg-12 multiplePropertyAddTable" id="multiplePropertyAddTable">
+                            <div class="col-md-12 col-lg-12 multiplePropertyAddTable" id="multiplePropertyAddTable">
                             </div>
 
                             <div class="row MailingContentAdd" id="MailingDetailsAdd" style="display: none;">
 
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Mailing Address 1</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Mailing Address 1</label>
+                                        <input type="text" class="form-control" name="" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Mailing Address 2</label>
+                                        <input type="text" class="form-control" name="" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Mailing Zipcode</label>
+                                        <input type="text" class="form-control" name="" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Mailing City</label>
+                                        <input type="text" class="form-control" name="" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Mailing County</label>
+                                        <input type="text" class="form-control" name="" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Mailing State</label>
+                                        <input type="text" class="form-control" name="" placeholder="">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Mailing Address 2</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Mailing Zipcode</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Mailing City</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Mailing County</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="form-group">
-                                    <label class="form-label">Mailing State</label>
-                                    <input type="text" class="form-control" name="" placeholder="">
-                                </div>
-                            </div>
-                        </div>
                            <!--  <div class="col-md-12 col-lg-12 mb-4">
                                 <div class="btn-list  text-right">
                                     <a href="#" class="btn btn-secondary">Cancel</a>
@@ -669,8 +659,8 @@ if($order_details->PriorityUID == '1'){
                 </div>
             </div>
         </form>
-        </div>
     </div>
+</div>
 
 
 <script type="text/javascript">
@@ -688,17 +678,17 @@ if($order_details->PriorityUID == '1'){
         $(document).on('click', '.add_property_role', function(event)
         {
           event.preventDefault();
-         /* Act on the event */             
+          /* Act on the event */             
           var id  = $(this).attr('id');
-           Header  = 'Add New Property Roles';
+          Header  = 'Add New Property Roles';
           // var Button = 'Delete';
-           Button = 'Save';
+          Button = 'Save';
           $('.multiplePropertyAddTable').append(multiplePropertyTable(Button,Header));
 
           $('.select2').select2();
           $('.ProductUID1:last').val($('.ProductUID1:last option:first').val()).trigger('change');
 
-        });
+      });
         $(document).on('click', '.add_cancel', function(event)
         {
           event.preventDefault();
@@ -707,22 +697,22 @@ if($order_details->PriorityUID == '1'){
 
           // $("#rowID_" + id).remove();
           $('.multiplePropertyAddTable').html(''); 
-                  $('.SaveUpdate').hide();
-                  $('.select2').select2();
-        });
+          $('.SaveUpdate').hide();
+          $('.select2').select2();
+      });
 
         function multiplePropertyTable(Button,Header)
         {
             var id  = 1;
             var multiplePropertyFields;
 
-             multiplePropertyFields  = '<div class="row" id="rowID_'+id+'">';
+            multiplePropertyFields  = '<div class="row" id="rowID_'+id+'">';
 
-             multiplePropertyFields  += '<div class="col-md-12 col-lg-12">';
-             multiplePropertyFields  += '<div class="row">';
-             multiplePropertyFields  += '<div class="col-md-6">';
-             multiplePropertyFields  += '<h3 class="card-title pb-4 pt-2">'+Header+'</h3>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-md-12 col-lg-12">';
+            multiplePropertyFields  += '<div class="row">';
+            multiplePropertyFields  += '<div class="col-md-6">';
+            multiplePropertyFields  += '<h3 class="card-title pb-4 pt-2">'+Header+'</h3>';
+            multiplePropertyFields  += '</div>';
              //  multiplePropertyFields  += '<div class="col-md-6 text-right">';
              // multiplePropertyFields  += '<i class="btn btn-danger btn-md fe fe-minus propertycancel_button" button-id="'+id+'"></i>';
              // multiplePropertyFields  += '</div>';
@@ -737,106 +727,106 @@ if($order_details->PriorityUID == '1'){
              foreach ($Prop_roles as $value)
              {                                                              
                 ?>
-             multiplePropertyFields += '<option value="<?php echo $value->PropertyRoleName; ?>"><?php echo $value->PropertyRoleName; ?></option>';
-            
+                multiplePropertyFields += '<option value="<?php echo $value->PropertyRoleName; ?>"><?php echo $value->PropertyRoleName; ?></option>';
+                
             <?php } ?>
-             multiplePropertyFields  += ' </select>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
- multiplePropertyFields  += '<input type="hidden" class="rolesname" name="rolesname" id="rolesname" value="<?php echo $value->PropertyRoleName; ?>"  />';
-             multiplePropertyFields  += '<div class="col-md-3 col-lg-3">';
-             multiplePropertyFields  += ' <div class="form-group">';
-             multiplePropertyFields  += ' <label class="form-label">Title</label>';
-             multiplePropertyFields  += '<select class="form-control select2 title" id="title" name="title">';
-             multiplePropertyFields  += ' <option></option>';
-             multiplePropertyFields  += ' <option value="1">MR</option>';
-             multiplePropertyFields  += ' <option value="2">MRS</option>';
-             multiplePropertyFields  += ' <option value="3">Ms</option>';
-             multiplePropertyFields  += ' <option value="4">Dr</option>';
-             multiplePropertyFields  += ' </select>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += ' </select>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<input type="hidden" class="rolesname" name="rolesname" id="rolesname" value="<?php echo $value->PropertyRoleName; ?>"  />';
+            multiplePropertyFields  += '<div class="col-md-3 col-lg-3">';
+            multiplePropertyFields  += ' <div class="form-group">';
+            multiplePropertyFields  += ' <label class="form-label">Title</label>';
+            multiplePropertyFields  += '<select class="form-control select2 title" id="title" name="title">';
+            multiplePropertyFields  += ' <option></option>';
+            multiplePropertyFields  += ' <option value="1">MR</option>';
+            multiplePropertyFields  += ' <option value="2">MRS</option>';
+            multiplePropertyFields  += ' <option value="3">Ms</option>';
+            multiplePropertyFields  += ' <option value="4">Dr</option>';
+            multiplePropertyFields  += ' </select>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-md-6 col-lg-6">';
-             multiplePropertyFields  += '<div class="form-group">';
-             multiplePropertyFields  += '<label class="form-label">Name</label>';
-             multiplePropertyFields  += '<input type="text" class="form-control name" name="name" id="name" name="example-text-input" placeholder="">';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-md-6 col-lg-6">';
+            multiplePropertyFields  += '<div class="form-group">';
+            multiplePropertyFields  += '<label class="form-label">Name</label>';
+            multiplePropertyFields  += '<input type="text" class="form-control name" name="name" id="name" name="example-text-input" placeholder="">';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
-             multiplePropertyFields  += '<label class="form-label">Phone</label>';
-             multiplePropertyFields  += '<div class="input-group mb-3">';
-             multiplePropertyFields  += '<div class="input-group-prepend">';
-             multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '<input type="text" class="form-control mobile-phone-number telephone" id="telephone" name="telephone" placeholder="">';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
+            multiplePropertyFields  += '<label class="form-label">Phone</label>';
+            multiplePropertyFields  += '<div class="input-group mb-3">';
+            multiplePropertyFields  += '<div class="input-group-prepend">';
+            multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<input type="text" class="form-control mobile-phone-number telephone" id="telephone" name="telephone" placeholder="">';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
-             multiplePropertyFields  += '<label class="form-label">Work No</label>';
-             multiplePropertyFields  += '<div class="input-group mb-3">';
-             multiplePropertyFields  += '<div class="input-group-prepend">';
-             multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-phone"></i></span>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '<input type="text" class="form-control phone-number workNo" id="workNo" value="" name="workNo" placeholder="">';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
+            multiplePropertyFields  += '<label class="form-label">Work No</label>';
+            multiplePropertyFields  += '<div class="input-group mb-3">';
+            multiplePropertyFields  += '<div class="input-group-prepend">';
+            multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-phone"></i></span>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<input type="text" class="form-control phone-number workNo" id="workNo" value="" name="workNo" placeholder="">';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
-             multiplePropertyFields  += '<label class="form-label">Cell No</label>';
-             multiplePropertyFields  += '<div class="input-group mb-3">';
-             multiplePropertyFields  += '<div class="input-group-prepend">';
-             multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '<input type="text" class="form-control mobile-phone-number cellNo phone_mask" name="cellNo" placeholder="">';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
+            multiplePropertyFields  += '<label class="form-label">Cell No</label>';
+            multiplePropertyFields  += '<div class="input-group mb-3">';
+            multiplePropertyFields  += '<div class="input-group-prepend">';
+            multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<input type="text" class="form-control mobile-phone-number cellNo phone_mask" name="cellNo" placeholder="">';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
-             multiplePropertyFields  += '<label class="form-label">Social No</label>';
-             multiplePropertyFields  += '<div class="input-group mb-3">';
-             multiplePropertyFields  += '<div class="input-group-prepend">';
-             multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-credit-card"></i></span>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '<input type="text" class="form-control credit-card ssn socialNo ssn_mask" name="socialNo" data-mask="ssn" id="ssn" placeholder="">';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
+            multiplePropertyFields  += '<label class="form-label">Social No</label>';
+            multiplePropertyFields  += '<div class="input-group mb-3">';
+            multiplePropertyFields  += '<div class="input-group-prepend">';
+            multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-credit-card"></i></span>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<input type="text" class="form-control credit-card ssn socialNo ssn_mask" name="socialNo" data-mask="ssn" id="ssn" placeholder="">';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
-             multiplePropertyFields  += '<label class="form-label">Email</label>';
-             multiplePropertyFields  += '<div class="input-group mb-3">';
-             multiplePropertyFields  += '<div class="input-group-prepend">';
-             multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-envelope-o"></i></span>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '<input type="text" class="form-control email email_validation" name="email" id="email" placeholder="">';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-lg-3 col-md-3">';
+            multiplePropertyFields  += '<label class="form-label">Email</label>';
+            multiplePropertyFields  += '<div class="input-group mb-3">';
+            multiplePropertyFields  += '<div class="input-group-prepend">';
+            multiplePropertyFields  += '<span class="input-group-text"><i class="fa fa-envelope-o"></i></span>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<input type="text" class="form-control email email_validation" name="email" id="email" placeholder="">';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             multiplePropertyFields  += '<div class="col-lg-9 col-md-9 pt-4">';
-             multiplePropertyFields  += '<label class="form-label" style="display:inline-block;">Is the Mailing Address same as Property Address?</label>';  
-             multiplePropertyFields  += '<div class="custom-controls-stacked ml-3" style="display:inline-block;">';
-             multiplePropertyFields  += '<label class="custom-control custom-radio custom-control-inline">';
-             multiplePropertyFields  += '<input type="radio" class="custom-control-input IsMailing" id="IsMailingYes" name="mailing-address-same" value="Yes" checked>';
-             multiplePropertyFields  += '<span class="custom-control-label">Yes</span>';
-             multiplePropertyFields  += '</label>';
-             multiplePropertyFields  += '<label class="custom-control custom-radio custom-control-inline">';
-             multiplePropertyFields  += '<input type="radio" class="custom-control-input IsMailing" id="IsMailingNo" name="mailing-address-same" value="No">';
-             multiplePropertyFields  += '<span class="custom-control-label">No</span>';
-             multiplePropertyFields  += '</label>';
-             multiplePropertyFields  += '</div>';
-             multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '<div class="col-lg-9 col-md-9 pt-4">';
+            multiplePropertyFields  += '<label class="form-label" style="display:inline-block;">Is the Mailing Address same as Property Address?</label>';  
+            multiplePropertyFields  += '<div class="custom-controls-stacked ml-3" style="display:inline-block;">';
+            multiplePropertyFields  += '<label class="custom-control custom-radio custom-control-inline">';
+            multiplePropertyFields  += '<input type="radio" class="custom-control-input IsMailing" id="IsMailingYes" name="mailing-address-same" value="Yes" checked>';
+            multiplePropertyFields  += '<span class="custom-control-label">Yes</span>';
+            multiplePropertyFields  += '</label>';
+            multiplePropertyFields  += '<label class="custom-control custom-radio custom-control-inline">';
+            multiplePropertyFields  += '<input type="radio" class="custom-control-input IsMailing" id="IsMailingNo" name="mailing-address-same" value="No">';
+            multiplePropertyFields  += '<span class="custom-control-label">No</span>';
+            multiplePropertyFields  += '</label>';
+            multiplePropertyFields  += '</div>';
+            multiplePropertyFields  += '</div>';
 
-             if(Button == 'Save'){
+            if(Button == 'Save'){
                multiplePropertyFields  += '<div class="col-md-12 col-lg-12 mb-3">';
                multiplePropertyFields  += '<div class="btn-list  text-right">';
                multiplePropertyFields  += '<a href="#" class="btn btn-secondary add_cancel" id="add_cancel">Cancel</a>';
                multiplePropertyFields  += '<a href="#" class="btn btn-primary add_role" id="add_role">Save</a>';
                multiplePropertyFields  += '</div>';
                multiplePropertyFields  += '</div>';
-             }
-             else{
+           }
+           else{
                multiplePropertyFields  += '<div class="col-md-12 col-lg-12 mb-3">';
                multiplePropertyFields  += '<div class="btn-list  text-right">';
                multiplePropertyFields  += '<a href="#" class="btn btn-secondary add_cancel" id="add_cancel">Cancel</a>&nbsp;&nbsp;';
@@ -844,13 +834,13 @@ if($order_details->PriorityUID == '1'){
                multiplePropertyFields  += '</div>';
                multiplePropertyFields  += '</div>';
 
-             }
+           }
 
 
-            
-            $('.select2').select2();
-            return multiplePropertyFields;
-        }
+           
+           $('.select2').select2();
+           return multiplePropertyFields;
+       }
 
 
 
@@ -877,9 +867,9 @@ if($order_details->PriorityUID == '1'){
               $('.MailingContentAdd').show();
               // $('#MailingDetailsAdd .mailingAddressFields').html(mailingAddressFields);
 
-            }
+          }
 
-        });
+      });
 
   /**
         * @author Sathis Kannan P
@@ -935,7 +925,7 @@ if($order_details->PriorityUID == '1'){
             $.each($("input[name='IsMailing']:checked"), function()
             {
               mailingAddressRadioBtnValue.push($(this).val());
-            });
+          });
             mailCheck = mailingAddressRadioBtnValue;
 
             // var signingAddressRadioBtnValue = [];
@@ -947,22 +937,22 @@ if($order_details->PriorityUID == '1'){
 
             if(mailingaddress1 == undefined){
               mailingaddress1 = "";
-            }
-            if(mailingaddress2 == undefined){
+          }
+          if(mailingaddress2 == undefined){
               mailingaddress2 = "";
-            }
-            if(mailingzipcode == undefined){
+          }
+          if(mailingzipcode == undefined){
               mailingzipcode = "";
-            }
-            if(mailingcity == undefined){
+          }
+          if(mailingcity == undefined){
               mailingcity = "";
-            }
-            if(mailingcounty == undefined){
+          }
+          if(mailingcounty == undefined){
               mailingcounty = "";
-            }
-            if(mailingstate == undefined){
+          }
+          if(mailingstate == undefined){
               mailingstate = "";
-            }
+          }
             // if(mailingnotes == undefined){
             //   mailingnotes = "";
             // }
@@ -992,13 +982,13 @@ if($order_details->PriorityUID == '1'){
             // }
             if(mailCheck == undefined){
               mailCheck = "";
-            }
+          }
             // if(signinCheck == undefined){
             //   signinCheck = "";
             // }
 
             var table;
-           
+            
             table  = '<tr id="rowID_'+btnCount+'">';
             table  += '<td>';
             table  +='<div class="d-flex align-items-center">';
@@ -1082,15 +1072,15 @@ if($order_details->PriorityUID == '1'){
             // {
             //   return false;
             // }else{
-                  $('.tableDisplay').show();
-                  $("#propertyRoleTable tbody").append(table);            
+              $('.tableDisplay').show();
+              $("#propertyRoleTable tbody").append(table);            
                   // propertyroleTableCheck();              
                   $('.multiplePropertyAddTable').html(''); 
                   $('.SaveUpdate').hide();
                   $('.select2').select2();
             // }
         });
- $('#UpdateRoles').click(function(event) {
+$('#UpdateRoles').click(function(event) {
 
     event.preventDefault();
 
@@ -1106,14 +1096,14 @@ if($order_details->PriorityUID == '1'){
     if(LoanAmount){
       LoanAmount = LoanAmount.replace(/[,$]/g , '');
       var LoanAmount = Number(LoanAmount);
-    }
-    else{
+  }
+  else{
 
       var LoanAmount = 0;
-    }
+  }
 
-    var formData=$('#frm_OrderSummary').serialize()+'&'+$.param({ 'LoanAmount': LoanAmount });
-    $.ajax({
+  var formData=$('#frm_OrderSummary').serialize()+'&'+$.param({ 'LoanAmount': LoanAmount });
+  $.ajax({
      type: "POST",
      url: '<?php echo base_url();?>Order_summary/save_roles',
      data: formData,
@@ -1123,16 +1113,16 @@ if($order_details->PriorityUID == '1'){
       $('.loading').show()
       button.attr("disabled", true);
       button.html('Loading ...');
-    },
-    success: function(data)
-    {
+  },
+  success: function(data)
+  {
       $('.loading').hide()
       if(data['validation_error'] == 0){
         
         toastr["success"]("", data['message']);
 
 
-      }else{
+    }else{
         
         toastr["error"]("", data['message']);
         button.html(button_text);
@@ -1145,7 +1135,7 @@ if($order_details->PriorityUID == '1'){
 
               $('#'+k).closest('div.is_error').addClass('is-invalid');
 
-            });
+          });
 
         if (data.MailingAddressValidation) {
 
@@ -1159,40 +1149,40 @@ if($order_details->PriorityUID == '1'){
               $('.other_address').eq(Number(key1)).find('.'+key2).closest('div.is_error').addClass('is-invalid');
               /*console.log("$('.other_address').eq("+key1+").find(."+key2+").closest('div.is_error').addClass('is-invalid')");*/
 
-            }
           }
-        }
-
-        if (data.SigningAddressValidation) {
-
-          var SigningAddressValidation = data.SigningAddressValidation;
-          for(var key1 in SigningAddressValidation){
-            if (!SigningAddressValidation.hasOwnProperty(key1)) continue;
-            var obj = SigningAddressValidation[key1];
-
-            for(var key2 in obj){
-              if (!obj.hasOwnProperty(key2)) continue;
-              $('.signing_other_address').eq(Number(key1)).find('.'+key2).closest('div.is_error').addClass('is-invalid');
-              /*console.log("$('.other_address').eq("+key1+").find(."+key2+").closest('div.is_error').addClass('is-invalid')");*/
-
-            }
-          }
-        }
       }
+  }
+
+  if (data.SigningAddressValidation) {
+
+      var SigningAddressValidation = data.SigningAddressValidation;
+      for(var key1 in SigningAddressValidation){
+        if (!SigningAddressValidation.hasOwnProperty(key1)) continue;
+        var obj = SigningAddressValidation[key1];
+
+        for(var key2 in obj){
+          if (!obj.hasOwnProperty(key2)) continue;
+          $('.signing_other_address').eq(Number(key1)).find('.'+key2).closest('div.is_error').addClass('is-invalid');
+          /*console.log("$('.other_address').eq("+key1+").find(."+key2+").closest('div.is_error').addClass('is-invalid')");*/
+
+      }
+  }
+}
+}
 
 
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
+},
+error: function (jqXHR, textStatus, errorThrown) {
 
-      console.log(errorThrown);
+  console.log(errorThrown);
 
-    },
-    failure: function (jqXHR, textStatus, errorThrown) {
+},
+failure: function (jqXHR, textStatus, errorThrown) {
 
-      console.log(errorThrown);
+  console.log(errorThrown);
 
-    },
-  });
-  });
+},
+});
+});
 
 </script>
