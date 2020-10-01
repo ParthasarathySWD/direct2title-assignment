@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class OrderInfo extends MY_Controller {
+class Order_attachment extends MY_Controller {
 
 	public function index()
 	{

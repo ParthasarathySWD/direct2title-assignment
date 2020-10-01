@@ -20,7 +20,7 @@
         <a class="nav-link <?php echo $this->uri->segment(1) == "Order_reports" ? 'active' : ''; ?> " href="Order_reports?OrderUID=<?php echo $OrderUID; ?>"><i class="fe fe-paperclip menu-icon"></i> Reports</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false"><i class="fe fe-send menu-icon"></i> Delivery</a>
+        <a class="nav-link" href="Order_attachment"><i class="fe fe-send menu-icon"></i> Delivery</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false"><i class="fe fe-message-square menu-icon"></i> Notes</a>

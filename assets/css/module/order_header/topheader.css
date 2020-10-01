@@ -101,7 +101,7 @@
 }
 
 .arrow-steps .step.current:after {
-   border-left: 19px solid #45aaf2; 
+ border-left: 19px solid #45aaf2; 
 }
 .arrow-steps .step:last-child:after{
     display: none;
@@ -260,6 +260,6 @@
 }
 .order-tracking:first-child:before{display: none;}
 .order-tracking.completed:before{background-color: #27aa80;}
-.nav-tabs .nav-link:hover:not(.disabled) {
+.order-sum-tab .nav-tabs .nav-link:hover:not(.disabled) {
   border-right:1px solid #fff;
 }
