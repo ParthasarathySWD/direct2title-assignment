@@ -853,7 +853,7 @@
                             </h6>
                             <input class="TemplateUID TempUID" type="hidden" name="TemplateUID" id="TemplateUID" >
                             <input class="DynamincFieldUID DynamincUID" type="hidden" name="DynamincFieldUID" id="DynamincFieldUID">
-                            <input class="CopyText" id="CopyText" name="CopyText" type="text" style="height: 0px;width: 1px;border: 0px;" >
+                            <input class="CopyText" id="CopyText" name="CopyText" type="text" value="" style="border:none;color:#fff;font-size: 1px;" >
                             <div class="scroll-field col-md-12 p-0">
 
                                 <table class="table table-vcenter table-new text-nowrap mb-0" cellspacing="0" id="" style="width:100%;">
@@ -929,7 +929,9 @@
   //       }
   //   });
   // }
-   if($("#mymce1").length > 0){
+
+  $(document).ready(function(){
+   // if($("#mymce1").length > 0){
 
      tinymce.init({
         selector: "textarea#mymce1",
@@ -957,8 +959,8 @@
         e.stopImmediatePropagation();
       }
     });
-  } 
-
+  // } 
+})
 
   $('#BtnSaveProducts').click(function(event)
   {
@@ -1903,14 +1905,15 @@ failure: function (jqXHR, textStatus, errorThrown) {
       $('.FieldUID').append('<option value="' + Modal_FieldUID + '" selected >' + Modal_FieldName + '</option>').trigger('change');
     }*/
 
-    $('#CopyText').val('');
+    // $('#CopyText').val('');
 
     $('#CopyText').val(selectedfieldkeyword);
 
     var cTxt = document.getElementById("CopyText");
 
     cTxt.select();
-    document.execCommand("Copy");
+    document.execCommand("copy");
+    document.execCommand("BackColor", false, 'white');
 
    // $('#CopyText').val('');
 

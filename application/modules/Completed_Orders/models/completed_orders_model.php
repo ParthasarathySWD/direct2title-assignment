@@ -102,7 +102,7 @@ class completed_orders_model extends CI_Model {
 		$this->db->where_in('torders.StatusUID',$status ); 
 
 		$this->db->group_by('OrderUID');
-		$this->db->limit(10);
+		// $this->db->limit(10);
 		// if ($post['length']!='') {
 		// $this->db->limit($post['length'], $post['start']);
 		// }

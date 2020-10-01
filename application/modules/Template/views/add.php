@@ -521,9 +521,9 @@
 <script src="<?php echo base_url('assets/js/clipboard.min.js'); ?>"></script>
 
 <script type="text/javascript">
-
+$(document).ready(function(){
     //Init tinymce 
-    if($("#txt-header").length > 0){
+    // if($("#txt-header").length > 0){
       tinymce.init({
         selector: "textarea#txt-header",
         theme: "modern",
@@ -558,9 +558,9 @@
                 });
             }
     });
-  }
+  // }
     //Init tinymce 
-    if($("#txt-body").length > 0){
+    // if($("#txt-body").length > 0){
       tinymce.init({
         selector: "textarea#txt-body",
         theme: "modern",
@@ -595,9 +595,9 @@
                 });
             }
     });
-  }
+  // }
     //Init tinymce 
-    if($("#txt-footer").length > 0){
+    // if($("#txt-footer").length > 0){
       tinymce.init({
         selector: "textarea#txt-footer",
         theme: "modern",
@@ -635,8 +635,8 @@
                 });
             }
     });
-  }
-
+  // }
+})
     /*$('body').on('click','#PDFPreviewContent', function(event) {
 
         $('#TinyMCEContent').hide();
@@ -1062,7 +1062,7 @@
         if(TemplateUID){
             $.ajax({
                 type: "POST",
-                url: '<?php echo base_url();?>template/GetTemplateFileName',
+                url: '<?php echo base_url();?>Template/GetTemplateFileName',
                 data: {'TemplateUID':TemplateUID},
                 dataType: 'json',
                 cache: false,
@@ -1165,10 +1165,14 @@
 
     function getPDFContent() 
     {
+        tinyMCE.triggerSave();
+        var BodyContent = $('#txt-body').val();
+        var HeaderContent = $('#txt-header').val();
+        var FooterContent = $('#txt-footer').val();
         
-        var BodyContent=tinymce.get('txt-body').getContent();
-        var HeaderContent=tinymce.get('txt-header').getContent();
-        var FooterContent=tinymce.get('txt-footer').getContent();
+        // var BodyContent=tinymce.get('txt-body').getContent();
+        // var HeaderContent=tinymce.get('txt-header').getContent();
+        // var FooterContent=tinymce.get('txt-footer').getContent();
 
         var formData = new FormData($('.frmTemplate')[0]);
 
@@ -1179,7 +1183,7 @@
         formData.append('RandomString', RandomString);
 
         $.ajax({
-            url: 'template/getPDF',
+            url: 'Template/getPDF',
             type: 'POST',
             dataType: 'json',
             data: formData,
