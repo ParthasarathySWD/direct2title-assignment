@@ -175,7 +175,7 @@
                         <li>
                             <label class="custom-switch">
                                 <span class="custom-switch-description">Min Sidebar Dark</span>
-                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-min_sidebar">
+                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-min_sidebar" checked="">
                                 <span class="custom-switch-indicator"></span>
                             </label>
                         </li>

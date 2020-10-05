@@ -191,3 +191,32 @@ table.order-summary-head tr td .text-muted {
 .table th {
 	text-transform: capitalize;
 }
+.end-left-menu .with-icon i{
+	font-size: 25px;
+	color: #ffffff; 
+	font-weight:normal;
+}
+.end-left-menu .with-icon span{
+	display: block;
+	color: #ffffff;
+	font-size: 10px;
+	padding-top: 0px;
+}
+.end-left-menu a{
+	display: block!important;
+	width:70px;
+	height:65px;
+	min-width:70px;
+	padding:10px 3px;
+}
+.end-left-menu a:hover, .end-left-menu a.active{
+	border-left:4px solid #e2e2f6;
+	width:66px;
+	min-width:66px;
+	background-color: #3e4681;
+	background-image: linear-gradient(180deg,rgba(60,62,93,.6),rgba(60,62,93,0) 33%),linear-gradient(225deg,rgba(60,62,93,.6) 33%,rgba(60,62,93,0) 70%),linear-gradient(270deg,rgba(60,62,93,.6) 70%,rgba(60,62,93,0) 94%),linear-gradient(315deg,rgba(60,62,93,.6) 33%,rgba(60,62,93,0) 70%),linear-gradient(360deg,rgba(60,62,93,.6),rgba(60,62,93,0) 33%),linear-gradient(90deg,rgba(98,100,167,.75) 6%,rgba(98,100,167,0) 70%);
+	color: #fff;
+}
+.header_top.dark {
+	background-color: #33344a!important;
+}
