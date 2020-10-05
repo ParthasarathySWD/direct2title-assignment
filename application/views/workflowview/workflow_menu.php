@@ -23,10 +23,10 @@
         <a class="nav-link" href="Order_attachment"><i class="fe fe-send menu-icon"></i> Delivery</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false"><i class="fe fe-message-square menu-icon"></i> Notes</a>
+        <a class="nav-link active" href="Order_notes"><i class="fe fe-message-square menu-icon"></i> Notes</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#News" aria-expanded="false"><i class="fe fe-layers menu-icon"></i> History</a>
+        <a class="nav-link" data-toggle="tab" href="#News"><i class="fe fe-layers menu-icon"></i> History</a>
       </li>
     </ul>
   </div>
