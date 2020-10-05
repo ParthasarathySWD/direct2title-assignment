@@ -192,7 +192,7 @@ table.order-summary-head tr td .text-muted {
 	text-transform: capitalize;
 }
 .end-left-menu .with-icon i{
-	font-size: 25px;
+	font-size: 30px;
 	color: #ffffff; 
 	font-weight:normal;
 }
@@ -219,4 +219,30 @@ table.order-summary-head tr td .text-muted {
 }
 .header_top.dark {
 	background-color: #33344a!important;
+}
+.end-left-menu .with-icon{
+	position:relative;
+}
+.end-left-menu .activity-badge{
+	position: absolute;
+	left: 35px;
+	top: 3px;
+	border-radius: 1rem;
+	height: 21px;
+	margin: auto;
+	min-width: 21px;
+	align-items: center;
+	border-radius: .9rem;
+	height: 21px;
+	font-weight: 700;
+	background: #cc4a31;
+	color: #fff;
+	border: .2rem solid #33344a;
+
+	line-height: 15px;
+	padding: 0 3px;
+}
+.end-left-menu a:hover .activity-badge{
+
+	left: 31px;
 }

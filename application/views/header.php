@@ -55,8 +55,8 @@
                 <div class="hleft">
                     <div class="dropdown end-left-menu">
                         <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="assets/images/user.png" alt=""/></a>
-                        <a href="dashboard" class="with-icon"><i class="icon-home"></i><span>Dashboard</span></a>
-                        <a href="My_orders" class="with-icon"><i class="fe fe-layers"></i><span>My Orders</span></a>
+                        <a href="dashboard" class="with-icon"><i class="icon-home"></i><span class="activity-badge">5</span><span>Dashboard</span></a>
+                        <a href="My_orders" class="with-icon"><i class="fe fe-layers"></i><span class="activity-badge">55</span><span>My Orders</span></a>
                         <a href="Order_entry" class="with-icon"><i class="fe fe-log-in"></i><span>Order Entry</span></a>
 <!--                         <a href="page-search.html" class="nav-link icon"><i class="fa fa-search"></i></a>
                         <a href="index.html" class="nav-link icon"><i class="fa fa-home"></i></a>
