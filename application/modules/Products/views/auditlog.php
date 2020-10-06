@@ -1,10 +1,10 @@
 
 <!-- start body header -->
-<div id="page_top" class="section-body">
+<div id="page_top" class="section-body  bg-new-header-top">
     <div class="container-fluid">
         <div class="page-header">
             <div class="left">
-                <h1 class="page-title">Sub Products</h1> 
+                <h1 class="page-title">Products</h1> 
             </div>
             <div class="right">
                 <div class="notification d-flex">

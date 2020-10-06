@@ -1,7 +1,7 @@
 <!--BEGIN CONTENT-->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/lib/fSelect-Selectall/fSelect.css">
 <!-- start body header -->
-<div id="page_top" class="section-body">
+<div id="page_top" class="section-body  bg-new-header-top">
     <div class="container-fluid">
         <div class="page-header">
             <div class="left">

@@ -188,9 +188,6 @@ table.order-summary-head tr td .text-muted {
 .custom-checkbox .custom-control-label {
 	font-size:14px;
 }
-.table th {
-	text-transform: capitalize;
-}
 
 .end-left-menu .with-icon i{
 	font-size: 30px;
