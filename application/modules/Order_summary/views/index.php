@@ -30,7 +30,7 @@ $ExceptionList = $this->Common_model->GetExceptionList($OrderUID);
 $Orderdetailsss = $this->Common_model->get_orderdetails($OrderrUID);
 
 $SubProductUID = $Orderdetailsss->SubProductUID;
-$OrderSourceUID = $Orderdetailsss->OrderSourceUID;
+// $OrderSourceUID = $Orderdetailsss->OrderSourceUID;
 $ProductUID = $this->Common_model->GetProductUIDBySubProductUID($SubProductUID);
 $Product = $ProductUID->ProductUID;
 
@@ -50,11 +50,10 @@ if($billedqueue)
   $billedqueue = '<span class="btn btn-sm btn-rounded btn-sm pull-right" style="font-size: 10px; color:#fff; background: #34a853;">Billed</span>';
 }
 
-$is_stewart = 0;
-if($OrderSourceUID == 2){
-  $is_stewart = 1;
-}
-
+// $is_stewart = 0;
+// if($OrderSourceUID == 2){
+//   $is_stewart = 1;
+// }
 
 $is_customer_login = $this->Common_model->is_customerlogin();
 
@@ -76,6 +75,8 @@ if($order_details->PriorityUID == '1'){
 <!-- start body header -->
 
 <?php $this->load->view('workflowview/workflow_topheader'); ?>
+
+<!-- <?php print_r($Sub_products); ?> -->
 
 <div class="section-body">
     <div class="container-fluid">
@@ -142,7 +143,7 @@ if($order_details->PriorityUID == '1'){
             <div class="col-md-3 col-lg-3">
                 <div class="form-group">
                     <label class="form-label">SubProduct</label>
-                    <select class="form-control mdl-textfield__input input-xs select2 mdl-select2" id="SubProductUID" name="SubProductUID" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?> >
+                    <select class="form-control mdl-textfield__input input-xs select2 mdl-select2" id="SubProductUID" name="SubProductUID">
                       <?php foreach ($Sub_products as $key => $Sub_product) {
                         if($Sub_product->SubProductUID == $order_details->SubProductUID) {?>
                           <option value="<?php echo $Sub_product->SubProductUID; ?>" selected><?php echo $Sub_product->SubProductName;?></option>';
@@ -279,7 +280,7 @@ if($order_details->PriorityUID == '1'){
                                     <input class="form-control mdl-textfield__input  input-xs <?php if($is_vendor_login){ echo 'vendor_disabled'; } ?>" type="text" id="APN" name="APN" value="<?php echo $order_details->APN ?>" <?php if($is_vendor_login){ echo 'disabled="disabled"'; } ?>>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3">
+                      <!--       <div class="col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label">Borrower Type</label>
                                     <select class="form-control mdl-select2 select2 mdl-textfield__input input-xs BorrowerType" id="BorrowerType" name="BorrowerType" >
@@ -323,7 +324,7 @@ if($order_details->PriorityUID == '1'){
                             <?php } }?>
                         </select>
                     </div>
-                </div>
+                </div> -->
 
             </div>
         </div>

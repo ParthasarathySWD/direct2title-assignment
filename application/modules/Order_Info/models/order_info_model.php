@@ -32,7 +32,7 @@ class Order_info_model extends CI_Model {
     $this->db->select ( '*,torders.OrderDocsPath' );
     $this->db->from ( 'torderdocuments' );
     $this->db->join ( 'mdocumenttypes', 'mdocumenttypes.DocumentTypeUID = torderdocuments.DocumentTypeUID' , 'left' );
-    $this->db->join ( 'msearchmodes', 'msearchmodes.SearchModeUID = torderdocuments.SearchModeUID' , 'left' );
+    // $this->db->join ( 'msearchmodes', 'msearchmodes.SearchModeUID = torderdocuments.SearchModeUID' , 'left' );
     $this->db->join ( 'torders', 'torders.OrderUID = torderdocuments.OrderUID' , 'left' );
     $this->db->where(array("torderdocuments.OrderUID"=>$OrderUID));
     $this->db->order_by("torderdocuments.Position asc, torderdocuments.SearchModeUID asc");

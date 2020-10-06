@@ -632,10 +632,10 @@ class Order_Summary_Model extends CI_Model {
 
 		// D-2-T3 insert  if  not exists
                   /*Insert Order Import*/
-                  $this->Insert_tOrderImport($data,$OrderUID);
+                  // $this->Insert_tOrderImport($data,$OrderUID);
 
                   /* @purpose: To Update Additional Information  @author: Yagavi.G <yagavi.g@avanzegroup.com> @since: May 27th 2020 */
-                  $this->InsertAdditionalInformation($data,$OrderUID);
+                  // $this->InsertAdditionalInformation($data,$OrderUID);
 
                   return $OrderUID;
 
@@ -1349,16 +1349,16 @@ class Order_Summary_Model extends CI_Model {
 
 	            		if($ApiRequestUID != 0){
 
-	            			$ApiStatusCodeDetails = $this->GetApiStatusCodeDetails($ApiRequestUID); 
-	            			$ApiRequestCode = $ApiStatusCodeDetails->RequestCode;
-	            			$RequestDesc = $ApiStatusCodeDetails->RequestDesc;
+	            			// $ApiStatusCodeDetails = $this->GetApiStatusCodeDetails($ApiRequestUID); 
+	            			// $ApiRequestCode = $ApiStatusCodeDetails->RequestCode;
+	            			// $RequestDesc = $ApiStatusCodeDetails->RequestDesc;
 
-	            			$api_request['OrderUID'] = $cus['OrderUID'];
-	            			$api_request['ApiRequestUID'] = $ApiRequestUID;
-	            			$api_request['ApiRequestComment'] = $cus['CustomerDelayStartRemarks'];
-	            			$api_request['CreatedBy'] = $this->session->userdata('UserUID');
-	            			$api_request['CreatedDate'] = date('Y-m-d H:i:s',strtotime('now'));
-	            			$result = $this->db->insert('tApiRequestStatus',$api_request);
+	            			// $api_request['OrderUID'] = $cus['OrderUID'];
+	            			// $api_request['ApiRequestUID'] = $ApiRequestUID;
+	            			// $api_request['ApiRequestComment'] = $cus['CustomerDelayStartRemarks'];
+	            			// $api_request['CreatedBy'] = $this->session->userdata('UserUID');
+	            			// $api_request['CreatedDate'] = date('Y-m-d H:i:s',strtotime('now'));
+	            			// $result = $this->db->insert('tApiRequestStatus',$api_request);
 
 	            			$note_api['OrderUID'] = $cus['OrderUID'];
 	            			$note_api['SectionUID'] = $cus['CustomerDelayStartNoteType'];
@@ -1397,14 +1397,14 @@ class Order_Summary_Model extends CI_Model {
 	            	}
 	            } 
 
-	            function GetApiStatusCodeDetails($ApiRequestUID){
-	            	$this->db->select ( '*' ); 
-	            	$this->db->from ( 'mApiRequest' );
-	            	$this->db->where ('mApiRequest.ApiRequestUID',$ApiRequestUID);
-	            	$query = $this->db->get();
-	            	$res = $query->row();
-	            	return $res;
-	            }
+	            // function GetApiStatusCodeDetails($ApiRequestUID){
+	            // 	$this->db->select ( '*' ); 
+	            // 	$this->db->from ( 'mApiRequest' );
+	            // 	$this->db->where ('mApiRequest.ApiRequestUID',$ApiRequestUID);
+	            // 	$query = $this->db->get();
+	            // 	$res = $query->row();
+	            // 	return $res;
+	            // }
 
 	            function update_stop_delay_time($OrderUID,$StopTime,$StopRemarks,$StopNoteType,$CustomerDelayUID)
 	            {
@@ -2269,41 +2269,41 @@ class Order_Summary_Model extends CI_Model {
 	            }
 
 
-	            function GetCustomerOrderTypeDoc($CustomerUID, $OrderTypeUID)
-	            {
-	            	$this->db->select('*')->from('mcustomerordertypedoc');
-	            	$this->db->where(array('mcustomerordertypedoc.CustomerUID'=>$CustomerUID));
-	            	$CustomerOrderTypeDoc=$this->db->get()->result();
+	            // function GetCustomerOrderTypeDoc($CustomerUID, $OrderTypeUID)
+	            // {
+	            // 	$this->db->select('*')->from('mcustomerordertypedoc');
+	            // 	$this->db->where(array('mcustomerordertypedoc.CustomerUID'=>$CustomerUID));
+	            // 	$CustomerOrderTypeDoc=$this->db->get()->result();
 
-	            	$this->db->select('*')->from('mordertypes');
-	            	$this->db->where('OrderTypeUID', $OrderTypeUID);
-	            	$result=$this->db->get()->row();
+	            // 	$this->db->select('*')->from('mordertypes');
+	            // 	$this->db->where('OrderTypeUID', $OrderTypeUID);
+	            // 	$result=$this->db->get()->row();
 
-	            	$OrderType = '';
+	            // 	$OrderType = '';
 
-	            	$mcustomerordertypedoc['DocumentName']="";
-	            	$mcustomerordertypedoc['OrderType']=$result->OrderTypeName;
-	            	foreach ($CustomerOrderTypeDoc as $key => $row)
-	            	{
-	            		$OrderType .= $row->OrderTypeUID;
-	            		$OrderTypeUIDs=explode(',', $OrderType);
+	            // 	$mcustomerordertypedoc['DocumentName']="";
+	            // 	$mcustomerordertypedoc['OrderType']=$result->OrderTypeName;
+	            // 	foreach ($CustomerOrderTypeDoc as $key => $row)
+	            // 	{
+	            // 		$OrderType .= $row->OrderTypeUID;
+	            // 		$OrderTypeUIDs=explode(',', $OrderType);
 
-	            		foreach ($OrderTypeUIDs as $key => $value) {
-	            			if($value==$OrderTypeUID)
-	            			{
-	            				$mcustomerordertypedoc['DocumentName']=$row->DocumentName;
-	            			}
-	            			else
-	            			{
-	            				$mcustomerordertypedoc['DocumentName']=$row->DocumentName;
-	            			}
-	            		}
+	            // 		foreach ($OrderTypeUIDs as $key => $value) {
+	            // 			if($value==$OrderTypeUID)
+	            // 			{
+	            // 				$mcustomerordertypedoc['DocumentName']=$row->DocumentName;
+	            // 			}
+	            // 			else
+	            // 			{
+	            // 				$mcustomerordertypedoc['DocumentName']=$row->DocumentName;
+	            // 			}
+	            // 		}
 
-	            	}
-	            	return (object)$mcustomerordertypedoc;
+	            // 	}
+	            // 	return (object)$mcustomerordertypedoc;
 
 
-	            }
+	            // }
 
 	            function GetCustomerDefaultSubProducts($CustomerUID)
 	            {
@@ -2368,7 +2368,7 @@ class Order_Summary_Model extends CI_Model {
 	            	$this->db->from ( 'torders' );
 	            	$this->db->where ('torders.OrderUID',$OrderUID);
 	            	$this->db->join('mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID');
-	            	$this->db->join('mabstractor', 'mabstractor.AbstractorUID = torders.AbstractorUID','left');
+	            	// $this->db->join('mabstractor', 'mabstractor.AbstractorUID = torders.AbstractorUID','left');
 	            	$query = $this->db->get();
 	            	return $query->row();
 	            }
@@ -2566,9 +2566,9 @@ class Order_Summary_Model extends CI_Model {
 		/*Function to change OrderNumber*/
 		$this->Change_OrderNumber($OrderUID,$SubProductUID);
 
-		if($oldvalue['IsBilled'] == '0') {
-			$this->calculate_customerpricing($OrderUID,$SubProductUID,$OldSubProductUID);
-		}
+		// if($oldvalue['IsBilled'] == '0') {
+		// 	$this->calculate_customerpricing($OrderUID,$SubProductUID,$OldSubProductUID);
+		// }
 		
 		$this->db->select('*');
 		$this->db->from('torders');
@@ -2588,12 +2588,12 @@ class Order_Summary_Model extends CI_Model {
 		$this->db->update('torders');
 		/* End - OrderDueDateTime Changes for Product & SubProduct*/
 
-		$tApiOrders = $this->db->query('SELECT * FROM tApiOrders WHERE OrderUID='.$OrderUID.'')->row();
-		if($tApiOrders){
-			$this->db->set('SubProductUID', $NewSubProductUID);
-			$this->db->where('OrderUID', $OrderUID);
-			$this->db->update('tApiOrders');
-		}
+		// $tApiOrders = $this->db->query('SELECT * FROM tApiOrders WHERE OrderUID='.$OrderUID.'')->row();
+		// if($tApiOrders){
+		// 	$this->db->set('SubProductUID', $NewSubProductUID);
+		// 	$this->db->where('OrderUID', $OrderUID);
+		// 	$this->db->update('tApiOrders');
+		// }
 
 		$NoteType = $this->GetNoteTypeUID('System Note');
 		$SectionUID = $NoteType->SectionUID;
@@ -2943,13 +2943,13 @@ class Order_Summary_Model extends CI_Model {
     	return true;
     }
 
-    function GetStewartApiRequest(){
+    // function GetStewartApiRequest(){
 
-    	$this->db->select('*');
-    	$this->db->from('mApiRequest');
-    	$this->db->where('RequestType','Additional Information');
-    	return $this->db->get()->result();
-    }
+    // 	$this->db->select('*');
+    // 	$this->db->from('mApiRequest');
+    // 	$this->db->where('RequestType','Additional Information');
+    // 	return $this->db->get()->result();
+    // }
 
 
     function get_customerpricingdatas_frompayments($OrderUID){
@@ -2962,28 +2962,28 @@ class Order_Summary_Model extends CI_Model {
     	return $query->row();
     }
 
-    function get_parentpartnerdetails()
-    {
-    	$this->db->select('*');	
-    	$this->db->from('mPartner');
-    	$this->db->where(array('IsParentCompany'=>1,'Active'=>1));   
-    	return $this->db->get()->result();
-    }
-    function get_torderimportdata($OrderUID)
-    {
-    	$this->db->select('*')->from('tOrderImport');
-    	$this->db->where('OrderUID',$OrderUID);
-    	return $this->db->get()->row();
-    }
+    // function get_parentpartnerdetails()
+    // {
+    // 	$this->db->select('*');	
+    // 	$this->db->from('mPartner');
+    // 	$this->db->where(array('IsParentCompany'=>1,'Active'=>1));   
+    // 	return $this->db->get()->result();
+    // }
+    // function get_torderimportdata($OrderUID)
+    // {
+    // 	$this->db->select('*')->from('tOrderImport');
+    // 	$this->db->where('OrderUID',$OrderUID);
+    // 	return $this->db->get()->row();
+    // }
 
-    public function get_allpartners()
-    {
-    	$this->db->select('mPartner.PartnerUID,mPartner.PartnerCompanyName');
-    	$this->db->from('mPartner');
-    	$this->db->group_by('mPartner.PartnerUID'); 
-    	$query = $this->db->get();
-    	return $query->result();
-    }
+    // public function get_allpartners()
+    // {
+    // 	$this->db->select('mPartner.PartnerUID,mPartner.PartnerCompanyName');
+    // 	$this->db->from('mPartner');
+    // 	$this->db->group_by('mPartner.PartnerUID'); 
+    // 	$query = $this->db->get();
+    // 	return $query->result();
+    // }
 
     public function Update_OrderHeaderdetails($OrderUID,$PriorityID,$OrderTypeID)
     {
@@ -3006,43 +3006,43 @@ class Order_Summary_Model extends CI_Model {
     }
 
     /* D-2-T23 Parner or Inhouse autopopulate feature */
-    function Insert_tOrderImport($data,$OrderUID ='') {
-    	if(!empty($OrderUID)) {
-			//timport data
-    		$updatetimport = new Stdclass();
-    		$updatetimport->OrderUID = $OrderUID;
-    		$updatetimport->Investor = isset($data['Investor']) ? $data['Investor'] : null;
-    		$updatetimport->MCAPercentage = isset($data['MCAPercentage']) ? $data['MCAPercentage'] : null;
-    		$updatetimport->MCAAmount = isset($data['MCAAmount']) ? (float) str_replace(',', '', $data['MCAAmount']) : 0.00;
-    		$updatetimport->MCABuckets = 	isset($data['MCABuckets']) ? $data['MCABuckets'] : null;
-    		$updatetimport->Agent = isset($data['Agent']) ? $data['Agent'] : null;
-    		$updatetimport->TitleCompany = isset($data['TitleCompany']) ? $data['TitleCompany'] : null;
-    		$updatetimport->TitleUnderwriter = isset($data['TitleUnderwriter']) ? $data['TitleUnderwriter'] : null;
-    		$updatetimport->PolicyNumber = isset($data['PolicyNumber']) ? $data['PolicyNumber'] : null;
-    		$updatetimport->Issuer = isset($data['Issuer']) ? $data['Issuer'] : null;
-    		$updatetimport->ClientKickBackComments = isset($data['ClientKickBackComments']) ? $data['ClientKickBackComments'] : null;
-    		$updatetimport->SearchOrderedDate = isset($data['SearchOrderedDate']) && !empty($data['SearchOrderedDate']) ? Date('Y-m-d',strtotime($data['SearchOrderedDate'])) : null;
-    		$updatetimport->PolicyApproveDate = isset($data['PolicyApproveDate']) && !empty($data['PolicyApproveDate'])  ? Date('Y-m-d',strtotime($data['PolicyApproveDate'])) : null;
-    		$updatetimport->ClientKickBackDate = isset($data['ClientKickBackDate']) && !empty($data['ClientKickBackDate']) ? Date('Y-m-d',strtotime($data['ClientKickBackDate'])) : null;
-    		$updatetimport->FHA = isset($data['FHA']) && !empty($data['FHA']) ? $data['FHA'] : null;
-    		$this->db->where('OrderUID',$OrderUID);
-    		$this->db->where('OrderUID',$OrderUID);    
-    		$timportquery = $this->db->get('tOrderImport');
-    		if ( $timportquery->num_rows() > 0 )
-    		{
-    			$this->db->where('OrderUID',$OrderUID);    
-    			$this->db->update('tOrderImport',$updatetimport);
-    		} else {
-    			$this->db->insert('tOrderImport',$updatetimport);
-    		}
-    	}
-    }
+   //  function Insert_tOrderImport($data,$OrderUID ='') {
+   //  	if(!empty($OrderUID)) {
+			// //timport data
+   //  		$updatetimport = new Stdclass();
+   //  		$updatetimport->OrderUID = $OrderUID;
+   //  		$updatetimport->Investor = isset($data['Investor']) ? $data['Investor'] : null;
+   //  		$updatetimport->MCAPercentage = isset($data['MCAPercentage']) ? $data['MCAPercentage'] : null;
+   //  		$updatetimport->MCAAmount = isset($data['MCAAmount']) ? (float) str_replace(',', '', $data['MCAAmount']) : 0.00;
+   //  		$updatetimport->MCABuckets = 	isset($data['MCABuckets']) ? $data['MCABuckets'] : null;
+   //  		$updatetimport->Agent = isset($data['Agent']) ? $data['Agent'] : null;
+   //  		$updatetimport->TitleCompany = isset($data['TitleCompany']) ? $data['TitleCompany'] : null;
+   //  		$updatetimport->TitleUnderwriter = isset($data['TitleUnderwriter']) ? $data['TitleUnderwriter'] : null;
+   //  		$updatetimport->PolicyNumber = isset($data['PolicyNumber']) ? $data['PolicyNumber'] : null;
+   //  		$updatetimport->Issuer = isset($data['Issuer']) ? $data['Issuer'] : null;
+   //  		$updatetimport->ClientKickBackComments = isset($data['ClientKickBackComments']) ? $data['ClientKickBackComments'] : null;
+   //  		$updatetimport->SearchOrderedDate = isset($data['SearchOrderedDate']) && !empty($data['SearchOrderedDate']) ? Date('Y-m-d',strtotime($data['SearchOrderedDate'])) : null;
+   //  		$updatetimport->PolicyApproveDate = isset($data['PolicyApproveDate']) && !empty($data['PolicyApproveDate'])  ? Date('Y-m-d',strtotime($data['PolicyApproveDate'])) : null;
+   //  		$updatetimport->ClientKickBackDate = isset($data['ClientKickBackDate']) && !empty($data['ClientKickBackDate']) ? Date('Y-m-d',strtotime($data['ClientKickBackDate'])) : null;
+   //  		$updatetimport->FHA = isset($data['FHA']) && !empty($data['FHA']) ? $data['FHA'] : null;
+   //  		$this->db->where('OrderUID',$OrderUID);
+   //  		$this->db->where('OrderUID',$OrderUID);    
+   //  		$timportquery = $this->db->get('tOrderImport');
+   //  		if ( $timportquery->num_rows() > 0 )
+   //  		{
+   //  			$this->db->where('OrderUID',$OrderUID);    
+   //  			$this->db->update('tOrderImport',$updatetimport);
+   //  		} else {
+   //  			$this->db->insert('tOrderImport',$updatetimport);
+   //  		}
+   //  	}
+   //  }
 
     /* @purpose: To Update Additional Info @author: Yagavi.G <yagavi.g@avanzegroup.com> @since: May 27th 2020 */
     function InsertAdditionalInformation($data,$OrderUID ='') {
     	if(!empty($OrderUID)) {			
-    		$tApiOrders = $this->db->query('SELECT * FROM tApiOrders WHERE OrderUID='.$OrderUID.'')->row();
-    		$OrderRequestUID = $tApiOrders->OrderRequestUID;
+    		// $tApiOrders = $this->db->query('SELECT * FROM tApiOrders WHERE OrderUID='.$OrderUID.'')->row();
+    		// $OrderRequestUID = $tApiOrders->OrderRequestUID;
 
     		$updateAdditional = new Stdclass();			
     		$updateAdditional->EstateInterestUID = isset($data['EstateInterestUID']) ? $data['EstateInterestUID'] : null;
@@ -3109,18 +3109,18 @@ class Order_Summary_Model extends CI_Model {
 	*/
 
 
-	function getApiOrderDetail($OrderUID)
-	{
-		$this->db->select("torders.OrderUID, torders.OrderNumber, tApiOrders.InBoundUID, tApiOrders.TransactionID");
-		$this->db->from('torders');
-		$this->db->join ( 'tApiOrders', 'tApiOrders.OrderUID = torders.OrderUID' , 'left' );
-		$this->db->join ( 'tApiOutBoundOrders', 'tApiOutBoundOrders.OrderUID = torders.OrderUID' , 'left' );
-		$this->db->where(array("torders.OrderUID"=>$OrderUID));  
-		$query = $this->db->get();
+	// function getApiOrderDetail($OrderUID)
+	// {
+	// 	$this->db->select("torders.OrderUID, torders.OrderNumber, tApiOrders.InBoundUID, tApiOrders.TransactionID");
+	// 	$this->db->from('torders');
+	// 	$this->db->join ( 'tApiOrders', 'tApiOrders.OrderUID = torders.OrderUID' , 'left' );
+	// 	$this->db->join ( 'tApiOutBoundOrders', 'tApiOutBoundOrders.OrderUID = torders.OrderUID' , 'left' );
+	// 	$this->db->where(array("torders.OrderUID"=>$OrderUID));  
+	// 	$query = $this->db->get();
 
-		return $query->row();
+	// 	return $query->row();
 
-	}
+	// }
 
 	function GetX1Order($OrderUID) 
 	{
@@ -3130,37 +3130,37 @@ class Order_Summary_Model extends CI_Model {
 
 		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$torders->PropertyCountyName))->row();
 
-		if(!empty($mcounties))
-		{
-			$query = $this->db->query("SELECT *, CASE WHEN msearchmodes.SearchModeUID = '6' THEN 
-				mcountysearchmodes.WebsiteURL ELSE msearchmodes.SearchSiteURL END AS SiteURL 
-				FROM mcountysearchmodes
-				LEFT JOIN msearchmodes ON mcountysearchmodes.SearchModeUID = msearchmodes.SearchModeUID 
-				WHERE mcountysearchmodes.CountyUID = '". $mcounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
-				Order By FIELD(SearchModeName, 'Free', 'Paid', 'Others', 'Abstractor')");
+		// if(!empty($mcounties))
+		// {
+		// 	$query = $this->db->query("SELECT *, CASE WHEN msearchmodes.SearchModeUID = '6' THEN 
+		// 		mcountysearchmodes.WebsiteURL ELSE msearchmodes.SearchSiteURL END AS SiteURL 
+		// 		FROM mcountysearchmodes
+		// 		LEFT JOIN msearchmodes ON mcountysearchmodes.SearchModeUID = msearchmodes.SearchModeUID 
+		// 		WHERE mcountysearchmodes.CountyUID = '". $mcounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
+		// 		Order By FIELD(SearchModeName, 'Free', 'Paid', 'Others', 'Abstractor')");
 
-			$data = $query->row();
-		}
-		return $data;
+		// 	$data = $query->row();
+		// }
+		// return $data;
 	}
 
-	function CheckX1OrderInMyapproval($OrderUID)
-	{
-		$ApiOutboundStatus = array('50','100');
-		$this->db->select('*');
-		$this->db->from('tOrderEventLog');
-		$this->db->join('tApiOutBoundOrders','tApiOutBoundOrders.ApiOutBoundOrderUID = tApiOutBoundOrders.ApiOutBoundOrderUID');
-		$this->db->join('torderapprovals','torderapprovals.ApiOutBoundOrderUID = tOrderEventLog.ApiOutBoundOrderUID','left');
-		$this->db->join('torders','torders.OrderUID = tApiOutBoundOrders.OrderUID','left');
-		$this->db->where('tOrderEventLog.OrderUID',$OrderUID);
-		$this->db->where('tApiOutBoundOrders.Status', 'Accepted');
-		$this->db->where_not_in('tApiOutBoundOrders.ApiOutboundStatus', $ApiOutboundStatus);
-		$this->db->where('torderapprovals.ApprovalStatus', 0);
-		$this->db->where('torders.OrderUID',$OrderUID);
-		$this->db->group_by('tApiOutBoundOrders.ApiOutBoundOrderUID');
-		$tOrderEventLog = $this->db->get()->RESULT();
-		return $tOrderEventLog;
-	}
+	// function CheckX1OrderInMyapproval($OrderUID)
+	// {
+	// 	$ApiOutboundStatus = array('50','100');
+	// 	$this->db->select('*');
+	// 	$this->db->from('tOrderEventLog');
+	// 	$this->db->join('tApiOutBoundOrders','tApiOutBoundOrders.ApiOutBoundOrderUID = tApiOutBoundOrders.ApiOutBoundOrderUID');
+	// 	$this->db->join('torderapprovals','torderapprovals.ApiOutBoundOrderUID = tOrderEventLog.ApiOutBoundOrderUID','left');
+	// 	$this->db->join('torders','torders.OrderUID = tApiOutBoundOrders.OrderUID','left');
+	// 	$this->db->where('tOrderEventLog.OrderUID',$OrderUID);
+	// 	$this->db->where('tApiOutBoundOrders.Status', 'Accepted');
+	// 	$this->db->where_not_in('tApiOutBoundOrders.ApiOutboundStatus', $ApiOutboundStatus);
+	// 	$this->db->where('torderapprovals.ApprovalStatus', 0);
+	// 	$this->db->where('torders.OrderUID',$OrderUID);
+	// 	$this->db->group_by('tApiOutBoundOrders.ApiOutBoundOrderUID');
+	// 	$tOrderEventLog = $this->db->get()->RESULT();
+	// 	return $tOrderEventLog;
+	// }
 
 	/**
 	* @purpose : To get api title order details

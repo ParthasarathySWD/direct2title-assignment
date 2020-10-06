@@ -9,7 +9,7 @@ $UserRole = $this->common_model->GetRoleTypeDetails($RoleUID);
 $CustomerDetails = $this->common_model->GetCustomerByUserUID($UserUID);
 $Products = $this->Common_model->getCustomerProducts(1);
 $Sub_products = $this->Common_model->GetSub_productDetails();
-$BorrowerDetails = $this->Common_model->GetBorrowerDetailsDescription();
+// $BorrowerDetails = $this->Common_model->GetBorrowerDetailsDescription();
 $PropertyTypeDetails = $this->Common_model->GetPropertyTypeDetails();
 $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
 
@@ -182,7 +182,7 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
                                     <input type="text" class="form-control" id="APN" name="APN" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3">
+                          <!--   <div class="col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label">Borrower Type</label>
                                     <select  class="form-control select2" id="BorrowerType" name="BorrowerType">
@@ -226,7 +226,7 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
                                         <?php } }?>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>

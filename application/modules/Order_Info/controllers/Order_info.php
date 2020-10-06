@@ -1158,22 +1158,22 @@ public function previewtemplate()
 		      	{
 		      		$str.= '<div class="'.$rowtest.' form-group input_style">
 		      		<label for="exampleInputuname" style="font-weight:bold" class="'.$colsm3.'" >'. $row->FieldName.'</label>
-		      		<div  class="input-group datepicker '.$colsm12.'">';
+		      		<div  class="input-group'.$colsm12.'">';
 
 		      		if($Orderinfo->$value)
 		      		{                                                    
 		      			if( in_array($Orderinfo->$value, ["0000-00-00", "", " ", "--", "__", "0000-00-00 00:00:00",NULL]) ) 
 		      			{
-		      				$str.= '<input size="16" type="date" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " class="form-control input-xs" '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
+		      				$str.= '<input size="16" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " data-provide="datepicker" data-date-autoclose="true" class="form-control" '.$Disable.'><span class="input-group-addon "><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
 		      			} 
 		      			else
 		      			{
-		      				$str.= '<input size="16" type="date" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value="'. date('m/d/Y',strtotime($Orderinfo->$value)) .'" class="form-control input-xs"  '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
+		      				$str.= '<input size="16" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value="'. date('m/d/Y',strtotime($Orderinfo->$value)) .'" data-provide="datepicker" data-date-autoclose="true" class="form-control"  '.$Disable.'><span class="input-group-addon "><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
 		      			}
 		      		}
 		      		else
 		      		{
-		      			$str.= '<input size="16" type="date" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " class="form-control input-xs" '.$Disable.'><span class="input-group-addon btn btn-primary"><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
+		      			$str.= '<input size="16" name="'. $row->FieldName.'" id="'. $row->FieldName.'" value=" " data-provide="datepicker" data-date-autoclose="true" class="form-control" '.$Disable.'><span class="input-group-addon "><i class="icon-th mdi mdi-calendar" style="font-size:15px;margin-top:-6px;"></i></span>';
 		      		}
 		      		$str.= '</div>
 		      		</div>';

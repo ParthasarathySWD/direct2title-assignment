@@ -103,10 +103,10 @@ class Orderentry_model extends CI_Model {
 
 		//D-2-T23 state issuer fetched
 		$data['Issuer'] = $this->lang->line('Inhouse_addtable');
-		$searchmoderesult = $this->common_model->get_statesearchmode($data['PropertyStateCode'],$data['PropertyCountyName']);
-		if(!empty($searchmoderesult)) {
-			$data['Issuer'] = (!empty($searchmoderesult->SearchModeName)) ? $searchmoderesult->SearchModeName : $this->lang->line('Inhouse_addtable');
-		}
+		// $searchmoderesult = $this->common_model->get_statesearchmode($data['PropertyStateCode'],$data['PropertyCountyName']);
+		// if(!empty($searchmoderesult)) {
+		// 	$data['Issuer'] = (!empty($searchmoderesult->SearchModeName)) ? $searchmoderesult->SearchModeName : $this->lang->line('Inhouse_addtable');
+		// }
 		$date = date('Ymd');
 
 		$IsDuplicateOrder = ($DatabaseAddress == NUll) ? 0 : 1 ;
@@ -257,13 +257,13 @@ class Orderentry_model extends CI_Model {
 			}
 
 
-			$x1CustomerCheck = $this->CheckX1Order($this->CustomerUID,$msubproducts->ProductUID,$this->SubProductUID);
-			if($x1CustomerCheck)
-			{
-				$this->BorrowerType = $data['BorrowerType'];
-				$this->PropertyType = $data['PropertyType'];
-				$this->TransactionType = $data['TransactionType'];
-			}
+			// $x1CustomerCheck = $this->CheckX1Order($this->CustomerUID,$msubproducts->ProductUID,$this->SubProductUID);
+			// if($x1CustomerCheck)
+			// {
+			// 	$this->BorrowerType = $data['BorrowerType'];
+			// 	$this->PropertyType = $data['PropertyType'];
+			// 	$this->TransactionType = $data['TransactionType'];
+			// }
 
 			$this->IsQuote = $CustomerQuote; /*@Desc Customer Pricing Update D2T-540 @Author Jainulabdeen @Updated May 20 2020*/
 
@@ -2866,11 +2866,11 @@ class Orderentry_model extends CI_Model {
 	}
 
 	//function to check if selected customer has bundled subproduct
-	function get_bundleddetails()
-	{
-    $this->db->select('GROUP_CONCAT(DISTINCT CustomerUID) AS CustomerUID , GROUP_CONCAT( DISTINCT CurrentProductUID) AS CurrentProductUID ')->from('mBundleSubProduct');
-    return $this->db->get()->row();
-	}
+	// function get_bundleddetails()
+	// {
+ //    $this->db->select('GROUP_CONCAT(DISTINCT CustomerUID) AS CustomerUID , GROUP_CONCAT( DISTINCT CurrentProductUID) AS CurrentProductUID ')->from('mBundleSubProduct');
+ //    return $this->db->get()->row();
+	// }
 
 	//function to check if loan numbert matching with the previous order
 	function check_duplicateloanorder_exists($BundleSubProductUID,$LoanNumber) {
@@ -2881,46 +2881,46 @@ class Orderentry_model extends CI_Model {
 
 	//function to return subproduct by matching the loan number with the previous orders 
 	//if matched return currentsuproductuid else defaultsubproductuid
-  function get_bundled_customer_product_subproduct($post)
-  {
+  // function get_bundled_customer_product_subproduct($post)
+  // {
 
-    $this->db->select('mBundleSubProduct.*')->from('mBundleSubProduct');
-    $this->db->where('mBundleSubProduct.CustomerUID',$post['CustomerUID']);
-    $this->db->where('mBundleSubProduct.CurrentProductUID',$post['ProductUID']);
-    $bundleddetails = $this->db->get()->result();
-    $len = count($bundleddetails);
-    foreach ($bundleddetails as $key => $bundleddetail) {
-      $isexist = $this->check_duplicateloanorder_exists($bundleddetail->BundleSubProductUID,$post['LoanNumber']); 
-      if(!empty($isexist)) {
+  //   $this->db->select('mBundleSubProduct.*')->from('mBundleSubProduct');
+  //   $this->db->where('mBundleSubProduct.CustomerUID',$post['CustomerUID']);
+  //   $this->db->where('mBundleSubProduct.CurrentProductUID',$post['ProductUID']);
+  //   $bundleddetails = $this->db->get()->result();
+  //   $len = count($bundleddetails);
+  //   foreach ($bundleddetails as $key => $bundleddetail) {
+  //     $isexist = $this->check_duplicateloanorder_exists($bundleddetail->BundleSubProductUID,$post['LoanNumber']); 
+  //     if(!empty($isexist)) {
 
-        return ['Order'=>$isexist,'SubProductUID'=>$bundleddetail->CurrentSubProductUID];
-      } 
+  //       return ['Order'=>$isexist,'SubProductUID'=>$bundleddetail->CurrentSubProductUID];
+  //     } 
 
-      //last loop
-      if ($key == $len - 1) {
-        return ['Order'=>$isexist,'SubProductUID'=>$bundleddetail->DefaultSubProductUID];
-      }
-    }
+  //     //last loop
+  //     if ($key == $len - 1) {
+  //       return ['Order'=>$isexist,'SubProductUID'=>$bundleddetail->DefaultSubProductUID];
+  //     }
+  //   }
 
-    return ['Order'=>'','SubProductUID'=>''];
-  }
+  //   return ['Order'=>'','SubProductUID'=>''];
+  // }
 
 
   //bulkentry return subproductname for the matching loan number with the previous order 
-  function bulk_bundle_subproductmatch($post) {
-  	$bundledoldorder = $this->Orderentry_model->get_bundled_customer_product_subproduct($post);
-  	$bundledoldorder['SubProductName'] = '';
-  	if(!empty($bundledoldorder)) {
-  		if(!empty($bundledoldorder['SubProductUID'])) {
-  			$SubProduct = $this->get_subproductname_byuid($bundledoldorder['SubProductUID']);
-  			if(!empty($SubProduct)) {
-  				$bundledoldorder['SubProductName'] = $SubProduct->SubProductName;
-  			}
-  		}
+  // function bulk_bundle_subproductmatch($post) {
+  // 	$bundledoldorder = $this->Orderentry_model->get_bundled_customer_product_subproduct($post);
+  // 	$bundledoldorder['SubProductName'] = '';
+  // 	if(!empty($bundledoldorder)) {
+  // 		if(!empty($bundledoldorder['SubProductUID'])) {
+  // 			$SubProduct = $this->get_subproductname_byuid($bundledoldorder['SubProductUID']);
+  // 			if(!empty($SubProduct)) {
+  // 				$bundledoldorder['SubProductName'] = $SubProduct->SubProductName;
+  // 			}
+  // 		}
 
-  	}
-  	return $bundledoldorder;
-  }
+  // 	}
+  // 	return $bundledoldorder;
+  // }
 
   //function to get subproductname by subproductuid
   function get_subproductname_byuid($SubProductUID) {
@@ -3244,23 +3244,23 @@ class Orderentry_model extends CI_Model {
 	* @purpose Check X1 order
 	*/
 
-	function CheckX1Order($CustomerUID,$ProductUID,$SubProductUID) {
-		$OrderSourceUID = $this->db->select('OrderSourceUID')->from('mApiTitlePlatform')->where('OrderSourceName','X1')->get()->row()->OrderSourceUID;
-		if (empty($OrderSourceUID)) 
-		{
-			return 0;
-		}
+	// function CheckX1Order($CustomerUID,$ProductUID,$SubProductUID) {
+	// 	$OrderSourceUID = $this->db->select('OrderSourceUID')->from('mApiTitlePlatform')->where('OrderSourceName','X1')->get()->row()->OrderSourceUID;
+	// 	if (empty($OrderSourceUID)) 
+	// 	{
+	// 		return 0;
+	// 	}
 		
-		$result = $this->db->select('*')->from('mcustomerproducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
-		if(!empty($result))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+	// 	$result = $this->db->select('*')->from('mcustomerproducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
+	// 	if(!empty($result))
+	// 	{
+	// 		return 1;
+	// 	}
+	// 	else
+	// 	{
+	// 		return 0;
+	// 	}
+	// }
 
 	/**
 	* @author Naveenkumar
@@ -3346,19 +3346,19 @@ class Orderentry_model extends CI_Model {
 
 		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$torders->PropertyCountyName))->row();
 
-		if(!empty($mcounties))
-		{
+		// if(!empty($mcounties))
+		// {
 
 
-			$query = $this->db->query("SELECT *, CASE WHEN msearchmodes.SearchModeUID = '6' THEN 
-				mcountysearchmodes.WebsiteURL ELSE msearchmodes.SearchSiteURL END AS SiteURL 
-				FROM mcountysearchmodes
-				LEFT JOIN msearchmodes ON mcountysearchmodes.SearchModeUID = msearchmodes.SearchModeUID 
-				WHERE mcountysearchmodes.CountyUID = '". $mcounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
-				Order By FIELD(SearchModeName, 'Free', 'Paid', 'Others', 'Abstractor')");
+		// 	$query = $this->db->query("SELECT *, CASE WHEN msearchmodes.SearchModeUID = '6' THEN 
+		// 		mcountysearchmodes.WebsiteURL ELSE msearchmodes.SearchSiteURL END AS SiteURL 
+		// 		FROM mcountysearchmodes
+		// 		LEFT JOIN msearchmodes ON mcountysearchmodes.SearchModeUID = msearchmodes.SearchModeUID 
+		// 		WHERE mcountysearchmodes.CountyUID = '". $mcounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
+		// 		Order By FIELD(SearchModeName, 'Free', 'Paid', 'Others', 'Abstractor')");
 
-			$data = $query->row();
-		}
+		// 	$data = $query->row();
+		// }
 
 		return $data;
 

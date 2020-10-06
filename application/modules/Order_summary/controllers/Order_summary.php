@@ -66,20 +66,20 @@ class Order_summary extends MY_Controller {
 				$status = $this->Order_Summary_Model->ChangeOrderStatus($OrderUID);
 
 				$data['States'] = $this->common_model->GetStateDetails();
-				$data['Sub_products'] = $this->common_model->GetSub_productDetails($ProductUID = '1');
+				$data['Sub_products'] = $this->common_model->Get_SubProduct();
 				$data['Products'] = $this->common_model->GetProductDetails();
 				$data['Prioritys'] = $this->common_model->GetPriorityDetails();
-				$data['InsuranceTypeDet'] = $this->common_model->GetInsuranceType();
+				// $data['InsuranceTypeDet'] = $this->common_model->GetInsuranceType();
 			//$data['Templates'] = $this->common_model->GetTemplateDetails();
 				$data['Customers'] = $this->common_model->GetCustomerDetails();
 				$data['Prop_roles'] = $this->common_model->GetPropertyrolesDetails();
 
-				$data['TransactionTypeDetails'] = $this->common_model->GetTransactionTypeDetails();
-				$data['PropertyTypeDetails'] = $this->common_model->GetPropertyTypeDetails();
-				$data['BorrowerDetails'] = $this->common_model->GetBorrowerDetailsDescription();
+				// $data['TransactionTypeDetails'] = $this->common_model->GetTransactionTypeDetails();
+				// $data['PropertyTypeDetails'] = $this->common_model->GetPropertyTypeDetails();
+				// $data['BorrowerDetails'] = $this->common_model->GetBorrowerDetailsDescription();
 				$data['IsX1ResubmitOrder'] = $this->common_model->CheckEventLogOrders($OrderUID);
-				$data['CheckX1Order'] = $this->Order_Summary_Model->GetX1Order($OrderUID);
-				$data['CheckX1OrderInMyapproval'] = $this->Order_Summary_Model->CheckX1OrderInMyapproval($OrderUID);
+				// $data['CheckX1Order'] = $this->Order_Summary_Model->GetX1Order($OrderUID);
+				// $data['CheckX1OrderInMyapproval'] = $this->Order_Summary_Model->CheckX1OrderInMyapproval($OrderUID);
 				$data['X1Enabled'] = $this->common_model->GetX1EnabledforCustomerSubproduct($OrderUID);
 				/*Query Chagned as per Closing Requirement done by Parthasarathy*/
 				/*$data['Ordertypes'] = $this->Order_Summary_Model->GetOrdersOrderTypes($OrderUID);*/
@@ -88,19 +88,19 @@ class Order_summary extends MY_Controller {
 				$data['order_details'] = $this->common_model->get_orderdetails($OrderUID);
 				
 				$data['CustomerSchedule']= $this->Order_Summary_Model->getCustomerSchedule($data['order_details']);
-				$data['order_import_data'] = $this->Order_Summary_Model->get_torderimportdata($OrderUID);			
+				// $data['order_import_data'] = $this->Order_Summary_Model->get_torderimportdata($OrderUID);			
 				$data['prop_details'] = $this->Order_Summary_Model->get_propdetails($OrderUID);
 
 			// $data['InsuranceTypeDetails'] = array('1'=>'1','2'=>'2');
-				$data['mPartner'] = $this->Order_Summary_Model->get_allpartners();
+				// $data['mPartner'] = $this->Order_Summary_Model->get_allpartners();
 
-				$OrderSourceUID = $data['order_details']->OrderSourceUID;
+				// $OrderSourceUID = $data['order_details']->OrderSourceUID;
 
 				$data['notesection'] = $this->Order_Summary_Model->GetNotessection();
 
-				if($OrderSourceUID == 2){
-					$data['ApiRequest'] = $this->Order_Summary_Model->GetStewartApiRequest();
-				} 
+				// if($OrderSourceUID == 2){
+				// 	$data['ApiRequest'] = $this->Order_Summary_Model->GetStewartApiRequest();
+				// } 
 
 
 				$torders=$this->common_model->GettordersbyUID($OrderUID);
@@ -130,7 +130,7 @@ class Order_summary extends MY_Controller {
 				$data['CustWorkflowModules']=$this->Order_Summary_Model->GetCustomerWorkflows($CustomerUID, $SubProductUID, $ProductUID);
 
 				$data['CustPriorities']=$this->Order_Summary_Model->GetCustomerPriorities($CustomerUID, $SubProductUID, $ProductUID, $PriorityUID);
-				$data['CustOrderTypeDocs']=$this->Order_Summary_Model->GetCustomerOrderTypeDoc($CustomerUID, $OrderTypeUID);
+				// $data['CustOrderTypeDocs']=$this->Order_Summary_Model->GetCustomerOrderTypeDoc($CustomerUID, $OrderTypeUID);
 				$data['CustDefaultProduct']=$this->Order_Summary_Model->GetCustomerDefaultSubProducts($CustomerUID);
 
 				/*@purpose: To show additional fields for an order  @author: Yagavi.G <yagavi.g@avanzegroup.com> @since: May 21st 2020*/
@@ -150,7 +150,7 @@ class Order_summary extends MY_Controller {
 				$data['is_customerpricing_abstractorfee'] = $this->common_model->is_customerpricing_abstractorfee($this->RoleUID);
 				$data['RoleDetails'] = $this->common_model->GetRole_Details($this->RoleUID);
 				$data['encrypt'] = new AesCtr();
-				$data['ParentCompanyDetails'] = $this->Order_Summary_Model->get_parentpartnerdetails();
+				// $data['ParentCompanyDetails'] = $this->Order_Summary_Model->get_parentpartnerdetails();
 
 			// @author Praveen Kumar -- DI1-T81 - check the bill & complete workflow exists
 				$customerworkflowuids = array_column($data['CustWorkflowModules'], 'WorkflowModuleUID');
@@ -169,7 +169,7 @@ class Order_summary extends MY_Controller {
 
             //condition to display xml reader button 
 			//$data['apiOrderCount'] = $this->common_model->apiOrdersCount($OrderUID);
-
+ 		
 				$this->load->view('page', $data);
 			}
 			else
@@ -256,13 +256,13 @@ class Order_summary extends MY_Controller {
 				//for x1 api orders 
 				$CustomerUID = $this->input->post('customer');
 				$SubProductUID = $this->input->post('SubProductUID');
-				$X1result =$this->CheckX1Order($CustomerUID,$SubProductUID);
-				if(!empty($X1result))
-				{
-					$this->form_validation->set_rules('BorrowerType', '', 'required');
-					$this->form_validation->set_rules('PropertyType', '', 'required');
-					$this->form_validation->set_rules('TransactionType', '', 'required');
-				}
+				// $X1result =$this->CheckX1Order($CustomerUID,$SubProductUID);
+				// if(!empty($X1result))
+				// {
+				// 	$this->form_validation->set_rules('BorrowerType', '', 'required');
+				// 	$this->form_validation->set_rules('PropertyType', '', 'required');
+				// 	$this->form_validation->set_rules('TransactionType', '', 'required');
+				// }
 
 				foreach ($chk_mailing as $key => $mailingtype) {
 
@@ -413,14 +413,14 @@ class Order_summary extends MY_Controller {
 					// 'EmailReportTo' => form_error('EmailReportTo'),
 				);
 
-				if(!empty($X1result))
-				{
-					$X1DataValidation = array(
-						'BorrowerType' => form_error('BorrowerType'),
-						'PropertyType' => form_error('PropertyType'),
-						'TransactionType' => form_error('TransactionType'),
-					);
-				}
+				// if(!empty($X1result))
+				// {
+				// 	$X1DataValidation = array(
+				// 		'BorrowerType' => form_error('BorrowerType'),
+				// 		'PropertyType' => form_error('PropertyType'),
+				// 		'TransactionType' => form_error('TransactionType'),
+				// 	);
+				// }
 
 				$datas = array_merge($datas1,$datas2);
 				$Merged = array_merge($datas,$data,$X1DataValidation);
@@ -491,23 +491,23 @@ class Order_summary extends MY_Controller {
 
 
 
-function CheckX1Order($CustomerUID,$SubProductUID) {
-		$OrderSourceUID = $this->db->select('OrderSourceUID')->from('mApiTitlePlatform')->where('OrderSourceName','X1')->get()->row()->OrderSourceUID;
-		if (empty($OrderSourceUID)) 
-		{
-			return 0;
-		}
+// function CheckX1Order($CustomerUID,$SubProductUID) {
+// 		$OrderSourceUID = $this->db->select('OrderSourceUID')->from('mApiTitlePlatform')->where('OrderSourceName','X1')->get()->row()->OrderSourceUID;
+// 		if (empty($OrderSourceUID)) 
+// 		{
+// 			return 0;
+// 		}
 		
-		$result = $this->db->select('*')->from('mcustomerproducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
-		if(!empty($result))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+// 		$result = $this->db->select('*')->from('mcustomerproducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
+// 		if(!empty($result))
+// 		{
+// 			return 1;
+// 		}
+// 		else
+// 		{
+// 			return 0;
+// 		}
+// 	}
 
 
 

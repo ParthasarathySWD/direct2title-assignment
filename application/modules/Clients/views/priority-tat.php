@@ -1,7 +1,7 @@
 <!--BEGIN CONTENT-->
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/module/clients/style.css">
+<!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/module/clients/style.css"> -->
 <!-- start body header -->
-<div id="page_top" class="section-body">
+<!-- <div id="page_top" class="section-body">
     <div class="container-fluid">
         <div class="page-header">
             <div class="left">
@@ -20,10 +20,8 @@
 <div class="section-body">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 col-lg-12">
-                <div class="card">
-
-                    <?php $this->load->view('Clients/client-top-header-menu'); ?>
+            <div class="col-md-12 col-lg-12"> -->
+               <!--  <div class="card"> -->
 
                     <div class="card">
 
@@ -132,16 +130,18 @@
                         <div class="card-header">
                             <div class="col-md-12 col-lg-12 mb-3 mt-2">
                                 <div class="btn-list  text-right">
-                                    <a href="#" class="btn btn-outline-secondary">Cancel</a>
-                                    <a href="#" class="btn btn-primary">Save</a>
+                                   <!--  <a href="#" class="btn btn-outline-secondary">Cancel</a>
+                                    <a href="#" class="btn btn-primary">Save</a> -->
+                                    <button type="button" data-moveon="clientworkflows" class="btn btn-outline-secondary wizard-btn btn-space"><i class="fa fa-angle-double-left"></i> Previous</button>
+                                    <button id="BtnLienProductSaveCustomer" value="1" class="btn btn-primary wizard-btn wizard-next">Complete <i class="fa fa-thumbs-up"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+             <!--    </div> -->
+           <!--  </div>
         </div>
-    </div>
+    </div> -->
     <!-- Modal -->
     <script type="text/javascript">
         $('.expand-collapse-btn').off('click').on('click', function (e) {

@@ -613,6 +613,12 @@ class Common_model extends CI_Model {
 		return $query->result();
 	}
 
+	function Get_SubProduct(){
+
+		return $this->db->select('*')->from('msubproducts')->get()->result();
+		
+	}
+
 
 	function GetPriorityDetails()
 	{
@@ -622,10 +628,10 @@ class Common_model extends CI_Model {
 		return $query->result();
 	}
 
-	function GetInsuranceType()
-	{
-		return $this->db->select('*')->from('mInsuranceType')->get()->result();
-	}
+	// function GetInsuranceType()
+	// {
+	// 	return $this->db->select('*')->from('mInsuranceType')->get()->result();
+	// }
 
 	function GetTemplateDetails(){
 
@@ -639,12 +645,12 @@ class Common_model extends CI_Model {
 	* @author D.Samuel Prabhu
 	* @since  18 March 2020
 	*/
-	function GetServiceTypeDetails(){
+	// function GetServiceTypeDetails(){
 
-		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mServiceType');
-		return $query->result();
-	}
+	// 	$this->db->where(array("Active"=>1));
+	// 	$query = $this->db->get('mServiceType');
+	// 	return $query->result();
+	// }
 
 	function GetCustomerDetails(){
 
@@ -4739,15 +4745,15 @@ class Common_model extends CI_Model {
 		return $this->db->get()->num_rows();
 	}
 
-	function GetApiSourceName($OrderUID){
-		$this->db->select('*');
-		$this->db->from('torders');
-		$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID=torders.OrderSourceUID','inner');
-		$this->db->where('OrderUID',$OrderUID);
-		$this->db->where('APIOrder',1);
-		$result= $this->db->get()->row();
-		return $result;
-	}
+	// function GetApiSourceName($OrderUID){
+	// 	$this->db->select('*');
+	// 	$this->db->from('torders');
+	// 	$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID=torders.OrderSourceUID','inner');
+	// 	$this->db->where('OrderUID',$OrderUID);
+	// 	$this->db->where('APIOrder',1);
+	// 	$result= $this->db->get()->row();
+	// 	return $result;
+	// }
 
 	function is_duplicateorder($OrderUID)
 	{
@@ -5096,13 +5102,13 @@ class Common_model extends CI_Model {
 		return $this->db->get()->row();
 	}
 
-	function GetOrderSourceDetails($OrderSourceUID){
-		$this->db->select('mApiTitlePlatform.*')->from('mApiTitlePlatform');
-	$this->db->join('torders', 'torders.OrderSourceUID=mApiTitlePlatform.OrderSourceUID', 'left');
-	$this->db->where('mApiTitlePlatform.OrderSourceUID', $OrderSourceUID);
-	$query=$this->db->get();
-	return $query->row();
-	}
+	// function GetOrderSourceDetails($OrderSourceUID){
+	// 	$this->db->select('mApiTitlePlatform.*')->from('mApiTitlePlatform');
+	// $this->db->join('torders', 'torders.OrderSourceUID=mApiTitlePlatform.OrderSourceUID', 'left');
+	// $this->db->where('mApiTitlePlatform.OrderSourceUID', $OrderSourceUID);
+	// $query=$this->db->get();
+	// return $query->row();
+	// }
 
 	function CheckAutoSuggestionInput($CurrentTargetID)
 	{
@@ -5370,30 +5376,30 @@ function GetNotaryByNotaryUID($NotaryUID)
 	return $this->db->get()->row();
 }
 
-function GetApiRequestStatus($OrderUID){
+// function GetApiRequestStatus($OrderUID){
 
-	$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
-	$OrderSourceUID = $torders->OrderSourceUID;
-	$mApiTitlePlatform = $this->db->get_where('mApiTitlePlatform', array('ApiTitlePlatformUID'=>$OrderSourceUID))->row();
-	$OrderSourceName = $mApiTitlePlatform->OrderSourceName;
+// 	$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
+// 	$OrderSourceUID = $torders->OrderSourceUID;
+// 	$mApiTitlePlatform = $this->db->get_where('mApiTitlePlatform', array('ApiTitlePlatformUID'=>$OrderSourceUID))->row();
+// 	$OrderSourceName = $mApiTitlePlatform->OrderSourceName;
 
-	$this->db->select('*');
-	$this->db->from ( 'tApiRequestStatus' );
-	$this->db->join ( 'mApiRequest', 'mApiRequest.ApiRequestUID = tApiRequestStatus.ApiRequestUID','left');
-	$this->db->join ( 'mApiTitlePlatform', 'mApiTitlePlatform.ApiTitlePlatformUID = mApiRequest.ApiTitlePlatformUID','left');
-	$this->db->where('tApiRequestStatus.OrderUID',$OrderUID);
-	$this->db->where('tApiRequestStatus.IsCompleted','0');
-	$this->db->where('mApiRequest.ApiTitlePlatformUID',$OrderSourceUID);
+// 	$this->db->select('*');
+// 	$this->db->from ( 'tApiRequestStatus' );
+// 	$this->db->join ( 'mApiRequest', 'mApiRequest.ApiRequestUID = tApiRequestStatus.ApiRequestUID','left');
+// 	$this->db->join ( 'mApiTitlePlatform', 'mApiTitlePlatform.ApiTitlePlatformUID = mApiRequest.ApiTitlePlatformUID','left');
+// 	$this->db->where('tApiRequestStatus.OrderUID',$OrderUID);
+// 	$this->db->where('tApiRequestStatus.IsCompleted','0');
+// 	$this->db->where('mApiRequest.ApiTitlePlatformUID',$OrderSourceUID);
 
-	if($OrderSourceName == 'Stewart'){
-		$this->db->where('mApiRequest.RequestType','Dispute');
-	} else if($OrderSourceName == 'Keystone'){
-		$this->db->where('mApiRequest.RequestType','RevisionRequest');
-	}
+// 	if($OrderSourceName == 'Stewart'){
+// 		$this->db->where('mApiRequest.RequestType','Dispute');
+// 	} else if($OrderSourceName == 'Keystone'){
+// 		$this->db->where('mApiRequest.RequestType','RevisionRequest');
+// 	}
 
-	$query = $this->db->get();
-	return $query->result();
-}
+// 	$query = $this->db->get();
+// 	return $query->result();
+// }
 
 	/*function _getCounty_StateUID_ZipCode($ZipCode,$StateCode) {
 
@@ -6450,18 +6456,18 @@ function GetApiRequestStatus($OrderUID){
 		return $this->db->get()->row();
 	}
 
-	function get_statesearchmode($State,$County)
-	{
-		$query = $this->db->query("SELECT SearchModeName FROM mStateSearchMode JOIN mcounties ON mcounties.CountyUID = mStateSearchMode.CountyUID JOIN mstates ON mstates.StateUID = mStateSearchMode.StateUID WHERE StateCode = '".trim($State)."' AND CountyName = '".trim($County)."' ");
-		$result =  $query->row();
+	// function get_statesearchmode($State,$County)
+	// {
+	// 	$query = $this->db->query("SELECT SearchModeName FROM mStateSearchMode JOIN mcounties ON mcounties.CountyUID = mStateSearchMode.CountyUID JOIN mstates ON mstates.StateUID = mStateSearchMode.StateUID WHERE StateCode = '".trim($State)."' AND CountyName = '".trim($County)."' ");
+	// 	$result =  $query->row();
 
-		if(empty($result)) {
-			$query = $this->db->query("SELECT SearchModeName FROM mStateSearchMode JOIN mstates ON mstates.StateUID = mStateSearchMode.StateUID WHERE StateCode = '".trim($State)."' AND (mStateSearchMode.CountyUID = 0 OR mStateSearchMode.CountyUID IS NULL) ");
-			$result =  $query->row();
-		}
+	// 	if(empty($result)) {
+	// 		$query = $this->db->query("SELECT SearchModeName FROM mStateSearchMode JOIN mstates ON mstates.StateUID = mStateSearchMode.StateUID WHERE StateCode = '".trim($State)."' AND (mStateSearchMode.CountyUID = 0 OR mStateSearchMode.CountyUID IS NULL) ");
+	// 		$result =  $query->row();
+	// 	}
 
-		return $result;
-	}
+	// 	return $result;
+	// }
 
 	function get_pending_workflows_to_complete($CustomerUID = '', $SubProductUID = '', $OrderUID)
 	{
@@ -8091,27 +8097,27 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 
 
-    function apiOrdersCount($OrderUID)
-    {
-    	$this->db->from('tApiOrders');
-    	$this->db->where('OrderUID',$OrderUID);
-		$query = $this->db->get();
-		$apiOrders = $query->num_rows();
+  //   function apiOrdersCount($OrderUID)
+  //   {
+  //   	$this->db->from('tApiOrders');
+  //   	$this->db->where('OrderUID',$OrderUID);
+		// $query = $this->db->get();
+		// $apiOrders = $query->num_rows();
 
-		$this->db->from('tApiInboundOrders');
-		$this->db->where('OrderUID',$OrderUID);
-		$query = $this->db->get();
-		$inboundOrders = $query->num_rows();
+		// $this->db->from('tApiInboundOrders');
+		// $this->db->where('OrderUID',$OrderUID);
+		// $query = $this->db->get();
+		// $inboundOrders = $query->num_rows();
 
-		$this->db->from('tApiOutBoundOrders');
-		$this->db->where('OrderUID',$OrderUID);
-		$query = $this->db->get();
-		$outboundOrders = $query->num_rows();
+		// $this->db->from('tApiOutBoundOrders');
+		// $this->db->where('OrderUID',$OrderUID);
+		// $query = $this->db->get();
+		// $outboundOrders = $query->num_rows();
         
-        $total = $apiOrders + $inboundOrders + $outboundOrders;
+  //       $total = $apiOrders + $inboundOrders + $outboundOrders;
 
-		return array('total' => $total, 'apiOrders' =>$apiOrders, 'inboundOrders' =>$inboundOrders, 'outboundOrders' =>$outboundOrders);
-    }
+		// return array('total' => $total, 'apiOrders' =>$apiOrders, 'inboundOrders' =>$inboundOrders, 'outboundOrders' =>$outboundOrders);
+  //   }
 
     function getsystemNotes(){
     	$this->db->select('*');
@@ -8352,31 +8358,31 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		return $data;
 	}
 
-	function CheckX1ApiOutboundOrders($OrderUID)
-	{
-		$this->db->select('*');
-		$this->db->from('tApiOutBoundOrders');
-		$this->db->join('torders','torders.OrderUID = tApiOutBoundOrders.OrderUID','left');
-		$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID = tApiOutBoundOrders.OrderSourceUID');
-		$this->db->where('tApiOutBoundOrders.OrderUID',$OrderUID);
-		$this->db->where('mApiTitlePlatform.OrderSourceName','X1');
-		$tApiOutBoundOrders = $this->db->get()->result();
+	// function CheckX1ApiOutboundOrders($OrderUID)
+	// {
+	// 	$this->db->select('*');
+	// 	$this->db->from('tApiOutBoundOrders');
+	// 	$this->db->join('torders','torders.OrderUID = tApiOutBoundOrders.OrderUID','left');
+	// 	$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID = tApiOutBoundOrders.OrderSourceUID');
+	// 	$this->db->where('tApiOutBoundOrders.OrderUID',$OrderUID);
+	// 	$this->db->where('mApiTitlePlatform.OrderSourceName','X1');
+	// 	$tApiOutBoundOrders = $this->db->get()->result();
 
-		if(empty($tApiOutBoundOrders)){
-			return true;
-		} /*else {			
-			$Status = [];
-			foreach ($tApiOutBoundOrders as $key => $value) {
-				$Status[] = $value->Status;
-			}
+	// 	if(empty($tApiOutBoundOrders)){
+	// 		return true;
+	// 	} /*else {			
+	// 		$Status = [];
+	// 		foreach ($tApiOutBoundOrders as $key => $value) {
+	// 			$Status[] = $value->Status;
+	// 		}
 
-			if (count(array_unique($Status)) <= 1) { 
-				if($Status[0] == 'Cancelled') {
-					return $tApiOutBoundOrders;
-				}
-			}
-		}*/
-	}
+	// 		if (count(array_unique($Status)) <= 1) { 
+	// 			if($Status[0] == 'Cancelled') {
+	// 				return $tApiOutBoundOrders;
+	// 			}
+	// 		}
+	// 	}*/
+	// }
 
 	/**
 		*@description Function to getVendorOrderProcessedToday
@@ -8905,7 +8911,7 @@ function sendRequest($path, $post)
 			//trigger DocumentPackage slaaction start
 			// @author alwin <alwin.l@avanzegroup.com>
 			//trigger DocumentPackage slaaction end 
-			$this->InsertDocumentPackageTrigger($ActionUID,$OrderUID,$AssignedToUserUID);
+			// $this->InsertDocumentPackageTrigger($ActionUID,$OrderUID,$AssignedToUserUID);
 
 			$sla_noteddata = array(
 				'OrderUID' => $OrderUID,
@@ -9526,12 +9532,12 @@ function sendRequest($path, $post)
 		* @since   26 FEB 2020 
 		* @version API
 		*/
-		function GetEventlogCount()
-		{
-			$this->db->select('*')->from('tOrderEventLog');
-			$q = $this->db->get();
-			return $q->num_rows();
-		}
+		// function GetEventlogCount()
+		// {
+		// 	$this->db->select('*')->from('tOrderEventLog');
+		// 	$q = $this->db->get();
+		// 	return $q->num_rows();
+		// }
 
 
 		/**
@@ -11551,17 +11557,17 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	  }
 	}
 
-	function getDocumentPackagesByOrder($CustomerUID='0',$ProductUID='0',$SubProductUID='0',$OrderTypeUID='0',$StateUID='0',$CountyUID='0',$CityUID='0',$ZipCode='0')
-	{
-		// Empty Validation Added for CountyUID,CityUID @Uba @On 31 Jul 2020
-		$CountyUID = (!empty($CountyUID)) ? $CountyUID : 0;
-		$CityUID = (!empty($CityUID)) ? $CityUID : 0;
-		$ProductCategory = $this->IsClosingOrder($ProductUID);
-		return $this->db->query("SELECT mDocPackages.DocPackageUID,mDocPackages.DocPackageName,mDocPackages.ProductCategory,mDocPackages.DefaultView, COUNT(mDocPackageDocumentTypes.DocumentTypeUID) AS NoDoc, GROUP_CONCAT(mDocPackageDocumentTypes.DocumentTypeUID) AS DocumentTypes, mDocPackages.Merge, mDocPackages.SecureDelivery FROM ( SELECT (CASE WHEN CustomerUID = '$CustomerUID' AND ProductUID = '$ProductUID' AND SubProductUID = '$SubProductUID' AND OrderTypeUID = 0 THEN DocPackageUID WHEN CustomerUID = '$CustomerUID' AND ProductUID = 0 AND SubProductUID = 0 AND OrderTypeUID = 0 THEN DocPackageUID WHEN  CustomerUID = '$CustomerUID' AND ProductUID = '$ProductUID' AND SubProductUID = '$SubProductUID' AND OrderTypeUID = '$OrderTypeUID' THEN DocPackageUID WHEN CustomerUID = '$CustomerUID' AND OrderTypeUID = '$OrderTypeUID' AND ProductUID = 0 AND SubProductUID = 0 THEN DocPackageUID WHEN CustomerUID = '$CustomerUID' AND ProductUID = '$ProductUID' AND SubProductUID = 0 AND OrderTypeUID = 0 THEN DocPackageUID ELSE NULL END) AS PackageUID FROM mDocPackageProducts 
-			UNION 
-			SELECT (CASE WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID = 0 AND ZipCode = 0 THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID IN ($CountyUID) AND CityUID = 0 AND ZipCode = 0 THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID IN ($CountyUID) AND CityUID IN($CityUID) AND ZipCode = 0 THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID IN ($CountyUID) AND CityUID IN($CityUID) AND ZipCode = '$ZipCode' THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID = 0 AND ZipCode = '$ZipCode' THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID IN ($CityUID) AND ZipCode = '$ZipCode' THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID IN ($CityUID) AND ZipCode = 0 THEN DocPackageUID ELSE NULL END) FROM mDocPackageGeographic
-		)package INNER JOIN mDocPackages ON mDocPackages.DocPackageUID = PackageUID AND ProductCategory = '$ProductCategory' LEFT JOIN mDocPackageDocumentTypes ON mDocPackageDocumentTypes.DocPackageUID = PackageUID WHERE PackageUID IS NOT NULL GROUP BY PackageUID")->result();
-	}
+	// function getDocumentPackagesByOrder($CustomerUID='0',$ProductUID='0',$SubProductUID='0',$OrderTypeUID='0',$StateUID='0',$CountyUID='0',$CityUID='0',$ZipCode='0')
+	// {
+	// 	// Empty Validation Added for CountyUID,CityUID @Uba @On 31 Jul 2020
+	// 	$CountyUID = (!empty($CountyUID)) ? $CountyUID : 0;
+	// 	$CityUID = (!empty($CityUID)) ? $CityUID : 0;
+	// 	$ProductCategory = $this->IsClosingOrder($ProductUID);
+	// 	return $this->db->query("SELECT mDocPackages.DocPackageUID,mDocPackages.DocPackageName,mDocPackages.ProductCategory,mDocPackages.DefaultView, COUNT(mDocPackageDocumentTypes.DocumentTypeUID) AS NoDoc, GROUP_CONCAT(mDocPackageDocumentTypes.DocumentTypeUID) AS DocumentTypes, mDocPackages.Merge, mDocPackages.SecureDelivery FROM ( SELECT (CASE WHEN CustomerUID = '$CustomerUID' AND ProductUID = '$ProductUID' AND SubProductUID = '$SubProductUID' AND OrderTypeUID = 0 THEN DocPackageUID WHEN CustomerUID = '$CustomerUID' AND ProductUID = 0 AND SubProductUID = 0 AND OrderTypeUID = 0 THEN DocPackageUID WHEN  CustomerUID = '$CustomerUID' AND ProductUID = '$ProductUID' AND SubProductUID = '$SubProductUID' AND OrderTypeUID = '$OrderTypeUID' THEN DocPackageUID WHEN CustomerUID = '$CustomerUID' AND OrderTypeUID = '$OrderTypeUID' AND ProductUID = 0 AND SubProductUID = 0 THEN DocPackageUID WHEN CustomerUID = '$CustomerUID' AND ProductUID = '$ProductUID' AND SubProductUID = 0 AND OrderTypeUID = 0 THEN DocPackageUID ELSE NULL END) AS PackageUID FROM mDocPackageProducts 
+	// 		UNION 
+	// 		SELECT (CASE WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID = 0 AND ZipCode = 0 THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID IN ($CountyUID) AND CityUID = 0 AND ZipCode = 0 THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID IN ($CountyUID) AND CityUID IN($CityUID) AND ZipCode = 0 THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID IN ($CountyUID) AND CityUID IN($CityUID) AND ZipCode = '$ZipCode' THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID = 0 AND ZipCode = '$ZipCode' THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID IN ($CityUID) AND ZipCode = '$ZipCode' THEN DocPackageUID WHEN StateUID = '$StateUID' AND CountyUID = 0 AND CityUID IN ($CityUID) AND ZipCode = 0 THEN DocPackageUID ELSE NULL END) FROM mDocPackageGeographic
+	// 	)package INNER JOIN mDocPackages ON mDocPackages.DocPackageUID = PackageUID AND ProductCategory = '$ProductCategory' LEFT JOIN mDocPackageDocumentTypes ON mDocPackageDocumentTypes.DocPackageUID = PackageUID WHERE PackageUID IS NOT NULL GROUP BY PackageUID")->result();
+	// }
 
 	function getDocumentTypeByOrder($CustomerUID=NULL,$ProductUID=NULL,$SubProductUID=NULL,$OrderTypeUID=NULL,$StateUID=NULL,$CountyUID=NULL,$CityUID='0',$ZipCode='0')
 	{
@@ -11619,41 +11625,41 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		return $this->db->get()->row()->DocumentTypeUID;
 	}
 
-	function getDocTypesByPackageUID($DocPackageUID){
-		$this->db->where('DocPackageUID',$DocPackageUID);
-		$mDocPackageProducts = $this->db->get('mDocPackageProducts')->result();
+	// function getDocTypesByPackageUID($DocPackageUID){
+	// 	$this->db->where('DocPackageUID',$DocPackageUID);
+	// 	$mDocPackageProducts = $this->db->get('mDocPackageProducts')->result();
 
-		$this->db->where('DocPackageUID',$DocPackageUID);
-		$mDocTypeGio = $this->db->get('mDocPackageGeographic')->result();
+	// 	$this->db->where('DocPackageUID',$DocPackageUID);
+	// 	$mDocTypeGio = $this->db->get('mDocPackageGeographic')->result();
 
-		if(empty($mDocPackageProducts) && empty($mDocTypeGio)){
-			$this->db->where('Active', 1);
-			return $this->db->get('mdocumenttypes')->result();
-		}
+	// 	if(empty($mDocPackageProducts) && empty($mDocTypeGio)){
+	// 		$this->db->where('Active', 1);
+	// 		return $this->db->get('mdocumenttypes')->result();
+	// 	}
 		
-		$this->db->select('GROUP_CONCAT(DocumentTypeUID) as DocumentTypeUIDs');
-		$this->db->from('mDocPackageProducts');
-		$this->db->join('mDocTypeClientProducts','mDocTypeClientProducts.CustomerUID = mDocPackageProducts.CustomerUID AND mDocTypeClientProducts.ProductUID = mDocPackageProducts.ProductUID AND mDocTypeClientProducts.SubProductUID = mDocPackageProducts.SubProductUID AND mDocTypeClientProducts.OrderTypeUID = mDocPackageProducts.OrderTypeUID','left');
-		$this->db->where('DocPackageUID',$DocPackageUID);
-		$ClientProducts = $this->db->get()->row()->DocumentTypeUIDs;
-		$ClientProducts = explode(',',$ClientProducts);
+	// 	$this->db->select('GROUP_CONCAT(DocumentTypeUID) as DocumentTypeUIDs');
+	// 	$this->db->from('mDocPackageProducts');
+	// 	$this->db->join('mDocTypeClientProducts','mDocTypeClientProducts.CustomerUID = mDocPackageProducts.CustomerUID AND mDocTypeClientProducts.ProductUID = mDocPackageProducts.ProductUID AND mDocTypeClientProducts.SubProductUID = mDocPackageProducts.SubProductUID AND mDocTypeClientProducts.OrderTypeUID = mDocPackageProducts.OrderTypeUID','left');
+	// 	$this->db->where('DocPackageUID',$DocPackageUID);
+	// 	$ClientProducts = $this->db->get()->row()->DocumentTypeUIDs;
+	// 	$ClientProducts = explode(',',$ClientProducts);
 
-		$this->db->select('GROUP_CONCAT(DocumentTypeUID) as DocumentTypeUIDs');
-		$this->db->from('mDocPackageGeographic');
-		$this->db->join('mDocTypeGio','mDocTypeGio.StateUID = mDocPackageGeographic.StateUID AND mDocTypeGio.CountyUID = mDocPackageGeographic.CountyUID AND mDocTypeGio.CityUID = mDocPackageGeographic.CityUID AND mDocTypeGio.ZipCode = mDocPackageGeographic.ZipCode','left');
-		$this->db->where('DocPackageUID',$DocPackageUID);
-		$Gio = $this->db->get()->row()->DocumentTypeUIDs;
-		$Gio = explode(',',$Gio);
+	// 	$this->db->select('GROUP_CONCAT(DocumentTypeUID) as DocumentTypeUIDs');
+	// 	$this->db->from('mDocPackageGeographic');
+	// 	$this->db->join('mDocTypeGio','mDocTypeGio.StateUID = mDocPackageGeographic.StateUID AND mDocTypeGio.CountyUID = mDocPackageGeographic.CountyUID AND mDocTypeGio.CityUID = mDocPackageGeographic.CityUID AND mDocTypeGio.ZipCode = mDocPackageGeographic.ZipCode','left');
+	// 	$this->db->where('DocPackageUID',$DocPackageUID);
+	// 	$Gio = $this->db->get()->row()->DocumentTypeUIDs;
+	// 	$Gio = explode(',',$Gio);
 
-		$DocumentTypeUIDs = array_filter(array_unique(array_merge($ClientProducts,$Gio)));
-		if(empty($DocumentTypeUIDs)){
-			return [];
-		}else{
-			$this->db->where('Active', 1);
-			$this->db->where_in('DocumentTypeUID', $DocumentTypeUIDs);
-			return $this->db->get('mdocumenttypes')->result();
-		}
-	}
+	// 	$DocumentTypeUIDs = array_filter(array_unique(array_merge($ClientProducts,$Gio)));
+	// 	if(empty($DocumentTypeUIDs)){
+	// 		return [];
+	// 	}else{
+	// 		$this->db->where('Active', 1);
+	// 		$this->db->where_in('DocumentTypeUID', $DocumentTypeUIDs);
+	// 		return $this->db->get('mdocumenttypes')->result();
+	// 	}
+	// }
 
 	function getPackageStatus($DocPackageUID,$OrderUID)
 	{
@@ -11673,38 +11679,38 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	  return $this->db->get()->result();
 	}
 
-	function InsertDocumentPackageTrigger($ActionUID,$OrderUID,$AssignedToUserUID)
-	{
-		//get order details
-		$order_details = $this->get_orderdetails($OrderUID);
-		$CountyUID = $this->getCountyUID_ByOrderUID($OrderUID);
-		$CityUIDs = $this->getCityUID_ByOrderUID($OrderUID);
+	// function InsertDocumentPackageTrigger($ActionUID,$OrderUID,$AssignedToUserUID)
+	// {
+	// 	//get order details
+	// 	$order_details = $this->get_orderdetails($OrderUID);
+	// 	$CountyUID = $this->getCountyUID_ByOrderUID($OrderUID);
+	// 	$CityUIDs = $this->getCityUID_ByOrderUID($OrderUID);
 
-		//get doc package details
-		$DocPackage = $this->getDocumentPackagesByOrder($order_details->CustomerUID,$order_details->ProductUID,$order_details->SubProductUID,$order_details->OrderTypeUID,$order_details->StateUID,$CountyUID,$CityUIDs,$order_details->PropertyZipcode);
-		//loop for insert multiple doc package rows
-		foreach ($DocPackage as $key => $value) 
-		{
-		//get mDocPackageDelivery details
-			$DocPackageDelivery = $this->db->select('*')->from('mDocPackageDelivery')->where(array('DocPackageUID'=>$value->DocPackageUID,'Auto'=>1,'DeliveryTrigger'=>$ActionUID))->get()->row();
+	// 	//get doc package details
+	// 	$DocPackage = $this->getDocumentPackagesByOrder($order_details->CustomerUID,$order_details->ProductUID,$order_details->SubProductUID,$order_details->OrderTypeUID,$order_details->StateUID,$CountyUID,$CityUIDs,$order_details->PropertyZipcode);
+	// 	//loop for insert multiple doc package rows
+	// 	foreach ($DocPackage as $key => $value) 
+	// 	{
+	// 	//get mDocPackageDelivery details
+	// 		$DocPackageDelivery = $this->db->select('*')->from('mDocPackageDelivery')->where(array('DocPackageUID'=>$value->DocPackageUID,'Auto'=>1,'DeliveryTrigger'=>$ActionUID))->get()->row();
 				
-				if(!empty($DocPackageDelivery))
-				{
-				//insert tDocumentDeliveryQueue
-					$tDocumentDeliveryQueue = array(
-						'OrderUID' => $OrderUID,
-						'PackageUID' => $DocPackageDelivery->DocPackageUID,
-						'DocumentTypeUIDs' => $value->DocumentTypes,
-						'SlaActionUID' => $ActionUID,
-						'DeliveryStatus' => 'NotSend',
-						'DeliveryType' => $DocPackageDelivery->DeliveryMode,
-						'CreatedOn'=> date('Y-m-d H:i:s'),
-						'CreatedBy' => $AssignedToUserUID, 
-					);
-					$this->db->insert('tDocumentDeliveryQueue',$tDocumentDeliveryQueue);				
-				}
-		}
-	}
+	// 			if(!empty($DocPackageDelivery))
+	// 			{
+	// 			//insert tDocumentDeliveryQueue
+	// 				$tDocumentDeliveryQueue = array(
+	// 					'OrderUID' => $OrderUID,
+	// 					'PackageUID' => $DocPackageDelivery->DocPackageUID,
+	// 					'DocumentTypeUIDs' => $value->DocumentTypes,
+	// 					'SlaActionUID' => $ActionUID,
+	// 					'DeliveryStatus' => 'NotSend',
+	// 					'DeliveryType' => $DocPackageDelivery->DeliveryMode,
+	// 					'CreatedOn'=> date('Y-m-d H:i:s'),
+	// 					'CreatedBy' => $AssignedToUserUID, 
+	// 				);
+	// 				$this->db->insert('tDocumentDeliveryQueue',$tDocumentDeliveryQueue);				
+	// 			}
+	// 	}
+	// }
 
 
 	function getClosingCurrentQueue_MobileApp($OrderUID)

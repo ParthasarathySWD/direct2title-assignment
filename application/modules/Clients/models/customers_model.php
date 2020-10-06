@@ -2036,15 +2036,15 @@ function UpdateAllCustomerDetails($CustomersDetails,$Prod_SubProducts,$Workflows
 			}
 
             //ServiceType    
-			if((!empty($PreviousProduct->ServiceTypeUID) && !empty($values['ServiceTypeUID'])) && 
-				($PreviousProduct->ServiceTypeUID != $values['ServiceTypeUID'])){
-				$ServiceTypeName1 = $this->db->query('SELECT ServiceTypeName FROM mServiceType WHERE ServiceTypeUID='.$PreviousProduct->ServiceTypeUID.'')->row()->ServiceTypeName;
-			$ServiceTypeName2 = $this->db->query('SELECT ServiceTypeName FROM mServiceType WHERE ServiceTypeUID='.(int)$values['ServiceTypeUID'].'')->row()->ServiceTypeName;
-			$str = 'for Product <b>'.$ProductName.'</b> and SubProduct <b>'.$SubProductName.'</b> ServiceType is <b>changed</b> to <b>'.$ServiceTypeName2.'</b> from <b>'.$ServiceTypeName1.'</b>';
-		}else if(empty($PreviousProduct->ServiceTypeUID) && !empty($values['ServiceTypeUID'])){
-			$ServiceTypeName2 = $this->db->query('SELECT ServiceTypeName FROM mServiceType WHERE ServiceTypeUID='.(int)$values['ServiceTypeUID'].'')->row()->ServiceTypeName;
-			$str = '<b>'.$ServiceTypeName2.'</b> ServiceType is <b>changed </b> for Product <b>'.$ProductName.'</b> and SubProduct <b>'.$SubProductName.'</b>';
-		}
+		// 	if((!empty($PreviousProduct->ServiceTypeUID) && !empty($values['ServiceTypeUID'])) && 
+		// 		($PreviousProduct->ServiceTypeUID != $values['ServiceTypeUID'])){
+		// 		$ServiceTypeName1 = $this->db->query('SELECT ServiceTypeName FROM mServiceType WHERE ServiceTypeUID='.$PreviousProduct->ServiceTypeUID.'')->row()->ServiceTypeName;
+		// 	$ServiceTypeName2 = $this->db->query('SELECT ServiceTypeName FROM mServiceType WHERE ServiceTypeUID='.(int)$values['ServiceTypeUID'].'')->row()->ServiceTypeName;
+		// 	$str = 'for Product <b>'.$ProductName.'</b> and SubProduct <b>'.$SubProductName.'</b> ServiceType is <b>changed</b> to <b>'.$ServiceTypeName2.'</b> from <b>'.$ServiceTypeName1.'</b>';
+		// }else if(empty($PreviousProduct->ServiceTypeUID) && !empty($values['ServiceTypeUID'])){
+		// 	$ServiceTypeName2 = $this->db->query('SELECT ServiceTypeName FROM mServiceType WHERE ServiceTypeUID='.(int)$values['ServiceTypeUID'].'')->row()->ServiceTypeName;
+		// 	$str = '<b>'.$ServiceTypeName2.'</b> ServiceType is <b>changed </b> for Product <b>'.$ProductName.'</b> and SubProduct <b>'.$SubProductName.'</b>';
+		// }
 		if($str != ''){
 				// Audit Log Service type 
 			$InsetData = array('UserUID' => $this->loggedid,'ModuleName' => 'Customers','Feature' => $CustomerUID,'DateTime' => date('Y-m-d H:i:s')

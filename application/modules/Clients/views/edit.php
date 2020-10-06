@@ -17,6 +17,7 @@
         </div>
     </div>
 </div>
+
 <div class="section-body">
     <div class="container-fluid">
         <div class="row">
@@ -25,6 +26,7 @@
 
                     <?php $this->load->view('Clients/client-top-header-menu'); ?>
                 <!-- <?php  print_r($Customers); ?> -->
+                <!-- <?php print_r($TemplateDetails."Hai"); ?> -->
                     <div class="card">
                         <div class="card-header pb-0">
                             <div class="col-md-12">
@@ -253,23 +255,36 @@
                                     <div class="col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <label class="form-label">Group  </label>
-                                            <select name="beast" class="form-control select2" style="width:100%;">
+                                            <select id="GroupUID" name="GroupUID" class="form-control select2" style="width:100%;">
                                                 <option></option>
-                                                <option value="1">Group </option>
-                                            </select>
+                                                <?php 
+                                                foreach ($Groups as $row) { 
+                    // echo "<option value='".$row->GroupUID."'>".$row->GroupName."</option>";
+
+                                                  if($row->DefaultGroup==1){
+
+                                                    echo "<option value='".$row->GroupUID."' selected>".$row->GroupName."</option>";
+                                                }else{
+                                                    echo "<option value='".$row->GroupUID."'>".$row->GroupName."</option>";
+                                                }
+                                            }
+                                            ?>
+                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3 col-lg-3">
                                         <label class="form-label">Document upload (pdf) </label>
                                         <div class="custom-file form-group">
-                                            <input type="file" class="custom-file-input form-control" id="customFile">
+                                            <input type="file" class="custom-file-input form-control" name="customerfiles[]" id="customerfiles" class="dropify" accept=".pdf" >
                                             <label class="custom-file-label text-truncate form-control" for="customFile">Choose file</label>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-lg-3 mt-4 pt-1">
-                                        <a href="#" class="btn btn-outline-info btn-sm"><i class="fe fe-eye"></i> View Document</a>
-                                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="fe fe-trash-2"></i></a>
+                                        <?php if($Customers->CustomerInformation) { ?>
+                                        <a target="_blank" href="<?php echo base_url().$Customers->CustomerInformation;?>" class="btn btn-outline-info btn-sm"><i class="fe fe-eye"></i> View Document</a>
+                                        <a href="#" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#verify-password"><i class="fe fe-trash-2" ></i></a>
+                                         <?php } ?> 
                                     </div>
                                     <div class="col-md-3 col-lg-3 mt-4 pt-1">
                                      <!-- Default dropup button -->
@@ -287,19 +302,19 @@
                             </div>
                             <div class="col-md-3 col-lg-3 mt-2 pt-1">
                                 <label class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <input type="checkbox" class="custom-control-input" name="BundlePricing" id="BundlePricing" value="1" <?php if($Customers->BundlePricing==1){ echo 'checked="true"';}?>>
                                     <span class="custom-control-label">Bundle Pricing</span>
                                 </label>
                             </div>
                             <div class="col-md-3 col-lg-3 mt-2 pt-1">
                                 <label class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" >
+                                    <input type="checkbox" class="custom-control-input" name="AdverseConditionsEnabled" id="AdverseConditionsEnabled" <?php if($Customers->AdverseConditionsEnabled==1){ echo 'checked="true"';}?> >
                                     <span class="custom-control-label">Adverse Conditions Enabled</span>
                                 </label>
                             </div>
                             <div class="col-md-3 col-lg-3 mt-2 pt-1">
                                 <label class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <input type="checkbox" class="custom-control-input" name="AutoBilling" id="AutoBilling" <?php if($Customers->AutoBilling==1){ echo 'checked="true"';}?>>
                                     <span class="custom-control-label">Auto Billing</span>
                                 </label>
                             </div>

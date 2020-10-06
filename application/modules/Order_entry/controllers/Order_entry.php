@@ -1,6 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-ini_set('display_errors', 1);
+// defined('BASEPATH') OR exit('No direct script access allowed');
+// ini_set('display_errors', 1);
 error_reporting(E_ALL);
 class Order_entry extends MY_Controller {
 
@@ -42,9 +42,9 @@ class Order_entry extends MY_Controller {
 		$data['States'] = $this->common_model->GetStateDetails();
 		$data['Prioritys'] = $this->common_model->GetPriorityDetails();
 		$data['Ordertypes'] = $this->common_model->GetOrderTypeDetails();
-		$data['TransactionTypeDetails'] = $this->common_model->GetTransactionTypeDetails();
-		$data['PropertyTypeDetails'] = $this->common_model->GetPropertyTypeDetails();
-		$data['BorrowerDetails'] = $this->common_model->GetBorrowerDetailsDescription();
+		// $data['TransactionTypeDetails'] = $this->common_model->GetTransactionTypeDetails();
+		// $data['PropertyTypeDetails'] = $this->common_model->GetPropertyTypeDetails();
+		// $data['BorrowerDetails'] = $this->common_model->GetBorrowerDetailsDescription();
 		$data['documentstatus'] = $this->config->item('RMS_DocumentStatus');
 
 
@@ -113,7 +113,7 @@ class Order_entry extends MY_Controller {
 			
 		}	
 		$data['Prop_roles'] = $this->common_model->GetPropertyrolesDetails();
-		$data['bundleddetails'] = $this->Orderentry_model->get_bundleddetails();
+		// $data['bundleddetails'] = $this->Orderentry_model->get_bundleddetails();
 		$data['is_vendor_login'] = $this->common_model->is_vendorlogin();
 		$data['Name'] = $this->UserName;
 		// $data['Menu'] = $this->Mlogin->DynamicMenu($this->RoleUID,$this->UserName);
@@ -319,13 +319,13 @@ function insert()
 			//for x1 api orders 
 			$CustomerUID = $this->input->post('customer');
 			$SubProductUID = $this->input->post('SubProductUID');
-			$X1result =$this->Orderentry_model->CheckX1Order($CustomerUID,$ProductUIDs[0],$SubProductUID[0]);
-			if($X1result)
-			{
-				$this->form_validation->set_rules('BorrowerType', '', 'required');
-				$this->form_validation->set_rules('PropertyType', '', 'required');
-				$this->form_validation->set_rules('TransactionType', '', 'required');
-			}
+			// $X1result =$this->Orderentry_model->CheckX1Order($CustomerUID,$ProductUIDs[0],$SubProductUID[0]);
+			// if($X1result)
+			// {
+			// 	$this->form_validation->set_rules('BorrowerType', '', 'required');
+			// 	$this->form_validation->set_rules('PropertyType', '', 'required');
+			// 	$this->form_validation->set_rules('TransactionType', '', 'required');
+			// }
 
 			$chk_mailing = $this->input->post('chk_mailing');
 
