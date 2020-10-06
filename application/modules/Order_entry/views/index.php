@@ -32,7 +32,7 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
 
 
 <!-- start body header -->
-<div id="page_top" class="section-body">
+<div id="page_top" class="section-body bg-new-header-top">
     <div class="container-fluid">
         <div class="page-header">
             <div class="left">
@@ -54,7 +54,7 @@ $Prop_roles=$this->Common_model->GetPropertyrolesDetails();
         <h5 class="pb-1 inner-page-head">Single Order</h5>
         <div class="row">
             <div class="col-md-12 col-lg-12">
-                <div class="card">
+                <div class="card" style="border-radius:0;">
                     <div class="card-header pb-0">
                         <div class="col-md-12">
                             <div class="row">

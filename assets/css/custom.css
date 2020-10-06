@@ -191,6 +191,7 @@ table.order-summary-head tr td .text-muted {
 .table th {
 	text-transform: capitalize;
 }
+
 .end-left-menu .with-icon i{
 	font-size: 30px;
 	color: #ffffff; 
@@ -204,21 +205,41 @@ table.order-summary-head tr td .text-muted {
 }
 .end-left-menu a{
 	display: block!important;
-	width:70px;
+	width:68px;
 	height:65px;
-	min-width:70px;
+	min-width:68px;
 	padding:10px 3px;
+	margin-bottom: 10px;
 }
 .end-left-menu a:hover, .end-left-menu a.active{
 	border-left:4px solid #e2e2f6;
-	width:66px;
-	min-width:66px;
+	width:64px;
+	min-width:64px;
 	background-color: #3e4681;
 	background-image: linear-gradient(180deg,rgba(60,62,93,.6),rgba(60,62,93,0) 33%),linear-gradient(225deg,rgba(60,62,93,.6) 33%,rgba(60,62,93,0) 70%),linear-gradient(270deg,rgba(60,62,93,.6) 70%,rgba(60,62,93,0) 94%),linear-gradient(315deg,rgba(60,62,93,.6) 33%,rgba(60,62,93,0) 70%),linear-gradient(360deg,rgba(60,62,93,.6),rgba(60,62,93,0) 33%),linear-gradient(90deg,rgba(98,100,167,.75) 6%,rgba(98,100,167,0) 70%);
 	color: #fff;
 }
 .header_top.dark {
 	background-color: #33344a!important;
+}
+
+.bg-new-header-top {
+	background: #33344a !important;
+}
+
+.bg-new-header-top .page-header {
+	border:0;
+}
+.bg-new-header-top .page-title {
+	color: #ffffff !important;
+}
+
+.bg-new-header-top .notification .btn {
+	color: #ffffff !important;
+}
+
+.container-fluid-1 {
+	padding: 0px 15px;
 }
 .end-left-menu .with-icon{
 	position:relative;
@@ -238,11 +259,13 @@ table.order-summary-head tr td .text-muted {
 	background: #cc4a31;
 	color: #fff;
 	border: .2rem solid #33344a;
-
 	line-height: 15px;
 	padding: 0 3px;
 }
 .end-left-menu a:hover .activity-badge{
 
 	left: 31px;
+}
+.card{
+	border-radius:0;
 }

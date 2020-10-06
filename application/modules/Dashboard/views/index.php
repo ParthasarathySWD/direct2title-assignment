@@ -1,7 +1,7 @@
 
 <link rel="stylesheet" href="assets/css/module/dashboard/style.css" rel="stylesheet" />
 <!-- start body header -->
-<div id="page_top" class="section-body">
+<div id="page_top" class="section-body bg-new-header-top">
     <div class="container-fluid">
         <div class="page-header">
             <div class="left">
@@ -39,7 +39,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-lg-12">
-                <div class="card">
+                <div class="card" style="border-radius:0;">
                     <div class="card-body">
                         <div class="col-md-12 col-lg-12 add-product-div p-0">
                             <div class="row">
