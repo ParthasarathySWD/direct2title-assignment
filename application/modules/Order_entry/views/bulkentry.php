@@ -454,7 +454,8 @@ $(document).off('click', '#bulk_save').on('click', '#bulk_save', function(e){
         contentType: false,
         cache:false,
         beforeSend: function(){
-            $('.spinnerclass').addClass("be-loading-active");
+            // $('.spinnerclass').addClass("be-loading-active");
+            $('.page-loader-wrapper').show();
             button.attr("disabled", true);
             button.html('Loading ...'); 
         },
@@ -462,19 +463,11 @@ $(document).off('click', '#bulk_save').on('click', '#bulk_save', function(e){
         {
             button.html('save'); 
             button.removeAttr('disabled');
-            $('.spinnerclass').removeClass("be-loading-active");
+            // $('.spinnerclass').removeClass("be-loading-active");
+            $('.page-loader-wrapper').hide();
             try {
                 obj = JSON.parse(data);
-                // $.gritter.add({
-                //     title: obj['message'],
-                //                             // text: data['message'],
-                //                             class_name: 'color danger',
-                //                             fade: true,
-                //                             time: 1000,
-                //                             speed:'fast',
-
-                //                         });
-                 toastr['error']("", obj['message']);
+                toastr['error']("", obj['message']);
             } catch (e) {
                 $('#preview-table').html('');
                 $('#imported-table').html(data);

@@ -7,18 +7,18 @@ class Orderentry_model extends CI_Model {
 	}
 // NF223 - Quick Order Entry
 	function GetOrderEntryCopyDetailsbyUID($orderUID) {
-		$this->db->select('torders.*, torders.PropertyCityName as CityName, torders.PropertyCountyName as CountyName, torders.PropertyStateCode as StateName, torders.PropertyStateCode as StateCode, mordertypes.OrderTypeName, msubproducts.SubProductName,mproducts.ProductUID')->from('torders');
-		$this->db->join('msubproducts','msubproducts.SubProductUID=torders.SubProductUID');
-		$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID','left');
-		$this->db->join('mordertypes','mordertypes.OrderTypeUID=torders.OrderTypeUID', 'left');
-		$this->db->where('torders.OrderUID',$orderUID);
+		$this->db->select('tOrders.*, tOrders.PropertyCityName as CityName, tOrders.PropertyCountyName as CountyName, tOrders.PropertyStateCode as StateName, tOrders.PropertyStateCode as StateCode, mordertypes.OrderTypeName, mSubProducts.SubProductName,mProducts.ProductUID')->from('tOrders');
+		$this->db->join('mSubProducts','mSubProducts.SubProductUID=tOrders.SubProductUID');
+		$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID','left');
+		$this->db->join('mOrderTypes','mordertypes.OrderTypeUID=tOrders.OrderTypeUID', 'left');
+		$this->db->where('tOrders.OrderUID',$orderUID);
 		$query = $this->db->get()->row();
 		return $query;
 	}
 	
 
 	function GetPropertyRoleEntryCopyDetailsbyUID($orderUID) {
-		$this->db->select('*')->from('torderpropertyroles');
+		$this->db->select('*')->from('tOrderPropertyRoles');
 		$this->db->where('OrderUID',$orderUID);
 		$query = $this->db->get()->result();
 		return $query;
@@ -27,8 +27,8 @@ class Orderentry_model extends CI_Model {
 	function GetStateDetails($StateUID){
 
 		$this->db->select("StateCode");
-		$this->db->from('mstates');
-		$this->db->where(array("Active"=>1,"mstates.StateUID"=>$StateUID));
+		$this->db->from('mStates');
+		$this->db->where(array("Active"=>1,"mStates.StateUID"=>$StateUID));
 		$query = $this->db->get();
 		return $query->row();
 
@@ -37,8 +37,8 @@ class Orderentry_model extends CI_Model {
 	function GetCityDetails($CityUID){
 
 		$this->db->select("CityName");
-		$this->db->from('mcities');
-		$this->db->where(array("Active"=>1,"mcities.CityUID"=>$CityUID));
+		$this->db->from('mCities');
+		$this->db->where(array("Active"=>1,"mCities.CityUID"=>$CityUID));
 		$query = $this->db->get();
 		return $query->row();
 
@@ -47,8 +47,8 @@ class Orderentry_model extends CI_Model {
 	function GetCountyDetails($CountyUID){
 
 		$this->db->select("CountyName");
-		$this->db->from('mcounties');
-		$this->db->where(array("Active"=>1,"mcounties.CountyUID"=>$CountyUID));
+		$this->db->from('mCounties');
+		$this->db->where(array("Active"=>1,"mCounties.CountyUID"=>$CountyUID));
 		$query = $this->db->get();
 		return $query->row();
 
@@ -62,9 +62,9 @@ class Orderentry_model extends CI_Model {
 
 	function GetSubProductOrderType($SubProductUID)
 	{
-		$this->db->where('msubproducts.SubProductUID',$SubProductUID);
-		$this->db->select('msubproducts.OrderTypeUID, mordertypes.OrderTypeName')->from('msubproducts');
-		$this->db->join('mordertypes','mordertypes.OrderTypeUID = msubproducts.OrderTypeUID','LEFT');
+		$this->db->where('mSubProducts.SubProductUID',$SubProductUID);
+		$this->db->select('mSubProducts.OrderTypeUID, mordertypes.OrderTypeName')->from('mSubProducts');
+		$this->db->join('mordertypes','mordertypes.OrderTypeUID = mSubProducts.OrderTypeUID','LEFT');
 		return $this->db->get()->row();
 	}
 
@@ -78,18 +78,18 @@ class Orderentry_model extends CI_Model {
 
 	function get_customer_default_template($CustomerUID)
 	{
-		$this->db->select('DefaultTemplateUID, TemplateName, TemplateUID')->from('mcustomers');
+		$this->db->select('DefaultTemplateUID, TemplateName, TemplateUID')->from('mCustomers');
 		$this->db->where('CustomerUID',$CustomerUID);
-		$this->db->join('mtemplates','mtemplates.TemplateUID = mcustomers.DefaultTemplateUID');
+		$this->db->join('mtemplates','mtemplates.TemplateUID = mCustomers.DefaultTemplateUID');
 		return $this->db->get()->row();
 	}
 
 	function GetSub_productDetails($ProductUID, $CustomerUID)
 	{
-		$this->db->select('msubproducts.SubProductUID, msubproducts.SubProductName,msubproducts.RMS')->from('msubproducts');
-		$this->db->join('mcustomerproducts','msubproducts.SubProductUID = mcustomerproducts.SubProductUID','LEFT');
-		$this->db->where('mcustomerproducts.CustomerUID',$CustomerUID);
-		$this->db->where('mcustomerproducts.ProductUID',$ProductUID);
+		$this->db->select('mSubProducts.SubProductUID, mSubProducts.SubProductName,mSubProducts.RMS')->from('mSubProducts');
+		$this->db->join('mCustomerProducts','mSubProducts.SubProductUID = mCustomerProducts.SubProductUID','LEFT');
+		$this->db->where('mCustomerProducts.CustomerUID',$CustomerUID);
+		$this->db->where('mCustomerProducts.ProductUID',$ProductUID);
 		$q = $this->db->get();
 		return $q->result();
 	}
@@ -143,16 +143,16 @@ class Orderentry_model extends CI_Model {
 		$pricing = new Customer_pricing();
 
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $this->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $this->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
 
 		$OrderNos = [];
 		//OrderNumber Change -Product Indexs @Auth Uba @On may 18 2020 
 		if(!empty($PreviousOrderUID)){
-			$last_row_seq = $this->db->select('OrderNumber,OrderSequence,OrderUID')->where('OrderUID',$PreviousOrderUID)->get('torders')->row();
+			$last_row_seq = $this->db->select('OrderNumber,OrderSequence,OrderUID')->where('OrderUID',$PreviousOrderUID)->get('tOrders')->row();
 			$LastNo = explode('-',$last_row_seq->OrderNumber);
-			$last_row_sequence = $this->db->select('OrderNumber,OrderSequence,OrderUID')->like('OrderNumber', substr($LastNo[0],3), 'both')->order_by('OrderUID',"DESC")->limit(1)->get('torders')->row();
+			$last_row_sequence = $this->db->select('OrderNumber,OrderSequence,OrderUID')->like('OrderNumber', substr($LastNo[0],3), 'both')->order_by('OrderUID',"DESC")->limit(1)->get('tOrders')->row();
 			
 			$ANo = explode('-',$last_row_sequence->OrderNumber);
 			$PreviousIncrement = $ANo[1];
@@ -185,8 +185,8 @@ class Orderentry_model extends CI_Model {
 			}
 
 			$this->db->select('ProductCode');
-			$this->db->from('msubproducts');
-			$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID');
+			$this->db->from('mSubProducts');
+			$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID');
 			$this->db->where('SubProductUID', $data['SubProductUID'][$key]);
 			$query = $this->db->get();
 			$result = $query->row();
@@ -198,8 +198,8 @@ class Orderentry_model extends CI_Model {
 			
 			$this->OrderSequence = $OrderSequence.'-'.$ProductIndex;
 			
-			$msubproducts = $this->common_model->get_row('msubproducts', ['SubProductUID'=>$this->SubProductUID]);
-			$IsClosingProduct = $this->Orderentry_model->IsClosingProduct($msubproducts->ProductUID);
+			$mSubProducts = $this->common_model->get_row('mSubProducts', ['SubProductUID'=>$this->SubProductUID]);
+			$IsClosingProduct = $this->Orderentry_model->IsClosingProduct($mSubProducts->ProductUID);
 
 			$this->OrderTypeUID = $this->GetSubProductOrderType($this->SubProductUID)->OrderTypeUID;
 			$where['SubProductUID'] = $this->SubProductUID;
@@ -217,8 +217,8 @@ class Orderentry_model extends CI_Model {
 			}
 
 			//RMS based on subproduct - pricing 
-			if(!empty($msubproducts)) {
-				if($msubproducts->RMS == 1){
+			if(!empty($mSubProducts)) {
+				if($mSubProducts->RMS == 1){
 					$CustomerAmount = $pricing->get_Customer_ReverseMortgagePricing($this->CustomerUID,$this->SubProductUID);
 					$this->CustomerAmount = $CustomerAmount;
 					$this->CustomerActualAmount = $CustomerAmount;					
@@ -226,19 +226,19 @@ class Orderentry_model extends CI_Model {
 			}
 
 
-			if ($mstates->SearchType==1) {
+			if ($mStates->SearchType==1) {
 				$this->IsInhouseExternal=0;
 			}
-			elseif ($mstates->SearchType==2) {
+			elseif ($mStates->SearchType==2) {
 			 	$this->IsInhouseExternal=1;
 		 	}
 		 	else{
 
-		 		if ($mstates->AbstractorAssignment==1) {
-					$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+		 		if ($mStates->AbstractorAssignment==1) {
+					$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 		 		}
 		 		else{
-		 			$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mstates->StateUID,$data['PropertyZipcode']);
+		 			$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mStates->StateUID,$data['PropertyZipcode']);
 		 		}
 		 	}
 
@@ -257,7 +257,7 @@ class Orderentry_model extends CI_Model {
 			}
 
 
-			// $x1CustomerCheck = $this->CheckX1Order($this->CustomerUID,$msubproducts->ProductUID,$this->SubProductUID);
+			// $x1CustomerCheck = $this->CheckX1Order($this->CustomerUID,$mSubProducts->ProductUID,$this->SubProductUID);
 			// if($x1CustomerCheck)
 			// {
 			// 	$this->BorrowerType = $data['BorrowerType'];
@@ -275,7 +275,7 @@ class Orderentry_model extends CI_Model {
 			$where_policy_type['CustomerUID'] = $this->CustomerUID;
 			$this->OrderPolicyType = $this->common_model->GetCustomerProductDetailsByCustomerSubproductUID($where_policy_type)->OrderPolicyType;
 
-			$query = $this->db->insert('torders',$this);
+			$query = $this->db->insert('tOrders',$this);
 			$insert_id = $this->db->insert_id();	
 
 			if (!empty($IsClosingProduct))
@@ -306,14 +306,14 @@ class Orderentry_model extends CI_Model {
 			}
 
 			$this->db->select('OrderUID');
-			$this->db->from('torders');
+			$this->db->from('tOrders');
 			$this->db->where('OrderNumber',$this->OrderNumber);
 			$newvalue=$this->db->get('')->row_array();
 
 			$data1['ModuleName']='orderentry-insert';
 			$data1['IpAddreess']=$_SERVER['REMOTE_ADDR'];
 			$data1['DateTime']=date('y-m-d H:i:s');
-			$data1['TableName']='torders';
+			$data1['TableName']='tOrders';
 			$data1['OrderUID'] = $newvalue['OrderUID'];
 			$data1['UserUID']=$this->session->userdata('UserUID');
 			$this->common_model->Audittrail_insert($data1);
@@ -469,9 +469,9 @@ class Orderentry_model extends CI_Model {
 			$this->FHA = $data['FHA'];
 		}
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $this->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $this->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
 
 
 		$OrderNos = [];
@@ -501,19 +501,19 @@ class Orderentry_model extends CI_Model {
 			$this->CustomerActualAmount = $this->CustomerAmount;
 			$this->IsQuote = $CustomerAmountQuote->IsQuote;
 			/*End*/
-			if ($mstates->SearchType==1) {
+			if ($mStates->SearchType==1) {
 				$this->IsInhouseExternal=0;
 			}
-			elseif ($mstates->SearchType==2) {
+			elseif ($mStates->SearchType==2) {
 			 	$this->IsInhouseExternal=1;
 		 	}
 		 	else{
 
-		 		if ($mstates->AbstractorAssignment==1) {
-					$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+		 		if ($mStates->AbstractorAssignment==1) {
+					$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 		 		}
 		 		else{
-		 			$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mstates->StateUID,$data['PropertyZipcode']);
+		 			$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mStates->StateUID,$data['PropertyZipcode']);
 		 		}
 		 	}
 
@@ -533,7 +533,7 @@ class Orderentry_model extends CI_Model {
 			$where_policy_type['CustomerUID'] = $this->CustomerUID;
 			$this->OrderPolicyType = $this->common_model->GetCustomerProductDetailsByCustomerSubproductUID($where_policy_type)->OrderPolicyType;
 
-			$query = $this->db->insert('torders',$this);
+			$query = $this->db->insert('tOrders',$this);
 			$insert_id = $this->db->insert_id();
 
 			/*INSERT CUSTOMER ACTUAL PRICING*/
@@ -543,7 +543,7 @@ class Orderentry_model extends CI_Model {
 			$this->Insert_tOrderImport($data,$insert_id);
 
 			$this->db->select('OrderUID');
-			$this->db->from('torders');
+			$this->db->from('tOrders');
 			$this->db->where('OrderNumber',$this->OrderNumber);
 			$newvalue=$this->db->get('')->row_array();
 
@@ -551,7 +551,7 @@ class Orderentry_model extends CI_Model {
 			$data1['ModuleName']='email-orderentry-insert';
 			$data1['IpAddreess']=$_SERVER['REMOTE_ADDR'];
 			$data1['DateTime']=date('y-m-d H:i:s');
-			$data1['TableName']='torders';
+			$data1['TableName']='tOrders';
 			$data1['OrderUID'] = $newvalue['OrderUID'];
 			$data1['UserUID']=$this->session->userdata('UserUID');
 			$this->common_model->Audittrail_insert($data1);
@@ -593,7 +593,7 @@ class Orderentry_model extends CI_Model {
 
 
 	// Import Order via Email - Order Insert Model
-	function email_update_order($data,$DatabaseAddress,$torders){
+	function email_update_order($data,$DatabaseAddress,$tOrders){
 		//D-2-T23 state issuer fetched
 		$data['Issuer'] = $this->lang->line('Inhouse_addtable');
 		$searchmoderesult = $this->common_model->get_statesearchmode($data['PropertyStateCode'],$data['PropertyCountyName']);
@@ -627,9 +627,9 @@ class Orderentry_model extends CI_Model {
 		$pricing = new Customer_pricing();
 
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $this->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $this->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
 
 
 		$OrderNos = [];
@@ -639,7 +639,7 @@ class Orderentry_model extends CI_Model {
 			$this->PriorityUID = $data['PriorityUID'][$key];
 			$this->ProjectUID = isset($data['ProjectUID'][$key]) ? $data['ProjectUID'][$key] : '0';
 			//$this->IsMERS = isset($data['MERS'][$key]) ? 1 : 0;
-			$OrderNo = $torders->OrderNumber;
+			$OrderNo = $tOrders->OrderNumber;
 
 
 			$this->OrderTypeUID = $this->GetSubProductOrderType($this->SubProductUID)->OrderTypeUID;
@@ -655,19 +655,19 @@ class Orderentry_model extends CI_Model {
 			$this->CustomerActualAmount = $this->CustomerAmount;
 			$this->IsQuote = $CustomerAmountQuote->IsQuote;
 			/*End*/
-			if ($mstates->SearchType==1) {
+			if ($mStates->SearchType==1) {
 				$this->IsInhouseExternal=0;
 			}
-			elseif ($mstates->SearchType==2) {
+			elseif ($mStates->SearchType==2) {
 			 	$this->IsInhouseExternal=1;
 		 	}
 		 	else{
 
-		 		if ($mstates->AbstractorAssignment==1) {
-					$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+		 		if ($mStates->AbstractorAssignment==1) {
+					$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 		 		}
 		 		else{
-		 			$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mstates->StateUID,$data['PropertyZipcode']);
+		 			$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mStates->StateUID,$data['PropertyZipcode']);
 		 		}
 		 	}
 
@@ -678,9 +678,9 @@ class Orderentry_model extends CI_Model {
 
 			$this->OrderDueDateTime = calculate_duedate($this->OrderEntryDatetime,$this->CustomerUID,$this->SubProductUID,$this->PriorityUID);
 			$this->OrderDocsPath ='uploads/searchdocs/'.$date.'/'.$OrderNo.'/';
-			$this->db->where('OrderUID', $torders->OrderUID);
-			$query = $this->db->update('torders',$this);
-			$insert_id = $torders->OrderUID;
+			$this->db->where('OrderUID', $tOrders->OrderUID);
+			$query = $this->db->update('tOrders',$this);
+			$insert_id = $tOrders->OrderUID;
 
 			/*INSERT CUSTOMER ACTUAL PRICING*/
 			$this->common_model->delete( 'tOrderPayments', 'OrderUID', $insert_id);
@@ -690,7 +690,7 @@ class Orderentry_model extends CI_Model {
 			$this->Insert_tOrderImport($data,$insert_id);
 
 			$this->db->select('OrderUID');
-			$this->db->from('torders');
+			$this->db->from('tOrders');
 			$this->db->where('OrderNumber',$this->OrderNumber);
 			$newvalue=$this->db->get('')->row_array();
 
@@ -698,13 +698,13 @@ class Orderentry_model extends CI_Model {
 			$data1['ModuleName']='orderentry-insert';
 			$data1['IpAddreess']=$_SERVER['REMOTE_ADDR'];
 			$data1['DateTime']=date('y-m-d H:i:s');
-			$data1['TableName']='torders';
+			$data1['TableName']='tOrders';
 			$data1['OrderUID'] = $newvalue['OrderUID'];
 			$data1['UserUID']=$this->session->userdata('UserUID');
 			$this->common_model->Audittrail_insert($data1);
 
 			$this->db->where('OrderUID', $insert_id);
-			$this->db->delete('torderpropertyroles');
+			$this->db->delete('tOrderPropertyRoles');
 			$property_role = $this->saveProperty_Details($data,$insert_id);
 
 			/* D-2-T9 GENERATE PACKAGE NUMBER BASED ON LOAN NUMBER*/
@@ -733,19 +733,19 @@ class Orderentry_model extends CI_Model {
 		{
 
 			$this->db->select ( '*' );
-			$this->db->from ( 'torders' );
-			$this->db->join('mordertypes','mordertypes.OrderTypeUID = torders.OrderTypeUID','LEFT');
-			$this->db->join('morderpriority','morderpriority.PriorityUID = torders.PriorityUID','LEFT');
-			$this->db->join('mcustomers','mcustomers.CustomerUID = torders.CustomerUID','LEFT');
-			$this->db->join('msubproducts','msubproducts.SubProductUID = torders.SubProductUID','LEFT');
-			$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID','LEFT');
-			$this->db->join('mcities','mcities.CityUID = torders.PropertyCity','LEFT');
-			$this->db->join('mstates','mstates.StateUID = torders.PropertyStateUID','LEFT');
-			$this->db->join('mcounties','mcounties.CountyUID = torders.PropertyCountyUID','LEFT');
-			$this->db->join('mtemplates','mtemplates.TemplateUID = torders.TemplateUID','LEFT');
-			$this->db->join('torderpropertyroles','torderpropertyroles.OrderUID = torders.OrderUID','LEFT');
-			$this->db->where_in('torders.OrderUID',$OrderUID);
-			$this->db->group_by('torders.OrderUID');
+			$this->db->from ( 'tOrders' );
+			$this->db->join('mordertypes','mordertypes.OrderTypeUID = tOrders.OrderTypeUID','LEFT');
+			$this->db->join('morderpriority','morderpriority.PriorityUID = tOrders.PriorityUID','LEFT');
+			$this->db->join('mCustomers','mCustomers.CustomerUID = tOrders.CustomerUID','LEFT');
+			$this->db->join('mSubProducts','mSubProducts.SubProductUID = tOrders.SubProductUID','LEFT');
+			$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID','LEFT');
+			$this->db->join('mCities','mCities.CityUID = tOrders.PropertyCity','LEFT');
+			$this->db->join('mStates','mStates.StateUID = tOrders.PropertyStateUID','LEFT');
+			$this->db->join('mCounties','mCounties.CountyUID = tOrders.PropertyCountyUID','LEFT');
+			$this->db->join('mtemplates','mtemplates.TemplateUID = tOrders.TemplateUID','LEFT');
+			$this->db->join('tOrderPropertyRoles','tOrderPropertyRoles.OrderUID = tOrders.OrderUID','LEFT');
+			$this->db->where_in('tOrders.OrderUID',$OrderUID);
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -758,7 +758,7 @@ class Orderentry_model extends CI_Model {
 	{
 		if($OrderUID !=''){
 			$this->db->select ( '*' );
-			$this->db->from ( 'torderpropertyroles' );
+			$this->db->from ( 'tOrderPropertyRoles' );
 			$this->db->where_in('OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->result_array();
@@ -894,7 +894,7 @@ class Orderentry_model extends CI_Model {
 				$data1['ModuleName']=$PRName[$i].' '.'propertyroles-insert';
 				$data1['IpAddreess']=$_SERVER['REMOTE_ADDR'];
 				$data1['DateTime']=date('y-m-d H:i:s');
-				$data1['TableName']='torderpropertyroles';
+				$data1['TableName']='tOrderPropertyRoles';
 				$data1['OrderUID']=$insert_id;
 				$data1['UserUID']=$this->session->userdata('UserUID');
 				$this->common_model->Audittrail_insert($data1);
@@ -902,7 +902,7 @@ class Orderentry_model extends CI_Model {
 
 
 			if (!empty($propertyroles_array)) {
-				$this->db->insert_batch('torderpropertyroles', $propertyroles_array);				
+				$this->db->insert_batch('tOrderPropertyRoles', $propertyroles_array);				
 			}
 
 		}
@@ -930,22 +930,22 @@ class Orderentry_model extends CI_Model {
 	function getzipcontents($zipcode = '')
 	{
 		$zipcode=str_replace('-', '', $zipcode);
-		$query = $this->db->query("SELECT * FROM `mcities`
-			LEFT JOIN mstates ON mcities.StateUID = mstates.StateUID
-			LEFT JOIN mcounties ON mcities.StateUID = mcounties.StateUID
-			AND mcities.CountyUID = mcounties.CountyUID
-			WHERE mcities.ZipCode = '$zipcode'");
+		$query = $this->db->query("SELECT * FROM `mCities`
+			LEFT JOIN mStates ON mCities.StateUID = mStates.StateUID
+			LEFT JOIN mCounties ON mCities.StateUID = mCounties.StateUID
+			AND mCities.CountyUID = mCounties.CountyUID
+			WHERE mCities.ZipCode = '$zipcode'");
 		$result=$query->row();
 
 
 		if(empty($result)){
 			$zipcode_new=substr("$zipcode", 0, 5);
 
-			$query = $this->db->query("SELECT * FROM `mcities`
-				LEFT JOIN mstates ON mcities.StateUID = mstates.StateUID
-				LEFT JOIN mcounties ON mcities.StateUID = mcounties.StateUID
-				AND mcities.CountyUID = mcounties.CountyUID
-				WHERE mcities.ZipCode  LIKE '$zipcode_new%'");
+			$query = $this->db->query("SELECT * FROM `mCities`
+				LEFT JOIN mStates ON mCities.StateUID = mStates.StateUID
+				LEFT JOIN mCounties ON mCities.StateUID = mCounties.StateUID
+				AND mCities.CountyUID = mCounties.CountyUID
+				WHERE mCities.ZipCode  LIKE '$zipcode_new%'");
 			return $query->row();
 		}else{
 
@@ -1012,24 +1012,24 @@ class Orderentry_model extends CI_Model {
 	}
 	function getCityDetail($zipcode) {
 
-      /*$this->db->join('mstates','mcities.StateUID=mstates.StateUID','left');
-      $this->db->join('mcounties','mcities.StateUID=mcounties.StateUID','left');*/
-      $query = $this->db->get_where('mcities', array('ZipCode' => $zipcode));
+      /*$this->db->join('mStates','mCities.StateUID=mStates.StateUID','left');
+      $this->db->join('mCounties','mCities.StateUID=mCounties.StateUID','left');*/
+      $query = $this->db->get_where('mCities', array('ZipCode' => $zipcode));
       return $query->result();
 
   }
 
   function getStateDetail($zipcode) {
 
-  	$this->db->join('mstates','mcities.StateUID=mstates.StateUID','left');
-  	$query = $this->db->get_where('mcities', array('ZipCode' => $zipcode));
+  	$this->db->join('mStates','mCities.StateUID=mStates.StateUID','left');
+  	$query = $this->db->get_where('mCities', array('ZipCode' => $zipcode));
   	return $query->result();
   }
 
   function getCountyDetail($zipcode) {
 
-  	$this->db->join('mcounties','mcities.CountyUID=mcounties.CountyUID','left');
-  	$query = $this->db->get_where('mcities', array('ZipCode' => $zipcode));
+  	$this->db->join('mCounties','mCities.CountyUID=mCounties.CountyUID','left');
+  	$query = $this->db->get_where('mCities', array('ZipCode' => $zipcode));
   	return $query->result();
   }
 
@@ -1044,7 +1044,7 @@ class Orderentry_model extends CI_Model {
 
 		/*$this->db->where(array("Active"=>1,"StateCode"=>$StateCode));*/
 		$this->db->where(array("StateCode"=>$StateCode));
-		$query = $this->db->get('mstates');
+		$query = $this->db->get('mStates');
 		return $query->row();
 	}
 
@@ -1052,14 +1052,14 @@ class Orderentry_model extends CI_Model {
 
 		$this->db->like('CityName', $CityName);
 		$this->db->where(array("Active"=>1,"ZipCode"=>$zipcode));
-		$query = $this->db->get('mcities');
+		$query = $this->db->get('mCities');
 		return $query->row();
 	}
 
 	function get_county($StateUID,$CountyName){
 
 		$this->db->where(array("Active"=>1,"CountyName"=>$CountyName,"StateUID"=>$StateUID));
-		$query = $this->db->get('mcounties');
+		$query = $this->db->get('mCounties');
 		return $query->row();
 	}
 
@@ -1067,7 +1067,7 @@ class Orderentry_model extends CI_Model {
 	function get_product($ProductName){
 
 		$this->db->where(array("Active"=>1,"ProductName"=>$ProductName));
-		$query = $this->db->get('mproducts');
+		$query = $this->db->get('mProducts');
 		return $query->row();
 	}
 
@@ -1075,7 +1075,7 @@ class Orderentry_model extends CI_Model {
 	function get_customer($CustomerName){
 
 		$this->db->where(array("Active"=>1,"CustomerName"=>$CustomerName));
-		$query = $this->db->get('mcustomers');
+		$query = $this->db->get('mCustomers');
 		return $query->row();
 	}
 
@@ -1088,7 +1088,7 @@ class Orderentry_model extends CI_Model {
 
 	function get_sub_product($SubProductName = ''){
 
-		$query = $this->db->query("SELECT * FROM (`msubproducts`) WHERE `Active` = 1 AND (`SubProductName` = '$SubProductName' OR `SubProductCode` = '$SubProductName')");
+		$query = $this->db->query("SELECT * FROM (`mSubProducts`) WHERE `Active` = 1 AND (`SubProductName` = '$SubProductName' OR `SubProductCode` = '$SubProductName')");
 		return $query->row();
 	}
 
@@ -1114,10 +1114,10 @@ class Orderentry_model extends CI_Model {
 
 		//D-2-T23 state issuer fetched
 		$data['Issuer'] = $this->lang->line('Inhouse_addtable');
-		$searchmoderesult = $this->common_model->get_statesearchmode($data['PropertyStateCode'],$data['PropertyCountyName']);
-		if(!empty($searchmoderesult)) {
-			$data['Issuer'] = (!empty($searchmoderesult->SearchModeName)) ? $searchmoderesult->SearchModeName : $this->lang->line('Inhouse_addtable');
-		}
+		// $searchmoderesult = $this->common_model->get_statesearchmode($data['PropertyStateCode'],$data['PropertyCountyName']);
+		// if(!empty($searchmoderesult)) {
+		// 	$data['Issuer'] = (!empty($searchmoderesult->SearchModeName)) ? $searchmoderesult->SearchModeName : $this->lang->line('Inhouse_addtable');
+		// }
 		$field_count = 20; 
 		$Sellercolumn = $arrayCode[19];
 		$this->AltORderNumber = $data['AltORderNumber'];
@@ -1163,22 +1163,22 @@ class Orderentry_model extends CI_Model {
 		$this->CustomerActualAmount = $this->CustomerAmount;
 		$this->IsQuote = $CustomerAmountQuote->IsQuote;
 		/*End*/
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $this->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $this->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
 
-		if ($mstates->SearchType==1) {
+		if ($mStates->SearchType==1) {
 			$this->IsInhouseExternal=0;
 		}
-		elseif ($mstates->SearchType==2) {
+		elseif ($mStates->SearchType==2) {
 			$this->IsInhouseExternal=1;
 		}
 		else{
-			if ($mstates->AbstractorAssignment==1) {
-				$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+			if ($mStates->AbstractorAssignment==1) {
+				$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 			}
 			else{
-				$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mstates->StateUID,$data['PropertyZipcode']);
+				$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mStates->StateUID,$data['PropertyZipcode']);
 			}
 		}
 
@@ -1200,11 +1200,11 @@ class Orderentry_model extends CI_Model {
 		$where_policy_type['CustomerUID'] = $this->CustomerUID;
 		$this->OrderPolicyType = $this->common_model->GetCustomerProductDetailsByCustomerSubproductUID($where_policy_type)->OrderPolicyType;
 
-		$query = $this->db->insert('torders',$this);
+		$query = $this->db->insert('tOrders',$this);
 		$lastinsertid = $this->db->insert_id();	
 
-		$msubproducts = $this->common_model->get_row('msubproducts', ['SubProductUID'=>$this->SubProductUID]);
-		$IsClosingProduct = $this->Orderentry_model->IsClosingProduct($msubproducts->ProductUID);
+		$mSubProducts = $this->common_model->get_row('mSubProducts', ['SubProductUID'=>$this->SubProductUID]);
+		$IsClosingProduct = $this->Orderentry_model->IsClosingProduct($mSubProducts->ProductUID);
 
 		if (!empty($IsClosingProduct))
 		{
@@ -1215,12 +1215,12 @@ class Orderentry_model extends CI_Model {
 		/* @purpose: D2T-55: Get Default Template for the order @author: Yagavi.G <yagavi.g@avanzegroup.com> @since: 13th May 2020 */
 		$template_data['TemplateUID'] = $this->GetTemplateUIDByCustomerUID($data['CustomerUID'],$data['SubProductUID']);
 		$this->db->where('OrderUID', $lastinsertid);
-		$this->db->update('torders',$template_data);
+		$this->db->update('tOrders',$template_data);
 		
 		$data1['ModuleName']='orderentry-insert';
 		$data1['IpAddreess']=$_SERVER['REMOTE_ADDR'];
 		$data1['DateTime']=date('y-m-d H:i:s');
-		$data1['TableName']='torders';
+		$data1['TableName']='tOrders';
 		$data1['OrderUID'] = $lastinsertid;
 		$data1['UserUID']=$this->session->userdata('UserUID');
 		$this->common_model->Audittrail_insert($data1);
@@ -1232,7 +1232,7 @@ class Orderentry_model extends CI_Model {
 			$sellerdata['OrderUID'] = $lastinsertid; 
 			$sellerdata['PropertyRoleUID'] = $this->config->item('Propertyroles')['Sellers']; 
 			$sellerdata['PRName'] = $Sellercolumn; 
-			$this->db->insert('torderpropertyroles', $sellerdata);
+			$this->db->insert('tOrderPropertyRoles', $sellerdata);
 		}
 
 		$property_array = array();
@@ -1259,12 +1259,12 @@ class Orderentry_model extends CI_Model {
 		foreach ($entry_array as $key => $value) {
 			$PropertyRoles=array_filter($value, function($value) { return !is_null($value) && $value !== ''; });
 			if(!empty($PropertyRoles)){
-			$this->db->insert('torderpropertyroles', $PropertyRoles);
+			$this->db->insert('tOrderPropertyRoles', $PropertyRoles);
 		  }
 		}
 
 	/*	if(!empty($entry_array)){
-			$this->db->insert_batch('torderpropertyroles', $PropertyRoles);
+			$this->db->insert_batch('tOrderPropertyRoles', $PropertyRoles);
 		}*/
 
 		$OrderNumber=$this->OrderNumber;
@@ -1360,11 +1360,11 @@ class Orderentry_model extends CI_Model {
 		$TemplateUID = $SubproductTemplate->TemplateUID;
 
 		if(empty($TemplateUID)){
-			$this->db->select('*')->from('mcustomers');
+			$this->db->select('*')->from('mCustomers');
 			$this->db->where('CustomerUID',$CustomerUID);
-			$this->db->join('mtemplates','mtemplates.TemplateUID = mcustomers.DefaultTemplateUID','left');
-			$mcustomers = $this->db->get()->row();
-			$TemplateUID = $mcustomers->TemplateUID;
+			$this->db->join('mtemplates','mtemplates.TemplateUID = mCustomers.DefaultTemplateUID','left');
+			$mCustomers = $this->db->get()->row();
+			$TemplateUID = $mCustomers->TemplateUID;
 		}
 		return $TemplateUID;
 	}
@@ -1372,7 +1372,7 @@ class Orderentry_model extends CI_Model {
 	function GetOrderCheck(){
 
 		$year=date('Ymd');
-		$query = $this->db->query("SELECT EXISTS(SELECT OrderNumber FROM `torders` WHERE OrderNumber LIKE '$year%') as CheckOrderNumber;
+		$query = $this->db->query("SELECT EXISTS(SELECT OrderNumber FROM `tOrders` WHERE OrderNumber LIKE '$year%') as CheckOrderNumber;
 			");
 		return $query->row();
 	}
@@ -1387,7 +1387,7 @@ class Orderentry_model extends CI_Model {
 		if($CheckOrderNumber == 1){
 
 			$year=date('Ymd');
-			$query = $this->db->query("SELECT MAX(`OrderNumber`) AS `AUTO_INCREMENT` FROM `torders` WHERE OrderNumber LIKE '$year%'");
+			$query = $this->db->query("SELECT MAX(`OrderNumber`) AS `AUTO_INCREMENT` FROM `tOrders` WHERE OrderNumber LIKE '$year%'");
 			$res = $query->row();
 
 			$auto_number = $res->AUTO_INCREMENT + 1;
@@ -1396,7 +1396,7 @@ class Orderentry_model extends CI_Model {
 		else{
 
 			$year=date('Ymd');
-			$query = $this->db->query("SELECT MAX(`OrderNumber`) AS `AUTO_INCREMENT` FROM `torders` WHERE OrderNumber LIKE '$year%'");
+			$query = $this->db->query("SELECT MAX(`OrderNumber`) AS `AUTO_INCREMENT` FROM `tOrders` WHERE OrderNumber LIKE '$year%'");
 			$res = $query->row();
 
 			$id = sprintf("%06d",$res->AUTO_INCREMENT+1);
@@ -1413,7 +1413,7 @@ class Orderentry_model extends CI_Model {
 	function get_product_details($CustomerUID)
 	{
 
-		$SubProductUIDs = $this->db->query("SELECT GROUP_CONCAT(SubProductUID SEPARATOR ',') as SubProductUIDs FROM mcustomerproducts where CustomerUID = $CustomerUID")->row();
+		$SubProductUIDs = $this->db->query("SELECT GROUP_CONCAT(SubProductUID SEPARATOR ',') as SubProductUIDs FROM mCustomerProducts where CustomerUID = $CustomerUID")->row();
 		$SubProductUIDs = $SubProductUIDs->SubProductUIDs;
 
 		$Products = [];
@@ -1426,32 +1426,32 @@ class Orderentry_model extends CI_Model {
 
 
 		if($SubProductUIDs !=''){
-			$ProductUIDs = $this->db->query("SELECT GROUP_CONCAT(ProductUID SEPARATOR ',') as ProductUIDs FROM msubproducts where SubProductUID IN ($SubProductUIDs)")->row();
+			$ProductUIDs = $this->db->query("SELECT GROUP_CONCAT(ProductUID SEPARATOR ',') as ProductUIDs FROM mSubProducts where SubProductUID IN ($SubProductUIDs)")->row();
 			$ProductUIDs = $ProductUIDs->ProductUIDs;
 
 
 
 			$this->db->select ( 'SubProductUID,SubProductName' );
-			$this->db->from ( 'msubproducts' );
-			$this->db->where_in ('msubproducts.ProductUID',$ProductUIDs);
+			$this->db->from ( 'mSubProducts' );
+			$this->db->where_in ('mSubProducts.ProductUID',$ProductUIDs);
 			$query = $this->db->get();
 			$SubProducts =  $query->result();
 
 			$this->db->select ( 'ProductUID,ProductName' );
-			$this->db->from ( 'mproducts' );
-			$this->db->where_in ('mproducts.ProductUID',$ProductUIDs);
+			$this->db->from ( 'mProducts' );
+			$this->db->where_in ('mProducts.ProductUID',$ProductUIDs);
 			$querys = $this->db->get();
 			$Products =  $querys->result();
 		}
 		$this->db->select ( '*' );
-		$this->db->from ( 'mcustomers' );
-		$this->db->where ('mcustomers.CustomerUID',$CustomerUID);
+		$this->db->from ( 'mCustomers' );
+		$this->db->where ('mCustomers.CustomerUID',$CustomerUID);
 		$queryss = $this->db->get();
 		$CustomerDetails =  $queryss->row();
 
 		$this->db->select ( '*' );
-		$this->db->from ( 'musers' );
-		$this->db->where ('musers.UserUID',$this->session->userdata('UserUID'));
+		$this->db->from ( 'mUsers' );
+		$this->db->where ('mUsers.UserUID',$this->session->userdata('UserUID'));
 		$queryss = $this->db->get();
 		$UserDetails =  $queryss->row();
 
@@ -1461,9 +1461,9 @@ class Orderentry_model extends CI_Model {
 
 	function Get_Assign_Customer($user_id)
 	{
-		$this->db->select('*,musers.CustomerUID')->from('musers');
+		$this->db->select('*,mUsers.CustomerUID')->from('mUsers');
 		$this->db->where('UserUID',$user_id);
-		$this->db->join('mcustomers','musers.CustomerUID = mcustomers.CustomerUID','LEFT');
+		$this->db->join('mCustomers','mUsers.CustomerUID = mCustomers.CustomerUID','LEFT');
 		return $this->db->get()->result();
 	}
 
@@ -1482,7 +1482,7 @@ class Orderentry_model extends CI_Model {
 
 			if($cust_ids !=''){
 
-				$result = $this->db->query("SELECT `CustomerName`, `CustomerUID`, `CustomerNumber` FROM (`mcustomers`) WHERE `mcustomers`.`CustomerUID` IN ($cust_ids) ");
+				$result = $this->db->query("SELECT `CustomerName`, `CustomerUID`, `CustomerNumber` FROM (`mCustomers`) WHERE `mCustomers`.`CustomerUID` IN ($cust_ids) ");
 				return $result->result();
 
 
@@ -1497,22 +1497,22 @@ class Orderentry_model extends CI_Model {
 
 	function GetCustomerProductDetails($CustomerUID)
 	{
-		$this->db->select('mproducts.*,mproducts.ProductUID,mproducts.ProductName,msubproducts.SubProductUID,msubproducts.SubProductName,mproducts.IsRMSProduct,msubproducts.RMS')->from('mcustomerproducts');
-		$this->db->join('msubproducts','msubproducts.SubProductUID=mcustomerproducts.SubProductUID', 'left');
-		$this->db->join('mproducts','mproducts.ProductUID = mcustomerproducts.ProductUID','left');
-		$this->db->where('mcustomerproducts.CustomerUID',$CustomerUID);
-		$this->db->group_by('mcustomerproducts.ProductUID');
+		$this->db->select('mProducts.*,mProducts.ProductUID,mProducts.ProductName,mSubProducts.SubProductUID,mSubProducts.SubProductName,mProducts.IsRMSProduct,mSubProducts.RMS')->from('mCustomerProducts');
+		$this->db->join('mSubProducts','mSubProducts.SubProductUID=mCustomerProducts.SubProductUID', 'left');
+		$this->db->join('mProducts','mProducts.ProductUID = mCustomerProducts.ProductUID','left');
+		$this->db->where('mCustomerProducts.CustomerUID',$CustomerUID);
+		$this->db->group_by('mCustomerProducts.ProductUID');
 		$query = $this->db->get()->result();
 		return $query;
 	}
 
 	function GetCustomerSubProductDetails($CustomerUID,$ProductUID)
 	{
-		$this->db->select('mproducts.ProductUID,mproducts.ProductName,msubproducts.SubProductUID,msubproducts.SubProductName,mproducts.IsRMSProduct,msubproducts.RMS')->from('mcustomerproducts');
-		$this->db->join('msubproducts','msubproducts.SubProductUID=mcustomerproducts.SubProductUID', 'left');
-		$this->db->join('mproducts','mproducts.ProductUID = mcustomerproducts.ProductUID','left');
-		$this->db->where('mcustomerproducts.CustomerUID',$CustomerUID);
-		$this->db->where('mcustomerproducts.ProductUID',$ProductUID);
+		$this->db->select('mProducts.ProductUID,mProducts.ProductName,mSubProducts.SubProductUID,mSubProducts.SubProductName,mProducts.IsRMSProduct,mSubProducts.RMS')->from('mCustomerProducts');
+		$this->db->join('mSubProducts','mSubProducts.SubProductUID=mCustomerProducts.SubProductUID', 'left');
+		$this->db->join('mProducts','mProducts.ProductUID = mCustomerProducts.ProductUID','left');
+		$this->db->where('mCustomerProducts.CustomerUID',$CustomerUID);
+		$this->db->where('mCustomerProducts.ProductUID',$ProductUID);
 		$query = $this->db->get()->result();
 		return $query;
 	}
@@ -1546,22 +1546,22 @@ class Orderentry_model extends CI_Model {
 		$this->StatusUID = $this->config->item('keywords')['New Order'];
 		$this->OrderEntryDatetime = Date('Y-m-d H:i:s',strtotime("now"));
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $this->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $this->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$this->PropertyCountyName))->row();
 
-		if ($mstates->SearchType==1) {
+		if ($mStates->SearchType==1) {
 			$this->IsInhouseExternal=0;
 		}
-		elseif ($mstates->SearchType==2) {
+		elseif ($mStates->SearchType==2) {
 		 	$this->IsInhouseExternal=1;
 		 }
 		 else{
-		 	if ($mstates->AbstractorAssignment==1) {
-		 		$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+		 	if ($mStates->AbstractorAssignment==1) {
+		 		$this->IsInhouseExternal = $this->common_model->get_inhouse_external($this->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 		 	}
 		 	else{
-		 		$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mstates->StateUID,$data['PropertyZipcode']);
+		 		$this->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($this->OrderTypeUID,$mStates->StateUID,$data['PropertyZipcode']);
 		 	}
 
 		 }
@@ -1586,7 +1586,7 @@ class Orderentry_model extends CI_Model {
 		$where_policy_type['CustomerUID'] = $this->CustomerUID;
 		$this->OrderPolicyType = $this->common_model->GetCustomerProductDetailsByCustomerSubproductUID($where_policy_type)->OrderPolicyType;
 
-		$query = $this->db->insert('torders',$this);
+		$query = $this->db->insert('tOrders',$this);
 
 		$insert_id = $this->db->insert_id();
 
@@ -1624,7 +1624,7 @@ class Orderentry_model extends CI_Model {
 
 		}
 		if(count($entry_array)>0){
-			$this->db->insert_batch('torderpropertyroles', $entry_array);
+			$this->db->insert_batch('tOrderPropertyRoles', $entry_array);
 		}
 
 		return true;
@@ -1634,7 +1634,7 @@ class Orderentry_model extends CI_Model {
 
 	function gettemplatecontents($CustomerUID)
 	{
-		$query = $this->db->query("SELECT * FROM mtemplates t1,mcustomers t2
+		$query = $this->db->query("SELECT * FROM mtemplates t1,mCustomers t2
 			WHERE t1.TemplateUID = t2.DefaultTemplateUID AND t2.CustomerUID = '$CustomerUID' ");
 
 		return $query->row();
@@ -1651,15 +1651,15 @@ class Orderentry_model extends CI_Model {
 
 			if($UserProducts){
 				$this->db->select('group_concat(DISTINCT ProductUID) as CProduct, group_concat(DISTINCT SubProductUID) as CSubProduct');
-				$this->db->from('mcustomerproducts');
-				$this->db->where('mcustomerproducts.ProductUID IN ('.$UserProducts.')', null, false);
+				$this->db->from('mCustomerProducts');
+				$this->db->where('mCustomerProducts.ProductUID IN ('.$UserProducts.')', null, false);
 				$this->db->where('CustomerUID',$CustomerUID);
 				$customer = $this->db->get()->row();
 			}
 		}else{
 
 			$this->db->select('group_concat(DISTINCT ProductUID) as CProduct, group_concat(DISTINCT SubProductUID) as CSubProduct');
-			$this->db->from('mcustomerproducts');
+			$this->db->from('mCustomerProducts');
 			$this->db->where('CustomerUID',$CustomerUID);
 			$customer = $this->db->get()->row();
 
@@ -1669,7 +1669,7 @@ class Orderentry_model extends CI_Model {
 		if(!empty($customer)){
 			$Product = $customer->CProduct;
 			$SubProduct = $customer->CSubProduct;
-			$Products = $this->db->query("SELECT * FROM mproducts WHERE mproducts.ProductUID IN ($Product)")->result_array();
+			$Products = $this->db->query("SELECT * FROM mProducts WHERE mProducts.ProductUID IN ($Product)")->result_array();
 		}
 
 
@@ -1677,26 +1677,26 @@ class Orderentry_model extends CI_Model {
 		$this->RoleUID = $this->session->userdata('RoleUID');
 		if($this->RoleUID == 8)
 		{
-			$query = $this->db->query("SELECT * FROM mcustomerdefaultproduct WHERE CustomerUID ='$CustomerUID' ");
+			$query = $this->db->query("SELECT * FROM mCustomerDefaultProduct WHERE CustomerUID ='$CustomerUID' ");
 			$data = $query->row();
 			$DefaultProductSubCode = $data->DefaultProductSubCode;
 			if($DefaultProductSubCode == 1)
 			{
 				$SubProductUID = $data->DefaultProductSubValue;
-				$SubProducts = $this->db->query("SELECT SubProductUID,SubProductName,ProductUID FROM msubproducts
+				$SubProducts = $this->db->query("SELECT SubProductUID,SubProductName,ProductUID FROM mSubProducts
 					WHERE SubProductUID IN ($SubProductUID)")->result_array();
 
 			}
 			else if($DefaultProductSubCode == 2)
 			{
 				$month=date("m");
-				$SubProducts = $this->db->query("SELECT torders.SubProductUID,SubProductName FROM torders LEFT JOIN  msubproducts ON msubproducts.SubProductUID = torders.SubProductUID WHERE torders.CustomerUID ='$CustomerUID' and MONTH(torders.OrderEntryDatetime) = '$month'GROUP BY torders.SubProductUID ORDER BY COUNT(torders.SubProductUID) DESC")->result_array();
+				$SubProducts = $this->db->query("SELECT tOrders.SubProductUID,SubProductName FROM tOrders LEFT JOIN  mSubProducts ON mSubProducts.SubProductUID = tOrders.SubProductUID WHERE tOrders.CustomerUID ='$CustomerUID' and MONTH(tOrders.OrderEntryDatetime) = '$month'GROUP BY tOrders.SubProductUID ORDER BY COUNT(tOrders.SubProductUID) DESC")->result_array();
 
 			}
 			else
 			{
 				$year=date("Y");
-				$SubProducts = $this->db->query("SELECT torders.SubProductUID,SubProductName FROM torders LEFT JOIN  msubproducts ON msubproducts.SubProductUID = torders.SubProductUID WHERE torders.CustomerUID ='$CustomerUID' and YEAR(torders.OrderEntryDatetime) = $year GROUP BY torders.SubProductUID  ORDER BY COUNT(torders.SubProductUID) DESC")->result_array();
+				$SubProducts = $this->db->query("SELECT tOrders.SubProductUID,SubProductName FROM tOrders LEFT JOIN  mSubProducts ON mSubProducts.SubProductUID = tOrders.SubProductUID WHERE tOrders.CustomerUID ='$CustomerUID' and YEAR(tOrders.OrderEntryDatetime) = $year GROUP BY tOrders.SubProductUID  ORDER BY COUNT(tOrders.SubProductUID) DESC")->result_array();
 
 			}
 		}
@@ -1704,19 +1704,19 @@ class Orderentry_model extends CI_Model {
 		else
 		{
 			if(!empty($SubProduct)){
-				$SubProducts = $this->db->query("SELECT * FROM msubproducts WHERE msubproducts.SubProductUID IN ($SubProduct)")->result_array();
+				$SubProducts = $this->db->query("SELECT * FROM mSubProducts WHERE mSubProducts.SubProductUID IN ($SubProduct)")->result_array();
 			}
 			
 		}
 		$this->db->select ( '*' );
-		$this->db->from ( 'mcustomers' );
-		$this->db->where ('mcustomers.CustomerUID',$CustomerUID);
+		$this->db->from ( 'mCustomers' );
+		$this->db->where ('mCustomers.CustomerUID',$CustomerUID);
 		$queryss = $this->db->get();
 		$CustomerDetails =  $queryss->row();
 
 		$this->db->select ( '*' );
-		$this->db->from ( 'musers' );
-		$this->db->where ('musers.UserUID',$this->session->userdata('UserUID'));
+		$this->db->from ( 'mUsers' );
+		$this->db->where ('mUsers.UserUID',$this->session->userdata('UserUID'));
 		$queryss = $this->db->get();
 		$UserDetails =  $queryss->row();
 
@@ -1737,8 +1737,8 @@ class Orderentry_model extends CI_Model {
 		$PropertyCountyUID = $OrderDetail['PropertyCountyUID'];
 
 		$this->db->select ( '*' );
-		$this->db->from ( 'torders' );
-		$this->db->where(array("torders.PropertyCity"=>$PropertyCity,"torders.PropertyCountyUID"=>$PropertyCountyUID,"torders.PropertyStateUID"=>$PropertyStateUID,"torders.PropertyZipcode"=>$PropertyZipcode ));
+		$this->db->from ( 'tOrders' );
+		$this->db->where(array("tOrders.PropertyCity"=>$PropertyCity,"tOrders.PropertyCountyUID"=>$PropertyCountyUID,"tOrders.PropertyStateUID"=>$PropertyStateUID,"tOrders.PropertyZipcode"=>$PropertyZipcode ));
 		$query = $this->db->get();
 		return $query->result();
 
@@ -1746,12 +1746,12 @@ class Orderentry_model extends CI_Model {
 
 	function getCustomerInfo($CustomerUID){
 		$this->db->select('*');
-		$this->db->from('mcustomers');
-		$this->db->join ( 'mstates', 'mstates.StateUID =mcustomers.CustomerStateUID' , 'left' );
-		$this->db->join ( 'mcities', 'mcities.CityUID = mcustomers.CustomerCityUID' , 'left' );
-		$this->db->join ( 'mcounties', 'mcounties.CountyUID = mcustomers.CustomerCountyUID' , 'left');
-		$this->db->like('mcustomers.CustomerName',$CustomerUID);
-		$this->db->or_like('mcustomers.CustomerNumber',$CustomerUID);
+		$this->db->from('mCustomers');
+		$this->db->join ( 'mStates', 'mStates.StateUID =mCustomers.CustomerStateUID' , 'left' );
+		$this->db->join ( 'mCities', 'mCities.CityUID = mCustomers.CustomerCityUID' , 'left' );
+		$this->db->join ( 'mCounties', 'mCounties.CountyUID = mCustomers.CustomerCountyUID' , 'left');
+		$this->db->like('mCustomers.CustomerName',$CustomerUID);
+		$this->db->or_like('mCustomers.CustomerNumber',$CustomerUID);
 		return $this->db->get('')->result_array();
 
 	}
@@ -1760,11 +1760,11 @@ class Orderentry_model extends CI_Model {
 	function GetCustomerDetailsByCustomerUID($CustomerUID){
 
 		$this->db->select('*');
-		$this->db->from('mcustomers');
-		$this->db->join ( 'mstates', 'mstates.StateUID =mcustomers.CustomerStateUID' , 'left' );
-		$this->db->join ( 'mcities', 'mcities.CityUID = mcustomers.CustomerCityUID' , 'left' );
-		$this->db->join ( 'mcounties', 'mcounties.CountyUID = mcustomers.CustomerCountyUID' , 'left');
-		$this->db->where('mcustomers.CustomerUID',$CustomerUID);
+		$this->db->from('mCustomers');
+		$this->db->join ( 'mStates', 'mStates.StateUID =mCustomers.CustomerStateUID' , 'left' );
+		$this->db->join ( 'mCities', 'mCities.CityUID = mCustomers.CustomerCityUID' , 'left' );
+		$this->db->join ( 'mCounties', 'mCounties.CountyUID = mCustomers.CustomerCountyUID' , 'left');
+		$this->db->where('mCustomers.CustomerUID',$CustomerUID);
 		return $this->db->get('')->row_array();
 
 	}
@@ -1773,8 +1773,8 @@ class Orderentry_model extends CI_Model {
 	function Order_Number($SubProductUID,$PreviousOrderUID = NULL){
 		if(!empty($SubProductUID)){
 			$this->db->select('ProductCode');
-			$this->db->from('msubproducts');
-			$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID');
+			$this->db->from('mSubProducts');
+			$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID');
 			$this->db->where('SubProductUID', $SubProductUID);
 			$query = $this->db->get();
 			$result = $query->row();
@@ -1788,15 +1788,15 @@ class Orderentry_model extends CI_Model {
 			
 			if(!empty($PreviousOrderUID)){
 				// Order Number year fixed for previous Year Orders @Uba @On Jul 2020 
-				$last_row_seq = $this->db->select('OrderSequence,OrderNumber,OrderUID')->where('OrderUID',$PreviousOrderUID)->get('torders')->row();
+				$last_row_seq = $this->db->select('OrderSequence,OrderNumber,OrderUID')->where('OrderUID',$PreviousOrderUID)->get('tOrders')->row();
 				$LastNo = explode('-',$last_row_seq->OrderNumber);
 				$CenterSequence = substr($LastNo[0],3);
 
-				$last_row_sequence = $this->db->select('OrderSequence,OrderNumber,OrderUID')->like('OrderNumber', $CenterSequence, 'both')->order_by('OrderUID',"DESC")->limit(1)->get('torders')->row();
+				$last_row_sequence = $this->db->select('OrderSequence,OrderNumber,OrderUID')->like('OrderNumber', $CenterSequence, 'both')->order_by('OrderUID',"DESC")->limit(1)->get('tOrders')->row();
 				$ANo = explode('-',$last_row_sequence->OrderNumber);
 				$lastOrderNo = date("y").substr($ANo[0],2); // Year based Order Fixed
 			}else{
-				$last_row = $this->db->select('OrderNumber,OrderUID')->where('IsChildOrder !=',1)->order_by('OrderUID',"DESC")->limit(1)->get('torders')->row();
+				$last_row = $this->db->select('OrderNumber,OrderUID')->where('IsChildOrder !=',1)->order_by('OrderUID',"DESC")->limit(1)->get('tOrders')->row();
 		
 				if(!empty($last_row)){
 					if(strpos($last_row->OrderNumber, '-') !== false){
@@ -1828,8 +1828,8 @@ class Orderentry_model extends CI_Model {
 	function OrderSequence($SubProductUID,$PreviousOrderUID = NULL){
 		if(!empty($SubProductUID)){
 			$this->db->select('ProductCode');
-			$this->db->from('msubproducts');
-			$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID');
+			$this->db->from('mSubProducts');
+			$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID');
 			$this->db->where('SubProductUID', $SubProductUID);
 			$query = $this->db->get();
 			$result = $query->row();
@@ -1843,13 +1843,13 @@ class Orderentry_model extends CI_Model {
 		
 		
 		if(!empty($PreviousOrderUID)){
-			$last_row_seq = $this->db->select('OrderSequence,OrderNumber,OrderUID')->where('OrderUID',$PreviousOrderUID)->get('torders')->row();
+			$last_row_seq = $this->db->select('OrderSequence,OrderNumber,OrderUID')->where('OrderUID',$PreviousOrderUID)->get('tOrders')->row();
 			$LastNo = explode('-',$last_row_seq->OrderNumber);
-			$last_row_sequence = $this->db->select('OrderSequence,OrderNumber,OrderUID')->like('OrderSequence', substr($LastNo[0],1), 'both')->order_by('OrderUID',"DESC")->limit(1)->get('torders')->row();
+			$last_row_sequence = $this->db->select('OrderSequence,OrderNumber,OrderUID')->like('OrderSequence', substr($LastNo[0],1), 'both')->order_by('OrderUID',"DESC")->limit(1)->get('tOrders')->row();
 			$ANo = explode('-',$last_row_sequence->OrderNumber);
 			$lastOrderNo = date("y").substr($ANo[0],2); // Year based Order Fixed @Uba @On 30 Jul 2020
 		}else{
-			$last_row = $this->db->select('OrderNumber,OrderUID')->where('IsChildOrder !=',1)->order_by('OrderUID',"DESC")->limit(1)->get('torders')->row();
+			$last_row = $this->db->select('OrderNumber,OrderUID')->where('IsChildOrder !=',1)->order_by('OrderUID',"DESC")->limit(1)->get('tOrders')->row();
 	
 			if(!empty($last_row)){
 				if(strpos($last_row->OrderNumber, '-') !== false){
@@ -1875,13 +1875,13 @@ class Orderentry_model extends CI_Model {
 	function get_all_in_customerproduct($CustomerUID,$ProductUID,$SubProductUID)
 	{
 		$this->db->select("*");
-		$this->db->from('mcustomerproducts');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID =mcustomerproducts.CustomerUID' , 'left' );
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID =mcustomerproducts.ProductUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = mcustomerproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = msubproducts.PriorityUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = msubproducts.OrderTypeUID' , 'left' );
-		$this->db->where(array("mcustomerproducts.CustomerUID"=>$CustomerUID,"mcustomerproducts.ProductUID"=>$ProductUID,"mcustomerproducts.SubProductUID"=>$SubProductUID));
+		$this->db->from('mCustomerProducts');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID =mCustomerProducts.CustomerUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID =mCustomerProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = mCustomerProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = mSubProducts.PriorityUID' , 'left' );
+		$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = mSubProducts.OrderTypeUID' , 'left' );
+		$this->db->where(array("mCustomerProducts.CustomerUID"=>$CustomerUID,"mCustomerProducts.ProductUID"=>$ProductUID,"mCustomerProducts.SubProductUID"=>$SubProductUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -1889,13 +1889,13 @@ class Orderentry_model extends CI_Model {
 	function get_all_in_customerproductsubproducts($CustomerUID,$ProductUID,$SubProductUID)
 	{
 		$this->db->select("*");
-		$this->db->from('mcustomerproducts');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID =mcustomerproducts.CustomerUID' , 'left' );
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID =mcustomerproducts.ProductUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = mcustomerproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = msubproducts.PriorityUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = msubproducts.OrderTypeUID' , 'left' );
-		$this->db->where(array("mcustomerproducts.CustomerUID"=>$CustomerUID,"mcustomerproducts.SubProductUID"=>$SubProductUID));
+		$this->db->from('mCustomerProducts');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID =mCustomerProducts.CustomerUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID =mCustomerProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = mCustomerProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = mSubProducts.PriorityUID' , 'left' );
+		$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = mSubProducts.OrderTypeUID' , 'left' );
+		$this->db->where(array("mCustomerProducts.CustomerUID"=>$CustomerUID,"mCustomerProducts.SubProductUID"=>$SubProductUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -1904,10 +1904,10 @@ class Orderentry_model extends CI_Model {
 	function get_customer_product($CustomerUID,$ProductUID)
 	{
 		$this->db->select("*");
-		$this->db->from('mcustomerproducts');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID =mcustomerproducts.CustomerUID' , 'left' );
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID =mcustomerproducts.ProductUID' , 'left' );
-		$this->db->where(array("mcustomerproducts.CustomerUID"=>$CustomerUID,"mcustomerproducts.ProductUID"=>$ProductUID));
+		$this->db->from('mCustomerProducts');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID =mCustomerProducts.CustomerUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID =mCustomerProducts.ProductUID' , 'left' );
+		$this->db->where(array("mCustomerProducts.CustomerUID"=>$CustomerUID,"mCustomerProducts.ProductUID"=>$ProductUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -1922,19 +1922,19 @@ class Orderentry_model extends CI_Model {
 			$UserProducts = $this->common_model->_get_product_bylogin();
 			if($UserProducts) {
 				$this->db->select("*");
-				$this->db->from('mcustomerproducts');
-				$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID =mcustomerproducts.SubProductUID' , 'left' );
-				$this->db->where(array("mcustomerproducts.CustomerUID"=>$CustomerUID,"mcustomerproducts.ProductUID"=>$ProductUID));
-				$this->db->where('mcustomerproducts.ProductUID IN ('.$UserProducts.')', null, false);
+				$this->db->from('mCustomerProducts');
+				$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID =mCustomerProducts.SubProductUID' , 'left' );
+				$this->db->where(array("mCustomerProducts.CustomerUID"=>$CustomerUID,"mCustomerProducts.ProductUID"=>$ProductUID));
+				$this->db->where('mCustomerProducts.ProductUID IN ('.$UserProducts.')', null, false);
 				$query = $this->db->get();
 				$details = $query->result();
 			}
 		}else{
 
 			$this->db->select("*");
-			$this->db->from('mcustomerproducts');
-			$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID =mcustomerproducts.SubProductUID' , 'left' );
-			$this->db->where(array("mcustomerproducts.CustomerUID"=>$CustomerUID,"mcustomerproducts.ProductUID"=>$ProductUID));
+			$this->db->from('mCustomerProducts');
+			$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID =mCustomerProducts.SubProductUID' , 'left' );
+			$this->db->where(array("mCustomerProducts.CustomerUID"=>$CustomerUID,"mCustomerProducts.ProductUID"=>$ProductUID));
 			$query = $this->db->get();
 			$details = $query->result();
 
@@ -1953,7 +1953,7 @@ class Orderentry_model extends CI_Model {
 	function get_customer_byuid($CustomerUID){
 
 		$this->db->where(array("Active"=>1,"CustomerUID"=>$CustomerUID));
-		$query = $this->db->get('mcustomers');
+		$query = $this->db->get('mCustomers');
 		return $query->row();
 	}
 
@@ -1966,9 +1966,9 @@ class Orderentry_model extends CI_Model {
 		$productwhere= '';
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $productwhere .= ' AND `mproducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
+			if($UserProducts): $productwhere .= ' AND `mProducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
 		}
-		$query = $this->db->query("SELECT * FROM (`mcustomerproducts`) LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` =`mcustomerproducts`.`ProductUID` WHERE `mcustomerproducts`.`CustomerUID` = '".$CustomerUID."' $productwhere GROUP BY mproducts.ProductUID");
+		$query = $this->db->query("SELECT * FROM (`mCustomerProducts`) LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` =`mCustomerProducts`.`ProductUID` WHERE `mCustomerProducts`.`CustomerUID` = '".$CustomerUID."' $productwhere GROUP BY mProducts.ProductUID");
 		$products  =  $query->result_array();
 
 		return array($products,$SubProducts,$Projects);
@@ -1976,7 +1976,7 @@ class Orderentry_model extends CI_Model {
 
 
 	function get_county_bystate($StateUID){
-		$query = $this->db->query("SELECT * FROM mcounties WHERE StateUID = '".$StateUID."' AND Active = 1 ");
+		$query = $this->db->query("SELECT * FROM mCounties WHERE StateUID = '".$StateUID."' AND Active = 1 ");
 		return $query->result();
 	}
 
@@ -1985,21 +1985,21 @@ class Orderentry_model extends CI_Model {
 		if($OrderUID !='')
 		{
 			$this->db->select ( '*' );
-			$this->db->from ( 'torders' );
-			$this->db->join('mordertypes','mordertypes.OrderTypeUID = torders.OrderTypeUID','LEFT');
-			$this->db->join('morderpriority','morderpriority.PriorityUID = torders.PriorityUID','LEFT');
-			$this->db->join('mcustomers','mcustomers.CustomerUID = torders.CustomerUID','LEFT');
-			$this->db->join('msubproducts','msubproducts.SubProductUID = torders.SubProductUID','LEFT');
-			$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID','LEFT');
-			$this->db->join('mtemplates','mtemplates.TemplateUID = torders.TemplateUID','LEFT');
-			$this->db->join('torderpropertyroles','torderpropertyroles.OrderUID = torders.OrderUID','LEFT');
+			$this->db->from ( 'tOrders' );
+			$this->db->join('mordertypes','mordertypes.OrderTypeUID = tOrders.OrderTypeUID','LEFT');
+			$this->db->join('morderpriority','morderpriority.PriorityUID = tOrders.PriorityUID','LEFT');
+			$this->db->join('mCustomers','mCustomers.CustomerUID = tOrders.CustomerUID','LEFT');
+			$this->db->join('mSubProducts','mSubProducts.SubProductUID = tOrders.SubProductUID','LEFT');
+			$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID','LEFT');
+			$this->db->join('mtemplates','mtemplates.TemplateUID = tOrders.TemplateUID','LEFT');
+			$this->db->join('tOrderPropertyRoles','tOrderPropertyRoles.OrderUID = tOrders.OrderUID','LEFT');
 /* OrderUID array validation */
 			if(is_array($OrderUID)){
-				$this->db->where_in('torders.OrderUID',$OrderUID);
+				$this->db->where_in('tOrders.OrderUID',$OrderUID);
 			}else{
-				$this->db->where('torders.OrderUID',$OrderUID);
+				$this->db->where('tOrders.OrderUID',$OrderUID);
 			}
-			$this->db->group_by('torders.OrderUID');
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -2012,7 +2012,7 @@ class Orderentry_model extends CI_Model {
 	{
 		if($OrderUID !=''){
 			$this->db->select ( '*' );
-			$this->db->from ( 'torderpropertyroles' );
+			$this->db->from ( 'tOrderPropertyRoles' );
 			$this->db->where('OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->result_array();
@@ -2036,13 +2036,13 @@ class Orderentry_model extends CI_Model {
 
 		$PropRoles_WHERE = [];
 		foreach ($PropertyRoles as $key => $role) {
-			$PropRoles_WHERE[] = "( torderpropertyroles.PropertyRoleUID = '" . $role->PropertyRoleUID . "' AND torderpropertyroles.PRName = '" . $role->PRName . "' )";
+			$PropRoles_WHERE[] = "( tOrderPropertyRoles.PropertyRoleUID = '" . $role->PropertyRoleUID . "' AND tOrderPropertyRoles.PRName = '" . $role->PRName . "' )";
 		}
 
-		$PropRoleWHERE = !empty($PropRoles_WHERE) ? implode(" OR ", $PropRoles_WHERE) : "(torderpropertyroles.OrderUID IS NULL)";
+		$PropRoleWHERE = !empty($PropRoles_WHERE) ? implode(" OR ", $PropRoles_WHERE) : "(tOrderPropertyRoles.OrderUID IS NULL)";
 		$OrderUID_Filter = "";
 		if (!empty($OrderUID)) {
-			$OrderUID_Filter = "AND ( torders.OrderUID <> '".$OrderUID."' )";
+			$OrderUID_Filter = "AND ( tOrders.OrderUID <> '".$OrderUID."' )";
 		}
 
 		$SubProductUIDs = !empty($SubProductUIDs) ? implode(", ", $SubProductUIDs) : "0";
@@ -2052,17 +2052,17 @@ class Orderentry_model extends CI_Model {
 		/* *** Extract Query From JSON begins *** */
 		$conditions = [];
 
-		$conditions["PropertyAddress"] = "(torders.PropertyZipcode = '$PropertyZipcode'
-		AND torders.PropertyCityName = '$PropertyCityName'
-		AND torders.PropertyStateCode = '$PropertyStateCode'
-		AND torders.PropertyCountyName = '$PropertyCountyName'
+		$conditions["PropertyAddress"] = "(tOrders.PropertyZipcode = '$PropertyZipcode'
+		AND tOrders.PropertyCityName = '$PropertyCityName'
+		AND tOrders.PropertyStateCode = '$PropertyStateCode'
+		AND tOrders.PropertyCountyName = '$PropertyCountyName'
 		AND trim(CONCAT_WS(' ', UPPER(PropertyAddress1), UPPER(PropertyAddress2))) = '$Address'	)";
 
-		$conditions["LoanNumber"] = "(torders.LoanNumber LIKE '$LoanNumber' AND torders.LoanNumber !='')";
-		$conditions["SubProduct"] = "(torders.SubProductUID IN ($SubProductUIDs) )";
-		$conditions["Product"] = "(mproducts.ProductUID IN ($ProductUIDs) )";
-		$conditions["Customer"] = "(torders.CustomerUID = '$CustomerUID')";
-		$conditions["OrderUID"] = "(torders.OrderUID <> '$OrderUID')";
+		$conditions["LoanNumber"] = "(tOrders.LoanNumber LIKE '$LoanNumber' AND tOrders.LoanNumber !='')";
+		$conditions["SubProduct"] = "(tOrders.SubProductUID IN ($SubProductUIDs) )";
+		$conditions["Product"] = "(mProducts.ProductUID IN ($ProductUIDs) )";
+		$conditions["Customer"] = "(tOrders.CustomerUID = '$CustomerUID')";
+		$conditions["OrderUID"] = "(tOrders.OrderUID <> '$OrderUID')";
 		$conditions["PropertyRoles"] = $PropRoleWHERE;
 
 
@@ -2085,17 +2085,17 @@ class Orderentry_model extends CI_Model {
 		/* *** Extract Query From JSON ends *** */
 
 
-		$query = $this->db->query(" SELECT torders.OrderUID,OrderNumber,CustomerNumber,PropertyStateCode,PropertyCountyName,PropertyCityName,PropertyZipcode,PropertyAddress1,PropertyAddress2,PropertyCountyName,torders.CustomerUID,CustomerName,torders.PriorityUID,PriorityName,torders.SubProductUID,SubProductName,ProductName,LoanNumber,DATE_FORMAT(OrderEntryDateTime, '%m-%d-%Y %H:%i:%s') as OrderEntryDateTime,DATE_FORMAT(OrderCompleteDateTime, '%m-%d-%Y %H:%i:%s') as OrderCompleteDateTime,torders.StatusUID,StatusName,StatusColor,
-			TRIM(CONCAT_WS(' ',TRIM(PropertyAddress1),TRIM(PropertyAddress2))) AS whole_name FROM torders
-			JOIN mcustomers ON mcustomers.CustomerUID = torders.CustomerUID
-			JOIN morderpriority ON morderpriority.PriorityUID = torders.PriorityUID
-			JOIN msubproducts ON msubproducts.SubProductUID = torders.SubProductUID
-			JOIN mproducts ON mproducts.ProductUID = msubproducts.ProductUID
-			JOIN morderstatus ON morderstatus.StatusUID = torders.StatusUID
-			JOIN torderpropertyroles ON torderpropertyroles.OrderUID = torders.OrderUID
+		$query = $this->db->query(" SELECT tOrders.OrderUID,OrderNumber,CustomerNumber,PropertyStateCode,PropertyCountyName,PropertyCityName,PropertyZipcode,PropertyAddress1,PropertyAddress2,PropertyCountyName,tOrders.CustomerUID,CustomerName,tOrders.PriorityUID,PriorityName,tOrders.SubProductUID,SubProductName,ProductName,LoanNumber,DATE_FORMAT(OrderEntryDateTime, '%m-%d-%Y %H:%i:%s') as OrderEntryDateTime,DATE_FORMAT(OrderCompleteDateTime, '%m-%d-%Y %H:%i:%s') as OrderCompleteDateTime,tOrders.StatusUID,StatusName,StatusColor,
+			TRIM(CONCAT_WS(' ',TRIM(PropertyAddress1),TRIM(PropertyAddress2))) AS whole_name FROM tOrders
+			JOIN mCustomers ON mCustomers.CustomerUID = tOrders.CustomerUID
+			JOIN morderpriority ON morderpriority.PriorityUID = tOrders.PriorityUID
+			JOIN mSubProducts ON mSubProducts.SubProductUID = tOrders.SubProductUID
+			JOIN mProducts ON mProducts.ProductUID = mSubProducts.ProductUID
+			JOIN morderstatus ON morderstatus.StatusUID = tOrders.StatusUID
+			JOIN tOrderPropertyRoles ON tOrderPropertyRoles.OrderUID = tOrders.OrderUID
 			WHERE 
 			".$WHEREQuery."
-			GROUP BY torders.OrderUID");
+			GROUP BY tOrders.OrderUID");
 		return $query->result();
 
 	}
@@ -2109,14 +2109,14 @@ class Orderentry_model extends CI_Model {
 
 		$PropRoles_WHERE = [];
 		foreach ($PropertyRoles as $key => $role) {
-			$PropRoles_WHERE[] = "( torderpropertyroles.PropertyRoleUID = '" . $role->PropertyRoleUID . "' AND torderpropertyroles.PRName = '" . $role->PRName . "' )";
+			$PropRoles_WHERE[] = "( tOrderPropertyRoles.PropertyRoleUID = '" . $role->PropertyRoleUID . "' AND tOrderPropertyRoles.PRName = '" . $role->PRName . "' )";
 		}
 
-		$PropRoleWHERE = !empty($PropRoles_WHERE) ? implode(" OR ", $PropRoles_WHERE) : "(torderpropertyroles.OrderUID IS NULL)";
+		$PropRoleWHERE = !empty($PropRoles_WHERE) ? implode(" OR ", $PropRoles_WHERE) : "(tOrderPropertyRoles.OrderUID IS NULL)";
 
 		$OrderUID_Filter = "";
 		if (!empty($OrderUID)) {
-			$OrderUID_Filter = "AND ( torders.OrderUID <> '".$OrderUID."' )";
+			$OrderUID_Filter = "AND ( tOrders.OrderUID <> '".$OrderUID."' )";
 		}
 
 		$SubProductUIDs = !empty($SubProductUIDs) ? implode(", ", $SubProductUIDs) : "0";
@@ -2126,18 +2126,18 @@ class Orderentry_model extends CI_Model {
 		/* *** Extract Query From JSON begins *** */
 		$conditions = [];
 
-		$conditions["PropertyAddress"] = "(torders.PropertyZipcode = '$PropertyZipcode'
-		AND torders.PropertyCityName = '$PropertyCityName'
-		AND torders.PropertyStateCode = '$PropertyStateCode'
-		AND torders.PropertyCountyName = '$PropertyCountyName'
+		$conditions["PropertyAddress"] = "(tOrders.PropertyZipcode = '$PropertyZipcode'
+		AND tOrders.PropertyCityName = '$PropertyCityName'
+		AND tOrders.PropertyStateCode = '$PropertyStateCode'
+		AND tOrders.PropertyCountyName = '$PropertyCountyName'
 		AND trim(CONCAT_WS(' ', UPPER(PropertyAddress1), UPPER(PropertyAddress2))) = '$Address'	)";
 
-		$conditions["LoanNumber"] = "(torders.LoanNumber LIKE '$LoanNumber' AND torders.LoanNumber !='')";
-		$conditions["SubProduct"] = "(torders.SubProductUID IN ($SubProductUIDs) )";
-		$conditions["Product"] = "(mproducts.ProductUID IN ($ProductUIDs) )";
-		$conditions["Customer"] = "(torders.CustomerUID = '$CustomerUID')";
+		$conditions["LoanNumber"] = "(tOrders.LoanNumber LIKE '$LoanNumber' AND tOrders.LoanNumber !='')";
+		$conditions["SubProduct"] = "(tOrders.SubProductUID IN ($SubProductUIDs) )";
+		$conditions["Product"] = "(mProducts.ProductUID IN ($ProductUIDs) )";
+		$conditions["Customer"] = "(tOrders.CustomerUID = '$CustomerUID')";
 		if (!empty($OrderUID)) {
-			$conditions["OrderUID"] = "(torders.OrderUID <> '$OrderUID')";			
+			$conditions["OrderUID"] = "(tOrders.OrderUID <> '$OrderUID')";			
 		}
 		$conditions["PropertyRoles"] = $PropRoleWHERE;
 
@@ -2160,54 +2160,54 @@ class Orderentry_model extends CI_Model {
 		/* *** Extract Query From JSON ends *** */
 
 
-		$query = $this->db->query(" SELECT torders.OrderUID,OrderNumber,CustomerNumber,PropertyStateCode,PropertyCountyName,PropertyCityName,PropertyZipcode,PropertyAddress1,PropertyAddress2,PropertyCountyName,torders.CustomerUID,CustomerName,torders.PriorityUID,PriorityName,torders.SubProductUID,SubProductName,ProductName,LoanNumber,DATE_FORMAT(OrderEntryDateTime, '%m-%d-%Y %H:%i:%s') as OrderEntryDateTime,DATE_FORMAT(OrderCompleteDateTime, '%m-%d-%Y %H:%i:%s') as OrderCompleteDateTime,torders.StatusUID,StatusName,StatusColor,
-			TRIM(CONCAT_WS(' ',TRIM(PropertyAddress1),TRIM(PropertyAddress2))) AS whole_name FROM torders
-			JOIN mcustomers ON mcustomers.CustomerUID = torders.CustomerUID
-			JOIN morderpriority ON morderpriority.PriorityUID = torders.PriorityUID
-			JOIN msubproducts ON msubproducts.SubProductUID = torders.SubProductUID
-			JOIN mproducts ON mproducts.ProductUID = msubproducts.ProductUID
-			JOIN morderstatus ON morderstatus.StatusUID = torders.StatusUID
-			JOIN torderpropertyroles ON torderpropertyroles.OrderUID = torders.OrderUID
+		$query = $this->db->query(" SELECT tOrders.OrderUID,OrderNumber,CustomerNumber,PropertyStateCode,PropertyCountyName,PropertyCityName,PropertyZipcode,PropertyAddress1,PropertyAddress2,PropertyCountyName,tOrders.CustomerUID,CustomerName,tOrders.PriorityUID,PriorityName,tOrders.SubProductUID,SubProductName,ProductName,LoanNumber,DATE_FORMAT(OrderEntryDateTime, '%m-%d-%Y %H:%i:%s') as OrderEntryDateTime,DATE_FORMAT(OrderCompleteDateTime, '%m-%d-%Y %H:%i:%s') as OrderCompleteDateTime,tOrders.StatusUID,StatusName,StatusColor,
+			TRIM(CONCAT_WS(' ',TRIM(PropertyAddress1),TRIM(PropertyAddress2))) AS whole_name FROM tOrders
+			JOIN mCustomers ON mCustomers.CustomerUID = tOrders.CustomerUID
+			JOIN morderpriority ON morderpriority.PriorityUID = tOrders.PriorityUID
+			JOIN mSubProducts ON mSubProducts.SubProductUID = tOrders.SubProductUID
+			JOIN mProducts ON mProducts.ProductUID = mSubProducts.ProductUID
+			JOIN morderstatus ON morderstatus.StatusUID = tOrders.StatusUID
+			JOIN tOrderPropertyRoles ON tOrderPropertyRoles.OrderUID = tOrders.OrderUID
 			WHERE 
 			".$WHEREQuery."
-			GROUP BY torders.OrderUID");
+			GROUP BY tOrders.OrderUID");
 		return $query->result();
 
 	}
 
 
 	function Getborrowername($OrderUID){
-		$query = $this->db->query("SELECT GROUP_CONCAT(`torderpropertyroles`.`PRName`) AS Borrower FROM torderpropertyroles WHERE OrderUID=".$OrderUID." AND PropertyRoleUID = 5 ");
+		$query = $this->db->query("SELECT GROUP_CONCAT(`tOrderPropertyRoles`.`PRName`) AS Borrower FROM tOrderPropertyRoles WHERE OrderUID=".$OrderUID." AND PropertyRoleUID = 5 ");
 		return $query->row()->Borrower;
 
 	}
 
 	function Get_customer_details($CustomerUID){
-		$query = $this->db->query("SELECT CustomerUID,CustomerName FROM mcustomers WHERE CustomerUID=".$CustomerUID." ");
+		$query = $this->db->query("SELECT CustomerUID,CustomerName FROM mCustomers WHERE CustomerUID=".$CustomerUID." ");
 		return $query->row();
 
 	}
 
-	function CheckIsFlood($CustomerUID,$ProductUID){
+	// function CheckIsFlood($CustomerUID,$ProductUID){
 
-		$this->db->select ( '*' );
-		$this->db->from ( 'mCustomerApiInfo' );
-		$custom_where = array('CustomerUID'=>$CustomerUID,'ProductUID'=>$ProductUID,'OrderSourceName'=>'WoltersKluwer');
-		$this->db->where($custom_where);
-		$query = $this->db->get();
-		if($query->num_rows() > 0){
-			return 1;
-		}else{
-			return 0;
-		}
+	// 	$this->db->select ( '*' );
+	// 	$this->db->from ( 'mCustomerApiInfo' );
+	// 	$custom_where = array('CustomerUID'=>$CustomerUID,'ProductUID'=>$ProductUID,'OrderSourceName'=>'WoltersKluwer');
+	// 	$this->db->where($custom_where);
+	// 	$query = $this->db->get();
+	// 	if($query->num_rows() > 0){
+	// 		return 1;
+	// 	}else{
+	// 		return 0;
+	// 	}
 
-	}
+	// }
 
 	function Get_OrderNumber($OrderUID)
 	{
 		$this->db->select("OrderNumber");
-		$this->db->from('torders');
-		$this->db->where(array("torders.OrderUID"=>$OrderUID));
+		$this->db->from('tOrders');
+		$this->db->where(array("tOrders.OrderUID"=>$OrderUID));
 		$query = $this->db->get();
 		return $query->row()->OrderNumber;
 	}
@@ -2322,22 +2322,22 @@ class Orderentry_model extends CI_Model {
 		$torder->IsQuote = $CustomerAmountQuote->IsQuote;
 		/*End*/
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $torder->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $torder->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$torder->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$torder->PropertyCountyName))->row();
 
-		if ($mstates->SearchType==1) {
+		if ($mStates->SearchType==1) {
 			$torder->IsInhouseExternal=0;
 		}
-		elseif ($mstates->SearchType==2) {
+		elseif ($mStates->SearchType==2) {
 			$torder->IsInhouseExternal=1;
 		}
 		else{
-			if ($mstates->AbstractorAssignment==1) {
-				$torder->IsInhouseExternal = $this->common_model->get_inhouse_external($torder->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+			if ($mStates->AbstractorAssignment==1) {
+				$torder->IsInhouseExternal = $this->common_model->get_inhouse_external($torder->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 			}
 			else{
-				$torder->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($torder->OrderTypeUID,$mstates->StateUID,$torder->PropertyZipcode);
+				$torder->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($torder->OrderTypeUID,$mStates->StateUID,$torder->PropertyZipcode);
 			}
 		}
 
@@ -2358,7 +2358,7 @@ class Orderentry_model extends CI_Model {
 		$where_policy_type['CustomerUID'] = $torder->CustomerUID;
 		$torder->OrderPolicyType = $this->common_model->GetCustomerProductDetailsByCustomerSubproductUID($where_policy_type)->OrderPolicyType;
 
-		$query = $this->db->insert('torders',$torder);
+		$query = $this->db->insert('tOrders',$torder);
 
 		$lastinsertid = $this->db->insert_id();
 
@@ -2376,7 +2376,7 @@ class Orderentry_model extends CI_Model {
 		}
 
 		if(!empty($insertpropdata)){
-			$this->db->insert_batch('torderpropertyroles', $insertpropdata);
+			$this->db->insert_batch('tOrderPropertyRoles', $insertpropdata);
 		}
 
 
@@ -2541,7 +2541,7 @@ class Orderentry_model extends CI_Model {
 	function GetPropertyrolesBorrowerDetails($OrderUID)
 	{
 		$this->db->select ( '*' );
-		$this->db->from ( 'torderpropertyroles' );
+		$this->db->from ( 'tOrderPropertyRoles' );
 		$this->db->where('OrderUID',$OrderUID);
 		$this->db->where('PropertyRoleUID',$this->config->item('Propertyroles')['Borrowers']);
 		$query = $this->db->get();
@@ -2551,7 +2551,7 @@ class Orderentry_model extends CI_Model {
 	function GetPropertyrolesSellerDetails($OrderUID)
 	{
 			$this->db->select ( '*' );
-			$this->db->from ( 'torderpropertyroles' );
+			$this->db->from ( 'tOrderPropertyRoles' );
 			$this->db->where('OrderUID',$OrderUID);
 			$this->db->where('PropertyRoleUID',$this->config->item('Propertyroles')['Sellers']);
 			$query = $this->db->get();
@@ -2561,13 +2561,13 @@ class Orderentry_model extends CI_Model {
 	/*For fee upload check*/
 /* NF203 - Fee Upload Under Order Entry Screen */
 	function isexist_ordernumber($OrderNumber){
-		$query = $this->db->query("SELECT * FROM `torders` WHERE OrderNumber = '".$OrderNumber."' ");
+		$query = $this->db->query("SELECT * FROM `tOrders` WHERE OrderNumber = '".$OrderNumber."' ");
 		return $query->row();
 	}
 
 /* NF203 - Check Alternate Order Number */
 	function isexist_altordernumber($AltORderNumber){
-		$query = $this->db->query("SELECT * FROM `torders` WHERE AltORderNumber = '".$AltORderNumber."' ");
+		$query = $this->db->query("SELECT * FROM `tOrders` WHERE AltORderNumber = '".$AltORderNumber."' ");
 		return $query->row();
 	}
 
@@ -2617,7 +2617,7 @@ class Orderentry_model extends CI_Model {
 	}
 
 	function check_isbilled($OrderUID){
-		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM torders WHERE OrderUID = '".$OrderUID."' AND IsBilled IN (1, 2)) as billed");
+		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM tOrders WHERE OrderUID = '".$OrderUID."' AND IsBilled IN (1, 2)) as billed");
 		return $query->row()->billed;
 	}
 
@@ -2625,7 +2625,7 @@ class Orderentry_model extends CI_Model {
 	{
 		$this->db->where('OrderUID', $OrderUID);	
 		$this->db->where('StatusUID',100);
-		return $this->db->get('torders')->num_rows();
+		return $this->db->get('tOrders')->num_rows();
 	}
 
 /* NF203 - Insert fee upload data */
@@ -2665,7 +2665,7 @@ class Orderentry_model extends CI_Model {
 			$this->db->where('ApprovalFunction','AbstractorActualPricing');
 			$this->db->update('tOrderPayments',$fieldArray);
 
-			/*NF203 - updating all abstractor fee in torders*/
+			/*NF203 - updating all abstractor fee in tOrders*/
 			$query = $this->db->query("SELECT (SELECT COALESCE(SUM(t.AbstractorActualFee),0) FROM torderabstractor t WHERE t.OrderUID = $OrderUID)
 				+
 				(SELECT COALESCE(SUM(u.AbstractorActualFee),0) FROM torderabstractorunassign u WHERE u.OrderUID = $OrderUID AND IsFeeAdjusted = 1) AS TotalActualAbstractorFee,
@@ -2690,7 +2690,7 @@ class Orderentry_model extends CI_Model {
 			if(!empty($TotalAbstractorFees)){
 
 				$this->db->where(array('OrderUID' => $OrderUID ));
-				$this->db->update('torders', array('AbstractorFee'=>$TotalAbstractorFees->TotalAbstractorFee, 'AbstractorCopyCost'=>$TotalAbstractorFees->TotalAbstractorCopyCost, 'AbstractorActualFee'=>$TotalAbstractorFees->TotalActualAbstractorFee, 'AbstractorAdditionalFee'=>$TotalAbstractorFees->TotalAbstractorAdditionalFee));
+				$this->db->update('tOrders', array('AbstractorFee'=>$TotalAbstractorFees->TotalAbstractorFee, 'AbstractorCopyCost'=>$TotalAbstractorFees->TotalAbstractorCopyCost, 'AbstractorActualFee'=>$TotalAbstractorFees->TotalActualAbstractorFee, 'AbstractorAdditionalFee'=>$TotalAbstractorFees->TotalAbstractorAdditionalFee));
 
 			}
 
@@ -2703,7 +2703,7 @@ class Orderentry_model extends CI_Model {
       $update['LastModifiedByUserUID'] = 768;
       $update['StatusUID'] = 100;
       $this->db->where(array('OrderUID' => $OrderUID ));
-      $this->db->update('torders', $update);
+      $this->db->update('tOrders', $update);
 
       //insert sla action details for completed start
       $this->common_model->insert_slaaction($OrderUID,$this->config->item('SLAaction')['Completed'],$this->session->userdata('UserUID'));
@@ -2728,7 +2728,7 @@ class Orderentry_model extends CI_Model {
 			);
 
 			$this->db->where('OrderUID',$OrderUID);
-			$query = $this->db->update('torders',$fieldArray);
+			$query = $this->db->update('tOrders',$fieldArray);
 
 			$fieldArray = array(
 				"CustomerActualAmount"=> $data['SubscriberFee'],
@@ -2752,7 +2752,7 @@ class Orderentry_model extends CI_Model {
 			);
 
 			$this->db->where('OrderUID',$OrderUID);
-			$query = $this->db->update('torders',$fieldArray);
+			$query = $this->db->update('tOrders',$fieldArray);
 
 			//insert sla action details for Billed start
 			$this->common_model->insert_slaaction($OrderUID,$this->config->item('SLAaction')['Billed'],$this->session->userdata('UserUID'));
@@ -2834,24 +2834,24 @@ class Orderentry_model extends CI_Model {
 	}
 
 	function get_feeuploadimported($OrderUID){
-		$this->db->select('torders.OrderUID,torders.OrderNumber,torders.OrderEntryDatetime,torders.OrderCompleteDateTime,msubproducts.SubProductCode,mcustomers.CustomerPContactName,torders.CustomerUID,torders.LoanNumber,mcustomers.CustomerName,mcustomers.CustomerNumber,GROUP_CONCAT(DISTINCT torderpropertyroles.PRName) as PRName,torders.StatusUID,morderstatus.StatusName,morderstatus.StatusName,morderstatus.StatusColor,torders.PropertyAddress1,torders.PropertyAddress2,torders.PropertyCityName,torders.PropertyCountyName,torders.PropertyStateCode,torders.PropertyZipcode,torders.CustomerAmount,mordertypes.OrderTypeName,torders.AbstractorCopyCost,torders.AbstractorFee,torders.AbstractorAdditionalFee,torders.MailSendBy,mcustomers.CustomerPContactEmailID,torders.MailSendBy,msubproducts.SubProductName,musers.UserName as OrderBilledUserName, torders.OrderDueDatetime,torders.OrderDueDatetime,tApiOrders.TransactionID,torders.AltORderNumber,torders.CustomerRefNum,torders.IsBilled');
-		$this->db->select("CASE WHEN torders.StatusUID=100 THEN torders.OrderCompleteDateTime ELSE '' END as OrderCompleteDateTime",FALSE);  
-    $this->db->select("CASE WHEN torders.StatusUID=100 THEN 'Yes' ELSE 'No' END as OrderComplete",FALSE);  
+		$this->db->select('tOrders.OrderUID,tOrders.OrderNumber,tOrders.OrderEntryDatetime,tOrders.OrderCompleteDateTime,mSubProducts.SubProductCode,mCustomers.CustomerPContactName,tOrders.CustomerUID,tOrders.LoanNumber,mCustomers.CustomerName,mCustomers.CustomerNumber,GROUP_CONCAT(DISTINCT tOrderPropertyRoles.PRName) as PRName,tOrders.StatusUID,morderstatus.StatusName,morderstatus.StatusName,morderstatus.StatusColor,tOrders.PropertyAddress1,tOrders.PropertyAddress2,tOrders.PropertyCityName,tOrders.PropertyCountyName,tOrders.PropertyStateCode,tOrders.PropertyZipcode,tOrders.CustomerAmount,mordertypes.OrderTypeName,tOrders.AbstractorCopyCost,tOrders.AbstractorFee,tOrders.AbstractorAdditionalFee,tOrders.MailSendBy,mCustomers.CustomerPContactEmailID,tOrders.MailSendBy,mSubProducts.SubProductName,mUsers.UserName as OrderBilledUserName, tOrders.OrderDueDatetime,tOrders.OrderDueDatetime,tApiOrders.TransactionID,tOrders.AltORderNumber,tOrders.CustomerRefNum,tOrders.IsBilled');
+		$this->db->select("CASE WHEN tOrders.StatusUID=100 THEN tOrders.OrderCompleteDateTime ELSE '' END as OrderCompleteDateTime",FALSE);  
+    $this->db->select("CASE WHEN tOrders.StatusUID=100 THEN 'Yes' ELSE 'No' END as OrderComplete",FALSE);  
 		$this->db->select("BillingDateTime as BillingDateTime",FALSE);  
 		$this->db->select("COALESCE(HOUR(TIMEDIFF(OrderCompleteDateTime, OrderEntryDatetime)),0) as RetTime",FALSE);  
-		$this->db->from('torders');
-		$this->db->join('mcustomers','mcustomers.CustomerUID = torders.CustomerUID','LEFT');
-		$this->db->join('torderpropertyroles','torderpropertyroles.OrderUID = torders.OrderUID','LEFT');
-		$this->db->join('msubproducts','msubproducts.SubProductUID = torders.SubProductUID','LEFT');
-		$this->db->join('morderstatus','morderstatus.StatusUID = torders.StatusUID','LEFT');
-		$this->db->join('mordertypes','mordertypes.OrderTypeUID = torders.OrderTypeUID','LEFT'); 
-		$this->db->join('torderabstractor','torderabstractor.AbstractorUID = torders.AbstractorUID','LEFT'); 
-		$this->db->join('mabstractor','mabstractor.AbstractorUID = torders.AbstractorUID','LEFT'); 
-		$this->db->join('musers','musers.UserUID = torders.BilledbyUserUID','LEFT');
-		$this->db->join('tApiOrders','tApiOrders.OrderUID = torders.OrderUID','LEFT');
-		$this->db->where('torders.StatusUID != 110',NULL,FALSE);  
-		//$this->db->where('torders.IsBilled != 0',NULL,FALSE);
-		$this->db->where('torders.OrderUID',$OrderUID);
+		$this->db->from('tOrders');
+		$this->db->join('mCustomers','mCustomers.CustomerUID = tOrders.CustomerUID','LEFT');
+		$this->db->join('tOrderPropertyRoles','tOrderPropertyRoles.OrderUID = tOrders.OrderUID','LEFT');
+		$this->db->join('mSubProducts','mSubProducts.SubProductUID = tOrders.SubProductUID','LEFT');
+		$this->db->join('morderstatus','morderstatus.StatusUID = tOrders.StatusUID','LEFT');
+		$this->db->join('mordertypes','mordertypes.OrderTypeUID = tOrders.OrderTypeUID','LEFT'); 
+		$this->db->join('torderabstractor','torderabstractor.AbstractorUID = tOrders.AbstractorUID','LEFT'); 
+		$this->db->join('mabstractor','mabstractor.AbstractorUID = tOrders.AbstractorUID','LEFT'); 
+		$this->db->join('mUsers','mUsers.UserUID = tOrders.BilledbyUserUID','LEFT');
+		$this->db->join('tApiOrders','tApiOrders.OrderUID = tOrders.OrderUID','LEFT');
+		$this->db->where('tOrders.StatusUID != 110',NULL,FALSE);  
+		//$this->db->where('tOrders.IsBilled != 0',NULL,FALSE);
+		$this->db->where('tOrders.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -2859,8 +2859,8 @@ class Orderentry_model extends CI_Model {
 	public function IsClosingProduct($ProductUID)
 	{
 		$this->db->select('IsClosingProduct', false);
-		$this->db->from('mproducts');
-		$this->db->where('mproducts.ProductUID', $ProductUID);
+		$this->db->from('mProducts');
+		$this->db->where('mProducts.ProductUID', $ProductUID);
 		return $this->db->get()->row()->IsClosingProduct;
 
 	}
@@ -2874,7 +2874,7 @@ class Orderentry_model extends CI_Model {
 
 	//function to check if loan numbert matching with the previous order
 	function check_duplicateloanorder_exists($BundleSubProductUID,$LoanNumber) {
-		$query = $this->db->query("SELECT OrderUID,OrderNumber FROM torders WHERE LoanNumber = '".$LoanNumber."'  AND SubProductUID = '".$BundleSubProductUID."' ORDER BY OrderUID DESC");
+		$query = $this->db->query("SELECT OrderUID,OrderNumber FROM tOrders WHERE LoanNumber = '".$LoanNumber."'  AND SubProductUID = '".$BundleSubProductUID."' ORDER BY OrderUID DESC");
 		return $query->row();
 	}
 
@@ -2925,21 +2925,21 @@ class Orderentry_model extends CI_Model {
   //function to get subproductname by subproductuid
   function get_subproductname_byuid($SubProductUID) {
   	$this->db->select('*');
-  	$this->db->from('msubproducts');
-  	$this->db->where('msubproducts.SubProductUID',$SubProductUID);
+  	$this->db->from('mSubProducts');
+  	$this->db->where('mSubProducts.SubProductUID',$SubProductUID);
   	return $this->db->get()->row();
   }
 //D-2-T2 Order Entry
 	function get_productbyuid($ProductUID){
 		$this->db->select("ProductUID,ProductName");
-		$this->db->from('mproducts');
+		$this->db->from('mProducts');
 		$this->db->where(array("Active"=>1,"ProductUID"=>$ProductUID));
 		return $this->db->get()->row();
 	}
 
 	function get_customerbyuid($CustomerUID){
 		$this->db->select("CustomerName,CustomerUID");
-		$this->db->from('mcustomers');
+		$this->db->from('mCustomers');
 		$this->db->where(array("Active"=>1,"CustomerUID"=>$CustomerUID));
 		return $this->db->get()->row();
 	}
@@ -2947,7 +2947,7 @@ class Orderentry_model extends CI_Model {
 	function get_firstborrowerdetails($OrderUID)
 	{
 		$this->db->select ( '*' );
-		$this->db->from ( 'torderpropertyroles' );
+		$this->db->from ( 'tOrderPropertyRoles' );
 		$this->db->where('OrderUID',$OrderUID);
 		$this->db->where('PropertyRoleUID',$this->config->item('Propertyroles')['Borrowers']);
 		$this->db->order_by('Id');
@@ -3017,9 +3017,9 @@ class Orderentry_model extends CI_Model {
 		$insertdata->CustomerActualAmount = $insertdata->CustomerAmount;
 
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $insertdata->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $insertdata->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$insertdata->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$insertdata->PropertyCountyName))->row();
 
 		//D-2-T23 state issuer fetched
 		$timportdata->Issuer = $this->lang->line('Inhouse_addtable');
@@ -3032,18 +3032,18 @@ class Orderentry_model extends CI_Model {
 			$mDocTypes = $this->db->get_where('mProjectDocType',array('ProjectUID'=>$insertdata->ProjectUID))->result();
 		}
 
-		if ($mstates->SearchType==1) {
+		if ($mStates->SearchType==1) {
 			$insertdata->IsInhouseExternal=0;
 		}
-		elseif ($mstates->SearchType==2) {
+		elseif ($mStates->SearchType==2) {
 			$insertdata->IsInhouseExternal=1;
 		}
 		else{
-			if ($mstates->AbstractorAssignment==1) {
-				$insertdata->IsInhouseExternal = $this->common_model->get_inhouse_external($insertdata->OrderTypeUID,$mstates->StateUID,$mcounties->CountyUID);
+			if ($mStates->AbstractorAssignment==1) {
+				$insertdata->IsInhouseExternal = $this->common_model->get_inhouse_external($insertdata->OrderTypeUID,$mStates->StateUID,$mCounties->CountyUID);
 			}
 			else{
-				$insertdata->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($insertdata->OrderTypeUID,$mstates->StateUID,$insertdata->PropertyZipcode);
+				$insertdata->IsInhouseExternal = $this->common_model->get_inhouse_external_forzipcode($insertdata->OrderTypeUID,$mStates->StateUID,$insertdata->PropertyZipcode);
 			}
 		}
 
@@ -3068,7 +3068,7 @@ class Orderentry_model extends CI_Model {
 		$where_policy_type['CustomerUID'] = $insertdata->CustomerUID;
 		$insertdata->OrderPolicyType = $this->common_model->GetCustomerProductDetailsByCustomerSubproductUID($where_policy_type)->OrderPolicyType;
 
-		$query = $this->db->insert('torders',$insertdata);
+		$query = $this->db->insert('tOrders',$insertdata);
 
 		$OrderUID = $this->db->insert_id();
 
@@ -3081,7 +3081,7 @@ class Orderentry_model extends CI_Model {
 			$sellerdata['OrderUID'] = $OrderUID; 
 			$sellerdata['PropertyRoleUID'] = $this->config->item('Propertyroles')['Sellers']; 
 			$sellerdata['PRName'] = $data['Seller']; 
-			$this->db->insert('torderpropertyroles', $sellerdata);
+			$this->db->insert('tOrderPropertyRoles', $sellerdata);
 		}
 
 		if(!empty($data['BorrowerName1'])){
@@ -3107,7 +3107,7 @@ class Orderentry_model extends CI_Model {
 		}
 
 		if(!empty($borrowerinsertdata)){
-			$this->db->insert_batch('torderpropertyroles', $borrowerinsertdata);
+			$this->db->insert_batch('tOrderPropertyRoles', $borrowerinsertdata);
 		}
 		
 		/*INSERT CUSTOMER ACTUAL PRICING*/
@@ -3197,7 +3197,7 @@ class Orderentry_model extends CI_Model {
 
 	function get_subproductbyname($SubProductName){
 		$this->db->where(array("Active"=>1,"SubProductName" => trim($SubProductName)));
-		$query = $this->db->get('msubproducts');
+		$query = $this->db->get('mSubProducts');
 		return $query->row();
 	}
 
@@ -3251,7 +3251,7 @@ class Orderentry_model extends CI_Model {
 	// 		return 0;
 	// 	}
 		
-	// 	$result = $this->db->select('*')->from('mcustomerproducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
+	// 	$result = $this->db->select('*')->from('mCustomerProducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
 	// 	if(!empty($result))
 	// 	{
 	// 		return 1;
@@ -3269,7 +3269,7 @@ class Orderentry_model extends CI_Model {
 
 	function checkPrioritySubproduct($CustomerUID,$ProductUID,$SubProductUID) {
 		$this->db->select('PriorityUID');
-		$this->db->from('mcustomerproducts');
+		$this->db->from('mCustomerProducts');
 		$this->db->where('CustomerUID',$CustomerUID);
 		$this->db->where('ProductUID',$ProductUID);
 		$this->db->where('SubProductUID',$SubProductUID);
@@ -3282,7 +3282,7 @@ class Orderentry_model extends CI_Model {
 	*/
 	function checkPriorityCustomer($CustomerUID) {
 		$this->db->select('PriorityUID');
-		$this->db->from('mcustomers');
+		$this->db->from('mCustomers');
 		$this->db->where('CustomerUID',$CustomerUID);
 		return $this->db->get()->row()->PriorityUID;
 	}
@@ -3294,7 +3294,7 @@ class Orderentry_model extends CI_Model {
 
 	function checkPriorityMSubproduct($ProductUID,$SubProductUID) {
 		$this->db->select('PriorityUID');
-		$this->db->from('msubproducts');
+		$this->db->from('mSubProducts');
 		$this->db->where('ProductUID',$ProductUID);
 		$this->db->where('SubProductUID',$SubProductUID);
 		return $this->db->get()->row()->PriorityUID;
@@ -3332,7 +3332,7 @@ class Orderentry_model extends CI_Model {
 	*/
 	function check_clientquotebeforebilling($OrderUID)
 	{
-		$query = $this->db->query("SELECT  CONCAT_WS(' ','Client',`mcustomers`.`CustomerName`,'QUOTE FEE action pending') AS quotetext  FROM (`torders`) JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` WHERE `torders`.`OrderUID` = {$OrderUID} AND IsQuote = 1
+		$query = $this->db->query("SELECT  CONCAT_WS(' ','Client',`mCustomers`.`CustomerName`,'QUOTE FEE action pending') AS quotetext  FROM (`tOrders`) JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` WHERE `tOrders`.`OrderUID` = {$OrderUID} AND IsQuote = 1
 			");
 		return $query->row()->quotetext;
 	}
@@ -3340,21 +3340,21 @@ class Orderentry_model extends CI_Model {
 	function GetPreferedSites($OrderUID) 
 	{
 
-		$torders=$this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
+		$tOrders=$this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $torders->PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $tOrders->PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$torders->PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$tOrders->PropertyCountyName))->row();
 
-		// if(!empty($mcounties))
-		// {
+		// if(!empty($mCounties))
+		// { 	
 
 
 		// 	$query = $this->db->query("SELECT *, CASE WHEN msearchmodes.SearchModeUID = '6' THEN 
 		// 		mcountysearchmodes.WebsiteURL ELSE msearchmodes.SearchSiteURL END AS SiteURL 
 		// 		FROM mcountysearchmodes
 		// 		LEFT JOIN msearchmodes ON mcountysearchmodes.SearchModeUID = msearchmodes.SearchModeUID 
-		// 		WHERE mcountysearchmodes.CountyUID = '". $mcounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
+		// 		WHERE mcountysearchmodes.CountyUID = '". $mCounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
 		// 		Order By FIELD(SearchModeName, 'Free', 'Paid', 'Others', 'Abstractor')");
 
 		// 	$data = $query->row();

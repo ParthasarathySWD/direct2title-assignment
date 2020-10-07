@@ -1,6 +1,6 @@
 <?php
-// defined('BASEPATH') OR exit('No direct script access allowed');
-// ini_set('display_errors', 1);
+defined('BASEPATH') OR exit('No direct script access allowed');
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
 class Order_entry extends MY_Controller {
 
@@ -25,18 +25,13 @@ class Order_entry extends MY_Controller {
 			$this->RoleUID = $this->session->userdata('RoleUID');
 			$this->UserName = $this->session->userdata('UserName');
 			$this->RoleType = $this->session->userdata('RoleType');
-		/*	$this->UserUID ='3287';
-			$this->loggedid ='techorg';
-			$this->RoleUID ='1';
-			$this->UserName ='techorg';
-			$this->RoleType ='Administrator';
-*/		}
+		}
 
 	}
 
 	public function index()
 	{
-		$data['content'] = 'index';
+		$data['content'] = 'index1';
 		$data['OrderSummaryID'] = 0;
 		$data['data'] = array('menu'=>'OrderEntry','title'=>'Order Entry','link'=>array('OrderEntry'));
 		$data['States'] = $this->common_model->GetStateDetails();
@@ -104,7 +99,7 @@ class Order_entry extends MY_Controller {
 			// 	}
 				
 			// }
-			$data['CheckX1Order'] = $this->Orderentry_model->GetPreferedSites($OrderID) ;
+			// $data['CheckX1Order'] = $this->Orderentry_model->GetPreferedSites($OrderID);
 			$data['order_details'] = $this->common_model->get_orderdetails($OrderID);
 			
 			$data['Product']= $this->Orderentry_model->GetCustomerProductDetails($CustomerUID);
@@ -864,15 +859,15 @@ function preview_bulkentry()
 				$SubProductUID = $this->input->post('SubProductUID');
 				$bundledsubproductenabled = $this->input->post('bundledsubproductenabled');
 
-				$X1result =$this->Orderentry_model->CheckX1Order($CustomerUID,$ProductUID,$SubProductUID);
-				if($X1result)
-				{
-					$BorrowerType = $this->input->post('BorrowerType');
-					$PropertyType = $this->input->post('PropertyType');
-					$TransactionType = $this->input->post('TransactionType');
-				}
+				// $X1result =$this->Orderentry_model->CheckX1Order($CustomerUID,$ProductUID,$SubProductUID);
+				// if($X1result)
+				// {
+				// 	$BorrowerType = $this->input->post('BorrowerType');
+				// 	$PropertyType = $this->input->post('PropertyType');
+				// 	$TransactionType = $this->input->post('TransactionType');
+				// }
 
-				$IsFlood = $this->Orderentry_model->CheckIsFlood($CustomerUID,$ProductUID);
+				// $IsFlood = $this->Orderentry_model->CheckIsFlood($CustomerUID,$ProductUID);
 
 
 				if($CustomerUID =='' || $ProductUID =='' ){
@@ -1556,16 +1551,16 @@ function save_bulkentry()
 			$ProductUID = $this->input->post('ProductUID');
 			$SubProductUID = $this->input->post('SubProductUID');
 
-			$X1result =$this->Orderentry_model->CheckX1Order($CustomerUID,$ProductUID,$SubProductUID);
+			// $X1result =$this->Orderentry_model->CheckX1Order($CustomerUID,$ProductUID,$SubProductUID);
 
-			if($X1result)
-			{
-				$BorrowerType = $this->input->post('BorrowerType');
-				$PropertyType = $this->input->post('PropertyType');
-				$TransactionType = $this->input->post('TransactionType');
-			}
+			// if($X1result)
+			// {
+			// 	$BorrowerType = $this->input->post('BorrowerType');
+			// 	$PropertyType = $this->input->post('PropertyType');
+			// 	$TransactionType = $this->input->post('TransactionType');
+			// }
 
-			$IsFlood = $this->Orderentry_model->CheckIsFlood($CustomerUID,$ProductUID);
+			// $IsFlood = $this->Orderentry_model->CheckIsFlood($CustomerUID,$ProductUID);
 
 			if($CustomerUID =='' || $ProductUID ==''){
 				echo json_encode(array('error'=>'1','message'=>'Select the Required Fields'));exit;
@@ -3627,6 +3622,13 @@ function save_bulkentry()
 			if (null !== $cell) return false;
 		}
 		return true;
+	}
+
+
+	public function index1()
+	{
+		$data['content'] = 'index';
+		$this->load->view('page', $data);
 	}
 
 

@@ -19,14 +19,24 @@
       <li class="nav-item">
         <a class="nav-link <?php echo $this->uri->segment(1) == "Order_reports" ? 'active' : ''; ?> " href="Order_reports?OrderUID=<?php echo $OrderUID; ?>"><i class="fe fe-paperclip menu-icon"></i> Reports</a>
       </li>
-      <li class="nav-item">
+       <li class="nav-item">
+        <a class="nav-link <?php echo $this->uri->segment(1) == "Order_attachment" ? 'active' : ''; ?> " href="Order_attachment?OrderUID=<?php echo $OrderUID; ?>"><i class="fe fe-send menu-icon"></i> Delivery</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link <?php echo $this->uri->segment(1) == "Order_notes" ? 'active' : ''; ?> " href="Order_notes?OrderUID=<?php echo $OrderUID; ?>"><i class="fe fe-message-square menu-icon"></i> Notes</a>
+      </li>
+     <!--  <li class="nav-item">
         <a class="nav-link" href="Order_attachment"><i class="fe fe-send menu-icon"></i> Delivery</a>
       </li>
       <li class="nav-item">
+
         <a class="nav-link" href="Order_notes"><i class="fe fe-message-square menu-icon"></i> Notes</a>
       </li>
+        <a class="nav-link active" href="Order_notes"><i class="fe fe-message-square menu-icon"></i> Notes</a>
+      </li> -->
+
       <li class="nav-item">
-        <a class="nav-link active" href="Order_history"><i class="fe fe-layers menu-icon"></i> History</a>
+        <a class="nav-link" data-toggle="tab" href="#News"><i class="fe fe-layers menu-icon"></i> History</a>
       </li>
     </ul>
   </div>

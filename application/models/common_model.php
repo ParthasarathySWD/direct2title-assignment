@@ -17,9 +17,9 @@ class Common_model extends CI_Model {
 
 	/* @purpose: To get fields from master data @author: Yagavi.G <yagavi.g@avanzegroup.com> @since: May 21st 2020 */
 	public function GetMaterFieldList($OrderUID, $CustomerUID, $SubProductUID){
-		$this->db->select('*')->from('torders')->where ('torders.OrderUID', $OrderUID);
-		$torders = $this->db->get()->row();
-		$OrderSourceUID = $torders->OrderSourceUID;
+		$this->db->select('*')->from('tOrders')->where ('tOrders.OrderUID', $OrderUID);
+		$tOrders = $this->db->get()->row();
+		$OrderSourceUID = $tOrders->OrderSourceUID;
 
 		$this->db->select('*')->from('mCustomerFields');
 		$this->db->join('mfields','mfields.FieldUID=mCustomerFields.FieldUID');
@@ -64,17 +64,17 @@ class Common_model extends CI_Model {
 	{
 		$loggedid = $this->session->userdata('UserUID');
 
-		$this->db->select("torders.*, torderabstractor.*, torderassignment.*,msubproducts.*, mproducts.*,mordertypes.*,morderpriority.PriorityName, morderstatus.*, mabstractor.*", false);
+		$this->db->select("tOrders.*, torderabstractor.*, torderassignment.*,mSubProducts.*, mProducts.*,mOrderTypes.*,mOrderPriority.PriorityName, mOrderStatus.*, mabstractor.*", false);
 		$this->db->from ( 'torderabstractor' );
 		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
-		$this->db->join ( 'torders', 'torderabstractor.OrderUID = torders.OrderUID' , 'inner' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractor.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		$this->db->where( 'torderabstractor.AbstractorOrderUID',$AbstractorOrderUID);
 		$query = $this->db->get();
 		return $query->row();
@@ -85,17 +85,17 @@ class Common_model extends CI_Model {
 		$loggedid = $this->session->userdata('UserUID');
 		$mabstractor=$this->db->get_where('mabstractor', array('UserUID'=>$loggedid))->row();
 		$AbstractorUID=$mabstractor->AbstractorUID;
-		$this->db->select("torders.*, torderabstractorunassign.*, torderassignment.*,msubproducts.*, mproducts.*,mordertypes.*,morderpriority.PriorityName, morderstatus.*, mabstractor.*", false);
+		$this->db->select("tOrders.*, torderabstractorunassign.*, torderassignment.*,mSubProducts.*, mProducts.*,mOrderTypes.*,mOrderPriority.PriorityName, mOrderStatus.*, mabstractor.*", false);
 		$this->db->from ( 'torderabstractorunassign' );
 		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torderabstractorunassign.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractorunassign.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
-		$this->db->join ( 'torders', 'torderabstractorunassign.OrderUID = torders.OrderUID' , 'inner' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'inner' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractorunassign.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractorunassign.OrderUID = tOrders.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'inner' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractorunassign.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		$this->db->where( 'torderabstractorunassign.AbstractorOrderUID',$AbstractorOrderUID);
 		$query = $this->db->get();
 		return $query->row();
@@ -106,29 +106,29 @@ class Common_model extends CI_Model {
 		$loggedid = $this->session->userdata('UserUID');
 		$CurrentUser = $this->GetUserDetailsByUser($loggedid);
 		$status[0] = $this->config->item('keywords')['Cancelled'];
-		$this->db->select("torders.*, torderabstractor.*, mabstractor.*,morderstatus.*,mordertypes.*,morderpriority.PriorityName", false);
+		$this->db->select("tOrders.*, torderabstractor.*, mabstractor.*,mOrderStatus.*,mOrderTypes.*,mOrderPriority.PriorityName", false);
 		$this->db->from ( 'torderassignment' );
 		$this->db->join ( '(SELECT * FROM torderabstractor ORDER BY AbstractorOrderUID DESC) AS torderabstractor', 'torderassignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'left' );
-		$this->db->join ( 'torders', 'torderabstractor.OrderUID = torders.OrderUID' , 'inner' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'left' );
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractor.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		/*$this->db->where( 'torderassignment.AssignedToUserUID = '.$loggedid.' OR torderabstractor.AbstractorUID = '.$CurrentUser->AbstractorUID.'',NULL,FALSE);*/
 		$this->db->where( 'torderassignment.WorkflowModuleUID', 1);
 		$this->db->where( 'torderassignment.WorkflowStatus <>', 5 );
 		$this->db->where('torderabstractor.OrderStatus != 5');
 
-		$this->db->where_not_in('torders.StatusUID', $status);
+		$this->db->where_not_in('tOrders.StatusUID', $status);
 		$this->db->where('torderabstractor.AbstractorUID',$CurrentUser->AbstractorUID);
 		$this->db->group_by('torderabstractor.AbstractorOrderUID');
 		$this->db->order_by('torderabstractor.DueDateTime', 'ASC');
-		$this->db->order_by('torders.OrderNumber', 'ASC');
+		$this->db->order_by('tOrders.OrderNumber', 'ASC');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -140,15 +140,15 @@ class Common_model extends CI_Model {
 		$this->db->select("*, torderabstractor.AbstractorActualFee,torderabstractor.AbstractorFee,torderabstractor.AbstractorAdditionalFee,torderabstractor.AbstractorCopyCost,torderabstractor.OperatorType, mabstractor.*", false);
 		$this->db->from ( 'torderabstractor' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
-		$this->db->join ( 'torders', 'torderabstractor.OrderUID = torders.OrderUID' , 'inner' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'inner' );
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractor.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'inner' );
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		//$this->db->where( 'torderassignment.AssignedToUserUID', $loggedid);
 		$this->db->where( 'torderabstractor.WorkflowStatus ', 5 );
 		$this->db->order_by('torderabstractor.AbstractorOrderUID', 'DESC');
@@ -165,15 +165,15 @@ class Common_model extends CI_Model {
 		$this->db->from ( 'torderassignment' );
 		$this->db->join ( 'torderabstractor', 'torderassignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
-		$this->db->join ( 'torders', 'torderabstractor.OrderUID = torders.OrderUID' , 'inner' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'inner' );
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractor.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'inner' );
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		$this->db->where( 'torderabstractor.OrderUID',$OrderUID);
 		$this->db->where( 'torderassignment.AssignedToUserUID', $loggedid);
 		$this->db->where( 'torderassignment.WorkflowModuleUID', 1);
@@ -191,15 +191,15 @@ class Common_model extends CI_Model {
 		$this->db->from ( 'torderabstractor' );
 		$this->db->join ( 'torderassignment', 'torderabstractor.OrderUID = torderassignment.OrderUID' , 'left' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'left' );
-		$this->db->join ( 'torders', 'torderabstractor.OrderUID = torders.OrderUID' , 'left' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'left' );
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractor.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'left' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		$this->db->where( 'torderabstractor.OrderUID',$OrderUID);
 		//$this->db->where( 'torderabstractor.DocumentReceived',0);
 		$this->db->where( 'torderabstractor.AbstractorUID',$AbstractorUID);
@@ -211,7 +211,7 @@ class Common_model extends CI_Model {
 		//$this->db->where( 'torderassignment.WorkflowStatus <>', 5 );
 		//$this->db->where( 'torderassignment.OrderFlag <>', 2 );
 		//$this->db->group_by('torderassignment.OrderUID');
-		$this->db->order_by('torders.OrderNumber', 'DESC');
+		$this->db->order_by('tOrders.OrderNumber', 'DESC');
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -225,18 +225,18 @@ class Common_model extends CI_Model {
 		$this->db->from ( 'torderabstractorunassign' );
 		$this->db->join ( 'torderassignment', 'torderabstractorunassign.OrderUID = torderassignment.OrderUID' , 'left' );
 		$this->db->join ( 'mabstractor', 'torderabstractorunassign.AbstractorUID = mabstractor.AbstractorUID' , 'left' );
-		$this->db->join ( 'torders', 'torderabstractorunassign.OrderUID = torders.OrderUID' , 'left' );
-		$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'left' );
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-		$this->db->join ( 'mordertypes', 'torderabstractorunassign.OrderTypeUID = mordertypes.OrderTypeUID' , 'left' );
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+		$this->db->join ( 'tOrders', 'torderabstractorunassign.OrderUID = tOrders.OrderUID' , 'left' );
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+		$this->db->join ( 'mOrderTypes', 'torderabstractorunassign.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		$this->db->where( 'torderabstractorunassign.OrderUID',$OrderUID);
 		$this->db->where( 'torderabstractorunassign.AbstractorUID',$AbstractorUID);
-		$this->db->order_by('torders.OrderNumber', 'DESC');
+		$this->db->order_by('tOrders.OrderNumber', 'DESC');
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -259,7 +259,7 @@ class Common_model extends CI_Model {
 	function CheckIsDynamicProduct($ProductUID){
 
 		$this->db->select("*");
-		$this->db->from('mproducts');
+		$this->db->from('mProducts');
 		$this->db->where(array("ProductUID"=>$ProductUID));
 		$query = $this->db->get();
 		return $query->row();
@@ -304,8 +304,8 @@ class Common_model extends CI_Model {
 	function GetProductUIDBySubProductUID($SubProductUID){
 
 		$this->db->select("*");
-		$this->db->from('msubproducts');
-		$this->db->where(array("msubproducts.SubProductUID"=>$SubProductUID));
+		$this->db->from('mSubProducts');
+		$this->db->where(array("mSubProducts.SubProductUID"=>$SubProductUID));
 		$query = $this->db->get();
 		return $query->row();
 
@@ -396,8 +396,8 @@ class Common_model extends CI_Model {
 	function GetOrderNumberByOrderUID($OrderUID)
 	{
 		$this->db->select("*");
-		$this->db->from('torders');
-		$this->db->where(array("torders.OrderUID"=>$OrderUID));
+		$this->db->from('tOrders');
+		$this->db->where(array("tOrders.OrderUID"=>$OrderUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -417,10 +417,10 @@ class Common_model extends CI_Model {
 		return $query->result();
 	}
 
-	function GetOrderStatus($OrderUID){
+	function GetOrderstatus($OrderUID){
 
 		$this->db->where(array("StatusUID"=>20,"OrderUID"=>$OrderUID));
-		$query = $this->db->get('torders');
+		$query = $this->db->get('tOrders');
 		return $query->row();
 	}
 
@@ -453,7 +453,7 @@ class Common_model extends CI_Model {
 	function GetSubproductByProduct($ProductUID)
 	{
 		$this->db->select("*");
-		$this->db->from('msubproducts');
+		$this->db->from('mSubProducts');
 		$this->db->where(array("ProductUID"=>$ProductUID));
 		$query = $this->db->get();
 		return $query->result();
@@ -479,7 +479,7 @@ class Common_model extends CI_Model {
 	function GettOrderTypeDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mordertypes');
+		$query = $this->db->get('mOrderTypes');
 		return $query->result();
 	}
 	function GetVendorsDetails(){
@@ -494,9 +494,9 @@ class Common_model extends CI_Model {
 		return $query->result();
 	}
 
-	function GetTATOrders($TATtiming,$PriorityUID)
+	function GetTAtOrders($TATtiming,$PriorityUID)
 	{
-		$sql = "select GROUP_CONCAT(CASE WHEN (TIME_FORMAT(TIMEDIFF(NOW(),OrderEntryDatetime),'%H')>$TATtiming AND StatusUID<>100) THEN OrderUID END) AS TATUID from torders WHERE PriorityUID = $PriorityUID";
+		$sql = "select GROUP_CONCAT(CASE WHEN (TIME_FORMAT(TIMEDIFF(NOW(),OrderEntryDatetime),'%H')>$TATtiming AND StatusUID<>100) THEN OrderUID END) AS TATUID from tOrders WHERE PriorityUID = $PriorityUID";
 		return $this->db->query($sql)->row();
 	}
 	function GetCustomerDelayByOrder($OrderUID)
@@ -516,9 +516,9 @@ class Common_model extends CI_Model {
 		$this->db->select("*");
 		$this->db->from('mpricingproducts');
 		$this->db->join('mpricing','mpricingproducts.PricingUID=mpricing.PricingUID','left');
-		$this->db->join('mcounties','mpricingproducts.CountyUID=mcounties.CountyUID','left');
-		$this->db->join('mstates','mpricingproducts.StateUID=mstates.StateUID','left');
-		$this->db->join('msubproducts','mpricingproducts.SubProductUID=msubproducts.SubProductUID','left');
+		$this->db->join('mCounties','mpricingproducts.CountyUID=mCounties.CountyUID','left');
+		$this->db->join('mStates','mpricingproducts.StateUID=mStates.StateUID','left');
+		$this->db->join('mSubProducts','mpricingproducts.SubProductUID=mSubProducts.SubProductUID','left');
 		$this->db->where_in('mpricing.PricingType',array('C','RM','GRADE'));
 		$query = $this->db->get();
 		return $query->result();
@@ -529,9 +529,9 @@ class Common_model extends CI_Model {
 		$this->db->select("*");
 		$this->db->from('mpricingproducts');
 		$this->db->join('mpricing','mpricingproducts.PricingUID=mpricing.PricingUID','left');
-		$this->db->join('mcounties','mpricingproducts.CountyUID=mcounties.CountyUID','left');
-		$this->db->join('mstates','mpricingproducts.StateUID=mstates.StateUID','left');
-		$this->db->join('msubproducts','mpricingproducts.SubProductUID=msubproducts.SubProductUID','left');
+		$this->db->join('mCounties','mpricingproducts.CountyUID=mCounties.CountyUID','left');
+		$this->db->join('mStates','mpricingproducts.StateUID=mStates.StateUID','left');
+		$this->db->join('mSubProducts','mpricingproducts.SubProductUID=mSubProducts.SubProductUID','left');
 		$this->db->where(array("mpricing.PricingType"=>'V'));
 		$query = $this->db->get();
 		return $query->result();
@@ -551,7 +551,7 @@ class Common_model extends CI_Model {
 	function GetStateDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mstates');
+		$query = $this->db->get('mStates');
 		return $query->result();
 	}
 
@@ -559,35 +559,35 @@ class Common_model extends CI_Model {
 	function GetStatebyAbstractorAssignment($AbstractorAssignment){
 
 		$this->db->where(array("Active"=>1, 'AbstractorAssignment'=>$AbstractorAssignment));
-		$query = $this->db->get('mstates');
+		$query = $this->db->get('mStates');
 		return $query->result();
 	}
 
 	function GetCityDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mcities');
+		$query = $this->db->get('mCities');
 		return $query->result();
 	}
 
 	function GetCountyDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mcounties');
+		$query = $this->db->get('mCounties');
 		return $query->result();
 	}
 
 	function GetCountryDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mcounties');
+		$query = $this->db->get('mCounties');
 		return $query->result();
 	}
 
 	function GetCountiesDetails() {
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mcounties');
+		$query = $this->db->get('mCounties');
 		return $query->result();
 	}
 
@@ -597,7 +597,7 @@ class Common_model extends CI_Model {
 	function GetProductDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mproducts');
+		$query = $this->db->get('mProducts');
 		return $query->result();
 	}
 
@@ -609,22 +609,20 @@ class Common_model extends CI_Model {
 			$this->db->where(array("Active"=>1));
 		}
 
-		$query = $this->db->get('msubproducts');
+		$query = $this->db->get('mSubProducts');
 		return $query->result();
 	}
 
 	function Get_SubProduct(){
 
-		return $this->db->select('*')->from('msubproducts')->get()->result();
+		return $this->db->select('*')->from('mSubProducts')->get()->result();
 		
 	}
 
 
 	function GetPriorityDetails()
 	{
-		/*$this->db->where(array("Active"=>1));
-		$query = $this->db->get('morderpriority');*/
-		$query = $this->db->query("SELECT * FROM morderpriority WHERE Active = 1 ORDER BY FIELD(PriorityUID, 1,3,2)");
+		$query = $this->db->query("SELECT * FROM mOrderPriority WHERE Active = 1 ORDER BY FIELD(PriorityUID, 1,3,2)");
 		return $query->result();
 	}
 
@@ -636,7 +634,7 @@ class Common_model extends CI_Model {
 	function GetTemplateDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mtemplates');
+		$query = $this->db->get('mTemplates');
 		return $query->result();
 	}
 
@@ -655,7 +653,7 @@ class Common_model extends CI_Model {
 	function GetCustomerDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mcustomers');
+		$query = $this->db->get('mCustomers');
 		return $query->result();
 	}
 
@@ -668,7 +666,7 @@ class Common_model extends CI_Model {
 	function GetSubProducts(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('msubproducts');
+		$query = $this->db->get('mSubProducts');
 		return $query->result();
 	}
 
@@ -680,7 +678,7 @@ class Common_model extends CI_Model {
 	function GetCustomerDetailsBasedOnID($CustomerUID){
 
 		$this->db->where(array("Active"=>1,"CustomerUID"=>$CustomerUID));
-		$query = $this->db->get('mcustomers');
+		$query = $this->db->get('mCustomers');
 		return $query->result();
 	}
 
@@ -764,7 +762,7 @@ class Common_model extends CI_Model {
 		}
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('mordertypes');
+		$query = $this->db->get('mOrderTypes');
 		return $query->result();
 	}
 
@@ -931,9 +929,9 @@ class Common_model extends CI_Model {
 	function getDocumentPath_IfExist($OrderUID)
 	{
 
-		$this->db->select ( 'torders.*');
-		$this->db->from ( 'torders' );
-		$this->db->where(array("torders.OrderUID"=>$OrderUID));
+		$this->db->select ( 'tOrders.*');
+		$this->db->from ( 'tOrders' );
+		$this->db->where(array("tOrders.OrderUID"=>$OrderUID));
 		$query = $this->db->get();
 		$docpath = $query->result();
 
@@ -957,18 +955,18 @@ class Common_model extends CI_Model {
 	{
 		if($OrderUID){
 
-			$this->db->select ( '*,torders.OrderUID,torders.AgentPricing AS Agent, torders.UnderWritingPricing AS UnderWriting, torders.InsuranceType AS InsuranceTypePrice,torderpropertyroles.PRName AS Borrower_Name,mproducts.ProductUID,msubproducts.RMS,mstates.StateUID','msubproducts.SubProductUID');
-			$this->db->from ( 'torders' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-			$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-			$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-			$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID' , 'left' );
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
-			$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'left' );
-			$this->db->join ( 'mstates', 'torders.PropertyStateCode = mstates.StateCode' , 'left' );
-			$this->db->where ('torders.OrderUID',$OrderUID);
+			$this->db->select ( '*,tOrders.OrderUID,tOrders.AgentPricing AS Agent, tOrders.UnderWritingPricing AS UnderWriting, tOrders.InsuranceType AS InsuranceTypePrice,tOrderPropertyRoles.PRName AS Borrower_Name,mProducts.ProductUID,mSubProducts.RMS,mStates.StateUID','mSubProducts.SubProductUID');
+			$this->db->from ( 'tOrders' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+			$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+			$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
+			$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
+			$this->db->join ( 'mStates', 'tOrders.PropertyStateCode = mStates.StateCode' , 'left' );
+			$this->db->where ('tOrders.OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->row();
 		}
@@ -980,10 +978,10 @@ class Common_model extends CI_Model {
 	{
 		if($OrderUID){
 
-			$this->db->select('mcustomerproducts.CaseSensitivity'); 
-			$this->db->from('mcustomerproducts');
-			$this->db->join ( 'torders', 'torders.CustomerUID = mcustomerproducts.CustomerUID AND torders.SubProductUID = mcustomerproducts.SubProductUID' , 'left' );
-			$this->db->where ('torders.OrderUID',$OrderUID);
+			$this->db->select('mCustomerProducts.CaseSensitivity'); 
+			$this->db->from('mCustomerProducts');
+			$this->db->join ( 'tOrders', 'tOrders.CustomerUID = mCustomerProducts.CustomerUID AND tOrders.SubProductUID = mCustomerProducts.SubProductUID' , 'left' );
+			$this->db->where ('tOrders.OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->row();
 		}
@@ -994,8 +992,8 @@ class Common_model extends CI_Model {
 	function GetMultiplePricing($ProductUID){
 
 		$this->db->select("*");
-		$this->db->from('mproducts');
-		$this->db->where(array("mproducts.ProductUID"=>$ProductUID));
+		$this->db->from('mProducts');
+		$this->db->where(array("mProducts.ProductUID"=>$ProductUID));
 		$query = $this->db->get();
 		return $query->row();
 
@@ -1019,7 +1017,7 @@ class Common_model extends CI_Model {
 			$this->db->where('CountyUID',$county);	
 		  }
 		}
-		return $this->db->get('mcities')->result();	
+		return $this->db->get('mCities')->result();	
 	}
 
 	function hasCustomerProduct($CustomerUID,$ProductUID='',$SubProductUID='')  
@@ -1033,14 +1031,14 @@ class Common_model extends CI_Model {
 	   {
 	     $this->db->where('SubProductUID',$SubProductUID);	
 	   }
-	   return $this->db->get('mcustomerproducts')->num_rows();  	
+	   return $this->db->get('mCustomerProducts')->num_rows();  	
 	}
 
 	function hasCounty($State,$CountyUID)
 	{
 	  $this->db->where('StateUID', $State);
 	  $this->db->where('CountyUID', $CountyUID);
-	  return $this->db->get('mcounties')->num_rows();
+	  return $this->db->get('mCounties')->num_rows();
 	}
 
 	function hasCity($State, $CountyUID, $CityUID)
@@ -1050,7 +1048,7 @@ class Common_model extends CI_Model {
 	   $this->db->where('CountyUID', $CountyUID);
 	  }
 	  $this->db->where('CityUID', $CityUID);
-	  return $this->db->get('mcities')->num_rows();
+	  return $this->db->get('mCities')->num_rows();
 	}
 
 	function hasCityZipCode($State, $CountyUID, $CityUID, $ZipCode)
@@ -1063,37 +1061,37 @@ class Common_model extends CI_Model {
 	   $this->db->where('CountyUID', $CountyUID);
 	  }
 	  $this->db->where('ZipCode', $ZipCode);
-	  return $this->db->get('mcities')->num_rows();
+	  return $this->db->get('mCities')->num_rows();
 	}
 
 	function GetCountyByState($statedata) {
-		$query = $this->db->get_where('mcounties',$statedata);
+		$query = $this->db->get_where('mCounties',$statedata);
 		return $query->result();
 	}
 
 	function GetStatebyUID($stateUID) {
-		$query = $this->db->get_where('mstates', array('StateUID' => $stateUID));
+		$query = $this->db->get_where('mStates', array('StateUID' => $stateUID));
 		return $query->result();
 	}
 
 	function GetStatebyCode($StateCode) {
-		$query = $this->db->get_where('mstates', array('StateCode' => $StateCode));
+		$query = $this->db->get_where('mStates', array('StateCode' => $StateCode));
 		return $query->row();
 	}
 
 	function GetCitybyUID($cityUID) {
-		$query = $this->db->get_where('mcities', array('CityUID' => $cityUID));
+		$query = $this->db->get_where('mCities', array('CityUID' => $cityUID));
 		return $query->result();
 	}
 
 	function GetCountybyUID($countyUID) {
-		$query = $this->db->get_where('mcounties', array('CountyUID' => $countyUID));
+		$query = $this->db->get_where('mCounties', array('CountyUID' => $countyUID));
 		return $query->result();
 	}
 
 
 	function GetCityNamebyUID($countyUID) {
-		$query = $this->db->get_where('mcities', array('CityUID' => $countyUID));
+		$query = $this->db->get_where('mCities', array('CityUID' => $countyUID));
 		return $query->result();
 	}
 
@@ -1124,23 +1122,23 @@ class Common_model extends CI_Model {
 
 
 	// function GetCustomerbyUID($countyUID) {
-	// 	$query = $this->db->get_where('mcounties', array('CountyUID' => $countyUID));
+	// 	$query = $this->db->get_where('mCounties', array('CountyUID' => $countyUID));
 	// 	return $query->result();
 	// }
 
 
-	function GettordersbyUID($orderUID) {
-		$query = $this->db->get_where('torders', array('OrderUID' => $orderUID));
+	function GettOrdersbyUID($orderUID) {
+		$query = $this->db->get_where('tOrders', array('OrderUID' => $orderUID));
 		return $query->result();
 	}
 
-	function Gettordersby_UID($orderUID) {
-		$query = $this->db->get_where('torders', array('OrderUID' => $orderUID));
+	function GettOrdersby_UID($orderUID) {
+		$query = $this->db->get_where('tOrders', array('OrderUID' => $orderUID));
 		return $query->result();
 	}
 
-	function Gettorders($orderUID) {
-		$query = $this->db->get_where('torders', array('OrderUID' => $orderUID));
+	function GettOrders($orderUID) {
+		$query = $this->db->get_where('tOrders', array('OrderUID' => $orderUID));
 		return $query->row();
 	}
 
@@ -1158,13 +1156,13 @@ class Common_model extends CI_Model {
 
 	function customer_exists($CustomerName)
 	{
-		$query = $this->db->get_where('mcustomers', array('CustomerName' => $CustomerName));
+		$query = $this->db->get_where('mCustomers', array('CustomerName' => $CustomerName));
 		return $query->num_rows();
 	}
 
 	function state_exist($StateName)
 	{
-		$query = $this->db->get_where('mstates', array('StateName' => $StateName));
+		$query = $this->db->get_where('mStates', array('StateName' => $StateName));
 		return $query->num_rows();
 	}
 
@@ -1174,8 +1172,8 @@ class Common_model extends CI_Model {
 		if($OrderUID){
 
 			$query = $this->db->query("SELECT
-				CONCAT(`torders`.`PropertyAddress1` ,`torders`.`PropertyAddress2`,`torders`.`PropertyStateCode`,`torders`.`PropertyCountyName`,`torders`.`PropertyCityName` ,`torders`.`PropertyZipcode` ) Address
-				FROM   `torders`
+				CONCAT(`tOrders`.`PropertyAddress1` ,`tOrders`.`PropertyAddress2`,`tOrders`.`PropertyStateCode`,`tOrders`.`PropertyCountyName`,`tOrders`.`PropertyCityName` ,`tOrders`.`PropertyZipcode` ) Address
+				FROM   `tOrders`
 				WHERE OrderUID =$OrderUID;");
 			return $query->row();
 		}
@@ -1186,8 +1184,8 @@ class Common_model extends CI_Model {
 		if($OrderUID){
 
 			$query = $this->db->query("SELECT
-				CONCAT_WS(',',`torders`.`PropertyAddress1` ,`torders`.`PropertyAddress2`,`torders`.`PropertyStateCode`,`torders`.`PropertyCountyName`,`torders`.`PropertyCityName` ,`torders`.`PropertyZipcode` ) Address
-				FROM   `torders`
+				CONCAT_WS(',',`tOrders`.`PropertyAddress1` ,`tOrders`.`PropertyAddress2`,`tOrders`.`PropertyStateCode`,`tOrders`.`PropertyCountyName`,`tOrders`.`PropertyCityName` ,`tOrders`.`PropertyZipcode` ) Address
+				FROM   `tOrders`
 				WHERE OrderUID =$OrderUID;");
 			return $query->row();
 		}
@@ -1196,18 +1194,18 @@ class Common_model extends CI_Model {
 
 	function GetMenuBarDetails($CustomerUID,$SubProductUID,$OrderUID)
 	{
-		$query = $this->db->query("SELECT DISTINCT * FROM mmenu
+		$query = $this->db->query("SELECT DISTINCT * FROM mMenu
 			INNER JOIN (
 			SELECT * FROM mcustomerworkflowmodules
 			UNION ALL
-			SELECT torders.CustomerUID, torderoptionalworkflows.WorkflowModuleUID, 1, torders.SubProductUID	FROM torders
-			INNER JOIN torderoptionalworkflows ON torderoptionalworkflows.OrderUID = torders.OrderUID
-			AND torderoptionalworkflows.SubproductUID = torders.SubProductUID
-			WHERE	torders.OrderUID = '".$OrderUID."'
+			SELECT tOrders.CustomerUID, torderoptionalworkflows.WorkflowModuleUID, 1, tOrders.SubProductUID	FROM tOrders
+			INNER JOIN torderoptionalworkflows ON torderoptionalworkflows.OrderUID = tOrders.OrderUID
+			AND torderoptionalworkflows.SubproductUID = tOrders.SubProductUID
+			WHERE	tOrders.OrderUID = '".$OrderUID."'
 			) as customerworkflows
-			ON customerworkflows.WorkflowModuleUID = mmenu.WorkflowModuleUID
+			ON customerworkflows.WorkflowModuleUID = mMenu.WorkflowModuleUID
 			WHERE
-			/*mmenu.WorkflowModuleUID IN (1, 2, 3,)
+			/*mMenu.WorkflowModuleUID IN (1, 2, 3,)
 									AND*/ 
 			customerworkflows.CustomerUID = '".$CustomerUID."'
 			AND customerworkflows.SubProductUID = '".$SubProductUID."'
@@ -1221,14 +1219,14 @@ class Common_model extends CI_Model {
 		}
 		  else{
 	          $this->db->select('*');
-	          $this->db->from('torders');
+	          $this->db->from('tOrders');
 	          $this->db->where('OrderUID',$OrderUID);
 	          $this->db->where('IsTaxcert','1');
 	          $data=$this->db->get()->row();
          
           if($data){
 	          $this->db->select('*');
-	          $this->db->from('mmenu');
+	          $this->db->from('mMenu');
 	          $this->db->where('WorkflowModuleUID','3');
 	          $taxdata=$this->db->get()->result();
 	          $final=array_merge($result,$taxdata);       
@@ -1263,7 +1261,7 @@ class Common_model extends CI_Model {
 									WHERE mcustomeroptionalworkflowmodules.WorkflowModuleUID NOT IN (
 											SELECT WorkflowModuleUID
 											FROM torderoptionalworkflows
-											INNER JOIN torders ON torders.OrderUID=torderoptionalworkflows.OrderUID
+											INNER JOIN tOrders ON tOrders.OrderUID=torderoptionalworkflows.OrderUID
 											WHERE torderoptionalworkflows.OrderUID = ".$OrderUID." AND torderoptionalworkflows.SubProductUID = ".$SubProductUID.") AND mcustomeroptionalworkflowmodules.CustomerUID=".$CustomerUID." AND mcustomeroptionalworkflowmodules.SubProductUID=".$SubProductUID."
 										ORDER BY mcustomeroptionalworkflowmodules.WorkflowModuleUID")->result();
 	}
@@ -1272,7 +1270,7 @@ class Common_model extends CI_Model {
 	{
 		/*$query = $this->db->query("SELECT * FROM torderassignment
 		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		LEFT JOIN `mmenu` ON mmenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
+		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
 		WHERE torderassignment.WorkflowModuleUID
 		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID'
 		ORDER BY `MenuPosition`;");
@@ -1280,9 +1278,9 @@ class Common_model extends CI_Model {
 		return $query->result();*/
 
 
-		$query = $this->db->query("SELECT * FROM mmenu
-			INNER JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = mmenu.WorkflowModuleUID
-			WHERE mmenu.WorkflowModuleUID
+		$query = $this->db->query("SELECT * FROM mMenu
+			INNER JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = mMenu.WorkflowModuleUID
+			WHERE mMenu.WorkflowModuleUID
 			IN (1,2,3)
 			ORDER BY `MenuPosition`;");
 		return $query->result();
@@ -1293,7 +1291,7 @@ class Common_model extends CI_Model {
 	{
 		/*$query = $this->db->query("SELECT * FROM torderassignment
 		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		LEFT JOIN `mmenu` ON mmenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
+		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
 		WHERE torderassignment.WorkflowModuleUID
 		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID' AND torderassignment.AssignedToUserUID = '$UserUID'
 		ORDER BY `MenuPosition`;");
@@ -1301,7 +1299,7 @@ class Common_model extends CI_Model {
 
 		/* $query = $this->db->query("SELECT * FROM torderassignment
 		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		LEFT JOIN `mmenu` ON mmenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
+		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
 		WHERE torderassignment.WorkflowModuleUID
 		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID'
 		ORDER BY `MenuPosition`;");
@@ -1309,9 +1307,9 @@ class Common_model extends CI_Model {
 		return $query->result();*/
 
 
-		$query = $this->db->query("SELECT * FROM mmenu
-			INNER JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = mmenu.WorkflowModuleUID
-			WHERE mmenu.WorkflowModuleUID
+		$query = $this->db->query("SELECT * FROM mMenu
+			INNER JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = mMenu.WorkflowModuleUID
+			WHERE mMenu.WorkflowModuleUID
 			IN (1,2,3)
 			ORDER BY `MenuPosition`;");
 		return $query->result();
@@ -1347,7 +1345,7 @@ class Common_model extends CI_Model {
 	function GetOrderByID($OrderUID)
 	{
 
-		$query = $this->db->query("SELECT EXISTS(SELECT OrderUID FROM torders WHERE OrderUID = '$OrderUID') as OrderUID;
+		$query = $this->db->query("SELECT EXISTS(SELECT OrderUID FROM tOrders WHERE OrderUID = '$OrderUID') as OrderUID;
 			");
 
 		return $query->row();
@@ -1357,7 +1355,7 @@ class Common_model extends CI_Model {
 	function GetOrderByOrderNumber($OrderNumber)
 	{
 
-		$query = $this->db->query("SELECT OrderUID FROM torders WHERE OrderNumber = '$OrderNumber'");
+		$query = $this->db->query("SELECT OrderUID FROM tOrders WHERE OrderNumber = '$OrderNumber'");
 
 		return $query->row();
 	}
@@ -1413,9 +1411,9 @@ class Common_model extends CI_Model {
 		if(is_array($StateUID))
 		{
 		  $this->db->where_in('StateUID', $StateUID);
-		  return $this->db->get('mcounties')->result();	
+		  return $this->db->get('mCounties')->result();	
 		} else {
-	  	  $query = $this->db->get_where('mcounties', array('StateUID' => $StateUID));
+	  	  $query = $this->db->get_where('mCounties', array('StateUID' => $StateUID));
 	  	  return $query->result();
 		}
 	}
@@ -1423,7 +1421,7 @@ class Common_model extends CI_Model {
 
 	function GetCityByStateUID($StateUID) {
 
-		$query = $this->db->get_where('mcities', array('StateUID' => $StateUID));
+		$query = $this->db->get_where('mCities', array('StateUID' => $StateUID));
 
 		return $query->result();
 
@@ -1431,7 +1429,7 @@ class Common_model extends CI_Model {
 
 	function GetCityByStateCountyUID($StateUID,$CountyUID) {
 
-		$query = $this->db->get_where('mcities', array('StateUID' => $StateUID,'CountyUID' => $CountyUID));
+		$query = $this->db->get_where('mCities', array('StateUID' => $StateUID,'CountyUID' => $CountyUID));
 
 		return $query->result();
 
@@ -1452,7 +1450,7 @@ class Common_model extends CI_Model {
 		} else {
 		  $this->db->where('CountyUID',$county);	
 		}
-		return $this->db->get('mcities')->result();
+		return $this->db->get('mCities')->result();
 	}
 
 
@@ -1468,7 +1466,7 @@ class Common_model extends CI_Model {
 		if (!empty($CountyUID)) {
 			$filter['CountyUID'] = $CountyUID;
 		}
-		$query = $this->db->get_where('mcities', $filter);
+		$query = $this->db->get_where('mCities', $filter);
 
 
 		return $query->result();
@@ -1482,9 +1480,9 @@ class Common_model extends CI_Model {
 		if(is_array($StateUID))
 		{
 		  $this->db->where_in('StateUID', $StateUID);	
-		  return $this->db->get('mcities')->result();	
+		  return $this->db->get('mCities')->result();	
 		} else {
-		  $query = $this->db->get_where('mcities', array('StateUID' => $StateUID));
+		  $query = $this->db->get_where('mCities', array('StateUID' => $StateUID));
 		  return $query->result();
 		}
 
@@ -1590,10 +1588,10 @@ class Common_model extends CI_Model {
 	}
 
 
-	function GetassignmentTATOrders($TATtiming,$PriorityUID,$OrderUID)
+	function GetassignmentTAtOrders($TATtiming,$PriorityUID,$OrderUID)
 
 	{
-		$sql = "select TIME_FORMAT(TIMEDIFF(NOW(),OrderEntryDatetime),'%H')>$TATtiming AND StatusUID<>100 AS TATUID from torders WHERE PriorityUID = $PriorityUID AND OrderUID = $OrderUID";
+		$sql = "select TIME_FORMAT(TIMEDIFF(NOW(),OrderEntryDatetime),'%H')>$TATtiming AND StatusUID<>100 AS TATUID from tOrders WHERE PriorityUID = $PriorityUID AND OrderUID = $OrderUID";
 
 		return $this->db->query($sql)->row();
 	}
@@ -1616,7 +1614,7 @@ class Common_model extends CI_Model {
 
 	function get_prioritytime($PriorityUID){
 		$this->db->select ( '*' );
-		$this->db->from ( 'morderpriority' );
+		$this->db->from ( 'mOrderPriority' );
 		$this->db->where ('PriorityUID',$PriorityUID);
 		$query = $this->db->get();
 		return  $query->row();
@@ -1733,7 +1731,7 @@ class Common_model extends CI_Model {
 			$OrderUID = $this->uri->segment(3);
 		}
 		if(!empty($OrderUID)) {
-			$query = $this->db->query("SELECT StatusUID FROM torders WHERE OrderUID = '$OrderUID' and StatusUID = '110' ");
+			$query = $this->db->query("SELECT StatusUID FROM tOrders WHERE OrderUID = '$OrderUID' and StatusUID = '110' ");
 			if($query->num_rows() > 0)
 			{
 				return '1';
@@ -1756,7 +1754,7 @@ class Common_model extends CI_Model {
 		}
 
 		if(!empty($OrderUID)) {
-			$query = $this->db->query("SELECT StatusUID FROM torders WHERE OrderUID = '$OrderUID' and StatusUID = '100' ");
+			$query = $this->db->query("SELECT StatusUID FROM tOrders WHERE OrderUID = '$OrderUID' and StatusUID = '100' ");
 			if($query->num_rows() > 0)
 			{
 				return '1';
@@ -1780,7 +1778,7 @@ class Common_model extends CI_Model {
 			}
 		}
 
-		$query = $this->db->query("SELECT StatusUID FROM torders WHERE OrderUID = '$OrderUID' and StatusUID >= '100' ");
+		$query = $this->db->query("SELECT StatusUID FROM tOrders WHERE OrderUID = '$OrderUID' and StatusUID >= '100' ");
 		if($query->num_rows() > 0)
 		{
 			return '1';
@@ -1802,7 +1800,7 @@ class Common_model extends CI_Model {
 
 	function get_morder_priority($PriorityUID){
 		$this->db->select ( '*' );
-		$this->db->from ( 'morderpriority' );
+		$this->db->from ( 'mOrderPriority' );
 		$this->db->where ('PriorityUID',$PriorityUID);
 		$query = $this->db->get();
 		return  $query->row();
@@ -1826,13 +1824,13 @@ class Common_model extends CI_Model {
 	function Get_TaxAuthority_by_StateCounty($PropertyStateCode,$PropertyCountyName)
 	{
 
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $PropertyStateCode))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $PropertyStateCode))->row();
 
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$PropertyCountyName))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$PropertyCountyName))->row();
 
-		if(!empty($mcounties) && !empty($mstates))
+		if(!empty($mCounties) && !empty($mStates))
 		{
-			$this->db->where(array("Active"=>1,"StateUID"=>$mstates->StateUID,"CountyUID"=>$mcounties->CountyUID));
+			$this->db->where(array("Active"=>1,"StateUID"=>$mStates->StateUID,"CountyUID"=>$mCounties->CountyUID));
 			$this->db->or_where('IsDefault', 1);
 			$query = $this->db->get('mtaxauthority');
 			return $query->result();
@@ -2031,8 +2029,8 @@ class Common_model extends CI_Model {
 		return $OrderUID;
 	}
 
-	function GetOrderStatusBy_OrderUID($OrderUID){
-		$query = $this->db->query("SELECT b.StatusName FROM torders a, morderstatus b WHERE a.StatusUID = b.StatusUID and
+	function GetOrderstatusBy_OrderUID($OrderUID){
+		$query = $this->db->query("SELECT b.StatusName FROM tOrders a, mOrderStatus b WHERE a.StatusUID = b.StatusUID and
 			a.OrderUID ='".$OrderUID."' ");
 		$result =  $query->result();
 		$Status = '';
@@ -2045,8 +2043,8 @@ class Common_model extends CI_Model {
 	function GetCustomerContactName($UserUID)
 	{
 		$this->db->select('*');
-		$this->db->from ( 'mcustomers' );
-		$this->db->join ( 'musers', 'musers.CustomerUID = mcustomers.CustomerUID' , 'left' );
+		$this->db->from ( 'mCustomers' );
+		$this->db->join ( 'musers', 'musers.CustomerUID = mCustomers.CustomerUID' , 'left' );
 		$this->db->where('musers.UserUID',$UserUID);
 		$query = $this->db->get();
 		$value = $query->row();
@@ -2054,8 +2052,8 @@ class Common_model extends CI_Model {
 		{
 
 			$this->db->select('CustomerPContactName');
-			$this->db->from ( 'mcustomers' );
-			$this->db->join ( 'musers', 'musers.CustomerUID = mcustomers.CustomerUID' , 'left' );
+			$this->db->from ( 'mCustomers' );
+			$this->db->join ( 'musers', 'musers.CustomerUID = mCustomers.CustomerUID' , 'left' );
 			$this->db->where('musers.UserUID',$UserUID);
 			$query = $this->db->get();
 			$value = $query->row();
@@ -2072,8 +2070,8 @@ class Common_model extends CI_Model {
 //SideBar Functions
 	function GetDocumentFileName($OrderUID)
 	{
-		$this->db->select('torderdocuments.*, torders.OrderDocsPath, torders.OrderNumber, mdocumenttypes.*, musers.UserName,torderdocuments.UploadedDate')->from('torderdocuments');
-		$this->db->join('torders', 'torders.OrderUID=torderdocuments.OrderUID', 'left');
+		$this->db->select('torderdocuments.*, tOrders.OrderDocsPath, tOrders.OrderNumber, mdocumenttypes.*, musers.UserName,torderdocuments.UploadedDate')->from('torderdocuments');
+		$this->db->join('tOrders', 'tOrders.OrderUID=torderdocuments.OrderUID', 'left');
 		$this->db->join('mdocumenttypes', 'mdocumenttypes.DocumentTypeUID=torderdocuments.DocumentTypeUID', 'left');
 		$this->db->join('musers', 'musers.UserUID=torderdocuments.UploadedUserUID', 'left');
     $this->db->where('torderdocuments.TypeOfDocument <>','Screenshot');
@@ -2148,11 +2146,11 @@ class Common_model extends CI_Model {
 
 	}
 
-	function Gettorderpropertyroles($OrderUID)
+	function GettOrderPropertyRoles($OrderUID)
 	{
-		$this->db->select('torderpropertyroles.*,  mpropertyroles.*')->from('torderpropertyroles');
-		$this->db->join('mpropertyroles','mpropertyroles.PropertyRoleUID=torderpropertyroles.PropertyRoleUID', 'left');
-		$this->db->where('torderpropertyroles.OrderUID',$OrderUID);
+		$this->db->select('tOrderPropertyRoles.*,  mpropertyroles.*')->from('tOrderPropertyRoles');
+		$this->db->join('mpropertyroles','mpropertyroles.PropertyRoleUID=tOrderPropertyRoles.PropertyRoleUID', 'left');
+		$this->db->where('tOrderPropertyRoles.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->result();
 
@@ -2160,9 +2158,9 @@ class Common_model extends CI_Model {
 
 	function GetCustomerInformationByOrderUID($OrderUID)
 	{
-		$this->db->select('mcustomers.*')->from('torders');
-		$this->db->join('mcustomers', 'mcustomers.CustomerUID=torders.CustomerUID');
-		$this->db->where('torders.OrderUID',$OrderUID);
+		$this->db->select('mCustomers.*')->from('tOrders');
+		$this->db->join('mCustomers', 'mCustomers.CustomerUID=tOrders.CustomerUID');
+		$this->db->where('tOrders.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->row();
 
@@ -2170,11 +2168,11 @@ class Common_model extends CI_Model {
 
 
 	function GetOrderDetailsbyUID($orderUID) {
-		$this->db->select('torders.*, torders.PropertyCityName as CityName, torders.PropertyCountyName as CountyName, torders.PropertyStateCode as StateName, torders.PropertyStateCode as StateCode, mordertypes.OrderTypeName, msubproducts.SubProductName,mproducts.ProductUID,mproducts.IsRMSProduct,msubproducts.RMS')->from('torders');
-		$this->db->join('mordertypes','mordertypes.OrderTypeUID=torders.OrderTypeUID', 'left');
-		$this->db->join('msubproducts','msubproducts.SubProductUID=torders.SubProductUID', 'left');
-		$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-		$this->db->where('torders.OrderUID',$orderUID);
+		$this->db->select('tOrders.*, tOrders.PropertyCityName as CityName, tOrders.PropertyCountyName as CountyName, tOrders.PropertyStateCode as StateName, tOrders.PropertyStateCode as StateCode, mOrderTypes.OrderTypeName, mSubProducts.SubProductName,mProducts.ProductUID,mProducts.IsRMSProduct,mSubProducts.RMS')->from('tOrders');
+		$this->db->join('mOrderTypes','mOrderTypes.OrderTypeUID=tOrders.OrderTypeUID', 'left');
+		$this->db->join('mSubProducts','mSubProducts.SubProductUID=tOrders.SubProductUID', 'left');
+		$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+		$this->db->where('tOrders.OrderUID',$orderUID);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -2195,7 +2193,7 @@ class Common_model extends CI_Model {
 	}
 
 	function Get_borrowers_by_OrderUID($OrderUID){
-		$query = $this->db->query("SELECT GROUP_CONCAT(PRName) AS BorrowerNames FROM torderpropertyroles WHERE PropertyRoleUID = 5 and
+		$query = $this->db->query("SELECT GROUP_CONCAT(PRName) AS BorrowerNames FROM tOrderPropertyRoles WHERE PropertyRoleUID = 5 and
 			OrderUID = '".$OrderUID."' ");
 		$result = $query->row();
 		return $result;
@@ -2270,13 +2268,13 @@ class Common_model extends CI_Model {
 
 	function get_defaultsubproduct($CustomerUID){
 
-		$query = $this->db->query("SELECT * FROM `mcustomers` join mcustomerdefaultproduct on mcustomerdefaultproduct.CustomerUID = mcustomers.CustomerUID where `DefaultProductSubCode` = 1 and mcustomers.CustomerUID = $CustomerUID");
+		$query = $this->db->query("SELECT * FROM `mCustomers` join mcustomerdefaultproduct on mcustomerdefaultproduct.CustomerUID = mCustomers.CustomerUID where `DefaultProductSubCode` = 1 and mCustomers.CustomerUID = $CustomerUID");
 		return $query->row();
 	}
 
 	function get_defaultsvendor($VendorUID){
 
-		$query = $this->db->query("SELECT * FROM `mvendors` join mvendorsproducts on mvendorsproducts.VendorUID = mvendors.VendorUID LEFT JOIN msubproducts ON mvendorsproducts.SubProductUID = msubproducts.SubProductUID where `mvendors.Active` = 1 and mvendors.VendorUID = $VendorUID");
+		$query = $this->db->query("SELECT * FROM `mvendors` join mvendorsproducts on mvendorsproducts.VendorUID = mvendors.VendorUID LEFT JOIN mSubProducts ON mvendorsproducts.SubProductUID = mSubProducts.SubProductUID where `mvendors.Active` = 1 and mvendors.VendorUID = $VendorUID");
 		return $query->row();
 	}
 
@@ -2285,22 +2283,22 @@ class Common_model extends CI_Model {
 
 		$this->db->select('*,musers.CustomerUID')->from('musers');
 		$this->db->where('UserUID',$loggedid);
-		$this->db->join('mcustomers','musers.CustomerUID = mcustomers.CustomerUID','LEFT');
+		$this->db->join('mCustomers','musers.CustomerUID = mCustomers.CustomerUID','LEFT');
 		return $this->db->get()->row();
 	}
 
 
 	function getsubproductbyUID($SubProductUID){
-		$this->db->select('*')->from('msubproducts');
+		$this->db->select('*')->from('mSubProducts');
 		$this->db->where('SubProductUID',$SubProductUID);
 		return $this->db->get()->row();
 	}
 
 
 	function get_defaulttemplate_bycustomerUID($CustomerUID){
-		$this->db->select('*')->from('mcustomers');
+		$this->db->select('*')->from('mCustomers');
 		$this->db->where('CustomerUID',$CustomerUID);
-		$this->db->join('mtemplates','mtemplates.TemplateUID = mcustomers.DefaultTemplateUID','left');
+		$this->db->join('mTemplates','mTemplates.TemplateUID = mCustomers.DefaultTemplateUID','left');
 		return $this->db->get()->row();
 	}
 
@@ -2329,8 +2327,8 @@ class Common_model extends CI_Model {
 	function GetProductSubProduct()
 	{
 		$this->db->select("*");
-		$this->db->from('mproducts');
-		$this->db->join('msubproducts','msubproducts.ProductUID=mproducts.ProductUID');
+		$this->db->from('mProducts');
+		$this->db->join('mSubProducts','mSubProducts.ProductUID=mProducts.ProductUID');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -2361,7 +2359,7 @@ class Common_model extends CI_Model {
 	{
 		$this->db->select("OrderTypeName");
 		$this->db->where(array("Active"=>1,"OrderTypeUID"=>$OrderTypeUID));
-		$query = $this->db->get('mordertypes');
+		$query = $this->db->get('mOrderTypes');
 		$res = $query->row();
 		return $res->OrderTypeName;
 	}
@@ -2511,22 +2509,22 @@ class Common_model extends CI_Model {
 		$status[2] = $this->config->item('keywords')['Exception Raised'];
 
 		$this->db->select ( 'COUNT(*)' );
-		$this->db->select('DATE_FORMAT(torders.OrderDueDateTime, "%m-%d-%Y %H:%i:%s") as OrderDueDateTime', FALSE);
+		$this->db->select('DATE_FORMAT(tOrders.OrderDueDateTime, "%m-%d-%Y %H:%i:%s") as OrderDueDateTime', FALSE);
 		$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torders.OrderUID','left');
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = tOrders.OrderUID','left');
 		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID','left');
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID','left');
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID','left');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID','left');
 
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID','left');
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID','left');
 
-		$this->db->where_not_in('torders.StatusUID', $status);
-		$this->db->where('torders.CustomerUID',$CustomerUID);
+		$this->db->where_not_in('tOrders.StatusUID', $status);
+		$this->db->where('tOrders.CustomerUID',$CustomerUID);
 
-		$this->db->group_by('torders.OrderUID');
-		$this->db->order_by('torders.OrderUID,OrderNumber', 'DESC');
+		$this->db->group_by('tOrders.OrderUID');
+		$this->db->order_by('tOrders.OrderUID,OrderNumber', 'DESC');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -2545,14 +2543,14 @@ class Common_model extends CI_Model {
 		{
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`, `mstates`.`StateCode`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID` JOIN `mstates` ON `torders`.`PropertyStateUID` = `mstates`.`StateUID` JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 GROUP BY `OrderUID` ORDER BY FIELD(torders.PriorityUID,1,3,2),OrderEntryDatetime DESC,torders.OrderUID ASC ";
+			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, `mStates`.`StateCode`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`tOrders`) LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID` JOIN `mStates` ON `tOrders`.`PropertyStateUID` = `mStates`.`StateUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 		}
 		else
 		{
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 			','.$this->config->item('keywords')['Cancelled'];
 
-			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`, `mstates`.`StateCode`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID` JOIN `mstates` ON `torders`.`PropertyStateUID` = `mstates`.`StateUID` JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.")  GROUP BY `OrderUID` ORDER BY FIELD(torders.PriorityUID,1,3,2),OrderEntryDatetime DESC,torders.OrderUID ASC ";
+			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, `mStates`.`StateCode`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`tOrders`)  LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID` JOIN `mStates` ON `tOrders`.`PropertyStateUID` = `mStates`.`StateUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.")  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 		}
 
 		$query = $this->db->query($sql);
@@ -2630,14 +2628,14 @@ class Common_model extends CI_Model {
 				$where= '';
 				if ($this->session->userdata('RoleType') == 6){
 					$UserProducts = $this->common_model->_get_product_bylogin();
-					if($UserProducts): $where .= ' AND `mproducts`.`ProductUID` IN ('.$UserProducts.')'; else:  $where .= ' AND `mproducts`.`ProductUID` IN (NULL)'; endif;
+					if($UserProducts): $where .= ' AND `mProducts`.`ProductUID` IN ('.$UserProducts.')'; else:  $where .= ' AND `mProducts`.`ProductUID` IN (NULL)'; endif;
 				}
 
 				if($this->common_model->GetMyOrdersQueue() == 1)
 				{
 					$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `torders`.`OrderEntryDatetime` as OrderEntryDatetime, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 $where GROUP BY `OrderUID` ORDER BY FIELD(torders.PriorityUID,1,3,2),OrderEntryDatetime DESC,torders.OrderUID ASC";
+					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`) LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 $where GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC";
 				}
 				else
 				{
@@ -2664,14 +2662,14 @@ class Common_model extends CI_Model {
 								$subproductuids = rtrim($subproductuids,  ', ');
 
 
-								$where .= " AND (torders.SubProductUID IN (".$subproductuids.") OR `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4) ";
+								$where .= " AND (tOrders.SubProductUID IN (".$subproductuids.") OR `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4) ";
 					// echo $where; exit;
 							}*/
 							/*End*/
 						}
 					}
 
-					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `torders`.`OrderEntryDatetime` as OrderEntryDatetime, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") $where GROUP BY `OrderUID` ORDER BY FIELD(torders.PriorityUID,1,3,2),OrderEntryDatetime DESC,torders.OrderUID ASC";
+					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`)  LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $where GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC";
 
 				}
 
@@ -2778,14 +2776,14 @@ class Common_model extends CI_Model {
 
 				$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND torders.OrderUID IN (select OrderUID from torderassignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  GROUP BY `OrderUID` ORDER BY FIELD(torders.PriorityUID,1,3,2),OrderEntryDatetime DESC,torders.OrderUID ASC ";
+				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`) LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from torderassignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 			}
 			else{
 
 				$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 				','.$this->config->item('keywords')['Cancelled'];
 
-				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") AND torderassignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND torders.OrderUID IN (select OrderUID from torderassignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)    GROUP BY `OrderUID`  ORDER BY FIELD(torders.PriorityUID,1,3,2),OrderEntryDatetime DESC,torders.OrderUID ASC ";
+				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`)  LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND torderassignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from torderassignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)    GROUP BY `OrderUID`  ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 
 			}
 
@@ -2926,17 +2924,17 @@ class Common_model extends CI_Model {
 			$grp_id = $this->get_customer_group_id($user_in_groups);
 			$this->db->distinct();
 			$this->db->select ( 'CustomerName,CustomerUID' );
-			$this->db->from ( 'mgroupcustomers' );
-			$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = mgroupcustomers.GroupCustomerUID' , 'left' );
+			$this->db->from ( 'mGroupCustomers' );
+			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = mGroupCustomers.GroupCustomerUID' , 'left' );
 			if($grp_id != null){
-				$this->db->where_in ('mgroupcustomers.GroupUID',$grp_id);
+				$this->db->where_in ('mGroupCustomers.GroupUID',$grp_id);
 			}
 			/*FOR SUPERVISOR CHECK*/
 			if ($this->session->userdata('RoleType') == 6){
 				$UserGroupUID = $this->common_model->_get_groups_bylogin();
-				if($UserGroupUID): $this->db->where('mgroupcustomers.GroupUID IN ('.$UserGroupUID.')', null, false); else: $this->db->where('mgroupcustomers.GroupUID IN (0)', null, false); endif;
+				if($UserGroupUID): $this->db->where('mGroupCustomers.GroupUID IN ('.$UserGroupUID.')', null, false); else: $this->db->where('mGroupCustomers.GroupUID IN (0)', null, false); endif;
 			}
-			$this->db->group_by('mgroupcustomers.GroupCustomerUID');
+			$this->db->group_by('mGroupCustomers.GroupCustomerUID');
 			$query = $this->db->get();
 			return $query->result();
 
@@ -2946,14 +2944,14 @@ class Common_model extends CI_Model {
 		function get_customer_group_id($user_in_groups)
 		{
 			$this->db->select ( 'GroupUID' );
-			$this->db->from ( 'mgroupcustomers' );
+			$this->db->from ( 'mGroupCustomers' );
 			if($user_in_groups != null){
-				$this->db->where_in ('mgroupcustomers.GroupUID',$user_in_groups);
+				$this->db->where_in ('mGroupCustomers.GroupUID',$user_in_groups);
 			}
 			/*FOR SUPERVISOR CHECK*/
 			if ($this->session->userdata('RoleType') == 6){
 				$UserGroupUID = $this->common_model->_get_groups_bylogin();
-				if($UserGroupUID): $this->db->where('mgroupcustomers.GroupUID IN ('.$UserGroupUID.')', null, false); else: $this->db->where('mgroupcustomers.GroupUID IN (0)', null, false); endif;
+				if($UserGroupUID): $this->db->where('mGroupCustomers.GroupUID IN ('.$UserGroupUID.')', null, false); else: $this->db->where('mGroupCustomers.GroupUID IN (0)', null, false); endif;
 			}
 			$query = $this->db->get();
 			$groupids =  $query->result_array();
@@ -2970,7 +2968,7 @@ class Common_model extends CI_Model {
 
 		function get_customer_subproduct($CustomerUIDs){
 			if($CustomerUIDs != ''){
-				$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID) AS SubProductUIDs FROM `mcustomerproducts` WHERE CustomerUID IN ($CustomerUIDs)");
+				$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID) AS SubProductUIDs FROM `mCustomerProducts` WHERE CustomerUID IN ($CustomerUIDs)");
 				return $query->row();
 			}
 			return array();
@@ -3003,21 +3001,21 @@ class Common_model extends CI_Model {
 
 
 			$this->db->select ("COUNT(*)");
-			$this->db->from ( 'torders' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID');
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID','left');
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID','left');
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID');
+			$this->db->from ( 'tOrders' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID');
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID','left');
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID','left');
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID');
 			if ($is_permission->ReviewQueue == 2){
 
-				$this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID','left');
+				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID','left');
 
 			}else{
 
-				$this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID','left');
+				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID','left');
 				$this->db->where('torderassignment.WorkflowModuleUID',4);
 				/*if($cus_id){
-					$this->db->where_in ('torders.CustomerUID',$cus_id);
+					$this->db->where_in ('tOrders.CustomerUID',$cus_id);
 				}*/
 				$this->db->where("torderassignment.AssignedToUserUID = $loggedid");
 			}
@@ -3025,18 +3023,18 @@ class Common_model extends CI_Model {
 			/*FOR SUPERVISOR CHECK*/
 			if ($this->session->userdata('RoleType') == 6){
 				$UserSubProducts = $this->common_model->_get_Subproducts_bylogin($loggedid);
-				if($UserSubProducts): $this->db->where('torders.SubProductUID IN ('.$UserSubProducts.')', null, false); else: $this->db->where('torders.SubProductUID IN (0)', null, false); endif;
+				if($UserSubProducts): $this->db->where('tOrders.SubProductUID IN ('.$UserSubProducts.')', null, false); else: $this->db->where('tOrders.SubProductUID IN (0)', null, false); endif;
 			}
 
 
 			if (!in_array($this->RoleType, [1,2,3,4,5,6])) {			
 				if(!empty($cus_id)){
-					$this->db->where_in ('torders.CustomerUID',$cus_id);
+					$this->db->where_in ('tOrders.CustomerUID',$cus_id);
 				}
 			}
 
-			$this->db->where_in ('torders.StatusUID',$status);
-			$this->db->group_by('torders.OrderUID');
+			$this->db->where_in ('tOrders.StatusUID',$status);
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			return $query->num_rows();
 
@@ -3048,15 +3046,15 @@ class Common_model extends CI_Model {
 			$loggedid = $this->session->userdata('UserUID');
 			if($this->common_model->GetCancellationQueue() == 2)
 			{
-				$query = $this->db->query("SELECT COUNT(*) AS CancelOrdersCount FROM tordercancel LEFT JOIN torders ON tordercancel.OrderUID = torders.OrderUID  LEFT JOIN morderpriority ON morderpriority.PriorityUID = torders.PriorityUID  WHERE tordercancel.CancelStatus != 0  ");
+				$query = $this->db->query("SELECT COUNT(*) AS CancelOrdersCount FROM tordercancel LEFT JOIN tOrders ON tordercancel.OrderUID = tOrders.OrderUID  LEFT JOIN mOrderPriority ON mOrderPriority.PriorityUID = tOrders.PriorityUID  WHERE tordercancel.CancelStatus != 0  ");
 			}
 			else if($this->common_model->GetCancellationQueue() == 1)
 			{
 
 				$query = $this->db->query("SELECT COUNT(DISTINCT(OrderNumber)) AS CancelOrdersCount,tordercancel.OrderUID,tordercancel.Remarks,tordercancel.CancelStatus,PriorityName FROM tordercancel
-					LEFT JOIN torders ON tordercancel.OrderUID = torders.OrderUID
+					LEFT JOIN tOrders ON tordercancel.OrderUID = tOrders.OrderUID
 					LEFT JOIN torderassignment ON torderassignment.OrderUID = tordercancel.OrderUID
-					LEFT JOIN morderpriority ON morderpriority.PriorityUID = torders.PriorityUID
+					LEFT JOIN mOrderPriority ON mOrderPriority.PriorityUID = tOrders.PriorityUID
 					WHERE
 					tordercancel.CancelStatus != 0
 					AND torderassignment.AssignedToUserUID = '$loggedid'");
@@ -3076,14 +3074,14 @@ class Common_model extends CI_Model {
 			$status[1] = $this->config->item('keywords')['Order Completed'];
 		//$status = $this->config->item('keywords')['Order Completed'];
 			$this->db->select('count(DISTINCT(OrderNumber)) AS CompletedOrdersCount');
-			$this->db->select ( 'CustomerName,OrderNumber,torders.PropertyStateCode as StateName,StatusName,StatusColor,torders.OrderUID,torders.PriorityUID,PriorityName' );
-			$this->db->select('DATE_FORMAT(torders.OrderEntryDatetime, "%m-%d-%Y") as AssignedDatetime', FALSE);
-			$this->db->from ( 'torders');
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID' , 'left' );
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
-			$this->db->join ('torderassignment','torderassignment.OrderUID = torders.OrderUID','left');
-			$this->db->where_in('torders.StatusUID',$status);
+			$this->db->select ( 'CustomerName,OrderNumber,tOrders.PropertyStateCode as StateName,StatusName,StatusColor,tOrders.OrderUID,tOrders.PriorityUID,PriorityName' );
+			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y") as AssignedDatetime', FALSE);
+			$this->db->from ( 'tOrders');
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID' , 'left' );
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
+			$this->db->join ('torderassignment','torderassignment.OrderUID = tOrders.OrderUID','left');
+			$this->db->where_in('tOrders.StatusUID',$status);
 			if($this->common_model->GetCompletedQueue() == 1)
 			{
 				$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
@@ -3105,11 +3103,11 @@ class Common_model extends CI_Model {
 			$status[0] = $this->config->item('keywords')['Order Assigned'];
 			$status[1] = $this->config->item('keywords')['Order Work In Progress'];
 			$this->db->select('count(DISTINCT(OrderNumber)) AS OnHoldOrdersCount');
-			$this->db->select ( 'torders.OrderUID,OrderNumber,torders.CustomerUID,CustomerName,OrderTypeName,PriorityName,torders.SubProductUID,msubproducts.SubProductName,mproducts.ProductUID,mproducts.ProductName,mproducts.ProductCode,msubproducts.SubProductCode,
-				torders.PropertyStateCode as StateCode, torders.PropertyStateCode as StateName ,WorkflowModuleName,StatusName,morderpriority.PriorityUID' );
+			$this->db->select ( 'tOrders.OrderUID,OrderNumber,tOrders.CustomerUID,CustomerName,OrderTypeName,PriorityName,tOrders.SubProductUID,mSubProducts.SubProductName,mProducts.ProductUID,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,
+				tOrders.PropertyStateCode as StateCode, tOrders.PropertyStateCode as StateName ,WorkflowModuleName,StatusName,mOrderPriority.PriorityUID' );
 			$this->db->select('DATE_FORMAT(torderassignment.AssignedDatetime, "%m-%d-%Y %H:%i:%s") as AssignedDatetime', FALSE);
 			$this->db->select("DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime", FALSE);
-			$this->db->select('DATE_FORMAT(torders.OrderDueDateTime, "%m-%d-%Y %H:%i:%s") as OrderDueDateTime', FALSE);
+			$this->db->select('DATE_FORMAT(tOrders.OrderDueDateTime, "%m-%d-%Y %H:%i:%s") as OrderDueDateTime', FALSE);
 			//$this->db->select('DATE_FORMAT((TIMEDIFF(NOW(),torderassignment.OnholdDateTime)),"%H:%i:%s") as OnholdTime',FALSE);
 			//$this->db->select("CONCAT(
 			//  FLOOR(HOUR(TIMEDIFF(NOW(), torderassignment.OnholdDateTime)) / 24), ' days ',
@@ -3119,18 +3117,18 @@ class Common_model extends CI_Model {
 
 
 			$this->db->from ( 'torderassignment' );
-			$this->db->join ( 'torders', 'torderassignment.OrderUID = torders.OrderUID','left');
+			$this->db->join ( 'tOrders', 'torderassignment.OrderUID = tOrders.OrderUID','left');
 			$this->db->join ( 'musers', 'torderassignment.AssignedToUserUID = musers.UserUID','left');
 			$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
-			$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID','left');
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID','left');
-			$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID');
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID');
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID');
-			$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID');
+			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
+			$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID');
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID');
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID');
+			$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID');
 		//$this->db->join('mreportsections','torderassignment.SectionUID=mreportsections.SectionUID');
 
-			$this->db->where_in('torders.StatusUID', $status);
+			$this->db->where_in('tOrders.StatusUID', $status);
 			$this->db->where('torderassignment.WorkflowStatus',4);
 
 		// if (in_array($this->session->userdata('RoleType'),array('1','2','3','4','5','6','10')) == 0) {
@@ -3143,7 +3141,7 @@ class Common_model extends CI_Model {
 				$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
 			}
 
-			$this->db->group_by('torders.OrderUID');
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			$res = $query->result();
 			$Count = 0;
@@ -3171,35 +3169,35 @@ class Common_model extends CI_Model {
 			$Workflowstatus[1] = 3;
 			$Workflowstatus[2] = 5;
 
-			$this->db->select ("torders.OrderNumber,torders.OrderUID,torders.StatusUID,torders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,morderstatus.StatusName,morderstatus.StatusColor, torders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,morderpriority.PriorityUID,LoanNumber,PropertyAddress1,torders.PropertyStateCode,torders.PropertyCountyName");
-			$this->db->select('DATE_FORMAT(torders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
+			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
+			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 			$this->db->from ( 'texceptions');
-			$this->db->join ( 'torders', 'texceptions.OrderUID = torders.OrderUID' , 'left' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID' , 'left' );
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+			$this->db->join ( 'tOrders', 'texceptions.OrderUID = tOrders.OrderUID' , 'left' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 	// if($this->common_model->GetExceptionQueue() == 1)
 	// {
 	//    $userid = $this->session->userdata('UserUID');
-	//    $this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+	//    $this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 	//    $this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
 	//    $this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 	// }
 	// else if($this->common_model->GetExceptionQueue() == 2)
 	// {
-	//    $this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+	//    $this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 	//    // $this->db->where("torderassignment.AssignedToUserUID = torderassignment.WorkflowModuleUID = 4");
 	//    $this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 	// }
 
 			if($cus_id){
-				$this->db->where_in ('torders.CustomerUID',$cus_id);
+				$this->db->where_in ('tOrders.CustomerUID',$cus_id);
 			}
 			$this->db->where_in ('texceptions.RaisedByUserUID',$this->session->userdata('UserUID'));
 			$this->db->where_in ('texceptions.IsCustomNotifySeen',0);
-			$this->db->group_by('torders.OrderUID');
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			return $query->num_rows();
 		}
@@ -3207,8 +3205,8 @@ class Common_model extends CI_Model {
 		function GetMyApprovalsCount()
 		{
 			$this->db->select('*')->from('torderapprovals');
-			$this->db->join('torders','torders.OrderUID = torderapprovals.OrderUID','left');
-			$this->db->join('mcustomers','torders.CustomerUID = mcustomers.CustomerUID','left');
+			$this->db->join('tOrders','tOrders.OrderUID = torderapprovals.OrderUID','left');
+			$this->db->join('mCustomers','tOrders.CustomerUID = mCustomers.CustomerUID','left');
 			$this->db->join('torderassignment','torderassignment.OrderUID = torderapprovals.OrderUID','left');
 			$this->db->where('ApprovalStatus',0);
 			$this->db->where('ApprovalFunction NOT IN ("Order Cancellation")');
@@ -3296,7 +3294,7 @@ class Common_model extends CI_Model {
 
 
 		function completed_status_order($OrderUID){
-			$query = $this->db->query("SELECT GROUP_CONCAT(WorkflowModuleName) AS WorkflowModuleName FROM torders LEFT JOIN torderassignment ON torders.OrderUID = torderassignment.OrderUID AND torderassignment.WorkflowModuleUID NOT IN (SELECT WorkflowModuleUID FROM torderassignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND (QCCompletedDateTime IS NULL OR torderassignment.QCCompletedDateTime = '0000-00-00 00:00:00')) LEFT JOIN mworkflowmodules ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE  WorkflowStatus = 5 AND torders.OrderUID = $OrderUID");
+			$query = $this->db->query("SELECT GROUP_CONCAT(WorkflowModuleName) AS WorkflowModuleName FROM tOrders LEFT JOIN torderassignment ON tOrders.OrderUID = torderassignment.OrderUID AND torderassignment.WorkflowModuleUID NOT IN (SELECT WorkflowModuleUID FROM torderassignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND (QCCompletedDateTime IS NULL OR torderassignment.QCCompletedDateTime = '0000-00-00 00:00:00')) LEFT JOIN mworkflowmodules ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE  WorkflowStatus = 5 AND tOrders.OrderUID = $OrderUID");
 			$res = $query->row();
 			return $res;
 		}
@@ -3326,7 +3324,7 @@ class Common_model extends CI_Model {
 
 			);
 
-			$this->db->insert('mcities',$citydata);
+			$this->db->insert('mCities',$citydata);
 
 			if ($this->db->trans_status() === FALSE)
 			{
@@ -3347,7 +3345,7 @@ class Common_model extends CI_Model {
 
 
 			$this->db->select('*');
-			$this->db->from('mcities');
+			$this->db->from('mCities');
 			$this->db->where('ZipCode', $zipcode);
 			$this->db->where('CityName', $CityName);
 			$query = $this->db->get();
@@ -3424,7 +3422,7 @@ class Common_model extends CI_Model {
 					if($StatusUID == $this->config->item('keywords')['New Order'] || $StatusUID ==  $this->config->item('keywords')['Reopened Order'] || $StatusUID ==  $this->config->item('keywords')['Order Assigned'] ){
 						$data['StatusUID'] = $this->config->item('keywords')['Order Work In Progress'];
 						$this->db->where('OrderUID',$OrderUID);
-						$this->db->update('torders',$data);
+						$this->db->update('tOrders',$data);
 					}
 					return 1;
 				} else {
@@ -3517,7 +3515,7 @@ class Common_model extends CI_Model {
 					if($StatusUID == $this->config->item('keywords')['New Order'] || $StatusUID ==  $this->config->item('keywords')['Reopened Order'] || $StatusUID ==  $this->config->item('keywords')['Order Assigned'] ){
 						$data['StatusUID'] = $this->config->item('keywords')['Order Work In Progress'];
 						$this->db->where('OrderUID',$OrderUID);
-						$this->db->update('torders',$data);
+						$this->db->update('tOrders',$data);
 					}
 					return 1;
 				} else {
@@ -3715,8 +3713,8 @@ class Common_model extends CI_Model {
 		{
 			$this->db->distinct();
 			$this->db->select ('CustomerName,CustomerUID' );
-			$this->db->from ('mcustomers' );
-			$this->db->order_by('mcustomers.CustomerName');
+			$this->db->from ('mCustomers' );
+			$this->db->order_by('mCustomers.CustomerName');
 
 			$query = $this->db->get();
 			return $query->result();
@@ -3831,7 +3829,7 @@ class Common_model extends CI_Model {
 			{
 				$status = $this->config->item('keywords')['Order Work In Progress'];
 				$this->db->where('OrderUID', $OrderUID);
-				$this->db->update('torders', array('StatusUID'=>$status));
+				$this->db->update('tOrders', array('StatusUID'=>$status));
 
 				$this->db->insert('tordernotes', array('SystemNotesUID' => 0, 'SectionUID'=>13, 'RoleType'=>'1,2,3,4,5,6,7,9,11,12', 'CreatedByUserUID'=>$this->loggedid, 'CreatedOn'=>date('Y-m-d H:i:s'), 'OrderUID'=>$OrderUID, 'Note'=>$Remarks));
 			}
@@ -3961,7 +3959,7 @@ class Common_model extends CI_Model {
 		function GetOptionalWorkflowsByOrderUID($OrderUID)
 		{
 			$this->db->select('Distinct torderoptionalworkflows.*', false)->from('torderoptionalworkflows');
-			$this->db->join('torders', 'torderoptionalworkflows.OrderUID=torders.OrderUID AND torderoptionalworkflows.SubProductUID=torders.SubProductUID', 'inner');
+			$this->db->join('tOrders', 'torderoptionalworkflows.OrderUID=tOrders.OrderUID AND torderoptionalworkflows.SubProductUID=tOrders.SubProductUID', 'inner');
 			$this->db->where('torderoptionalworkflows.OrderUID', $OrderUID);
 			$this->db->order_by('WorkflowModuleUID', 'ASC');
 			return $this->db->get()->result();
@@ -3970,23 +3968,23 @@ class Common_model extends CI_Model {
 		function GetCustomerWorkflowsByOrderUID($OrderUID)
 		{
 			$this->db->select('Distinct mcustomerworkflowmodules.*', false)->from('mcustomerworkflowmodules');
-			$this->db->join('torders', 'mcustomerworkflowmodules.CustomerUID=torders.CustomerUID AND mcustomerworkflowmodules.SubProductUID=torders.SubProductUID', 'inner');
+			$this->db->join('tOrders', 'mcustomerworkflowmodules.CustomerUID=tOrders.CustomerUID AND mcustomerworkflowmodules.SubProductUID=tOrders.SubProductUID', 'inner');
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->group_by('WorkflowModuleUID');
 			$this->db->order_by('WorkflowModuleUID', 'ASC');
 			return $this->db->get()->result();
 		}
 
-		function checkandchangeorderstatus($OrderUID, $torders)
+		function checkandchangeorderstatus($OrderUID, $tOrders)
 		{
-			if ($torders->StatusUID==$this->config->item('keywords')['Draft Complete']) {
+			if ($tOrders->StatusUID==$this->config->item('keywords')['Draft Complete']) {
 				$this->db->where('OrderUID', $OrderUID);
-				$this->db->update('torders', array('StatusUID'=>$this->config->item('keywords')['Partial Draft Complete']));
+				$this->db->update('tOrders', array('StatusUID'=>$this->config->item('keywords')['Partial Draft Complete']));
 			}
 
-			if ($torders->StatusUID==$this->config->item('keywords')['Order Completed']) {
+			if ($tOrders->StatusUID==$this->config->item('keywords')['Order Completed']) {
 				$this->db->where('OrderUID', $OrderUID);
-				$this->db->update('torders', array('StatusUID'=>$this->config->item('keywords')['Partial Review Complete']));
+				$this->db->update('tOrders', array('StatusUID'=>$this->config->item('keywords')['Partial Review Complete']));
 
 				//Change Review
 				$this->db->where('OrderUID', $OrderUID);
@@ -4049,7 +4047,7 @@ class Common_model extends CI_Model {
 		}
 		function GetExceptionOrderStatus($OrderUID){
 			$this->db->select('*');
-			$this->db->from('torders');
+			$this->db->from('tOrders');
 			$this->db->where('StatusUID',49);
 			$this->db->where('OrderUID',$OrderUID);
 			$query = $this->db->get();
@@ -4080,47 +4078,47 @@ class Common_model extends CI_Model {
 			$Workflowstatus[2] = 5;
 
 			$this->db->select('count(DISTINCT(OrderNumber)) AS ExceptionOrderCount');
-			$this->db->select ("torders.OrderNumber,torders.OrderUID,torders.StatusUID,torders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,morderstatus.StatusName,morderstatus.StatusColor, torders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,morderpriority.PriorityUID,LoanNumber,PropertyAddress1,torders.PropertyStateCode,torders.PropertyCountyName");
-			$this->db->select('DATE_FORMAT(torders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
+			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
+			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 			$this->db->from ( 'texceptions' );
-			$this->db->join ( 'torders', 'texceptions.OrderUID = torders.OrderUID' , 'left' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID' , 'left' );
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+			$this->db->join ( 'tOrders', 'texceptions.OrderUID = tOrders.OrderUID' , 'left' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 
 
 		// if(in_array($this->session->userdata('RoleType'),array(7)))
 		// {
 		//   $userid = $this->session->userdata('UserUID');
-		//   $this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+		//   $this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 		//   $this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
 		//   $this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 		// }
 
-			// if(torders.StatusUID != 0){
+			// if(tOrders.StatusUID != 0){
 			if($this->common_model->GetExceptionQueue() == 1)
 			{
 				$userid = $this->session->userdata('UserUID');
-				$this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 				$this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
 				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 			}
 			else if($this->common_model->GetExceptionQueue() == 2)
 			{
-				$this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 			 // $this->db->where("torderassignment.AssignedToUserUID = torderassignment.WorkflowModuleUID = 4");
 				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 			}
 			// }
 
 			if($cus_id){
-				$this->db->where_in ('torders.CustomerUID',$cus_id);
+				$this->db->where_in ('tOrders.CustomerUID',$cus_id);
 			}
-			$this->db->where_in ('torders.StatusUID',49);
+			$this->db->where_in ('tOrders.StatusUID',49);
 			$this->db->where_in ('texceptions.IsClear',0);
-			$this->db->group_by('torders.OrderUID');
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			$res = $query->result();
 			$Count = 0;
@@ -4148,42 +4146,42 @@ class Common_model extends CI_Model {
 			$Workflowstatus[2] = 5;
 
 			$this->db->select('count(DISTINCT(OrderNumber)) AS ExceptionOrderCount');
-			$this->db->select ("torders.OrderNumber,torders.OrderUID,torders.StatusUID,torders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,morderstatus.StatusName,morderstatus.StatusColor, torders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,morderpriority.PriorityUID,LoanNumber,PropertyAddress1,torders.PropertyStateCode,torders.PropertyCountyName");
-			$this->db->select('DATE_FORMAT(torders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
+			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
+			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 			$this->db->from ( 'texceptions' );
-			$this->db->join ( 'torders', 'texceptions.OrderUID = torders.OrderUID' , 'left' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID' , 'left' );
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
+			$this->db->join ( 'tOrders', 'texceptions.OrderUID = tOrders.OrderUID' , 'left' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 
 			if($this->common_model->GetExceptionQueue() == 1)
 			{
 				$userid = $this->session->userdata('UserUID');
-				$this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 				$this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
 				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 			}
 			else if($this->common_model->GetExceptionQueue() == 2)
 			{
-				$this->db->join('torderassignment','torders.OrderUID = torderassignment.OrderUID');
+				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
 				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
 			}
 
 			if($cus_id)
 			{
-			 $this->db->where_in ('torders.CustomerUID',$cus_id);
+			 $this->db->where_in ('tOrders.CustomerUID',$cus_id);
 			}
 			/*FOR SUPERVISOR CHECK*/
 			if (in_array($this->RoleType, $this->config->item('SubProduct_RoleType'))) {
 				$UserSubProducts = $this->common_model->_get_Subproducts_bylogin($this->loggedid);
-				if($UserSubProducts): $this->db->where('torders.SubProductUID IN ('.$UserSubProducts.')', null, false); else: $this->db->where('torders.SubProductUID IN (0)', null, false); endif;
+				if($UserSubProducts): $this->db->where('tOrders.SubProductUID IN ('.$UserSubProducts.')', null, false); else: $this->db->where('tOrders.SubProductUID IN (0)', null, false); endif;
 			}
 
-			$this->db->where_in ('torders.StatusUID',49);
+			$this->db->where_in ('tOrders.StatusUID',49);
 			$this->db->where_in ('texceptions.IsClear',0);
-			$this->db->group_by('torders.OrderUID');
+			$this->db->group_by('tOrders.OrderUID');
 			$query = $this->db->get();
 			$res = $query->result();
 			$Count = 0;
@@ -4228,10 +4226,10 @@ class Common_model extends CI_Model {
 				$this->db->select('*');
 				$this->db->from('torderassignment');
 				$this->db->join('texceptions','texceptions.OrderUID=torderassignment.OrderUID','inner');
-				$this->db->join('torders','torders.OrderUID=torderassignment.OrderUID','inner');
+				$this->db->join('tOrders','tOrders.OrderUID=torderassignment.OrderUID','inner');
 				$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
 				$this->db->where ('torderassignment.OrderUID',$OrderUID);
-				$this->db->where ('torders.StatusUID',35);
+				$this->db->where ('tOrders.StatusUID',35);
 				$this->db->where ('texceptions.IsClear',0);
 				$query = $this->db->get();
 				return $query->num_rows();
@@ -4356,7 +4354,7 @@ class Common_model extends CI_Model {
 		}
 
 		function vendor_completed_status_order($OrderUID,$VendorUID){
-			$query = $this->db->query("SELECT GROUP_CONCAT( DISTINCT (WorkflowModuleName)) AS WorkflowModuleName FROM torders LEFT JOIN torderassignment ON torders.OrderUID = torderassignment.OrderUID LEFT JOIN mworkflowmodules ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE WorkflowStatus = 5 AND torders.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID IN ( SELECT WorkflowModuleUID FROM torderassignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND VendorUID = $VendorUID AND ( QCCompletedDateTime IS NOT NULL OR torderassignment.QCCompletedDateTime != '0000-00-00 00:00:00' ))");
+			$query = $this->db->query("SELECT GROUP_CONCAT( DISTINCT (WorkflowModuleName)) AS WorkflowModuleName FROM tOrders LEFT JOIN torderassignment ON tOrders.OrderUID = torderassignment.OrderUID LEFT JOIN mworkflowmodules ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE WorkflowStatus = 5 AND tOrders.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID IN ( SELECT WorkflowModuleUID FROM torderassignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND VendorUID = $VendorUID AND ( QCCompletedDateTime IS NOT NULL OR torderassignment.QCCompletedDateTime != '0000-00-00 00:00:00' ))");
 			$res = $query->row();
 			return $res;
 		}
@@ -4449,7 +4447,7 @@ class Common_model extends CI_Model {
 			$oldvalue='';
 			if($data['FieldUID']=='36'){
 				$this->db->select('*');
-				$this->db->from('mcounties');
+				$this->db->from('mCounties');
 				$this->db->where('CountyUID',$data['OldValue']);
 				$oldstate=$this->db->get()->row();
 				$oldvalue=$oldstate->StateUID;
@@ -4499,7 +4497,7 @@ class Common_model extends CI_Model {
 			$tax= $this->db->get()->row();
 					 //orderStatus
 			$this->db->select('*');
-			$this->db->from('torders');
+			$this->db->from('tOrders');
 			$this->db->where('OrderUID',$OrderUID);
 			$Orderstatus= $this->db->get()->row();
 
@@ -4574,7 +4572,7 @@ class Common_model extends CI_Model {
 			$loggedid = $this->session->userdata('UserUID');
 			$this->db->select("*");
 			$this->db->from('texceptions');
-			$this->db->join ( 'torders', 'torders.OrderUID = texceptions.OrderUID');
+			$this->db->join ( 'tOrders', 'tOrders.OrderUID = texceptions.OrderUID');
 			$this->db->join ( 'mexceptions', 'mexceptions.ExceptionUID = texceptions.ExceptionUID' , 'left' );
 			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 			$this->db->join ( 'mroles', 'mroles.RoleUID = musers.RoleUID');
@@ -4594,7 +4592,7 @@ class Common_model extends CI_Model {
 
 		function get_order_status($OrderUID){
 			$this->db->select('StatusUID');
-			$this->db->from('torders');
+			$this->db->from('tOrders');
 			$this->db->where('OrderUID', $OrderUID);
 			return $this->db->get()->row()->StatusUID;
 		}
@@ -4689,7 +4687,7 @@ class Common_model extends CI_Model {
 
 	function check_api_order($OrderUID){
 		$this->db->select('*');
-		$this->db->from('torders');
+		$this->db->from('tOrders');
 		$this->db->where('OrderUID',$OrderUID);
 		$this->db->where('APIOrder',1);
 						//$result= $this->db->get()->result();
@@ -4747,8 +4745,8 @@ class Common_model extends CI_Model {
 
 	// function GetApiSourceName($OrderUID){
 	// 	$this->db->select('*');
-	// 	$this->db->from('torders');
-	// 	$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID=torders.OrderSourceUID','inner');
+	// 	$this->db->from('tOrders');
+	// 	$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID=tOrders.OrderSourceUID','inner');
 	// 	$this->db->where('OrderUID',$OrderUID);
 	// 	$this->db->where('APIOrder',1);
 	// 	$result= $this->db->get()->row();
@@ -4768,13 +4766,13 @@ class Common_model extends CI_Model {
 
 		$Address = strtoupper(trim(trim($PropertyAddress1).' '.trim($PropertyAddress2)));
 
-		$query = $this->db->query(" SELECT *,TRIM(CONCAT_WS(' ',TRIM(PropertyAddress1),TRIM(PropertyAddress2))) AS whole_name FROM torders
-			WHERE torders.OrderUID <> '$OrderUID'
-			AND torders.PropertyZipcode = '$PropertyZipcode'
-			AND torders.PropertyCityName = '$PropertyCityName'
-			AND torders.PropertyStateCode = '$PropertyStateCode'
-			AND torders.PropertyCountyName = '$PropertyCountyName'
-			GROUP BY torders.OrderUID
+		$query = $this->db->query(" SELECT *,TRIM(CONCAT_WS(' ',TRIM(PropertyAddress1),TRIM(PropertyAddress2))) AS whole_name FROM tOrders
+			WHERE tOrders.OrderUID <> '$OrderUID'
+			AND tOrders.PropertyZipcode = '$PropertyZipcode'
+			AND tOrders.PropertyCityName = '$PropertyCityName'
+			AND tOrders.PropertyStateCode = '$PropertyStateCode'
+			AND tOrders.PropertyCountyName = '$PropertyCountyName'
+			GROUP BY tOrders.OrderUID
 			HAVING whole_name LIKE '$Address'");
 		$res = $query->num_rows();
 
@@ -4975,11 +4973,11 @@ class Common_model extends CI_Model {
 		if (in_array($this->session->userdata('RoleType'),array('1','2','3','4','5','6'))) {
 			$query = $this->db->query("SELECT IsRead,FollowUpUID,OrderNumber,FollowUpType,torderfollowup.OrderUID,FollowUpStatus,Comments,Remarks,FollowUpPriority,`b`.`UserName` AS CreatedByUserName,`c`.`UserName` AS CompletedByUserName,`d`.`UserName` AS StartedByUserName, DATE_FORMAT(torderfollowup.FollowupDateTime, '%m-%d-%Y %H:%i:%s') as FollowupDateTime, DATE_FORMAT(torderfollowup.CreateOnDateTime, '%m-%d-%Y %H:%i:%s') as CreateOnDateTime, DATE_FORMAT(torderfollowup.FollowUpEndTime, '%m-%d-%Y %H:%i:%s') as FollowUpEndTime, DATE_FORMAT(torderfollowup.FollowUpStartTime, '%m-%d-%Y %H:%i:%s') as FollowUpStartTime,
 				CASE FollowUpType
-				WHEN 'Customer' THEN (SELECT CustomerName FROM mcustomers WHERE CustomerUID = torderfollowup.UserUID)
+				WHEN 'Customer' THEN (SELECT CustomerName FROM mCustomers WHERE CustomerUID = torderfollowup.UserUID)
 				ELSE `a`.`UserName`
 				END as UserName,
 				torderfollowup.UserUID AS UserUID
-				 FROM (`torderfollowup`) JOIN torders ON torders.OrderUID = torderfollowup.OrderUID LEFT JOIN `musers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `musers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `musers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `musers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE   DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) AND FollowUpStatus IN ('New','Started','Completed')
+				 FROM (`torderfollowup`) JOIN tOrders ON tOrders.OrderUID = torderfollowup.OrderUID LEFT JOIN `musers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `musers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `musers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `musers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE   DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) AND FollowUpStatus IN ('New','Started','Completed')
 				AND FollowUpPriority IN ('Rush', 'ASAP', 'Normal') ORDER BY FIELD(FollowUpPriority,'Rush', 'ASAP', 'Normal')
 
 				  ,IsRead ASC LIMIT 25
@@ -4991,11 +4989,11 @@ class Common_model extends CI_Model {
 		}else{
 			$query = $this->db->query("SELECT IsRead,FollowUpUID,OrderNumber,FollowUpType,torderfollowup.OrderUID,FollowUpStatus,Comments,Remarks,FollowUpPriority,`b`.`UserName` AS CreatedByUserName,`c`.`UserName` AS CompletedByUserName,`d`.`UserName` AS StartedByUserName, DATE_FORMAT(torderfollowup.FollowupDateTime, '%m-%d-%Y %H:%i:%s') as FollowupDateTime, DATE_FORMAT(torderfollowup.CreateOnDateTime, '%m-%d-%Y %H:%i:%s') as CreateOnDateTime, DATE_FORMAT(torderfollowup.FollowUpEndTime, '%m-%d-%Y %H:%i:%s') as FollowUpEndTime, DATE_FORMAT(torderfollowup.FollowUpStartTime, '%m-%d-%Y %H:%i:%s') as FollowUpStartTime,
 				CASE FollowUpType
-				WHEN 'Customer' THEN (SELECT CustomerName FROM mcustomers WHERE CustomerUID = torderfollowup.UserUID)
+				WHEN 'Customer' THEN (SELECT CustomerName FROM mCustomers WHERE CustomerUID = torderfollowup.UserUID)
 				ELSE `a`.`UserName`
 				END as UserName,
 				torderfollowup.UserUID AS UserUID
-				 FROM (`torderfollowup`) JOIN torders ON torders.OrderUID = torderfollowup.OrderUID LEFT JOIN `musers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `musers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `musers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `musers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE  FollowUpStatus IN ('New','Started','Completed') AND (`torderfollowup`.`CreatedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`CompletedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`StartedByUserUID` = ".$this->loggedid.") AND DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) 
+				 FROM (`torderfollowup`) JOIN tOrders ON tOrders.OrderUID = torderfollowup.OrderUID LEFT JOIN `musers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `musers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `musers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `musers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE  FollowUpStatus IN ('New','Started','Completed') AND (`torderfollowup`.`CreatedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`CompletedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`StartedByUserUID` = ".$this->loggedid.") AND DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) 
 				 AND FollowUpPriority IN ('Rush', 'ASAP', 'Normal') ORDER BY FIELD(FollowUpPriority,'Rush', 'ASAP', 'Normal')
 				,IsRead ASC LIMIT 25
 				");
@@ -5102,9 +5100,9 @@ class Common_model extends CI_Model {
 		return $this->db->get()->row();
 	}
 
-	// function GetOrderSourceDetails($OrderSourceUID){
+	// function GetOrdersourceDetails($OrderSourceUID){
 	// 	$this->db->select('mApiTitlePlatform.*')->from('mApiTitlePlatform');
-	// $this->db->join('torders', 'torders.OrderSourceUID=mApiTitlePlatform.OrderSourceUID', 'left');
+	// $this->db->join('tOrders', 'tOrders.OrderSourceUID=mApiTitlePlatform.OrderSourceUID', 'left');
 	// $this->db->where('mApiTitlePlatform.OrderSourceUID', $OrderSourceUID);
 	// $query=$this->db->get();
 	// return $query->row();
@@ -5128,8 +5126,8 @@ class Common_model extends CI_Model {
 	}
 
 	function GetApiSourceStatus($OrderUID) {
-		$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
-		$OrderSourceUID = $torders->OrderSourceUID;
+		$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
+		$OrderSourceUID = $tOrders->OrderSourceUID;
 		if($OrderSourceUID){
 			$mApiTitlePlatform = $this->db->get_where('mApiTitlePlatform', array('ApiTitlePlatformUID'=>$OrderSourceUID))->row();
 			$OrderSourceName = trim($mApiTitlePlatform->OrderSourceName);
@@ -5166,11 +5164,11 @@ public function GetAbstractorByUID($AbstractorUID)
 								`mabstractor`.`LookUpCompany` AS LookUpCompany,
 								`mabstractor`.`FaxNo` As FaxNo
 	 FROM (`mabstractor`)
-	 LEFT JOIN `mcounties` AS c ON `c`.`CountyUID`=`mabstractor`.`CountyUID`
-	 LEFT JOIN `mcounties` AS vc ON `vc`.`CountyUID`=`mabstractor`.`VisitingCountyUID`
-	 LEFT JOIN `mcities` AS city ON `city`.`CityUID`=`mabstractor`.`CityUID`
-	 LEFT JOIN `mstates` AS s ON `s`.`StateUID`=`mabstractor`.`StateUID`
-	 LEFT JOIN `mstates` AS vs ON `vs`.`StateUID`=`mabstractor`.`VisitingStateUID`
+	 LEFT JOIN `mCounties` AS c ON `c`.`CountyUID`=`mabstractor`.`CountyUID`
+	 LEFT JOIN `mCounties` AS vc ON `vc`.`CountyUID`=`mabstractor`.`VisitingCountyUID`
+	 LEFT JOIN `mCities` AS city ON `city`.`CityUID`=`mabstractor`.`CityUID`
+	 LEFT JOIN `mStates` AS s ON `s`.`StateUID`=`mabstractor`.`StateUID`
+	 LEFT JOIN `mStates` AS vs ON `vs`.`StateUID`=`mabstractor`.`VisitingStateUID`
 	 WHERE `mabstractor`.`AbstractorUID`=".$AbstractorUID."
 	 group by `mabstractor`.`AbstractorUID`")->row();
 
@@ -5179,19 +5177,19 @@ public function GetAbstractorByUID($AbstractorUID)
 function GetStatesByStateUID($StateUIDs)
 {
 	$this->db->where_in('StateUID', $StateUIDs);
-	return $this->db->get('mstates')->result();
+	return $this->db->get('mStates')->result();
 }
 
 function GetmcitiesbyZipCodes($ZipCodes)
 {
 	$this->db->where_in('ZipCode', $ZipCodes);
-	return $this->db->get('mcities')->result();
+	return $this->db->get('mCities')->result();
 }
 
-function GetmcountiesbyCoutyUID($CountyUIDs)
+function GetmCountiesbyCoutyUID($CountyUIDs)
 {
 	$this->db->where_in('CountyUID', $CountyUIDs);
-	return $this->db->get('mcounties')->result();
+	return $this->db->get('mCounties')->result();
 }
 
 function searchForId($id, $array) {
@@ -5219,13 +5217,13 @@ function CheckPrintingWorkFlow($CustomerUID,$SubProductUID,$OrderUID)
 
 	if($roles->CanPrinting == 1){
 		$StatusUID = $this->config->item('keywords')['Review Complete'];
-		$this->db->select('*')->from('torders');
-		$this->db->join('mcustomerworkflowmodules', 'torders.CustomerUID=mcustomerworkflowmodules.CustomerUID', 'inner');
+		$this->db->select('*')->from('tOrders');
+		$this->db->join('mcustomerworkflowmodules', 'tOrders.CustomerUID=mcustomerworkflowmodules.CustomerUID', 'inner');
 		$this->db->where('mcustomerworkflowmodules.CustomerUID', $CustomerUID);
 		$this->db->where('mcustomerworkflowmodules.SubProductUID', $SubProductUID);
 		$this->db->where('mcustomerworkflowmodules.WorkflowModuleUID', '5');
-		$this->db->where('torders.OrderUID', $OrderUID);
-		$this->db->where('torders.StatusUID', $StatusUID);
+		$this->db->where('tOrders.OrderUID', $OrderUID);
+		$this->db->where('tOrders.StatusUID', $StatusUID);
 		$query=$this->db->get();
 		return $query->row();
 	}
@@ -5258,29 +5256,29 @@ function CheckFinalReportExist($OrderUID){
 		$loggedid = $this->session->userdata('UserUID');
 		$status[0] = $this->config->item('keywords')['Review Complete'];
 
-		$this->db->select ("OrderNumber,torders.CustomerUID,CustomerNumber,CustomerName,OrderTypeName,StatusColor,PriorityName,morderstatus.StatusName, torders.OrderUID,morderpriority.PriorityUID,PriorityName,PropertyStateCode, torders.LoanNumber, CompleteDateTime AS ReviewCompleteDateTime", false);
-		$this->db->select('DATE_FORMAT(torders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'torderassignment', 'torders.OrderUID = torderassignment.OrderUID');
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID','left');
-		$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID','left');
-		$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID','left');
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID' , 'left' );
-		$this->db->join ( 'mstates', 'mstates.StateCode = torders.PropertyStateCode' , 'left' );
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID');
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID');
+		$this->db->select ("OrderNumber,tOrders.CustomerUID,CustomerNumber,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName, tOrders.OrderUID,mOrderPriority.PriorityUID,PriorityName,PropertyStateCode, tOrders.LoanNumber, CompleteDateTime AS ReviewCompleteDateTime", false);
+		$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'torderassignment', 'tOrders.OrderUID = torderassignment.OrderUID');
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID','left');
+		$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID','left');
+		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID','left');
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID' , 'left' );
+		$this->db->join ( 'mStates', 'mStates.StateCode = tOrders.PropertyStateCode' , 'left' );
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID');
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID');
 
 
 		/*FOR SUPERVISOR CHECK*/
 		if ($this->session->userdata('RoleType') == 6){
 			$UserSubProducts = $this->common_model->_get_Subproducts_bylogin($this->loggedid);
-			if($UserSubProducts): $this->db->where('torders.SubProductUID IN ('.$UserSubProducts.')', null, false); else: $this->db->where('torders.SubProductUID IN (0)', null, false); endif;
+			if($UserSubProducts): $this->db->where('tOrders.SubProductUID IN ('.$UserSubProducts.')', null, false); else: $this->db->where('tOrders.SubProductUID IN (0)', null, false); endif;
 		}
 
-		$this->db->where('torders.IsPrint',NULL);
-		$this->db->where('torders.ProjectUID!=0',NULL, false);
-		$this->db->where_in ('torders.StatusUID',$status);
-		$this->db->group_by('torders.OrderUID');
+		$this->db->where('tOrders.IsPrint',NULL);
+		$this->db->where('tOrders.ProjectUID!=0',NULL, false);
+		$this->db->where_in ('tOrders.StatusUID',$status);
+		$this->db->group_by('tOrders.OrderUID');
 
 		$query = $this->db->get();
 		return $query->num_rows();
@@ -5289,9 +5287,9 @@ function CheckFinalReportExist($OrderUID){
 
 function is_printingorder($OrderUID){
 	$this->db->select('*');
-	$this->db->from ( 'torders' );
-	$this->db->where('torders.StatusUID','40');
-	$this->db->where('torders.OrderUID',$OrderUID);
+	$this->db->from ( 'tOrders' );
+	$this->db->where('tOrders.StatusUID','40');
+	$this->db->where('tOrders.OrderUID',$OrderUID);
 	$query = $this->db->get();
 	return $query->num_rows();
 }
@@ -5346,8 +5344,8 @@ function GetProjectDetails($ProductUID,$CustomerUID){
 
 	$this->db->select('*');
 	$this->db->from ( 'mProjects' );
-	$this->db->join ( 'mproducts', 'mproducts.ProductUID = mProjects.ProductUID','left');
-	$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = mProjects.CustomerUID','left');
+	$this->db->join ( 'mProducts', 'mProducts.ProductUID = mProjects.ProductUID','left');
+	$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = mProjects.CustomerUID','left');
 	$this->db->where('mProjects.CustomerUID',$CustomerUID);
 	$this->db->where('mProjects.ProductUID',$ProductUID);
 	//$this->db->where('mProjects.Active',1);
@@ -5359,7 +5357,7 @@ function GetProjectDetails($ProductUID,$CustomerUID){
 
 function GetSubProductDetails($SubProductUID){
 	$this->db->where(array("Active"=>1,"SubProductUID" => $SubProductUID));
-	$query = $this->db->get('msubproducts');
+	$query = $this->db->get('mSubProducts');
 	return $query->row();
 }
 
@@ -5378,8 +5376,8 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 // function GetApiRequestStatus($OrderUID){
 
-// 	$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
-// 	$OrderSourceUID = $torders->OrderSourceUID;
+// 	$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
+// 	$OrderSourceUID = $tOrders->OrderSourceUID;
 // 	$mApiTitlePlatform = $this->db->get_where('mApiTitlePlatform', array('ApiTitlePlatformUID'=>$OrderSourceUID))->row();
 // 	$OrderSourceName = $mApiTitlePlatform->OrderSourceName;
 
@@ -5403,7 +5401,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	/*function _getCounty_StateUID_ZipCode($ZipCode,$StateCode) {
 
-		$query = $this->db->query("SELECT CountyName FROM `mcities` JOIN mstates ON mstates.StateUID = mcities.StateUID JOIN mcounties ON mcounties.CountyUID = mstates.StateUID WHERE mcities.ZipCode = '".$ZipCode."' AND StateCode = '".$StateCode."' ");
+		$query = $this->db->query("SELECT CountyName FROM `mCities` JOIN mStates ON mStates.StateUID = mCities.StateUID JOIN mCounties ON mCounties.CountyUID = mStates.StateUID WHERE mCities.ZipCode = '".$ZipCode."' AND StateCode = '".$StateCode."' ");
 		return $query->row();
 
 	}*/
@@ -5411,11 +5409,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function _getCounty_StateUID_ZipCode($ZipCode,$StateCode) {
 
 		$this->db->select('*');
-		$this->db->from ( 'mcounties' );
-		$this->db->join ( 'mcities', 'mcities.CountyUID = mcounties.CountyUID','INNER');
-		$this->db->join ( 'mstates', 'mstates.StateUID = mcities.StateUID','INNER');
-		$this->db->where('mstates.StateCode',$StateCode);
-		$this->db->where('mcities.ZipCode',$ZipCode);
+		$this->db->from ( 'mCounties' );
+		$this->db->join ( 'mCities', 'mCities.CountyUID = mCounties.CountyUID','INNER');
+		$this->db->join ( 'mStates', 'mStates.StateUID = mCities.StateUID','INNER');
+		$this->db->where('mStates.StateCode',$StateCode);
+		$this->db->where('mCities.ZipCode',$ZipCode);
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -5433,11 +5431,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function _get_loginCustomers($ProductUID)
 	{
 		if($ProductUID){
-			$this->db->select('mcustomerproducts.CustomerUID,CustomerName,CustomerNumber');
-			$this->db->from ( 'mcustomerproducts' );
-			$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = mcustomerproducts.CustomerUID');
-			$this->db->where_in('mcustomerproducts.ProductUID',$ProductUID);
-			$this->db->group_by('mcustomerproducts.CustomerUID');
+			$this->db->select('mCustomerProducts.CustomerUID,CustomerName,CustomerNumber');
+			$this->db->from ( 'mCustomerProducts' );
+			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = mCustomerProducts.CustomerUID');
+			$this->db->where_in('mCustomerProducts.ProductUID',$ProductUID);
+			$this->db->group_by('mCustomerProducts.CustomerUID');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -5456,11 +5454,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function _get_loginProducts($ProductUID)
 	{
 		if($ProductUID){
-			$this->db->select('mcustomerproducts.ProductUID,ProductName');
-			$this->db->from ( 'mcustomerproducts' );
-			$this->db->join ( 'mproducts', 'mproducts.ProductUID = mcustomerproducts.ProductUID');
-			$this->db->where('mcustomerproducts.ProductUID in ('.$ProductUID.')');
-			$this->db->group_by('mcustomerproducts.ProductUID');
+			$this->db->select('mCustomerProducts.ProductUID,ProductName');
+			$this->db->from ( 'mCustomerProducts' );
+			$this->db->join ( 'mProducts', 'mProducts.ProductUID = mCustomerProducts.ProductUID');
+			$this->db->where('mCustomerProducts.ProductUID in ('.$ProductUID.')');
+			$this->db->group_by('mCustomerProducts.ProductUID');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -5468,7 +5466,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	}
 
 	function _get_subproduct_bylogin($ProductUID){
-		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID SEPARATOR ',') AS SubProductUID FROM (`mcustomerproducts`) WHERE `mcustomerproducts`.`ProductUID` IN (".$ProductUID.")");
+		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID SEPARATOR ',') AS SubProductUID FROM (`mCustomerProducts`) WHERE `mCustomerProducts`.`ProductUID` IN (".$ProductUID.")");
 		$result = $query->row();
 		if(!empty($result)){
 			return $result->SubProductUID;
@@ -5477,7 +5475,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	}
 
 	function _get_customers_bylogin($ProductUID){
-		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT CustomerUID SEPARATOR ',') AS CustomerUID FROM (`mcustomerproducts`) WHERE `mcustomerproducts`.`ProductUID` IN (".$ProductUID.")");
+		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT CustomerUID SEPARATOR ',') AS CustomerUID FROM (`mCustomerProducts`) WHERE `mCustomerProducts`.`ProductUID` IN (".$ProductUID.")");
 		$result = $query->row();
 		if(!empty($result)){
 			return $result->CustomerUID;
@@ -5486,13 +5484,13 @@ function GetNotaryByNotaryUID($NotaryUID)
 	}
 
 	function _get_customersdata_bylogin($UserUID){
-		$query = $this->db->query("SELECT CustomerNumber,mcustomers.CustomerUID,CustomerName FROM (`mUserProduct`) JOIN mcustomerproducts on mcustomerproducts.ProductUID = mUserProduct.ProductUID JOIN mcustomers ON mcustomers.CustomerUID =  mcustomerproducts.CustomerUID WHERE `mUserProduct`.`UserUID` = '".$UserUID."' GROUP BY mcustomers.CustomerUID ORDER BY CustomerName ASC");
+		$query = $this->db->query("SELECT CustomerNumber,mCustomers.CustomerUID,CustomerName FROM (`mUserProduct`) JOIN mCustomerProducts on mCustomerProducts.ProductUID = mUserProduct.ProductUID JOIN mCustomers ON mCustomers.CustomerUID =  mCustomerProducts.CustomerUID WHERE `mUserProduct`.`UserUID` = '".$UserUID."' GROUP BY mCustomers.CustomerUID ORDER BY CustomerName ASC");
 		$result = $query->result();
 		return $result;
 	}
 
 	function _get_Subproducts_bylogin($UserUID){
-		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID SEPARATOR ',') AS SubProductUID FROM (`mUserProduct`) JOIN mcustomerproducts on mcustomerproducts.ProductUID = mUserProduct.ProductUID WHERE `mUserProduct`.`UserUID` = '".$UserUID."'");
+		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID SEPARATOR ',') AS SubProductUID FROM (`mUserProduct`) JOIN mCustomerProducts on mCustomerProducts.ProductUID = mUserProduct.ProductUID WHERE `mUserProduct`.`UserUID` = '".$UserUID."'");
 		$result = $query->row();
 		if(!empty($result)){
 			return $result->SubProductUID;
@@ -5515,11 +5513,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function GetFinalReportsList($OrderUID){
 
-			$this->db->select ( '*,torders.OrderDocsPath' );
+			$this->db->select ( '*,tOrders.OrderDocsPath' );
 			$this->db->from ( 'torderdocuments' );
 			$this->db->join ( 'mdocumenttypes', 'mdocumenttypes.DocumentTypeUID = torderdocuments.DocumentTypeUID' , 'left' );
 			$this->db->join ( 'msearchmodes', 'msearchmodes.SearchModeUID = torderdocuments.SearchModeUID' , 'left' );
-			$this->db->join ( 'torders', 'torders.OrderUID = torderdocuments.OrderUID' , 'left' );
+			$this->db->join ( 'tOrders', 'tOrders.OrderUID = torderdocuments.OrderUID' , 'left' );
 			$this->db->where(array("torderdocuments.OrderUID"=>$OrderUID));
 			$this->db->where(array("torderdocuments.TypeOfDocument"=>'Final Reports'));
 			$this->db->order_by("torderdocuments.DocumentCreatedDate DESC");
@@ -5548,8 +5546,8 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function GetDocmentTypeFromTemplate($TemplateUID,$SubProductUID){
 		$this->db->select("*");
-		$this->db->from('mtemplates');
-		$this->db->join ( 'mtemplatemapping', 'mtemplatemapping.TemplateUID = mtemplates.TemplateUID' , 'left' );
+		$this->db->from('mTemplates');
+		$this->db->join ( 'mtemplatemapping', 'mtemplatemapping.TemplateUID = mTemplates.TemplateUID' , 'left' );
 		$this->db->where(array("mtemplatemapping.TemplateUID"=>$TemplateUID));
 		$this->db->where(array("mtemplatemapping.SubProductUID"=>$SubProductUID));
 		$query = $this->db->get();
@@ -5559,10 +5557,10 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function GetProductByOrderUID($OrderUID)
 	{
-		$this->db->select('msubproducts.*, mproducts.*')->from('torders');
-		$this->db->join('msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID');
-		$this->db->join('mproducts', 'msubproducts.ProductUID = mproducts.ProductUID');
-		$this->db->where('torders.OrderUID', $OrderUID);
+		$this->db->select('mSubProducts.*, mProducts.*')->from('tOrders');
+		$this->db->join('mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID');
+		$this->db->join('mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID');
+		$this->db->where('tOrders.OrderUID', $OrderUID);
 		return $this->db->get()->row();
 	}
 
@@ -5570,7 +5568,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	public function GetIsAdverseConditions($CustomerUID){
 
 		$this->db->select("*");
-		$this->db->from('mcustomers');
+		$this->db->from('mCustomers');
 		$this->db->where(array("CustomerUID"=>$CustomerUID));
 		$query = $this->db->get();
 		return $query->row()->AdverseConditionsEnabled;
@@ -5579,7 +5577,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	public function CheckAdverseConditionsEnabledForProduct($ProductUID){
 		$this->db->select("*");
-		$this->db->from('mproducts');
+		$this->db->from('mProducts');
 		$this->db->where(array("ProductUID"=>$ProductUID));
 		$query = $this->db->get();
 		return $query->row();
@@ -5591,7 +5589,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 		$ProductUIDs = explode(',', $ProductUIDs);
 		if($ProductUIDs){
 			$this->db->select('Group_Concat(SubProductUID) AS SubProductUID', false);
-			$this->db->from('msubproducts');
+			$this->db->from('mSubProducts');
 			$this->db->where_in('ProductUID', $ProductUIDs);
 			// print_r($this->db->get()->row());
 			return $this->db->get()->row();
@@ -5612,11 +5610,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 		AND `torderassignment`.`OrderUID` =  '$OrderUID'
 		UNION ALL
 		SELECT mcustomerworkflowmodules.WorkflowModuleUID, mworkflowmodules.WorkflowModuleName
-		FROM `torders`
-		JOIN mcustomerworkflowmodules ON mcustomerworkflowmodules.CustomerUID=torders.CustomerUID AND mcustomerworkflowmodules.SubProductUID=torders.SubProductUID
+		FROM `tOrders`
+		JOIN mcustomerworkflowmodules ON mcustomerworkflowmodules.CustomerUID=tOrders.CustomerUID AND mcustomerworkflowmodules.SubProductUID=tOrders.SubProductUID
 		JOIN mworkflowmodules ON mcustomerworkflowmodules.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID
-		WHERE mcustomerworkflowmodules.WorkflowModuleUID = ".$this->config->item('WorkflowModuleUID')['Printing']." AND torders.OrderUID = ".$OrderUID."
-		AND torders.IsPrint = 1
+		WHERE mcustomerworkflowmodules.WorkflowModuleUID = ".$this->config->item('WorkflowModuleUID')['Printing']." AND tOrders.OrderUID = ".$OrderUID."
+		AND tOrders.IsPrint = 1
 		");
 		return $query->result();
 
@@ -5626,9 +5624,9 @@ function GetNotaryByNotaryUID($NotaryUID)
 	/*INSERT ACTUAL PAYMENT DETAILS IN torderpayment*/
 	function insert_actualorderpaymentdata($OrderUID){
 
-		$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
+		$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
 		/*CustomerFee row*/
-		$reportdata = array('OrderUID' => $OrderUID,'CustomerUID'=>$torders->CustomerUID,'BeneficiaryType'=>'Customer','CustomerActualAmount' => $torders->CustomerActualAmount,'CustomerAdditionalAmount' => $torders->CustomerAdditionalAmount,'CustomerAmount' => $torders->CustomerAmount,'ApprovalFunction' => 'CustomerActualPricing','AgentPricing'=>$torders->AgentPricing,'UnderWritingPricing'=>$torders->UnderWritingPricing,'IsBilled' => $torders->IsBilled,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0);
+		$reportdata = array('OrderUID' => $OrderUID,'CustomerUID'=>$tOrders->CustomerUID,'BeneficiaryType'=>'Customer','CustomerActualAmount' => $tOrders->CustomerActualAmount,'CustomerAdditionalAmount' => $tOrders->CustomerAdditionalAmount,'CustomerAmount' => $tOrders->CustomerAmount,'ApprovalFunction' => 'CustomerActualPricing','AgentPricing'=>$tOrders->AgentPricing,'UnderWritingPricing'=>$tOrders->UnderWritingPricing,'IsBilled' => $tOrders->IsBilled,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0);
 		$this->db->insert('tOrderPayments',$reportdata);
 
 
@@ -5637,7 +5635,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 		foreach ($assignedabstractors as $assignedabstractorkey => $assignedabstractor) {
 
-			$reportdata = array('OrderUID' => $OrderUID,'AbstractorUID'=>$assignedabstractor->AbstractorUID,'AbstractorOrderUID'=>$assignedabstractor->AbstractorOrderUID,'BeneficiaryType'=>'Abstractor','AbstractorActualFee' => $assignedabstractor->AbstractorActualFee,'AbstractorAdditionalFee' => $assignedabstractor->AbstractorAdditionalFee,'AbstractorFee' => $assignedabstractor->AbstractorFee,'AbstractorCopyCost' => $assignedabstractor->AbstractorCopyCost,'ApprovalFunction' => 'AbstractorActualPricing','OperatorType'=>$assignedabstractor->OperatorType,'IsBilled' => $torders->IsBilled,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0);
+			$reportdata = array('OrderUID' => $OrderUID,'AbstractorUID'=>$assignedabstractor->AbstractorUID,'AbstractorOrderUID'=>$assignedabstractor->AbstractorOrderUID,'BeneficiaryType'=>'Abstractor','AbstractorActualFee' => $assignedabstractor->AbstractorActualFee,'AbstractorAdditionalFee' => $assignedabstractor->AbstractorAdditionalFee,'AbstractorFee' => $assignedabstractor->AbstractorFee,'AbstractorCopyCost' => $assignedabstractor->AbstractorCopyCost,'ApprovalFunction' => 'AbstractorActualPricing','OperatorType'=>$assignedabstractor->OperatorType,'IsBilled' => $tOrders->IsBilled,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0);
 			$this->db->insert('tOrderPayments',$reportdata);
 			
 		}
@@ -5651,7 +5649,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	}
 
 	function checkorder_isbilled($OrderUID){
-		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM torders WHERE OrderUID = '".$OrderUID."' AND IsBilled = 0) as billed");
+		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM tOrders WHERE OrderUID = '".$OrderUID."' AND IsBilled = 0) as billed");
 		return $query->row()->billed;
 	}
 	function GetFieldsDetails()
@@ -5673,7 +5671,7 @@ function GetNotaryByNotaryUID($NotaryUID)
   }
 
   function enable_reverseworkflow($OrderUID){
-  	$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM torders JOIN msubproducts ON msubproducts.SubProductUID = torders.SubProductUID JOIN mproducts ON mproducts.ProductUID = msubproducts.ProductUID  WHERE OrderUID = '".$OrderUID."' AND (StatusUID NOT IN (100,115,110,49) OR IsDynamicProduct  = 1 )) as isexists");
+  	$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM tOrders JOIN mSubProducts ON mSubProducts.SubProductUID = tOrders.SubProductUID JOIN mProducts ON mProducts.ProductUID = mSubProducts.ProductUID  WHERE OrderUID = '".$OrderUID."' AND (StatusUID NOT IN (100,115,110,49) OR IsDynamicProduct  = 1 )) as isexists");
 		return $query->row()->isexists;
   }
 
@@ -5690,9 +5688,9 @@ function GetNotaryByNotaryUID($NotaryUID)
   function insert_customerpaymentdata($OrderUID, $ScheduleUID = ''){
 
   	if($this->isexist_customer_payments($OrderUID) != 1){ 
-  		$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
+  		$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
   		/*CustomerFee row*/
-  		$reportdata = array('OrderUID' => $OrderUID,'CustomerUID'=>$torders->CustomerUID,'BeneficiaryType'=>'Customer','CustomerActualAmount' => $torders->CustomerActualAmount,'CustomerAdditionalAmount' => $torders->CustomerAdditionalAmount,'CustomerAmount' => $torders->CustomerAmount,'ApprovalFunction' => 'CustomerActualPricing','AgentPricing'=>$torders->AgentPricing,'UnderWritingPricing'=>$torders->UnderWritingPricing,'IsBilled' => $torders->IsBilled,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0, 'ScheduleUID'=>$ScheduleUID);
+  		$reportdata = array('OrderUID' => $OrderUID,'CustomerUID'=>$tOrders->CustomerUID,'BeneficiaryType'=>'Customer','CustomerActualAmount' => $tOrders->CustomerActualAmount,'CustomerAdditionalAmount' => $tOrders->CustomerAdditionalAmount,'CustomerAmount' => $tOrders->CustomerAmount,'ApprovalFunction' => 'CustomerActualPricing','AgentPricing'=>$tOrders->AgentPricing,'UnderWritingPricing'=>$tOrders->UnderWritingPricing,'IsBilled' => $tOrders->IsBilled,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0, 'ScheduleUID'=>$ScheduleUID);
   		$this->db->insert('tOrderPayments',$reportdata);
   	}
 
@@ -5703,16 +5701,16 @@ function GetNotaryByNotaryUID($NotaryUID)
   	$assignedabstractors = $this->db->get_where('torderabstractor', array('OrderUID'=>$OrderUID))->result();
   	$unassignedabstractors = $this->db->get_where('torderabstractorunassign', array('OrderUID'=>$OrderUID,'IsFeeAdjusted'=>1))->result();
   	$abstractors = array_merge($assignedabstractors,$unassignedabstractors);
-  	$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
+  	$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
 
   	foreach ($abstractors as $abstractorkey => $abstractor) {
   		if($this->isexist_abstractor_payments($OrderUID,$abstractor->AbstractorOrderUID) != 1){ 
 
-  			if($torders->IsBilled == 2){
+  			if($tOrders->IsBilled == 2){
   				$bill = 1;
-  				$this->db->query("UPDATE torders SET IsBilled = ".$bill." WHERE OrderUID = ".$OrderUID." ");
+  				$this->db->query("UPDATE tOrders SET IsBilled = ".$bill." WHERE OrderUID = ".$OrderUID." ");
   			} else {
-  				$bill =$torders->IsBilled;
+  				$bill =$tOrders->IsBilled;
   			}
   			$reportdata = array('OrderUID' => $OrderUID,'AbstractorUID'=>$abstractor->AbstractorUID,'AbstractorOrderUID'=>$abstractor->AbstractorOrderUID,'BeneficiaryType'=>'Abstractor','AbstractorActualFee' => $abstractor->AbstractorActualFee,'AbstractorAdditionalFee' => $abstractor->AbstractorAdditionalFee,'AbstractorFee' => $abstractor->AbstractorFee,'AbstractorCopyCost' => $abstractor->AbstractorCopyCost,'ApprovalFunction' => 'AbstractorActualPricing','OperatorType'=>$abstractor->OperatorType,'IsBilled' => $bill,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0);
   			$this->db->insert('tOrderPayments',$reportdata);
@@ -5725,16 +5723,16 @@ function GetNotaryByNotaryUID($NotaryUID)
   	$assignedabstractors = $this->db->get_where('torderabstractor', array('OrderUID'=>$OrderUID))->result();
   	$unassignedabstractors = $this->db->get_where('torderabstractorunassign', array('OrderUID'=>$OrderUID,'IsFeeAdjusted'=>1))->result();
   	$abstractors = array_merge($assignedabstractors,$unassignedabstractors);
-  	$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
+  	$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
 
   	foreach ($abstractors as $abstractorkey => $abstractor) {
   		if($this->isexist_abstractor_payments($OrderUID,$abstractor->AbstractorOrderUID) != 1){ 
 
-  			if($torders->IsBilled == 2){
+  			if($tOrders->IsBilled == 2){
   				$bill = 1;
-  				$this->db->query("UPDATE torders SET IsBilled = ".$bill." WHERE OrderUID = ".$OrderUID." ");
+  				$this->db->query("UPDATE tOrders SET IsBilled = ".$bill." WHERE OrderUID = ".$OrderUID." ");
   			} else {
-  				$bill =$torders->IsBilled;
+  				$bill =$tOrders->IsBilled;
   			}
   			$reportdata = array('OrderUID' => $OrderUID,'AbstractorUID'=>$abstractor->AbstractorUID,'AbstractorOrderUID'=>$abstractor->AbstractorOrderUID,'BeneficiaryType'=>'Abstractor','AbstractorActualFee' => $abstractor->AbstractorActualFee,'AbstractorAdditionalFee' => $abstractor->AbstractorAdditionalFee,'AbstractorFee' => $abstractor->AbstractorFee,'AbstractorCopyCost' => $abstractor->AbstractorCopyCost,'ApprovalFunction' => $PricingType,'OperatorType'=>$abstractor->OperatorType,'IsBilled' => $bill,'ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>0);
   			$this->db->insert('tOrderPayments',$reportdata);
@@ -5752,31 +5750,31 @@ function GetNotaryByNotaryUID($NotaryUID)
   	}
   	$result =  $query->row();
 
-  	$torders_abstractor['AbstractorFee'] = $result->TotalAbstractorFee; 
-  	$torders_abstractor['OperatorType'] = '+'; 
-  	$torders_abstractor['AbstractorAdditionalFee'] = $result->AbstractorAdditionalFee;
-  	$torders_abstractor['AbstractorCopyCost'] = $result->AbstractorCopyCost;
+  	$tOrders_abstractor['AbstractorFee'] = $result->TotalAbstractorFee; 
+  	$tOrders_abstractor['OperatorType'] = '+'; 
+  	$tOrders_abstractor['AbstractorAdditionalFee'] = $result->AbstractorAdditionalFee;
+  	$tOrders_abstractor['AbstractorCopyCost'] = $result->AbstractorCopyCost;
   	$this->db->where('AbstractorOrderUID', $AbstractorOrderUID);
 
   	if($Iscancelled == '1'){
-  		$this->db->update('torderabstractorunassign', $torders_abstractor);
+  		$this->db->update('torderabstractorunassign', $tOrders_abstractor);
   	}else{
-  		$this->db->update('torderabstractor', $torders_abstractor);
+  		$this->db->update('torderabstractor', $tOrders_abstractor);
   	}
   }
 
     function updatecustomerfee_payments($OrderUID){
 	
-  	$query = $this->db->query("SELECT SUM(CONCAT(`tOrderPayments`.`OperatorType`, '', `tOrderPayments`.`CustomerAdditionalAmount`)) AS CustomerAdditionalAmount,SUM(CONCAT(`tOrderPayments`.`OperatorType`, '', `tOrderPayments`.`CustomerAdditionalAmount`))+ CASE WHEN torders.CustomerActualAmount IS NULL THEN 0 ELSE torders.CustomerActualAmount END +SUM(tOrderPayments.AgentPricing)+SUM(tOrderPayments.UnderWritingPricing) AS CustomerTotalAmount,SUM(tOrderPayments.UnderWritingPricing) AS UnderWritingPricing,SUM(tOrderPayments.AgentPricing)  AS AgentPricing FROM tOrderPayments JOIN torders ON torders.OrderUID = tOrderPayments.OrderUID  WHERE tOrderPayments.OrderUID = '".$OrderUID."'  AND BeneficiaryType = 'Customer' ");
+  	$query = $this->db->query("SELECT SUM(CONCAT(`tOrderPayments`.`OperatorType`, '', `tOrderPayments`.`CustomerAdditionalAmount`)) AS CustomerAdditionalAmount,SUM(CONCAT(`tOrderPayments`.`OperatorType`, '', `tOrderPayments`.`CustomerAdditionalAmount`))+ CASE WHEN tOrders.CustomerActualAmount IS NULL THEN 0 ELSE tOrders.CustomerActualAmount END +SUM(tOrderPayments.AgentPricing)+SUM(tOrderPayments.UnderWritingPricing) AS CustomerTotalAmount,SUM(tOrderPayments.UnderWritingPricing) AS UnderWritingPricing,SUM(tOrderPayments.AgentPricing)  AS AgentPricing FROM tOrderPayments JOIN tOrders ON tOrders.OrderUID = tOrderPayments.OrderUID  WHERE tOrderPayments.OrderUID = '".$OrderUID."'  AND BeneficiaryType = 'Customer' ");
   	$result =  $query->row();
-  	$torders['CustomerAdditionalAmount'] = $result->CustomerAdditionalAmount; 
-  	$torders['OperatorType'] = '+'; 
-  	$torders['CustomerAmount'] = $result->CustomerTotalAmount;
-  	$torders['UnderWritingPricing'] = $result->UnderWritingPricing;
-  	$torders['AgentPricing'] = $result->AgentPricing;
+  	$tOrders['CustomerAdditionalAmount'] = $result->CustomerAdditionalAmount; 
+  	$tOrders['OperatorType'] = '+'; 
+  	$tOrders['CustomerAmount'] = $result->CustomerTotalAmount;
+  	$tOrders['UnderWritingPricing'] = $result->UnderWritingPricing;
+  	$tOrders['AgentPricing'] = $result->AgentPricing;
 
   	$this->db->where('OrderUID', $OrderUID);
-  	$this->db->update('torders', $torders);
+  	$this->db->update('tOrders', $tOrders);
   }
 
   function delete_abstractorchanges_payments($OrderUID,$AbstractorOrderUID){
@@ -5798,7 +5796,7 @@ function GetNotaryByNotaryUID($NotaryUID)
   		if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
   	}
 
-  	$query = $this->db->query("SELECT mgroupcustomers.GroupCustomerProductUID as ProductUID,mgroupcustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID  LEFT JOIN msubproducts on msubproducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID LEFT JOIN mproducts on mproducts.ProductUID = mgroupcustomers.GroupCustomerProductUID WHERE mgroups.GroupUID IN ($GroupUIDs) $where  Group by mgroupcustomers.GroupCustomerSubProductUID");
+  	$query = $this->db->query("SELECT mgroupcustomers.GroupCustomerProductUID as ProductUID,mgroupcustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID  LEFT JOIN mSubProducts on mSubProducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID LEFT JOIN mProducts on mProducts.ProductUID = mgroupcustomers.GroupCustomerProductUID WHERE mgroups.GroupUID IN ($GroupUIDs) $where  Group by mgroupcustomers.GroupCustomerSubProductUID");
   	return $query->result();
   }
 
@@ -5841,9 +5839,9 @@ function GetNotaryByNotaryUID($NotaryUID)
   	$data['ApprovedDatetime'] = date('Y-m-d H:i:s');
   	$data['Notes'] = 'System declined';
 
-  	$torders_abstractor['ApprovalStatus'] = 4;
+  	$tOrders_abstractor['ApprovalStatus'] = 4;
   	$this->db->where('AbstractorOrderUID', $AbstractorOrderUID);
-  	$this->db->update('torderabstractor', $torders_abstractor);
+  	$this->db->update('torderabstractor', $tOrders_abstractor);
 
   	$this->db->where('OrderUID',$OrderUID);
   	$this->db->where('ApprovalStatus','0');
@@ -5864,7 +5862,7 @@ function GetNotaryByNotaryUID($NotaryUID)
   	$this->db->update('torderapprovals', $data);
   }
 
-  function GetOrderSourceName($OrderSourceUID){
+  function GetOrdersourceName($OrderSourceUID){
   	$this->db->select("*");
   	$this->db->from('mApiTitlePlatform');
   	$this->db->where(array("OrderSourceUID"=>$OrderSourceUID));
@@ -6046,7 +6044,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
   function Customer_workflow_exists($OrderUID,$WorkflowModuleUID)
   {
-  	$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM (`mcustomerworkflowmodules`) INNER JOIN `torders` ON `mcustomerworkflowmodules`.`CustomerUID`=`torders`.`CustomerUID` AND mcustomerworkflowmodules.SubProductUID=torders.SubProductUID WHERE `OrderUID` = '".$OrderUID."' AND `WorkflowModuleUID` = '".$WorkflowModuleUID."' ORDER BY `WorkflowModuleUID` ASC) AS available");
+  	$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM (`mcustomerworkflowmodules`) INNER JOIN `tOrders` ON `mcustomerworkflowmodules`.`CustomerUID`=`tOrders`.`CustomerUID` AND mcustomerworkflowmodules.SubProductUID=tOrders.SubProductUID WHERE `OrderUID` = '".$OrderUID."' AND `WorkflowModuleUID` = '".$WorkflowModuleUID."' ORDER BY `WorkflowModuleUID` ASC) AS available");
   	return $query->row()->available;
   }
 
@@ -6096,12 +6094,12 @@ function GetNotaryByNotaryUID($NotaryUID)
   function get_order_detail($OrderUID)
   {
 
-  	$this->db->select ( 'torders.CustomerUID AS CustomerUID,CustomerName,CustomerRefNum,torders.SubProductUID AS SubproductUID,torders.OwnerOccupancy,torders.SigningLocalDate,mproducts.ProductUID AS ProductUID,ProductName,StatusUID,torders.OrderUID AS OrderUID,LoanNumber,OrderNumber,PropertyAddress1,PropertyAddress2,PropertyZipcode,PropertyCityName,PropertyCountyName,PropertyStateCode, msubproducts.ScheduleDuration,msubproducts.IsRefinance,torders.APIOrder');
-  	$this->db->from ( 'torders' );
-  	$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-  	$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-  	$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-  	$this->db->where ('torders.OrderUID',$OrderUID);
+  	$this->db->select ( 'tOrders.CustomerUID AS CustomerUID,CustomerName,CustomerRefNum,tOrders.SubProductUID AS SubproductUID,tOrders.OwnerOccupancy,tOrders.SigningLocalDate,mProducts.ProductUID AS ProductUID,ProductName,StatusUID,tOrders.OrderUID AS OrderUID,LoanNumber,OrderNumber,PropertyAddress1,PropertyAddress2,PropertyZipcode,PropertyCityName,PropertyCountyName,PropertyStateCode, mSubProducts.ScheduleDuration,mSubProducts.IsRefinance,tOrders.APIOrder');
+  	$this->db->from ( 'tOrders' );
+  	$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+  	$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+  	$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+  	$this->db->where ('tOrders.OrderUID',$OrderUID);
   	$query = $this->db->get();
   	return $query->row();
 
@@ -6111,16 +6109,16 @@ function GetNotaryByNotaryUID($NotaryUID)
 	{
 
 		// $this->db->select('Id,PRName');
-		// $this->db->from('torderpropertyroles');
-		// $this->db->join('tOrderScheduleBorrower','tOrderScheduleBorrower.BorrowerUID=torderpropertyroles.Id','left');
-		// // $this->db->join('tOrderSchedule','tOrderSchedule.ScheduleUID=tOrderScheduleBorrower.ScheduleUID','left');
+		// $this->db->from('tOrderPropertyRoles');
+		// $this->db->join('tOrderscheduleBorrower','tOrderscheduleBorrower.BorrowerUID=tOrderPropertyRoles.Id','left');
+		// // $this->db->join('tOrderschedule','tOrderschedule.ScheduleUID=tOrderscheduleBorrower.ScheduleUID','left');
 		// // $Notinstatus = array('Reschedule','Assign');
-		// // $this->db->where_not_in('tOrderSchedule.ScheduleStatus',$Notinstatus);
-		// $this->db->where("NOT EXISTS (SELECT 1 FROM tOrderSchedule WHERE tOrderSchedule.OrderUID = torderpropertyroles.OrderUID AND tOrderSchedule.ScheduleStatus in('Reschedule','Assign'))",NULL,FALSE);
-		// $this->db->where('torderpropertyroles.OrderUID',$OrderUID);
-		// $this->db->group_by('torderpropertyroles.Id');
+		// // $this->db->where_not_in('tOrderschedule.ScheduleStatus',$Notinstatus);
+		// $this->db->where("NOT EXISTS (SELECT 1 FROM tOrderschedule WHERE tOrderschedule.OrderUID = tOrderPropertyRoles.OrderUID AND tOrderschedule.ScheduleStatus in('Reschedule','Assign'))",NULL,FALSE);
+		// $this->db->where('tOrderPropertyRoles.OrderUID',$OrderUID);
+		// $this->db->group_by('tOrderPropertyRoles.Id');
 		// return $this->db->get()->result();
-		$sql ="SELECT `Id`, `PRName` FROM (`torderpropertyroles`) WHERE  NOT EXISTS (SELECT BorrowerUID FROM tOrderSchedule JOIN tOrderScheduleBorrower ON tOrderScheduleBorrower.ScheduleUID = tOrderSchedule.ScheduleUID  WHERE tOrderSchedule.ScheduleStatus IN ('Reschedule','Assign') AND torderpropertyroles.Id = BorrowerUID) AND `torderpropertyroles`.`OrderUID` = '".$OrderUID."' AND torderpropertyroles.PropertyRoleUID IN (5,7,27) ";
+		$sql ="SELECT `Id`, `PRName` FROM (`tOrderPropertyRoles`) WHERE  NOT EXISTS (SELECT BorrowerUID FROM tOrderschedule JOIN tOrderscheduleBorrower ON tOrderscheduleBorrower.ScheduleUID = tOrderschedule.ScheduleUID  WHERE tOrderschedule.ScheduleStatus IN ('Reschedule','Assign') AND tOrderPropertyRoles.Id = BorrowerUID) AND `tOrderPropertyRoles`.`OrderUID` = '".$OrderUID."' AND tOrderPropertyRoles.PropertyRoleUID IN (5,7,27) ";
 		$query = $this->db->query($sql);
 
 		return $query->result();
@@ -6177,32 +6175,32 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function getBorrowerCurrentAddress($BorrowerUID, $ReturnType = "String")
 	{
-		$torderpropertyroles = $this->common_model->get_row('torderpropertyroles', ['Id'=>$BorrowerUID]);
+		$tOrderPropertyRoles = $this->common_model->get_row('tOrderPropertyRoles', ['Id'=>$BorrowerUID]);
 		$currentaddress = [];
 
-		if (!empty($torderpropertyroles)) {
+		if (!empty($tOrderPropertyRoles)) {
 			
-			if ($torderpropertyroles->IsMailingAddress == 'property') {
-				$torders = $this->common_model->get_row('torders', ['OrderUID'=>$torderpropertyroles->OrderUID]);
+			if ($tOrderPropertyRoles->IsMailingAddress == 'property') {
+				$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$tOrderPropertyRoles->OrderUID]);
 				$currentaddress = array(
-					'AddressLine1'=>$torders->PropertyAddress1,
-					'AddressLine2'=>$torders->PropertyAddress2,
-					'CityName'=>$torders->PropertyCityName,
-					'CountyName'=>$torders->PropertyCountyName,
-					'StateCode'=>$torders->PropertyStateCode,
-					'ZipCode'=>$torders->PropertyZipcode,
-					'MailingAddressNotes'=>$torderpropertyroles->MailingAddressNotes,
+					'AddressLine1'=>$tOrders->PropertyAddress1,
+					'AddressLine2'=>$tOrders->PropertyAddress2,
+					'CityName'=>$tOrders->PropertyCityName,
+					'CountyName'=>$tOrders->PropertyCountyName,
+					'StateCode'=>$tOrders->PropertyStateCode,
+					'ZipCode'=>$tOrders->PropertyZipcode,
+					'MailingAddressNotes'=>$tOrderPropertyRoles->MailingAddressNotes,
 				);
 			}
-			else if($torderpropertyroles->IsMailingAddress == 'others'){
+			else if($tOrderPropertyRoles->IsMailingAddress == 'others'){
 				$currentaddress = array(
-					'AddressLine1'=>$torderpropertyroles->MailingAddress1,
-					'AddressLine2'=>$torderpropertyroles->MailingAddress2,
-					'CityName'=>$torderpropertyroles->MailingCityName,
-					'CountyName'=>$torderpropertyroles->MailingCountyName,
-					'StateCode'=>$torderpropertyroles->MailingStateCode,
-					'ZipCode'=>$torderpropertyroles->MailingZipCode,
-					'MailingAddressNotes'=>$torderpropertyroles->MailingAddressNotes,
+					'AddressLine1'=>$tOrderPropertyRoles->MailingAddress1,
+					'AddressLine2'=>$tOrderPropertyRoles->MailingAddress2,
+					'CityName'=>$tOrderPropertyRoles->MailingCityName,
+					'CountyName'=>$tOrderPropertyRoles->MailingCountyName,
+					'StateCode'=>$tOrderPropertyRoles->MailingStateCode,
+					'ZipCode'=>$tOrderPropertyRoles->MailingZipCode,
+					'MailingAddressNotes'=>$tOrderPropertyRoles->MailingAddressNotes,
 				);
 
 			}
@@ -6238,64 +6236,64 @@ function GetNotaryByNotaryUID($NotaryUID)
 			}
 		}
 
-		$torderpropertyroles = $this->common_model->get_row('torderpropertyroles', ['Id'=>$BorrowerUID]);
+		$tOrderPropertyRoles = $this->common_model->get_row('tOrderPropertyRoles', ['Id'=>$BorrowerUID]);
 		$currentaddress = [];
-		if (!empty($torderpropertyroles)) {
+		if (!empty($tOrderPropertyRoles)) {
 			
-			$torders = $this->common_model->get_row('torders', ['OrderUID'=>$torderpropertyroles->OrderUID]);
-			if ($torderpropertyroles->IsSigningAddress == 'property'/* || empty($torderpropertyroles->IsSigningAddress)*/ ) {
+			$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$tOrderPropertyRoles->OrderUID]);
+			if ($tOrderPropertyRoles->IsSigningAddress == 'property'/* || empty($tOrderPropertyRoles->IsSigningAddress)*/ ) {
 				$currentaddress = array(
-					'AddressLine1'=>$torders->PropertyAddress1,
-					'AddressLine2'=>$torders->PropertyAddress2,
-					'CityName'=>$torders->PropertyCityName,
-					'CountyName'=>$torders->PropertyCountyName,
-					'StateCode'=>$torders->PropertyStateCode,
-					'ZipCode'=>$torders->PropertyZipcode,
-					'MailingAddressNotes'=>!empty($torderpropertyroles->SigningAddressNotes) ? $torderpropertyroles->SigningAddressNotes : $torders->AddressNotes,
-					'SpecialInstruction'=>!empty($torderpropertyroles->SigningSpecialInstruction) ? $torderpropertyroles->SigningSpecialInstruction : $torders->SpecialInstruction,
+					'AddressLine1'=>$tOrders->PropertyAddress1,
+					'AddressLine2'=>$tOrders->PropertyAddress2,
+					'CityName'=>$tOrders->PropertyCityName,
+					'CountyName'=>$tOrders->PropertyCountyName,
+					'StateCode'=>$tOrders->PropertyStateCode,
+					'ZipCode'=>$tOrders->PropertyZipcode,
+					'MailingAddressNotes'=>!empty($tOrderPropertyRoles->SigningAddressNotes) ? $tOrderPropertyRoles->SigningAddressNotes : $tOrders->AddressNotes,
+					'SpecialInstruction'=>!empty($tOrderPropertyRoles->SigningSpecialInstruction) ? $tOrderPropertyRoles->SigningSpecialInstruction : $tOrders->SpecialInstruction,
 				);
 			}
-			else if($torderpropertyroles->IsSigningAddress == 'mailing'){
+			else if($tOrderPropertyRoles->IsSigningAddress == 'mailing'){
 
-				if ($torderpropertyroles->IsMailingAddress == 'property') {
+				if ($tOrderPropertyRoles->IsMailingAddress == 'property') {
 
 					$currentaddress = array(
-						'AddressLine1'=>$torders->PropertyAddress1,
-						'AddressLine2'=>$torders->PropertyAddress2,
-						'CityName'=>$torders->PropertyCityName,
-						'CountyName'=>$torders->PropertyCountyName,
-						'StateCode'=>$torders->PropertyStateCode,
-						'ZipCode'=>$torders->PropertyZipcode,
-						'MailingAddressNotes'=>!empty($torderpropertyroles->SigningAddressNotes) ? $torderpropertyroles->SigningAddressNotes : $torders->AddressNotes,
-						'SpecialInstruction'=>!empty($torderpropertyroles->SigningSpecialInstruction) ? $torderpropertyroles->SigningSpecialInstruction : $torders->SpecialInstruction,
+						'AddressLine1'=>$tOrders->PropertyAddress1,
+						'AddressLine2'=>$tOrders->PropertyAddress2,
+						'CityName'=>$tOrders->PropertyCityName,
+						'CountyName'=>$tOrders->PropertyCountyName,
+						'StateCode'=>$tOrders->PropertyStateCode,
+						'ZipCode'=>$tOrders->PropertyZipcode,
+						'MailingAddressNotes'=>!empty($tOrderPropertyRoles->SigningAddressNotes) ? $tOrderPropertyRoles->SigningAddressNotes : $tOrders->AddressNotes,
+						'SpecialInstruction'=>!empty($tOrderPropertyRoles->SigningSpecialInstruction) ? $tOrderPropertyRoles->SigningSpecialInstruction : $tOrders->SpecialInstruction,
 					);
 					
 				}
 				else{
 					$currentaddress = array(
-						'AddressLine1'=>$torderpropertyroles->MailingAddress1,
-						'AddressLine2'=>$torderpropertyroles->MailingAddress2,
-						'CityName'=>$torderpropertyroles->MailingCityName,
-						'CountyName'=>$torderpropertyroles->MailingCountyName,
-						'StateCode'=>$torderpropertyroles->MailingStateCode,
-						'ZipCode'=>$torderpropertyroles->MailingZipCode,
-						'MailingAddressNotes'=>!empty($torderpropertyroles->MailingAddressNotes) ? $torderpropertyroles->MailingAddressNotes : $torders->AddressNotes,
-						'SpecialInstruction'=>!empty($torderpropertyroles->SigningSpecialInstruction) ? $torderpropertyroles->SigningSpecialInstruction : $torders->SpecialInstruction,
+						'AddressLine1'=>$tOrderPropertyRoles->MailingAddress1,
+						'AddressLine2'=>$tOrderPropertyRoles->MailingAddress2,
+						'CityName'=>$tOrderPropertyRoles->MailingCityName,
+						'CountyName'=>$tOrderPropertyRoles->MailingCountyName,
+						'StateCode'=>$tOrderPropertyRoles->MailingStateCode,
+						'ZipCode'=>$tOrderPropertyRoles->MailingZipCode,
+						'MailingAddressNotes'=>!empty($tOrderPropertyRoles->MailingAddressNotes) ? $tOrderPropertyRoles->MailingAddressNotes : $tOrders->AddressNotes,
+						'SpecialInstruction'=>!empty($tOrderPropertyRoles->SigningSpecialInstruction) ? $tOrderPropertyRoles->SigningSpecialInstruction : $tOrders->SpecialInstruction,
 
 					);
 				}
 
 			}
-			else if($torderpropertyroles->IsSigningAddress == 'others'){
+			else if($tOrderPropertyRoles->IsSigningAddress == 'others'){
 				$currentaddress = array(
-					'AddressLine1'=>$torderpropertyroles->SigningAddress1,
-					'AddressLine2'=>$torderpropertyroles->SigningAddress2,
-					'CityName'=>$torderpropertyroles->SigningCityName,
-					'CountyName'=>$torderpropertyroles->SigningCountyName,
-					'StateCode'=>$torderpropertyroles->SigningStateCode,
-					'ZipCode'=>$torderpropertyroles->SigningZipCode,
-					'MailingAddressNotes'=>!empty($torderpropertyroles->SigningAddressNotes) ? $torderpropertyroles->SigningAddressNotes : $torders->AddressNotes,
-					'SpecialInstruction'=>!empty($torderpropertyroles->SigningSpecialInstruction) ? $torderpropertyroles->SigningSpecialInstruction : $torders->SpecialInstruction,
+					'AddressLine1'=>$tOrderPropertyRoles->SigningAddress1,
+					'AddressLine2'=>$tOrderPropertyRoles->SigningAddress2,
+					'CityName'=>$tOrderPropertyRoles->SigningCityName,
+					'CountyName'=>$tOrderPropertyRoles->SigningCountyName,
+					'StateCode'=>$tOrderPropertyRoles->SigningStateCode,
+					'ZipCode'=>$tOrderPropertyRoles->SigningZipCode,
+					'MailingAddressNotes'=>!empty($tOrderPropertyRoles->SigningAddressNotes) ? $tOrderPropertyRoles->SigningAddressNotes : $tOrders->AddressNotes,
+					'SpecialInstruction'=>!empty($tOrderPropertyRoles->SigningSpecialInstruction) ? $tOrderPropertyRoles->SigningSpecialInstruction : $tOrders->SpecialInstruction,
 
 				);
 
@@ -6311,15 +6309,15 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function getAllScheduleDetailsForOrder($OrderUID)
 	{
-		$this->db->select('*, GROUP_CONCAT(PRName SEPARATOR " and ") AS Borrowers, DATE_FORMAT(tOrderSchedule.SigningDateTime, "%m/%d/%Y %h:%i %p") AS fSigningDateTime', false);
-		$this->db->from('tOrderSchedule');
-		$this->db->join('tOrderScheduleBorrower', 'tOrderSchedule.ScheduleUID = tOrderScheduleBorrower.ScheduleUID');
-		$this->db->join('tOrderSign', 'tOrderSchedule.ScheduleUID = tOrderSign.ScheduleUID');
-		$this->db->join('torderpropertyroles', 'torderpropertyroles.Id = tOrderScheduleBorrower.BorrowerUID');
-		$this->db->join('mpropertyroles', 'torderpropertyroles.PropertyRoleUID = mpropertyroles.PropertyRoleUID');
-		$this->db->where('tOrderSchedule.OrderUID', $OrderUID);
-		$this->db->where_not_in('tOrderSchedule.ScheduleStatus', ['Cancel']);
-		$this->db->group_by('tOrderSchedule.ScheduleUID');
+		$this->db->select('*, GROUP_CONCAT(PRName SEPARATOR " and ") AS Borrowers, DATE_FORMAT(tOrderschedule.SigningDateTime, "%m/%d/%Y %h:%i %p") AS fSigningDateTime', false);
+		$this->db->from('tOrderschedule');
+		$this->db->join('tOrderscheduleBorrower', 'tOrderschedule.ScheduleUID = tOrderscheduleBorrower.ScheduleUID');
+		$this->db->join('tOrdersign', 'tOrderschedule.ScheduleUID = tOrdersign.ScheduleUID');
+		$this->db->join('tOrderPropertyRoles', 'tOrderPropertyRoles.Id = tOrderscheduleBorrower.BorrowerUID');
+		$this->db->join('mpropertyroles', 'tOrderPropertyRoles.PropertyRoleUID = mpropertyroles.PropertyRoleUID');
+		$this->db->where('tOrderschedule.OrderUID', $OrderUID);
+		$this->db->where_not_in('tOrderschedule.ScheduleStatus', ['Cancel']);
+		$this->db->group_by('tOrderschedule.ScheduleUID');
 		return $this->db->get()->result();
 	}
 
@@ -6438,8 +6436,8 @@ function GetNotaryByNotaryUID($NotaryUID)
 				FROM
 				torderabstractor
 				JOIN mabstractor ON mabstractor.AbstractorUID = torderabstractor.AbstractorUID
-				JOIN tOrderSchedule ON torderabstractor.AbstractorOrderUID = tOrderSchedule.AbstractorOrderUID
-				JOIN tOrderClosing ON tOrderClosing.ScheduleUID = tOrderSchedule.ScheduleUID
+				JOIN tOrderschedule ON torderabstractor.AbstractorOrderUID = tOrderschedule.AbstractorOrderUID
+				JOIN tOrderClosing ON tOrderClosing.ScheduleUID = tOrderschedule.ScheduleUID
 				WHERE
 				torderabstractor.OrderUID = '".$OrderUID."'
 				ORDER BY AssignedDateTime";
@@ -6450,19 +6448,19 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function getProductDetailsBySubProductUID($SubProductUID)
 	{
 		$this->db->select('*');
-		$this->db->from('msubproducts');
-		$this->db->join('mproducts', 'msubproducts.ProductUID = mproducts.ProductUID');
-		$this->db->where('msubproducts.SubProductUID', $SubProductUID);
+		$this->db->from('mSubProducts');
+		$this->db->join('mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID');
+		$this->db->where('mSubProducts.SubProductUID', $SubProductUID);
 		return $this->db->get()->row();
 	}
 
 	// function get_statesearchmode($State,$County)
 	// {
-	// 	$query = $this->db->query("SELECT SearchModeName FROM mStateSearchMode JOIN mcounties ON mcounties.CountyUID = mStateSearchMode.CountyUID JOIN mstates ON mstates.StateUID = mStateSearchMode.StateUID WHERE StateCode = '".trim($State)."' AND CountyName = '".trim($County)."' ");
+	// 	$query = $this->db->query("SELECT SearchModeName FROM mStatesearchMode JOIN mCounties ON mCounties.CountyUID = mStatesearchMode.CountyUID JOIN mStates ON mStates.StateUID = mStatesearchMode.StateUID WHERE StateCode = '".trim($State)."' AND CountyName = '".trim($County)."' ");
 	// 	$result =  $query->row();
 
 	// 	if(empty($result)) {
-	// 		$query = $this->db->query("SELECT SearchModeName FROM mStateSearchMode JOIN mstates ON mstates.StateUID = mStateSearchMode.StateUID WHERE StateCode = '".trim($State)."' AND (mStateSearchMode.CountyUID = 0 OR mStateSearchMode.CountyUID IS NULL) ");
+	// 		$query = $this->db->query("SELECT SearchModeName FROM mStatesearchMode JOIN mStates ON mStates.StateUID = mStatesearchMode.StateUID WHERE StateCode = '".trim($State)."' AND (mStatesearchMode.CountyUID = 0 OR mStatesearchMode.CountyUID IS NULL) ");
 	// 		$result =  $query->row();
 	// 	}
 
@@ -6475,11 +6473,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 		$this->db->select('mcustomerworkflowmodules.CustomerUID,mworkflowmodules.WorkflowModuleName,mcustomerworkflowmodules.WorkflowModuleUID');
 		$this->db->from('mcustomerworkflowmodules');
 		$this->db->join('mworkflowmodules', 'mcustomerworkflowmodules.workflowmoduleUID = mworkflowmodules.WorkflowModuleUID');
-		$this->db->join('torders', 'mcustomerworkflowmodules.CustomerUID = torders.CustomerUID AND mcustomerworkflowmodules.SubProductUID = torders.SubProductUID', 'left');
-		$this->db->join('torderassignment', 'torders.OrderUID = torderassignment.OrderUID AND mcustomerworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID', 'left');
+		$this->db->join('tOrders', 'mcustomerworkflowmodules.CustomerUID = tOrders.CustomerUID AND mcustomerworkflowmodules.SubProductUID = tOrders.SubProductUID', 'left');
+		$this->db->join('torderassignment', 'tOrders.OrderUID = torderassignment.OrderUID AND mcustomerworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID', 'left');
 		$this->db->where('mcustomerworkflowmodules.CustomerUID', $CustomerUID);
 		$this->db->where('mcustomerworkflowmodules.SubProductUID', $SubProductUID);
-		$this->db->where('torders.OrderUID', $OrderUID);
+		$this->db->where('tOrders.OrderUID', $OrderUID);
 		$this->db->where('torderassignment.WorkflowStatus != 5', NULL, FALSE);
 		$this->db->where_not_in('mcustomerworkflowmodules.WorkflowModuleUID', $this->config->item('NotAssignableWorkflows'));
 		$query = $this->db->get();
@@ -6491,7 +6489,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	{
 
 		$tOrderClosingTemp = $this->common_model->gettTempClosingOrderDetailsForOrder($OrderUID);
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
 		if (!empty($tOrderClosingTemp)) {			
 			$currentaddress = array(
 
@@ -6501,8 +6499,8 @@ function GetNotaryByNotaryUID($NotaryUID)
 				'CityName'=>$tOrderClosingTemp->MailingCityName,
 				'CountyName'=>$tOrderClosingTemp->MailingCountyName,
 				'StateCode'=>$tOrderClosingTemp->MailingStateCode,
-				'MailingAddressNotes'=>!empty($tOrderClosingTemp->MailingAddressNotes) ? $tOrderClosingTemp->MailingAddressNotes : $torders->AddressNotes,
-				'SpecialInstruction'=>!empty($tOrderClosingTemp->SpecialInstruction) ? $tOrderClosingTemp->SpecialInstruction : $torders->SpecialInstruction,
+				'MailingAddressNotes'=>!empty($tOrderClosingTemp->MailingAddressNotes) ? $tOrderClosingTemp->MailingAddressNotes : $tOrders->AddressNotes,
+				'SpecialInstruction'=>!empty($tOrderClosingTemp->SpecialInstruction) ? $tOrderClosingTemp->SpecialInstruction : $tOrders->SpecialInstruction,
 			);
 
 			return $currentaddress;
@@ -6515,7 +6513,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	{
 
 		$tOrderClosing = $this->common_model->get_row('tOrderClosing', ['ScheduleUID'=>$ScheduleUID]);
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
 		if (!empty($tOrderClosing)) {			
 			$currentaddress = array(
 
@@ -6525,8 +6523,8 @@ function GetNotaryByNotaryUID($NotaryUID)
 				'CityName'=>$tOrderClosing->SigningCityName,
 				'CountyName'=>$tOrderClosing->SigningCountyName,
 				'StateCode'=>$tOrderClosing->SigningStateCode,
-				'MailingAddressNotes'=>!empty($tOrderClosing->SigningAddressNotes) ? $tOrderClosing->SigningAddressNotes : $torders->AddressNotes,
-				'SpecialInstruction'=>!empty($tOrderClosing->SpecialInstruction) ? $tOrderClosing->SpecialInstruction : $torders->SpecialInstruction,
+				'MailingAddressNotes'=>!empty($tOrderClosing->SigningAddressNotes) ? $tOrderClosing->SigningAddressNotes : $tOrders->AddressNotes,
+				'SpecialInstruction'=>!empty($tOrderClosing->SpecialInstruction) ? $tOrderClosing->SpecialInstruction : $tOrders->SpecialInstruction,
 			);
 
 			return $currentaddress;
@@ -6574,8 +6572,8 @@ function GetNotaryByNotaryUID($NotaryUID)
   
   function GetUserDetailsByCustomerUID($CustomerUID){
     $this->db->select("*");
-    $this->db->from('mcustomers');
-    $this->db->where(array("mcustomers.CustomerUID"=>$CustomerUID));
+    $this->db->from('mCustomers');
+    $this->db->where(array("mCustomers.CustomerUID"=>$CustomerUID));
     $query = $this->db->get();
     return $query->row();
   }
@@ -6586,7 +6584,7 @@ function GetNotaryByNotaryUID($NotaryUID)
     if($CustomerUID != ''){
       $custwhere = "AND CustomerUID = '".$CustomerUID."'";
     }
-    $query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID SEPARATOR ',') AS SubProductUID FROM (`mcustomerproducts`) WHERE `mcustomerproducts`.`ProductUID` IN (".$ProductUID.") $custwhere ");
+    $query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID SEPARATOR ',') AS SubProductUID FROM (`mCustomerProducts`) WHERE `mCustomerProducts`.`ProductUID` IN (".$ProductUID.") $custwhere ");
     $result = $query->row();
     if(!empty($result)){
       return $result->SubProductUID;
@@ -6598,7 +6596,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 	/* D-2-T9 CREATE PACKAGE NUMBER BASED ON LOAN NUMBER*/
 	function is_packageuidavailable($OrderUID)
 	{	
-		$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM torders WHERE OrderUID = '".$OrderUID."' AND (PackageUID IS NOT NULL OR PackageUID <> '')) AS available ");
+		$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM tOrders WHERE OrderUID = '".$OrderUID."' AND (PackageUID IS NOT NULL OR PackageUID <> '')) AS available ");
 		return $query->row()->available;
 	}
 
@@ -6626,8 +6624,8 @@ function GetNotaryByNotaryUID($NotaryUID)
 			
 			if(!empty($LoanNumber)) {
 				//loann number matches with the existing loan number
-				$this->db->select('tOrderPackage.PackageUID')->from('torders');
-				$this->db->join('tOrderPackage','tOrderPackage.PackageUID = torders.PackageUID');
+				$this->db->select('tOrderPackage.PackageUID')->from('tOrders');
+				$this->db->join('tOrderPackage','tOrderPackage.PackageUID = tOrders.PackageUID');
 				$this->db->where('LoanNumber',$LoanNumber);
 				$this->db->where("(tOrderPackage.PackageUID <> '' AND tOrderPackage.PackageUID IS NOT NULL)",null,false);
 				$this->db->where('YEAR(CreatedDateTime)',$datequery);
@@ -6687,7 +6685,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 			if(!empty($PackageUID)) {
 				$this->db->set('PackageUID', $PackageUID); 
 				$this->db->where('OrderUID', $OrderUID);   
-				$this->db->update('torders'); 
+				$this->db->update('tOrders'); 
 			}
 			return true;
 		}
@@ -6697,32 +6695,32 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function updateClosingCustomerPricing($OrderUID)
 	{
 		$closing_pricing = new Customer_closing_pricing();
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
-		$this->db->select('tOrderSchedule.ScheduleUID, torderabstractor.AbstractorUID, tOrderClosing.*');
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
+		$this->db->select('tOrderschedule.ScheduleUID, torderabstractor.AbstractorUID, tOrderClosing.*');
 		$this->db->select('CASE WHEN IsNotary = 1 THEN "Notary" ELSE CASE WHEN IsAttorney = 1 THEN "Attorney" END END AS Type', false);
-		$this->db->from('tOrderSchedule');
-		$this->db->join('torderabstractor', 'torderabstractor.AbstractorOrderUID = tOrderSchedule.AbstractorOrderUID');
+		$this->db->from('tOrderschedule');
+		$this->db->join('torderabstractor', 'torderabstractor.AbstractorOrderUID = tOrderschedule.AbstractorOrderUID');
 		$this->db->join('mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID');
-		$this->db->join('tOrderClosing', 'tOrderSchedule.ScheduleUID = tOrderClosing.ScheduleUID');
-		$this->db->where('tOrderSchedule.OrderUID', $OrderUID);
-		$this->db->order_by('tOrderSchedule.ScheduleUID', 'ASC');
-		$tOrderSchedule = $this->db->get()->row();
+		$this->db->join('tOrderClosing', 'tOrderschedule.ScheduleUID = tOrderClosing.ScheduleUID');
+		$this->db->where('tOrderschedule.OrderUID', $OrderUID);
+		$this->db->order_by('tOrderschedule.ScheduleUID', 'ASC');
+		$tOrderschedule = $this->db->get()->row();
 
-		if (!empty($tOrderSchedule)) {
+		if (!empty($tOrderschedule)) {
 			
-			$mRoleCategory = $this->common_model->get_row('mRoleCategory', ['RoleCategoryName'=>$tOrderSchedule->Type]);
+			$mRoleCategory = $this->common_model->get_row('mRoleCategory', ['RoleCategoryName'=>$tOrderschedule->Type]);
 			if (!empty($mRoleCategory)) {
-				$Order = $torders;
-				$Order->PropertyStateCode = $tOrderSchedule->SigningStateCode;
-				$Order->PropertyCountyName = $tOrderSchedule->SigningCountyName;
+				$Order = $tOrders;
+				$Order->PropertyStateCode = $tOrderschedule->SigningStateCode;
+				$Order->PropertyCountyName = $tOrderschedule->SigningCountyName;
 				$Order->RoleCategoryUID = $mRoleCategory->RoleCategoryUID;
 				$customer_pricing = $closing_pricing->get_Closing_Pricings($Order);
 
-				$tOrderPayments = $this->common_model->get_row('tOrderPayments', ['ScheduleUID'=>$tOrderSchedule->ScheduleUID]);
+				$tOrderPayments = $this->common_model->get_row('tOrderPayments', ['ScheduleUID'=>$tOrderschedule->ScheduleUID]);
 
 				$reportdata = array('OrderUID' => $OrderUID,'CustomerActualAmount' => $customer_pricing->Pricing,'CustomerAdditionalAmount' => 0,'CustomerAmount' => $customer_pricing->Pricing,'ApprovalFunction' => 'CustomerActualPricing','ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>$tOrderPayments->CustomerAmount - $customer_pricing->Pricing);
 
-				$this->common_model->save('tOrderPayments', $reportdata, ['ScheduleUID'=>$tOrderSchedule->ScheduleUID]);
+				$this->common_model->save('tOrderPayments', $reportdata, ['ScheduleUID'=>$tOrderschedule->ScheduleUID]);
 
 
 			}
@@ -6733,26 +6731,26 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function updateClosingScheduleCustomerPricing($OrderUID, $ScheduleUID)
 	{
 		$closing_pricing = new Customer_closing_pricing();
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
 		$tOrderPayments = $this->common_model->get_row('tOrderPayments', ['ScheduleUID'=>$ScheduleUID]);
 
-		$this->db->select('tOrderSchedule.ScheduleUID, torderabstractor.AbstractorUID, tOrderClosing.*');
+		$this->db->select('tOrderschedule.ScheduleUID, torderabstractor.AbstractorUID, tOrderClosing.*');
 		$this->db->select('CASE WHEN IsNotary = 1 THEN "Notary" ELSE CASE WHEN IsAttorney = 1 THEN "Attorney" END END AS Type', false);
-		$this->db->from('tOrderSchedule');
-		$this->db->join('torderabstractor', 'torderabstractor.AbstractorOrderUID = tOrderSchedule.AbstractorOrderUID');
+		$this->db->from('tOrderschedule');
+		$this->db->join('torderabstractor', 'torderabstractor.AbstractorOrderUID = tOrderschedule.AbstractorOrderUID');
 		$this->db->join('mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID');
-		$this->db->join('tOrderClosing', 'tOrderSchedule.ScheduleUID = tOrderClosing.ScheduleUID');
-		$this->db->where('tOrderSchedule.ScheduleUID', $ScheduleUID);
-		$this->db->order_by('tOrderSchedule.ScheduleUID', 'ASC');
-		$tOrderSchedule = $this->db->get()->row();
+		$this->db->join('tOrderClosing', 'tOrderschedule.ScheduleUID = tOrderClosing.ScheduleUID');
+		$this->db->where('tOrderschedule.ScheduleUID', $ScheduleUID);
+		$this->db->order_by('tOrderschedule.ScheduleUID', 'ASC');
+		$tOrderschedule = $this->db->get()->row();
 
-		if (!empty($tOrderSchedule)) {
+		if (!empty($tOrderschedule)) {
 			
-			$mRoleCategory = $this->common_model->get_row('mRoleCategory', ['RoleCategoryName'=>$tOrderSchedule->Type]);
+			$mRoleCategory = $this->common_model->get_row('mRoleCategory', ['RoleCategoryName'=>$tOrderschedule->Type]);
 			if (!empty($mRoleCategory)) {
-				$Order = $torders;
-				$Order->PropertyStateCode = $tOrderSchedule->SigningStateCode;
-				$Order->PropertyCountyName = $tOrderSchedule->SigningCountyName;
+				$Order = $tOrders;
+				$Order->PropertyStateCode = $tOrderschedule->SigningStateCode;
+				$Order->PropertyCountyName = $tOrderschedule->SigningCountyName;
 				$Order->RoleCategoryUID = $mRoleCategory->RoleCategoryUID;
 				$customer_pricing = $closing_pricing->get_Closing_Pricings($Order);
 
@@ -6760,14 +6758,14 @@ function GetNotaryByNotaryUID($NotaryUID)
 					
 					if ($tOrderPayments->ApprovalFunction == 'CustomerPricingAdjustments') {
 
-						$reportdata = array('OrderUID' => $OrderUID,'CustomerActualAmount' => $torders->CustomerActualAmount,'CustomerAdditionalAmount' => $customer_pricing->DualClosingFee,'CustomerAmount' => ($torders->CustomerAmount - $tOrderPayments->CustomerAdditionalAmount) + $customer_pricing->DualClosingFee,'ApprovalFunction' => 'CustomerPricingAdjustments','ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>$tOrderPayments->CustomerAmount - $customer_pricing->DualClosingFee);
+						$reportdata = array('OrderUID' => $OrderUID,'CustomerActualAmount' => $tOrders->CustomerActualAmount,'CustomerAdditionalAmount' => $customer_pricing->DualClosingFee,'CustomerAmount' => ($tOrders->CustomerAmount - $tOrderPayments->CustomerAdditionalAmount) + $customer_pricing->DualClosingFee,'ApprovalFunction' => 'CustomerPricingAdjustments','ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>$tOrderPayments->CustomerAmount - $customer_pricing->DualClosingFee);
 
 						$this->common_model->save('tOrderPayments', $reportdata, ['ScheduleUID'=>$ScheduleUID]);
 
 					}
 					else if ($tOrderPayments->ApprovalFunction == 'CustomerActualPricing'){
 
-						$this->common_model->save('torders',  ['CustomerActualAmount' => $customer_pricing->Pricing], ['OrderUID'=>$OrderUID]);
+						$this->common_model->save('tOrders',  ['CustomerActualAmount' => $customer_pricing->Pricing], ['OrderUID'=>$OrderUID]);
 						$reportdata = array('OrderUID' => $OrderUID,'CustomerActualAmount' => $customer_pricing->Pricing,'CustomerAdditionalAmount' => 0,'CustomerAmount' => $customer_pricing->Pricing,'ApprovalFunction' => 'CustomerActualPricing','ModifiedByUserUID' => $this->session->userdata('UserUID'),'ModifiedDateTime'=>date('Y-m-d h:i:s'),'ModifiedAmount'=>$tOrderPayments->CustomerAmount - $customer_pricing->Pricing);
 
 						$this->common_model->save('tOrderPayments', $reportdata, ['ScheduleUID'=>$ScheduleUID]);
@@ -6846,10 +6844,10 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function getCustomerSchedule($CustomerUID)
 	{
-		$this->db->select('mCustomerBranches.BranchName,mCustomerBranches.BranchUID,mstates.StateCode');
+		$this->db->select('mCustomerBranches.BranchName,mCustomerBranches.BranchUID,mStates.StateCode');
 		$this->db->from('mCustomerBranches');
-		$this->db->join('mstates','mstates.StateUID = mCustomerBranches.StateUID','left');
-		// $this->db->where('mstates.StateCode',$stateCode->PropertyStateCode);
+		$this->db->join('mStates','mStates.StateUID = mCustomerBranches.StateUID','left');
+		// $this->db->where('mStates.StateCode',$stateCode->PropertyStateCode);
 		$this->db->where('mCustomerBranches.CustomerUID',$CustomerUID);
 		$this->db->where('mCustomerBranches.Active',1);
 		return $this->db->get()->result();
@@ -6860,11 +6858,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 	function getClosingCurrentQueue($OrderUID)
 	{
 
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
-		if (!empty($torders) && in_array($torders->StatusUID, [$this->config->item('keywords')['Order Completed']])  ) {
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
+		if (!empty($tOrders) && in_array($tOrders->StatusUID, [$this->config->item('keywords')['Order Completed']])  ) {
 			return $this->config->item('Closign Current Queue')[16];	
 		}
-		if (!empty($torders) && in_array($torders->StatusUID, [$this->config->item('keywords')['Cancelled']])  ) {
+		if (!empty($tOrders) && in_array($tOrders->StatusUID, [$this->config->item('keywords')['Cancelled']])  ) {
 			return $this->config->item('Closign Current Queue')[17];	
 		}
 
@@ -6880,22 +6878,22 @@ function GetNotaryByNotaryUID($NotaryUID)
 		THEN 1 ELSE 0
 		END AS ScheduleComplete,
 		CASE WHEN EXISTS(
-		SELECT tOrderSchedule.OrderUID FROM tOrderSchedule
-		JOIN torderabstractor ON torderabstractor.AbstractorOrderUID = tOrderSchedule.AbstractorOrderUID 
-		JOIN tOrderScheduleBorrower ON tOrderScheduleBorrower.ScheduleUID=tOrderSchedule.ScheduleUID
-		WHERE tOrderSchedule.OrderUID = $OrderUID AND tOrderSchedule.ScheduleStatus NOT IN ('Cancel', 'Complete')) 
+		SELECT tOrderschedule.OrderUID FROM tOrderschedule
+		JOIN torderabstractor ON torderabstractor.AbstractorOrderUID = tOrderschedule.AbstractorOrderUID 
+		JOIN tOrderscheduleBorrower ON tOrderscheduleBorrower.ScheduleUID=tOrderschedule.ScheduleUID
+		WHERE tOrderschedule.OrderUID = $OrderUID AND tOrderschedule.ScheduleStatus NOT IN ('Cancel', 'Complete')) 
 		THEN 1 ELSE 0 
 		END AS SettlementAgentAssigned,
 		CASE WHEN EXISTS(
-		SELECT OrderUID FROM tOrderSign WHERE OrderUID = $OrderUID AND tOrderSign.SigningStatus IN ('Cancel')) 
+		SELECT OrderUID FROM tOrdersign WHERE OrderUID = $OrderUID AND tOrdersign.SigningStatus IN ('Cancel')) 
 		THEN 1 ELSE 0 
 		END AS SigningCancelled,
 		CASE WHEN EXISTS(
-		SELECT OrderUID FROM tOrderSign WHERE OrderUID = $OrderUID AND tOrderSign.SigningStatus IN ('sign')) 
+		SELECT OrderUID FROM tOrdersign WHERE OrderUID = $OrderUID AND tOrdersign.SigningStatus IN ('sign')) 
 		THEN 1 ELSE 0 
 		END AS SigningCompleted,
 		CASE WHEN EXISTS(
-		SELECT OrderUID FROM tOrderShipping WHERE OrderUID = $OrderUID AND tOrderShipping.IsShipped = 1) 
+		SELECT OrderUID FROM tOrdershipping WHERE OrderUID = $OrderUID AND tOrdershipping.IsShipped = 1) 
 		THEN 1 ELSE 0 
 		END AS ShipmentDone,
 		CASE WHEN EXISTS( 
@@ -6928,7 +6926,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 		if ($result->SettlementAgentAssigned == 1 ) {
 
 			/*Individual Signing Status*/
-			$this->db->select('*')->from('tOrderSign');
+			$this->db->select('*')->from('tOrdersign');
 			$this->db->where(['OrderUID'=>$OrderUID]);
 			$this->db->where_not_in('SigningStatus', ['Cancel', 'Sign']);
 			$this->db->order_by('SignUID', 'DESC');
@@ -7115,90 +7113,90 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
   function getStateRowbyUID($StateUID)
   {
-  	return $this->db->where('StateUID', $StateUID)->get('mstates')->row();
+  	return $this->db->where('StateUID', $StateUID)->get('mStates')->row();
   }
 
 
    function getCustomerRowbyUID($CustomerUID)
   {
-  	return $this->db->where('CustomerUID', $CustomerUID)->get('mcustomers')->row();
+  	return $this->db->where('CustomerUID', $CustomerUID)->get('mCustomers')->row();
   }
 
    function getCityRowbyUID($CityUID)
   {
-  	return $this->db->where('CityUID', $CityUID)->get('mcities')->row();
+  	return $this->db->where('CityUID', $CityUID)->get('mCities')->row();
   }
  
   function getCitiesRowbyStateUID($StateUID)
   {
-  	return $this->db->where('StateUID', $StateUID)->get('mcities')->row();
+  	return $this->db->where('StateUID', $StateUID)->get('mCities')->row();
   } 
 
  	function getOrderTypesbyUID($OrderTypeUID)
   {
-  	return $this->db->where_in('OrderTypeUID', $OrderTypeUID)->get('mordertypes')->result();
+  	return $this->db->where_in('OrderTypeUID', $OrderTypeUID)->get('mOrderTypes')->result();
   }
 
   function getCustomerbyUID($CustomerUID)
   {
   	$this->db->select('*');
-  	$this->db->from('mcustomers');
+  	$this->db->from('mCustomers');
   	$this->db->where_in('CustomerUID', $CustomerUID);
   	return $this->db->get()->result();
   }
 
   function get_countiesbycountyuids($CountyUIDs)
   {
-  	$this->db->select('CountyUID,CountyName,mstates.StateUID,StateName,StateCode')->from('mcounties');
-  	$this->db->join('mstates','mstates.StateUID = mcounties.StateUID');
-  	$this->db->where_in('mcounties.CountyUID', $CountyUIDs);
-  	$this->db->group_by('mcounties.CountyUID');
+  	$this->db->select('CountyUID,CountyName,mStates.StateUID,StateName,StateCode')->from('mCounties');
+  	$this->db->join('mStates','mStates.StateUID = mCounties.StateUID');
+  	$this->db->where_in('mCounties.CountyUID', $CountyUIDs);
+  	$this->db->group_by('mCounties.CountyUID');
   	return $this->db->get()->result();
   }
 
   function get_countiesbyzipcodes($ZipCodes)
   {
-  	$this->db->distinct('CountyUID')->from('mcities');
-  	$this->db->where_in('mcities.ZipCode', $ZipCodes);
+  	$this->db->distinct('CountyUID')->from('mCities');
+  	$this->db->where_in('mCities.ZipCode', $ZipCodes);
   	return $this->db->get()->result();
   }
 
 
   function get_countiesbycityuids($CityUIDs)
   {
-  	$this->db->distinct('CountyUID')->from('mcities');
-  	$this->db->where_in('mcities.ZipCode', $CityUIDs);
+  	$this->db->distinct('CountyUID')->from('mCities');
+  	$this->db->where_in('mCities.ZipCode', $CityUIDs);
   	return $this->db->get()->result();
   }
 
 
   function get_citiesbyzipcodes($ZipCodes)
   {
-  	$this->db->select('CityUID,CityName,mstates.StateUID,StateName,StateCode,ZipCode,mcities.CountyUID,mcounties.CountyName')->from('mcities');
-  	$this->db->join('mstates','mstates.StateUID = mcities.StateUID');
-  	$this->db->join('mcounties','mcounties.countyUID = mcities.countyUID','LEFT');
-  	$this->db->where_in('mcities.ZipCode', $ZipCodes);
-  	$this->db->group_by('mcities.CityUID');
+  	$this->db->select('CityUID,CityName,mStates.StateUID,StateName,StateCode,ZipCode,mCities.CountyUID,mCounties.CountyName')->from('mCities');
+  	$this->db->join('mStates','mStates.StateUID = mCities.StateUID');
+  	$this->db->join('mCounties','mCounties.countyUID = mCities.countyUID','LEFT');
+  	$this->db->where_in('mCities.ZipCode', $ZipCodes);
+  	$this->db->group_by('mCities.CityUID');
   	return $this->db->get()->result();
   }
 
   function get_citiesbycityuids($CityUIDs)
   {
-  	$this->db->select('CityUID,CityName,mstates.StateUID,StateName,StateCode,ZipCode,mcities.CountyUID,mcounties.CountyName')->from('mcities');
-  	$this->db->join('mstates','mstates.StateUID = mcities.StateUID');
-  	$this->db->join('mcounties','mcounties.countyUID = mcities.countyUID','LEFT');
-  	$this->db->where_in('mcities.CityUID', $CityUIDs);
+  	$this->db->select('CityUID,CityName,mStates.StateUID,StateName,StateCode,ZipCode,mCities.CountyUID,mCounties.CountyName')->from('mCities');
+  	$this->db->join('mStates','mStates.StateUID = mCities.StateUID');
+  	$this->db->join('mCounties','mCounties.countyUID = mCities.countyUID','LEFT');
+  	$this->db->where_in('mCities.CityUID', $CityUIDs);
   	return $this->db->get()->result();
   }
 
   function getCitiesbyStateUID($StateUID)
   {
-  	return $this->db->where('StateUID', $StateUID)->get('mcities')->result();
+  	return $this->db->where('StateUID', $StateUID)->get('mCities')->result();
   } 
 
   function getDistinctCitiesbyStateUID($StateUID)
   {
-  	return $this->db->where('StateUID', $StateUID)->get('mcities')->result();
+  	return $this->db->where('StateUID', $StateUID)->get('mCities')->result();
   } 
   /**
 	  * @description Insert Audit Log
@@ -7289,7 +7287,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		return true;
 		if(!empty($OrderUID))
 		{
-			$validrow = $this->db->query("SELECT EXISTS(SELECT 1 FROM torders WHERE OrderUID = {$OrderUID} AND 
+			$validrow = $this->db->query("SELECT EXISTS(SELECT 1 FROM tOrders WHERE OrderUID = {$OrderUID} AND 
 				COALESCE(CustomerAmount,0) = (
 				SELECT  COALESCE(SUM(CASE WHEN  ApprovalFunction = 'CustomerActualPricing'  THEN CustomerActualAmount  END) + SUM(CASE WHEN  ApprovalFunction != 'CustomerActualPricing'  THEN CustomerAdditionalAmount END) ,0)
 				FROM tOrderPayments WHERE BeneficiaryType='Customer' AND  OrderUID = {$OrderUID}
@@ -7328,7 +7326,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		if(!empty($OrderUID))
 		{
 
-			$validrow = $this->db->query("SELECT EXISTS( SELECT COALESCE(AbstractorFee,0) FROM torders WHERE OrderUID = {$OrderUID} AND COALESCE(AbstractorFee,0) = ( 
+			$validrow = $this->db->query("SELECT EXISTS( SELECT COALESCE(AbstractorFee,0) FROM tOrders WHERE OrderUID = {$OrderUID} AND COALESCE(AbstractorFee,0) = ( 
 				SELECT COALESCE(SUM(CASE WHEN  ApprovalFunction = 'AbstractorActualPricing'  AND (IsAbstractorCancelled = 0 OR (IsAbstractorCancelled = 1 AND torderabstractorunassign.IsFeeAdjusted = 1))
 				THEN tOrderPayments.AbstractorActualFee END),0) + COALESCE(SUM(CASE WHEN  ApprovalFunction != 'AbstractorActualPricing' THEN tOrderPayments.AbstractorCopyCost END),0) + COALESCE(SUM(CASE WHEN ApprovalFunction != 'AbstractorActualPricing' THEN tOrderPayments.AbstractorAdditionalFee END),0)  FROM tOrderPayments LEFT JOIN torderabstractor ON torderabstractor.AbstractorOrderUID = tOrderPayments.AbstractorOrderUID AND tOrderPayments.IsAbstractorCancelled = 0  LEFT JOIN torderabstractorunassign ON torderabstractorunassign.AbstractorOrderUID = tOrderPayments.AbstractorOrderUID AND tOrderPayments.IsAbstractorCancelled = 1 AND IsFeeAdjusted = 1 WHERE BeneficiaryType = 'Abstractor'  AND tOrderPayments.OrderUID = {$OrderUID} 
 				) ) AS valid
@@ -7364,10 +7362,10 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		if (empty($FileNames)) {
 			return [];
 		}
-		$this->db->select('torders.OrderDocsPath, torderdocuments.DocumentFileName, torderdocuments.DisplayFileName');
+		$this->db->select('tOrders.OrderDocsPath, torderdocuments.DocumentFileName, torderdocuments.DisplayFileName');
 		$this->db->from('torderdocuments');
-		$this->db->join('torders', 'torderdocuments.OrderUID = torders.OrderUID');
-		$this->db->where('torders.OrderUID', $OrderUID);
+		$this->db->join('tOrders', 'torderdocuments.OrderUID = tOrders.OrderUID');
+		$this->db->where('tOrders.OrderUID', $OrderUID);
 		$this->db->where_in('torderdocuments.DocumentFileName', $FileNames);
 		return $this->db->get()->result();
 	}
@@ -7387,7 +7385,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
   function get_customerindividualcontactneeded($OrderUID)
   {
   	//VendorIndividualContact
-		$query = $this->db->query("SELECT EXISTS (SELECT * FROM (`torders`) JOIN `mcustomerproducts` ON `torders`.`CustomerUID` = `mcustomerproducts`.`CustomerUID` AND torders.SubProductUID = mcustomerproducts.SubProductUID WHERE `torders`.`OrderUID` = '{$OrderUID}' AND `VendorIndividualContact` = 1) AS needed ");
+		$query = $this->db->query("SELECT EXISTS (SELECT * FROM (`tOrders`) JOIN `mCustomerProducts` ON `tOrders`.`CustomerUID` = `mCustomerProducts`.`CustomerUID` AND tOrders.SubProductUID = mCustomerProducts.SubProductUID WHERE `tOrders`.`OrderUID` = '{$OrderUID}' AND `VendorIndividualContact` = 1) AS needed ");
 		return $query->row()->needed;
   }
 
@@ -7411,7 +7409,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
   		if(empty($assignedvendor->ContactUID))
   		{
   			/*@Desc Get Borrower Name @Author Jainulabdeen @Updated June 19 2020*/
-  			$query1 = $this->db->query("SELECT torderpropertyroles.PRName FROM (`tOrderSchedule`) JOIN `tOrderScheduleBorrower` ON `tOrderSchedule`.`ScheduleUID` = `tOrderScheduleBorrower`.`ScheduleUID` JOIN `torderpropertyroles` ON `torderpropertyroles`.`Id` = `tOrderScheduleBorrower`.`BorrowerUID` WHERE `tOrderSchedule`.`OrderUID` = '{$OrderUID}' AND `tOrderSchedule`.`AbstractorUID` = '{$assignedvendor->AbstractorUID}' AND `tOrderSchedule`.`ScheduleStatus` != 'Cancel' ");
+  			$query1 = $this->db->query("SELECT tOrderPropertyRoles.PRName FROM (`tOrderschedule`) JOIN `tOrderscheduleBorrower` ON `tOrderschedule`.`ScheduleUID` = `tOrderscheduleBorrower`.`ScheduleUID` JOIN `tOrderPropertyRoles` ON `tOrderPropertyRoles`.`Id` = `tOrderscheduleBorrower`.`BorrowerUID` WHERE `tOrderschedule`.`OrderUID` = '{$OrderUID}' AND `tOrderschedule`.`AbstractorUID` = '{$assignedvendor->AbstractorUID}' AND `tOrderschedule`.`ScheduleStatus` != 'Cancel' ");
   			$BorrowerName =  $query1->result();
   			/*End*/
   			$success = TRUE;
@@ -7482,10 +7480,10 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 		/*Client Quote*/
 		$this->db->select('1', false);
-		$this->db->from('torders'); 
-		$this->db->where('torders.OrderUID', $OrderUID);
-		$this->db->where('torders.IsQuote', 1);
-		$torders = $this->db->get()->result();
+		$this->db->from('tOrders'); 
+		$this->db->where('tOrders.OrderUID', $OrderUID);
+		$this->db->where('tOrders.IsQuote', 1);
+		$tOrders = $this->db->get()->result();
 
 		$this->db->select('1', false);
 		$this->db->from('torderabstractor'); 
@@ -7499,7 +7497,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		$this->db->where('torderabstractorunassign.IsQuote', 1);
 		$inactiveabstractors = $this->db->get()->result();
 
-		return count(array_merge($activeabstractors, $inactiveabstractors, $torders)) > 0 ? true : false;
+		return count(array_merge($activeabstractors, $inactiveabstractors, $tOrders)) > 0 ? true : false;
 	}
 
 	/**
@@ -7548,9 +7546,9 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	function isQuoteFeeEnabledClient($OrderUID){
 		/*Query*/
 		$this->db->select('1', false);
-		$this->db->from('torders'); 
-		$this->db->where('torders.OrderUID', $OrderUID);
-		$this->db->where('torders.IsQuote', 1);
+		$this->db->from('tOrders'); 
+		$this->db->where('tOrders.OrderUID', $OrderUID);
+		$this->db->where('tOrders.IsQuote', 1);
 		$active = $this->db->get()->result();
 
 		return count($active) > 0 ? true : false;
@@ -7660,7 +7658,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	function get_ordertyperow_byname($OrderTypeName,$post = NULL)
 	{
 		$this->db->select('*');
-		$this->db->from ('mordertypes');
+		$this->db->from ('mOrderTypes');
 		$this->db->where('OrderTypeName', $OrderTypeName);
 		if($post)
 		{
@@ -7702,7 +7700,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	*/
 	
 	function GetAllStatus(){
-		$query = $this->db->get('morderstatus');
+		$query = $this->db->get('mOrderStatus');
 		return $query->result();
 	}
 
@@ -7725,11 +7723,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	*/ 
 
 	function get_countyby_statecode_zipcode($stateuid,$zipcode) {
-		$this->db->select('mcounties.CountyUID, mcities.CityUID');
-		$this->db->from ( 'mcounties' );
-		$this->db->join ( 'mcities', 'mcities.CountyUID = mcounties.CountyUID','INNER');
-		$this->db->where_in('mcities.StateUID',$stateuid);
-		$this->db->where_in('mcities.ZipCode',$zipcode);
+		$this->db->select('mCounties.CountyUID, mCities.CityUID');
+		$this->db->from ( 'mCounties' );
+		$this->db->join ( 'mCities', 'mCities.CountyUID = mCounties.CountyUID','INNER');
+		$this->db->where_in('mCities.StateUID',$stateuid);
+		$this->db->where_in('mCities.ZipCode',$zipcode);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -7737,11 +7735,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function get_countyby_statecode_cityuid($stateuid,$cityuid) {
 
-		$this->db->select('mcounties.CountyUID, mcities.CityUID');
-		$this->db->from ( 'mcounties' );
-		$this->db->join ( 'mcities', 'mcities.CountyUID = mcounties.CountyUID','INNER');
-		$this->db->where_in('mcities.StateUID',$stateuid);
-		$this->db->where_in('mcities.CityUID',$cityuid);
+		$this->db->select('mCounties.CountyUID, mCities.CityUID');
+		$this->db->from ( 'mCounties' );
+		$this->db->join ( 'mCities', 'mCities.CountyUID = mCounties.CountyUID','INNER');
+		$this->db->where_in('mCities.StateUID',$stateuid);
+		$this->db->where_in('mCities.CityUID',$cityuid);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -7749,9 +7747,9 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function get_countyby_cityuid($cityuid) {
 
-		$this->db->select('mcities.CountyUID');
-		$this->db->from ( 'mcities' );
-		$this->db->where_in('mcities.CityUID',$cityuid);
+		$this->db->select('mCities.CountyUID');
+		$this->db->from ( 'mCities' );
+		$this->db->where_in('mCities.CityUID',$cityuid);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -7772,11 +7770,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function get_zipcodeby_state_county($stateuid,$countyuid) {
 
-		$this->db->select('mcities.ZipCode, mcities.CityUID, mcities.CityName');
-		$this->db->from ( 'mcities' );
-		$this->db->where_in('mcities.StateUID',$stateuid);
+		$this->db->select('mCities.ZipCode, mCities.CityUID, mCities.CityName');
+		$this->db->from ( 'mCities' );
+		$this->db->where_in('mCities.StateUID',$stateuid);
 		if($countyuid) {
-			$this->db->where_in('mcities.CountyUID',$countyuid);
+			$this->db->where_in('mCities.CountyUID',$countyuid);
 		}
 		$query = $this->db->get();
 		return $query->result();
@@ -7785,14 +7783,14 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function get_zipcodeby_state_county_city($stateuid,$countyuid,$cityuid) {
 
-		$this->db->select('mcities.ZipCode');
-		$this->db->from ( 'mcities' );
-		$this->db->where_in('mcities.StateUID',$stateuid);
+		$this->db->select('mCities.ZipCode');
+		$this->db->from ( 'mCities' );
+		$this->db->where_in('mCities.StateUID',$stateuid);
 		if($countyuid) {
-			$this->db->where_in('mcities.CountyUID',$countyuid);
+			$this->db->where_in('mCities.CountyUID',$countyuid);
 		}
 		if($cityuid) {
-			$this->db->where_in('mcities.CityUID',$cityuid);
+			$this->db->where_in('mCities.CityUID',$cityuid);
 		}
 		$query = $this->db->get();
 		return $query->result();
@@ -7801,11 +7799,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function get_cityby_state_county($stateuid,$countyuid) {
 
-		$this->db->select('mcities.CityUID,mcities.CityName');
-		$this->db->from ( 'mcities' );
-		$this->db->where_in('mcities.StateUID',$stateuid);
+		$this->db->select('mCities.CityUID,mCities.CityName');
+		$this->db->from ( 'mCities' );
+		$this->db->where_in('mCities.StateUID',$stateuid);
 		if($countyuid) {
-			$this->db->where_in('mcities.CountyUID',$countyuid);
+			$this->db->where_in('mCities.CountyUID',$countyuid);
 		}
 		$query = $this->db->get();
 		return $query->result();
@@ -7826,7 +7824,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function isvalid_cities_by_county_zipcode($stateuid,$countyuid,$zipcode) {
 
-		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM (`mcities`) WHERE `mcities`.`StateUID` = {$stateuid} AND `mcities`.`countyuid` = {$countyuid} AND `mcities`.`zipcode` = {$zipcode}) AS available");
+		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM (`mCities`) WHERE `mCities`.`StateUID` = {$stateuid} AND `mCities`.`countyuid` = {$countyuid} AND `mCities`.`zipcode` = {$zipcode}) AS available");
 		return $query->row()->available;
 	}
 
@@ -7844,15 +7842,15 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 */ 
 	function getAutoCompletionTask_WorkflowLevel($OrderUID, $WorkflowModuleUID, $TaskAction){
 
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
 
-		if (!empty($torders) && !empty($torders->SubProductUID)) {
+		if (!empty($tOrders) && !empty($tOrders->SubProductUID)) {
 
 			/*Query*/
 			$this->db->select('*');
 			$this->db->from('tCustomerSubProductTasks'); 
 			$this->db->join('mTask', 'tCustomerSubProductTasks.TaskUID = mTask.TaskUID');
-			$this->db->where('tCustomerSubProductTasks.SubProductUID', $torders->SubProductUID);
+			$this->db->where('tCustomerSubProductTasks.SubProductUID', $tOrders->SubProductUID);
 			if (!empty($WorkflowModuleUID)) {
 				$this->db->where('tCustomerSubProductTasks.WorkflowModuleUID', $WorkflowModuleUID);				
 			}
@@ -8029,16 +8027,16 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		* @return Object 
 		*
 	*/
-	function GetOrderStatusDetails()
+	function GetOrderstatusDetails()
 	{
-		return $this->db->get('morderstatus')->result();
+		return $this->db->get('mOrderStatus')->result();
 	}
 
 
 	/**********@author praveen kumar - Friday 17 January 2020**********/
 	function get_customerdetails_byuid($customeruid){ 
 		$this->db->where(array("Active"=>1,"CustomerUID"=>$customeruid));
-		$query = $this->db->get('mcustomers');
+		$query = $this->db->get('mCustomers');
 		return $query->row();
 	}
     		/**
@@ -8053,8 +8051,8 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
     function getScheduleByID($ScheduleUID)
 	{
 		$this->db->select('*');
-		$this->db->from('tOrderSchedule'); 
-		$this->db->where('tOrderSchedule.ScheduleUID', $ScheduleUID);
+		$this->db->from('tOrderschedule'); 
+		$this->db->where('tOrderschedule.ScheduleUID', $ScheduleUID);
 		return $this->db->get()->row();
 	}
 
@@ -8142,12 +8140,12 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	*/ 
   function customer_gradebysubproduct($CustomerUID,$SubProductUID)
   {
-  	return $this->db->select('mcustomerproducts.GradingType,mcustomerproducts.SubCategoryGrading')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID))->get('mcustomerproducts')->row();
+  	return $this->db->select('mCustomerProducts.GradingType,mCustomerProducts.SubCategoryGrading')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID))->get('mCustomerProducts')->row();
 
   }
 
   /**
-  * Function -  Reverse Mortgage Modifications Order fetch in mcustomerproducts
+  * Function -  Reverse Mortgage Modifications Order fetch in mCustomerProducts
   *
   * @param  (int) CustomerUID, (int) SubProductUID
   * 
@@ -8161,13 +8159,13 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
   function get_rmsorderdetails($OrderUID)
   {
-  	$this->db->select ( 'torders.OrderUID,torders.Grade,torders.OrderDueDatetime,torders.GradeAmount,torders.ImpedimentDateTime,torders.OriginalOrderDueDateTime,torders.CustomerUID,torders.SubProductUID,torders.CustomerAmount,torders.IsBilled,torders.CustomerActualAmount,torders.DocumentStatus');
-  	$this->db->select ('mcustomers.PricingUID,msubproducts.RMS,mcustomerproducts.ProductUID,mcustomerproducts.GradingType,mcustomerproducts.SubCategoryGrading');
-  	$this->db->from ( 'torders' );
-  	$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-  	$this->db->join ( 'mcustomerproducts', 'mcustomerproducts.CustomerUID = torders.CustomerUID  AND mcustomerproducts.SubProductUID = torders.SubProductUID ' , 'left' );
-  	$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-  	$this->db->where ('torders.OrderUID',$OrderUID);
+  	$this->db->select ( 'tOrders.OrderUID,tOrders.Grade,tOrders.OrderDueDatetime,tOrders.GradeAmount,tOrders.ImpedimentDateTime,tOrders.OriginalOrderDueDateTime,tOrders.CustomerUID,tOrders.SubProductUID,tOrders.CustomerAmount,tOrders.IsBilled,tOrders.CustomerActualAmount,tOrders.DocumentStatus');
+  	$this->db->select ('mCustomers.PricingUID,mSubProducts.RMS,mCustomerProducts.ProductUID,mCustomerProducts.GradingType,mCustomerProducts.SubCategoryGrading');
+  	$this->db->from ( 'tOrders' );
+  	$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+  	$this->db->join ( 'mCustomerProducts', 'mCustomerProducts.CustomerUID = tOrders.CustomerUID  AND mCustomerProducts.SubProductUID = tOrders.SubProductUID ' , 'left' );
+  	$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+  	$this->db->where ('tOrders.OrderUID',$OrderUID);
   	$query = $this->db->get();
   	return $query->row();
   }
@@ -8187,7 +8185,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
   function get_rmssubproducts(){
 
   	$this->db->where(array('RMS'=>1,'Active'=>1));
-  	$query = $this->db->get('msubproducts');
+  	$query = $this->db->get('mSubProducts');
   	return $query->result();
   }
 
@@ -8205,10 +8203,10 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
     */ 
 	function getCountyUID_ByOrderUID($OrderUID)
 	{
-		$this->db->select('CountyUID')->from('torders');
-		$this->db->join('mstates', 'mstates.StateCode=torders.PropertyStateCode');
-		$this->db->join('mcounties', 'mcounties.CountyName=torders.PropertyCountyName AND mstates.StateUID=mcounties.StateUID');
-		$this->db->where('torders.OrderUID', $OrderUID);
+		$this->db->select('CountyUID')->from('tOrders');
+		$this->db->join('mStates', 'mStates.StateCode=tOrders.PropertyStateCode');
+		$this->db->join('mCounties', 'mCounties.CountyName=tOrders.PropertyCountyName AND mStates.StateUID=mCounties.StateUID');
+		$this->db->where('tOrders.OrderUID', $OrderUID);
 		$County = $this->db->get()->row();
 
 		if (!empty($County)) {
@@ -8234,11 +8232,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
     */ 
 	function getCityUID_ByOrderUID($OrderUID)
 	{
-		$this->db->select('mcities.CityUID')->from('torders');
-		$this->db->join('mstates', 'mstates.StateCode=torders.PropertyStateCode');
-		$this->db->join('mcounties', 'mcounties.CountyName=torders.PropertyCountyName AND mstates.StateUID=mcounties.StateUID');
-		$this->db->join('mcities', 'mcities.CountyUID=mcounties.CountyUID AND mstates.StateUID = mcities.StateUID AND mcities.CityName = torders.PropertyCityName');
-		$this->db->where('torders.OrderUID', $OrderUID);
+		$this->db->select('mCities.CityUID')->from('tOrders');
+		$this->db->join('mStates', 'mStates.StateCode=tOrders.PropertyStateCode');
+		$this->db->join('mCounties', 'mCounties.CountyName=tOrders.PropertyCountyName AND mStates.StateUID=mCounties.StateUID');
+		$this->db->join('mCities', 'mCities.CountyUID=mCounties.CountyUID AND mStates.StateUID = mCities.StateUID AND mCities.CityName = tOrders.PropertyCityName');
+		$this->db->where('tOrders.OrderUID', $OrderUID);
 		$City = implode(", ", array_filter( array_column($this->db->get()->result_array(), 'CityUID') ) );
 
 		if (!empty($City)) {
@@ -8294,11 +8292,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		$this->db->select('*');
 		$this->db->from('tOrderEventLog');
 		$this->db->join('tApiOutBoundOrders','tApiOutBoundOrders.ApiOutBoundOrderUID = tApiOutBoundOrders.ApiOutBoundOrderUID');
-		$this->db->join('torders','torders.OrderUID = tApiOutBoundOrders.OrderUID','left');
+		$this->db->join('tOrders','tOrders.OrderUID = tApiOutBoundOrders.OrderUID','left');
 		$this->db->where('tOrderEventLog.OrderUID',$OrderUID);
 		$this->db->where('tApiOutBoundOrders.Status', 'Accepted');
 		$this->db->where_not_in('tApiOutBoundOrders.ApiOutboundStatus', $ApiOutboundStatus);
-		$this->db->where('torders.OrderUID',$OrderUID);
+		$this->db->where('tOrders.OrderUID',$OrderUID);
 		$this->db->group_by('tApiOutBoundOrders.ApiOutBoundOrderUID');
 		$tOrderEventLog = $this->db->get()->row();
 		return $tOrderEventLog;
@@ -8307,11 +8305,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	function get_Product_SubProduct()
 	{
 		$this->db->select('*');
-		$this->db->from('msubproducts');
-		$this->db->join('mproducts', 'msubproducts.ProductUID = mproducts.ProductUID');
-		$this->db->where('msubproducts.SubProductUID', $SubProductUID);
-		$this->db->where('msubproducts.Active', 1);
-		$this->db->where('mproducts.Active', 1);
+		$this->db->from('mSubProducts');
+		$this->db->join('mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID');
+		$this->db->where('mSubProducts.SubProductUID', $SubProductUID);
+		$this->db->where('mSubProducts.Active', 1);
+		$this->db->where('mProducts.Active', 1);
 		return $this->db->get()->result();
 	}
 
@@ -8320,7 +8318,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		$CustomerUID = $order_details->CustomerUID;
 		$SubProductUID = $order_details->SubProductUID;
 		$OrderSourceUID = $this->db->select('OrderSourceUID')->from('mApiTitlePlatform')->where('OrderSourceName','X1')->get()->row()->OrderSourceUID;
-		$result = $this->db->select('*')->from('mcustomerproducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
+		$result = $this->db->select('*')->from('mCustomerProducts')->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID,'OrderSourceUID'=>$OrderSourceUID))->get()->row();
 		if(!empty($result))
 		{
 			return $result;
@@ -8341,16 +8339,16 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function GetX1Order($OrderUID) 
 	{
-		$torders=$this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
-		$mstates=$this->db->get_where('mstates', array('StateCode' => $torders->PropertyStateCode))->row();
-		$mcounties=$this->db->get_where('mcounties', array('StateUID'=>$mstates->StateUID, 'CountyName'=>$torders->PropertyCountyName))->row();
-		if(!empty($mcounties))
+		$tOrders=$this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
+		$mStates=$this->db->get_where('mStates', array('StateCode' => $tOrders->PropertyStateCode))->row();
+		$mCounties=$this->db->get_where('mCounties', array('StateUID'=>$mStates->StateUID, 'CountyName'=>$tOrders->PropertyCountyName))->row();
+		if(!empty($mCounties))
 		{
 			$query = $this->db->query("SELECT *, CASE WHEN msearchmodes.SearchModeUID = '6' THEN 
 				mcountysearchmodes.WebsiteURL ELSE msearchmodes.SearchSiteURL END AS SiteURL 
 				FROM mcountysearchmodes
 				LEFT JOIN msearchmodes ON mcountysearchmodes.SearchModeUID = msearchmodes.SearchModeUID 
-				WHERE mcountysearchmodes.CountyUID = '". $mcounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
+				WHERE mcountysearchmodes.CountyUID = '". $mCounties->CountyUID ."'and msearchmodes.SearchSiteURL = 'X1' AND msearchmodes.SearchModeUID <> 5
 				Order By FIELD(SearchModeName, 'Free', 'Paid', 'Others', 'Abstractor')");
 
 			$data = $query->row();
@@ -8362,7 +8360,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 	// {
 	// 	$this->db->select('*');
 	// 	$this->db->from('tApiOutBoundOrders');
-	// 	$this->db->join('torders','torders.OrderUID = tApiOutBoundOrders.OrderUID','left');
+	// 	$this->db->join('tOrders','tOrders.OrderUID = tApiOutBoundOrders.OrderUID','left');
 	// 	$this->db->join('mApiTitlePlatform','mApiTitlePlatform.OrderSourceUID = tApiOutBoundOrders.OrderSourceUID');
 	// 	$this->db->where('tApiOutBoundOrders.OrderUID',$OrderUID);
 	// 	$this->db->where('mApiTitlePlatform.OrderSourceName','X1');
@@ -8467,11 +8465,11 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
   */ 
   function getCityByStateCountyCityName($StateUID, $CountyUID, $CityName){
   	/*Query*/
-  	$this->db->select('mcities.CityUID');
-  	$this->db->from('mcities'); 
-  	$this->db->where('mcities.StateUID', $StateUID);
-  	$this->db->where('mcities.CountyUID', $CountyUID);
-  	$this->db->where('mcities.CityName', $CityName);
+  	$this->db->select('mCities.CityUID');
+  	$this->db->from('mCities'); 
+  	$this->db->where('mCities.StateUID', $StateUID);
+  	$this->db->where('mCities.CountyUID', $CountyUID);
+  	$this->db->where('mCities.CityName', $CityName);
   	$City = implode(", ", array_filter(array_column( $this->db->get()->result_array(),'CityUID' ) ) );
 
   	if (!empty($City)) {
@@ -8497,7 +8495,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function isvalid_order($orderuid) {
 
-		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM (`torders`) WHERE `torders`.`OrderUID` = {$orderuid} ) AS available");
+		$query = $this->db->query("SELECT EXISTS(SELECT 1 FROM (`tOrders`) WHERE `tOrders`.`OrderUID` = {$orderuid} ) AS available");
 		return $query->row()->available;
 	}
 
@@ -8515,18 +8513,18 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 		$this->db->insert('tSLAReport',$insertdata);
 	}
 
-	function triggerorder_updatesla($tOrderSLAReportUID,$updatedata) {
+	function triggerorder_updatesla($tOrdersLAReportUID,$updatedata) {
 
 		$updatedata['ModifiedDateTime'] = date('y-m-d H:i:s');
-		$this->db->where('tOrderSLAReportUID',$tOrderSLAReportUID);
+		$this->db->where('tOrdersLAReportUID',$tOrdersLAReportUID);
 		$this->db->update('tSLAReport',$updatedata);
 	}
 
 	function get_slaorderdetails($orderuid)
 	{
 		$this->db->select ( '*');
-		$this->db->from ( 'torders' );
-		$this->db->where ('torders.OrderUID',$orderuid);
+		$this->db->from ( 'tOrders' );
+		$this->db->where ('tOrders.OrderUID',$orderuid);
 		$query = $this->db->get(); 
 		return $query->row();
 	}
@@ -8631,20 +8629,20 @@ function sendRequest($path, $post)
 		function getProductsByCustomer($CustomerUID){
 			if($CustomerUID)
 			{
-				$this->db->select('mcustomerproducts.ProductUID,mproducts.ProductName');
-				$this->db->from('mcustomerproducts');
+				$this->db->select('mCustomerProducts.ProductUID,mProducts.ProductName');
+				$this->db->from('mCustomerProducts');
 				if(is_array($CustomerUID))
 				{
-				  $this->db->where_in('mcustomerproducts.CustomerUID',$CustomerUID);
+				  $this->db->where_in('mCustomerProducts.CustomerUID',$CustomerUID);
 				} else {
-				  $this->db->where('mcustomerproducts.CustomerUID',$CustomerUID);
+				  $this->db->where('mCustomerProducts.CustomerUID',$CustomerUID);
 				}
-				$this->db->join('mproducts','mproducts.ProductUID = mcustomerproducts.ProductUID','LEFT');
+				$this->db->join('mProducts','mProducts.ProductUID = mCustomerProducts.ProductUID','LEFT');
 				$this->db->group_by('ProductUID');
 				return $this->db->get()->result();
 			} else {
-				$this->db->select('mproducts.ProductUID,mproducts.ProductName');
-				$this->db->from('mproducts');
+				$this->db->select('mProducts.ProductUID,mProducts.ProductName');
+				$this->db->from('mProducts');
 				return $this->db->get()->result();
 			}
 		}
@@ -8661,28 +8659,28 @@ function sendRequest($path, $post)
 		*/ 
 		function getSubProductsByProduct($ProductUID,$CustomerUID='')
 		{
-			$this->db->select('msubproducts.SubProductUID,msubproducts.SubProductName');
-			$this->db->from('msubproducts');
+			$this->db->select('mSubProducts.SubProductUID,mSubProducts.SubProductName');
+			$this->db->from('mSubProducts');
 			if(!empty($ProductUID)) 
 			{
 			  if(is_array($ProductUID))
 			  {
-			    $this->db->where_in("msubproducts.ProductUID",$ProductUID);
+			    $this->db->where_in("mSubProducts.ProductUID",$ProductUID);
 			  }	else {
-			    $this->db->where("msubproducts.ProductUID",$ProductUID);
+			    $this->db->where("mSubProducts.ProductUID",$ProductUID);
 			  } 
 		 	} 
 		 	if(!empty($CustomerUID))
 		 	{
-		 	  $this->db->join('mcustomerproducts','mcustomerproducts.SubProductUID = msubproducts.SubProductUID','INNER');	
+		 	  $this->db->join('mCustomerProducts','mCustomerProducts.SubProductUID = mSubProducts.SubProductUID','INNER');	
 		 	  if(is_array($CustomerUID))
 		 	  {
-		 	  	$this->db->where_in('mcustomerproducts.CustomerUID',$CustomerUID);
+		 	  	$this->db->where_in('mCustomerProducts.CustomerUID',$CustomerUID);
 		 	  } else {
-		 	    $this->db->where('mcustomerproducts.CustomerUID',$CustomerUID);
+		 	    $this->db->where('mCustomerProducts.CustomerUID',$CustomerUID);
 		 	  }
 		 	}
-		 	$this->db->group_by('msubproducts.SubProductUID');
+		 	$this->db->group_by('mSubProducts.SubProductUID');
 			return $this->db->get()->result();
 		}
 
@@ -8697,7 +8695,7 @@ function sendRequest($path, $post)
 		*/ 
 		function getCityZipCodes($CityUID){
 			$this->db->select('ZipCode');
-			$this->db->from('mcities');
+			$this->db->from('mCities');
 			$this->db->where('CityUID',$CityUID);
 			return $this->db->get()->result();
 		}
@@ -8714,7 +8712,7 @@ function sendRequest($path, $post)
 		function getZipCodeByCityName($CityUID,$StateUID='',$CountyUID='')
 		{
 		  $this->db->select('ZipCode');
-		  $this->db->from('mcities');
+		  $this->db->from('mCities');
 		  if(!empty($StateUID))
 		  {
 		  	if(is_array($StateUID))
@@ -8920,7 +8918,7 @@ function sendRequest($path, $post)
 				'OrderTypeUID' => $OrderTypeUID, //@Desc OrderTypeUID added @Author Jainulabdeen @Updated on June 3 2020
 				'ActionDateTime' => date('Y-m-d H:i:s'),
 			);
-			$this->db->insert('tOrderSLAActions',$sla_noteddata);
+			$this->db->insert('tOrdersLAActions',$sla_noteddata);
 
 		}
 
@@ -8936,7 +8934,7 @@ function sendRequest($path, $post)
 
 		function Check_InternolExternol($OrderUID)
 		{
-			$result = $this->db->select('*')->from('torders')->where(array('OrderUID' => $OrderUID, 'IsInhouseExternal' => 1))->get()->row();
+			$result = $this->db->select('*')->from('tOrders')->where(array('OrderUID' => $OrderUID, 'IsInhouseExternal' => 1))->get()->row();
 			if(!empty($result))
 			{
 				return true;
@@ -8967,9 +8965,9 @@ function sendRequest($path, $post)
 			$mabstractorfee = $this->common_model->get_row('mabstractorfee', ['AbstractorPricingProductUID'=>$AbstractorPricingProductUID]);
 			$torderabstractor = $this->common_model->get_row('torderabstractor', ['AbstractorPricingProductUID'=>$AbstractorPricingProductUID]);
 			if (!empty($torderabstractor)) {			
-				$tOrderSchedule = $this->common_model->get_row('tOrderSchedule', ['AbstractorOrderUID'=>$torderabstractor->AbstractorOrderUID]);
-				if (!empty($tOrderSchedule)) {
-					$tOrderClosing = $this->common_model->get_row('tOrderClosing', ['ScheduleUID'=>$tOrderSchedule->ScheduleUID]);
+				$tOrderschedule = $this->common_model->get_row('tOrderschedule', ['AbstractorOrderUID'=>$torderabstractor->AbstractorOrderUID]);
+				if (!empty($tOrderschedule)) {
+					$tOrderClosing = $this->common_model->get_row('tOrderClosing', ['ScheduleUID'=>$tOrderschedule->ScheduleUID]);
 					$order_details->PropertyZipcode = $tOrderClosing->SigningZipCode;
 					$order_details->PropertyCityName = $tOrderClosing->SigningCityName;
 					$order_details->PropertyCountyName = $tOrderClosing->SigningCountyName;
@@ -8979,9 +8977,9 @@ function sendRequest($path, $post)
 			else {
 				$torderabstractorunassign = $this->common_model->get_row('torderabstractorunassign', ['AbstractorPricingProductUID'=>$AbstractorPricingProductUID]);
 				if (!empty($torderabstractorunassign)) {			
-					$tOrderSchedule = $this->common_model->get_row('tOrderSchedule', ['AbstractorOrderUID'=>$torderabstractorunassign->OldAbstractorOrderUID]);
-					if (!empty($tOrderSchedule)) {
-						$tOrderClosing = $this->common_model->get_row('tOrderClosing', ['ScheduleUID'=>$tOrderSchedule->ScheduleUID]);
+					$tOrderschedule = $this->common_model->get_row('tOrderschedule', ['AbstractorOrderUID'=>$torderabstractorunassign->OldAbstractorOrderUID]);
+					if (!empty($tOrderschedule)) {
+						$tOrderClosing = $this->common_model->get_row('tOrderClosing', ['ScheduleUID'=>$tOrderschedule->ScheduleUID]);
 						$order_details->PropertyZipcode = $tOrderClosing->SigningZipCode;
 						$order_details->PropertyCityName = $tOrderClosing->SigningCityName;
 						$order_details->PropertyCountyName = $tOrderClosing->SigningCountyName;
@@ -8998,14 +8996,14 @@ function sendRequest($path, $post)
 			}
 
 
-			$this->db->select('CountyUID')->from('torders');
-			$this->db->join('mstates', 'mstates.StateCode=torders.PropertyStateCode');
-			$this->db->join('mcounties', 'mcounties.CountyName=torders.PropertyCountyName AND mstates.StateUID=mcounties.StateUID');
-			$this->db->where('torders.OrderUID', $torders->OrderUID);
+			$this->db->select('CountyUID')->from('tOrders');
+			$this->db->join('mStates', 'mStates.StateCode=tOrders.PropertyStateCode');
+			$this->db->join('mCounties', 'mCounties.CountyName=tOrders.PropertyCountyName AND mStates.StateUID=mCounties.StateUID');
+			$this->db->where('tOrders.OrderUID', $tOrders->OrderUID);
 			$AddressUIDs->CountyUID=$this->db->get()->row()->CountyUID;
 
 
-			$AddressUIDs->CityUID = $this->common_model->getCityUID_ByOrderUID($torders->OrderUID);
+			$AddressUIDs->CityUID = $this->common_model->getCityUID_ByOrderUID($tOrders->OrderUID);
 			$AddressUIDs->ZipCode = $order_details->PropertyZipcode;
 
 
@@ -9237,7 +9235,7 @@ function sendRequest($path, $post)
   function getCustomer_PassThruCost($OrderUID,$CustomerAmount,$CustomerReason){
   	// echo '<pre>';print_r($OrderUID);echo '<pre>';print_r($CustomerAmount);echo '<pre>';print_r($CustomerReason);exit;
     $this->db->select('PropertyZipcode, PropertyStateCode, CustomerUID');
-    $this->db->from('torders');
+    $this->db->from('tOrders');
     $this->db->where('OrderUID', $OrderUID);
     $PropAddress = $this->db->get()->row();
     $AddressUIDs = $this->_getCounty_StateUID_ZipCode($PropAddress->PropertyZipcode,$PropAddress->PropertyStateCode);
@@ -9393,8 +9391,8 @@ function sendRequest($path, $post)
 		function getOrderWorkflows($OrderUID){
 			/*Query*/
 			$this->db->select('mworkflowmodules.*');
-			$this->db->from('torders'); 
-			$this->db->join('mcustomerworkflowmodules', 'mcustomerworkflowmodules.CustomerUID = torders.CustomerUID AND mcustomerworkflowmodules.SubProductUID = torders.SubProductUID');
+			$this->db->from('tOrders'); 
+			$this->db->join('mcustomerworkflowmodules', 'mcustomerworkflowmodules.CustomerUID = tOrders.CustomerUID AND mcustomerworkflowmodules.SubProductUID = tOrders.SubProductUID');
 			$this->db->join('mworkflowmodules', 'mcustomerworkflowmodules.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID');
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->order_by('mworkflowmodules.WorkflowModuleUID', 'ASC');
@@ -9512,7 +9510,7 @@ function sendRequest($path, $post)
 		{
 			
 			$this->db->select('WorkflowModuleUID, MenuURL');
-			$this->db->from('mmenu'); 
+			$this->db->from('mMenu'); 
 			$this->db->where('WorkflowModuleUID > 0');
 			$result = $this->db->get()->result();
 
@@ -10019,12 +10017,12 @@ function sendRequest($path, $post)
 
 	function get_listworkflowprioritization($post)
 	{
-		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mstates.StateCode,mcounties.CountyName,mcities.CityName,mWorkflowTypePrioritization.Zipcode');
+		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mStates.StateCode,mCounties.CountyName,mCities.CityName,mWorkflowTypePrioritization.Zipcode');
 		$this->db->from('mWorkflowTypePrioritization'); 
 		$this->db->join('mWorkflowPrioritization', 'mWorkflowPrioritization.WorkflowPrioritizationUID = mWorkflowTypePrioritization.WorkflowPrioirtizationUID');
-		$this->db->join('mstates','mstates.StateUID = mWorkflowTypePrioritization.State','left');
-		$this->db->join('mcounties','mcounties.CountyUID = mWorkflowTypePrioritization.County','left');
-		$this->db->join('mcities','mcities.CityUID = mWorkflowTypePrioritization.City','left');
+		$this->db->join('mStates','mStates.StateUID = mWorkflowTypePrioritization.State','left');
+		$this->db->join('mCounties','mCounties.CountyUID = mWorkflowTypePrioritization.County','left');
+		$this->db->join('mCities','mCities.CityUID = mWorkflowTypePrioritization.City','left');
 
 		$this->db->where('mWorkflowPrioritization.PrioritizationType', 'Order');
 		$this->db->where('mWorkflowPrioritization.IsActive', 1);
@@ -10051,12 +10049,12 @@ function sendRequest($path, $post)
 
 	function get_listoverrideworkflowprioritization($post)
 	{
-		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mstates.StateCode,mcounties.CountyName,mcities.CityName,mWorkflowTypePrioritization.Zipcode');
+		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mStates.StateCode,mCounties.CountyName,mCities.CityName,mWorkflowTypePrioritization.Zipcode');
 		$this->db->from('mWorkflowTypePrioritization'); 
 		$this->db->join('mWorkflowPrioritization', 'mWorkflowPrioritization.WorkflowPrioritizationUID = mWorkflowTypePrioritization.WorkflowPrioirtizationUID');
-		$this->db->join('mstates','mstates.StateUID = mWorkflowTypePrioritization.State','left');
-		$this->db->join('mcounties','mcounties.CountyUID = mWorkflowTypePrioritization.County','left');
-		$this->db->join('mcities','mcities.CityUID = mWorkflowTypePrioritization.City','left');
+		$this->db->join('mStates','mStates.StateUID = mWorkflowTypePrioritization.State','left');
+		$this->db->join('mCounties','mCounties.CountyUID = mWorkflowTypePrioritization.County','left');
+		$this->db->join('mCities','mCities.CityUID = mWorkflowTypePrioritization.City','left');
 
 		$this->db->where('mWorkflowPrioritization.PrioritizationType', 'Order');
 		$this->db->where('mWorkflowPrioritization.IsActive', 1);
@@ -10071,12 +10069,12 @@ function sendRequest($path, $post)
 
 	function getnextorderworkflowprioritization($WorkflowUID)
 	{
-		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mstates.StateCode,mcounties.CountyName,mcities.CityName,mWorkflowTypePrioritization.Zipcode');
+		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mStates.StateCode,mCounties.CountyName,mCities.CityName,mWorkflowTypePrioritization.Zipcode');
 		$this->db->from('mWorkflowTypePrioritization'); 
 		$this->db->join('mWorkflowPrioritization', 'mWorkflowPrioritization.WorkflowPrioritizationUID = mWorkflowTypePrioritization.WorkflowPrioirtizationUID');
-		$this->db->join('mstates','mstates.StateUID = mWorkflowTypePrioritization.State','left');
-		$this->db->join('mcounties','mcounties.CountyUID = mWorkflowTypePrioritization.County','left');
-		$this->db->join('mcities','mcities.CityUID = mWorkflowTypePrioritization.City','left');
+		$this->db->join('mStates','mStates.StateUID = mWorkflowTypePrioritization.State','left');
+		$this->db->join('mCounties','mCounties.CountyUID = mWorkflowTypePrioritization.County','left');
+		$this->db->join('mCities','mCities.CityUID = mWorkflowTypePrioritization.City','left');
 
 		$this->db->where('mWorkflowPrioritization.PrioritizationType', 'Order');
 		$this->db->where('mWorkflowPrioritization.WorkflowUID', $WorkflowUID);
@@ -10096,7 +10094,7 @@ function sendRequest($path, $post)
 			foreach ($Prioritizationrows as $key => $Prioritizationrow) {
 				/*workflow statement*/
 				$Loop_where = [];
-				$workflow = " AND FIND_IN_SET('".$Prioritizationrow->WorkflowUID."',(SELECT GROUP_CONCAT(DISTINCT WorkflowModuleUID)	 FROM mcustomerworkflowmodules WHERE `torders`.`CustomerUID` = `mcustomerworkflowmodules`.`CustomerUID` AND mproducts.ProductUID = mcustomerworkflowmodules.ProductUID AND torders.SubProductUID = mcustomerworkflowmodules.SubProductUID))";
+				$workflow = " AND FIND_IN_SET('".$Prioritizationrow->WorkflowUID."',(SELECT GROUP_CONCAT(DISTINCT WorkflowModuleUID)	 FROM mcustomerworkflowmodules WHERE `tOrders`.`CustomerUID` = `mcustomerworkflowmodules`.`CustomerUID` AND mProducts.ProductUID = mcustomerworkflowmodules.ProductUID AND tOrders.SubProductUID = mcustomerworkflowmodules.SubProductUID))";
 
 				if(empty($Prioritizationrow->WorkflowUID))
 				{ 
@@ -10113,7 +10111,7 @@ function sendRequest($path, $post)
 				{
 
 
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND torders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND torders.PriorityUID = '.$Prioritizationrow->Priority.' AND torders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" AND torders.PropertyCountyName = "'.$Prioritizationrow->CountyName.'" AND torders.PropertyCityName = "'.$Prioritizationrow->CityName.'" AND torders.PropertyZipcode = '.$Prioritizationrow->Zipcode.' '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND tOrders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND tOrders.PriorityUID = '.$Prioritizationrow->Priority.' AND tOrders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" AND tOrders.PropertyCountyName = "'.$Prioritizationrow->CountyName.'" AND tOrders.PropertyCityName = "'.$Prioritizationrow->CityName.'" AND tOrders.PropertyZipcode = '.$Prioritizationrow->Zipcode.' '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) 
 					&& isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID) 
@@ -10124,7 +10122,7 @@ function sendRequest($path, $post)
 					&& isset($Prioritizationrow->CityName) && !empty($Prioritizationrow->CityName) 
 				)
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND torders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND torders.PriorityUID = '.$Prioritizationrow->Priority.' AND torders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" AND torders.PropertyCountyName = "'.$Prioritizationrow->CountyName.'" AND torders.PropertyCityName = "'.$Prioritizationrow->CityName.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND tOrders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND tOrders.PriorityUID = '.$Prioritizationrow->Priority.' AND tOrders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" AND tOrders.PropertyCountyName = "'.$Prioritizationrow->CountyName.'" AND tOrders.PropertyCityName = "'.$Prioritizationrow->CityName.'" '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) 
 					&& isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID) 
@@ -10134,7 +10132,7 @@ function sendRequest($path, $post)
 					&& isset($Prioritizationrow->CountyName) && !empty($Prioritizationrow->CountyName) 
 				)
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND torders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND torders.PriorityUID = '.$Prioritizationrow->Priority.' AND torders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" AND torders.PropertyCountyName = "'.$Prioritizationrow->CountyName.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND tOrders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND tOrders.PriorityUID = '.$Prioritizationrow->Priority.' AND tOrders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" AND tOrders.PropertyCountyName = "'.$Prioritizationrow->CountyName.'" '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) 
 					&& isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID) 
@@ -10143,7 +10141,7 @@ function sendRequest($path, $post)
 					&& isset($Prioritizationrow->StateCode) && !empty($Prioritizationrow->StateCode)
 				)
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND torders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND torders.PriorityUID = '.$Prioritizationrow->Priority.' AND torders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND tOrders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND tOrders.PriorityUID = '.$Prioritizationrow->Priority.' AND tOrders.PropertyStateCode = "'.$Prioritizationrow->StateCode.'" '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) 
 					&& isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID) 
@@ -10151,7 +10149,7 @@ function sendRequest($path, $post)
 					&& isset($Prioritizationrow->Priority) && !empty($Prioritizationrow->Priority) 
 				)
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND torders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND torders.PriorityUID = '.$Prioritizationrow->Priority.' '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND tOrders.SubProductUID = '.$Prioritizationrow->SubProductUID.' AND tOrders.PriorityUID = '.$Prioritizationrow->Priority.' '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) 
 					&& isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID) 
@@ -10159,46 +10157,46 @@ function sendRequest($path, $post)
 				)
 				{
 
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND torders.SubProductUID = '.$Prioritizationrow->SubProductUID.' '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' AND tOrders.SubProductUID = '.$Prioritizationrow->SubProductUID.' '.$workflow;	
 				}elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) 
 					&& isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID) 
 				)
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND msubproducts.ProductUID = '.$Prioritizationrow->ProductUID.' '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND mSubProducts.ProductUID = '.$Prioritizationrow->ProductUID.' '.$workflow;	
 				}elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID) && isset($Prioritizationrow->Priority) && !empty($Prioritizationrow->Priority) )
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND torders.PriorityUID = '.$Prioritizationrow->Priority.' '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' AND tOrders.PriorityUID = '.$Prioritizationrow->Priority.' '.$workflow;	
 				}elseif (isset($Prioritizationrow->CustomerUID) && !empty($Prioritizationrow->CustomerUID))
 				{
-					$Loop_where[] = 'torders.CustomerUID='.$Prioritizationrow->CustomerUID.' '.$workflow;	
+					$Loop_where[] = 'tOrders.CustomerUID='.$Prioritizationrow->CustomerUID.' '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->ProductUID) && !empty($Prioritizationrow->ProductUID))
 				{
-					$Loop_where[] = 'mproducts.ProductUID='.$Prioritizationrow->ProductUID.' '.$workflow;	
+					$Loop_where[] = 'mProducts.ProductUID='.$Prioritizationrow->ProductUID.' '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->SubProductUID) && !empty($Prioritizationrow->SubProductUID))
 				{
-					$Loop_where[] = 'torders.SubProductUID='.$Prioritizationrow->SubProductUID.' '.$workflow;	
+					$Loop_where[] = 'tOrders.SubProductUID='.$Prioritizationrow->SubProductUID.' '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->PriorityUID) && !empty($Prioritizationrow->PriorityUID))
 				{
-					$Loop_where[] = 'torders.PriorityUID='.$Prioritizationrow->PriorityUID.' '.$workflow;	
+					$Loop_where[] = 'tOrders.PriorityUID='.$Prioritizationrow->PriorityUID.' '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->StateCode) && !empty($Prioritizationrow->StateCode))
 				{
-					$Loop_where[] = 'torders.PropertyStateCode="'.$Prioritizationrow->StateCode.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.PropertyStateCode="'.$Prioritizationrow->StateCode.'" '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CountyName) && !empty($Prioritizationrow->CountyName))
 				{
-					$Loop_where[] = 'torders.PropertyCountyName="'.$Prioritizationrow->CountyName.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.PropertyCountyName="'.$Prioritizationrow->CountyName.'" '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->CityName) && !empty($Prioritizationrow->CityName))
 				{
-					$Loop_where[] = 'torders.PropertyCityName="'.$Prioritizationrow->CityName.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.PropertyCityName="'.$Prioritizationrow->CityName.'" '.$workflow;	
 				}
 				elseif (isset($Prioritizationrow->Zipcode) && !empty($Prioritizationrow->Zipcode))
 				{
-					$Loop_where[] = 'torders.PropertyZipcode="'.$Prioritizationrow->Zipcode.'" '.$workflow;	
+					$Loop_where[] = 'tOrders.PropertyZipcode="'.$Prioritizationrow->Zipcode.'" '.$workflow;	
 				}
 
 
@@ -10230,12 +10228,12 @@ function sendRequest($path, $post)
 
 	function getVendorPrioritization($post, $Type = "OrderBy")
 	{
-		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mstates.StateCode,mcounties.CountyName,mcities.CityName,mWorkflowTypePrioritization.Zipcode,mWorkflowTypePrioritization.State,mWorkflowTypePrioritization.County,mWorkflowTypePrioritization.City,mWorkflowTypePrioritization.VendorUID,mWorkflowPrioritization.PrioritizationName,mWorkflowPrioritization.AssignmentTypeUID, mWorkflowPrioritization.PrioritizationName, mWorkflowTypePrioritization.PrioritizationUID');
+		$this->db->select('mWorkflowPrioritization.WorkflowUID,mWorkflowTypePrioritization.CustomerUID,mWorkflowTypePrioritization.ProductUID,mWorkflowTypePrioritization.SubProductUID,mWorkflowTypePrioritization.Priority,mStates.StateCode,mCounties.CountyName,mCities.CityName,mWorkflowTypePrioritization.Zipcode,mWorkflowTypePrioritization.State,mWorkflowTypePrioritization.County,mWorkflowTypePrioritization.City,mWorkflowTypePrioritization.VendorUID,mWorkflowPrioritization.PrioritizationName,mWorkflowPrioritization.AssignmentTypeUID, mWorkflowPrioritization.PrioritizationName, mWorkflowTypePrioritization.PrioritizationUID');
 		$this->db->from('mWorkflowTypePrioritization'); 
 		$this->db->join('mWorkflowPrioritization', 'mWorkflowPrioritization.WorkflowPrioritizationUID = mWorkflowTypePrioritization.WorkflowPrioirtizationUID');
-		$this->db->join('mstates','mstates.StateUID = mWorkflowTypePrioritization.State','left');
-		$this->db->join('mcounties','mcounties.CountyUID = mWorkflowTypePrioritization.County','left');
-		$this->db->join('mcities','mcities.CityUID = mWorkflowTypePrioritization.City','left');
+		$this->db->join('mStates','mStates.StateUID = mWorkflowTypePrioritization.State','left');
+		$this->db->join('mCounties','mCounties.CountyUID = mWorkflowTypePrioritization.County','left');
+		$this->db->join('mCities','mCities.CityUID = mWorkflowTypePrioritization.City','left');
 
 		$this->db->where('mWorkflowPrioritization.PrioritizationType', 'Vendor');
 		$this->db->where('mWorkflowPrioritization.IsActive', 1);
@@ -10437,9 +10435,9 @@ function sendRequest($path, $post)
 
 	}
 
-	function GetOrderSourceNameByOrderUID($OrderUID){
-		$torders = $this->db->get_where('torders', array('OrderUID'=>$OrderUID))->row();
-		$OrderSourceUID = $torders->OrderSourceUID;
+	function GetOrdersourceNameByOrderUID($OrderUID){
+		$tOrders = $this->db->get_where('tOrders', array('OrderUID'=>$OrderUID))->row();
+		$OrderSourceUID = $tOrders->OrderSourceUID;
 		$OrderSourceName = '';
 		if($OrderSourceUID){
 			$mApiTitlePlatform = $this->db->get_where('mApiTitlePlatform', array('ApiTitlePlatformUID'=>$OrderSourceUID))->row();
@@ -10498,7 +10496,7 @@ function sendRequest($path, $post)
 	*/ 
 	function getSubProductsByProductUID($ProductUID){
 		$this->db->select('*');
-		$this->db->from('msubproducts');
+		$this->db->from('mSubProducts');
 		$this->db->where('ProductUID',$ProductUID);
 		return $this->db->get()->result();
 	}
@@ -10517,7 +10515,7 @@ function sendRequest($path, $post)
 
 	function get_mRoleCategorybyOrderType($OrderTypeUID) {
 		if(empty($OrderTypeUID)) return [];
-		return $this->db->query("SELECT mRoleCategory.RoleCategoryUID,RoleCategoryName, (CASE WHEN (SELECT ETA FROM mOrderTypeETA o WHERE o.OrderTypeUID = mordertypes.OrderTypeUID AND o.RoleCategoryUID = mRoleCategory.RoleCategoryUID AND ( ETA != 0 OR ETA IS NOT NULL ) ) THEN 1 ELSE 0 END ) AS VendorETA, AbstractorETA,AttorneyETA,NotaryETA FROM mordertypes LEFT JOIN mRoleCategory ON FIND_IN_SET(mRoleCategory.RoleCategoryUID, mordertypes.RoleCategoryUID) WHERE mRoleCategory.Active = 1 AND mordertypes.OrderTypeUID = {$OrderTypeUID}  GROUP BY mRoleCategory.RoleCategoryUID ORDER BY RoleCategoryName ASC")->result();
+		return $this->db->query("SELECT mRoleCategory.RoleCategoryUID,RoleCategoryName, (CASE WHEN (SELECT ETA FROM mOrderTypeETA o WHERE o.OrderTypeUID = mOrderTypes.OrderTypeUID AND o.RoleCategoryUID = mRoleCategory.RoleCategoryUID AND ( ETA != 0 OR ETA IS NOT NULL ) ) THEN 1 ELSE 0 END ) AS VendorETA, AbstractorETA,AttorneyETA,NotaryETA FROM mOrderTypes LEFT JOIN mRoleCategory ON FIND_IN_SET(mRoleCategory.RoleCategoryUID, mOrderTypes.RoleCategoryUID) WHERE mRoleCategory.Active = 1 AND mOrderTypes.OrderTypeUID = {$OrderTypeUID}  GROUP BY mRoleCategory.RoleCategoryUID ORDER BY RoleCategoryName ASC")->result();
 	}
 
 	/**
@@ -10571,17 +10569,17 @@ function sendRequest($path, $post)
 	function getOrderDetailsByOrderUID($OrderUID){
 		if($OrderUID){
 
-			$this->db->select ( 'torders.*, mcustomers.CustomerName, mcustomers.CustomerNumber, mproducts.ProductName, mproducts.ProductUID, msubproducts.SubProductName, msubproducts.SubProductCode, mordertypes.OrderTypeName, morderpriority.PriorityName, morderstatus.StatusName, GROUP_CONCAT( PRName SEPARATOR "\\\" ) AS BorrowerName, mproducts.IsClosingProduct ');
-			$this->db->from ( 'torders' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-			$this->db->join ( 'msubproducts', 'torders.SubProductUID = msubproducts.SubProductUID' , 'left' );
-			$this->db->join ( 'mproducts', 'msubproducts.ProductUID = mproducts.ProductUID' , 'left' );
-			$this->db->join ( 'mtemplates', 'torders.TemplateUID = mtemplates.TemplateUID' , 'left' );
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID' , 'left' );
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
-			$this->db->join ( 'torderpropertyroles', 'torders.OrderUID = torderpropertyroles.OrderUID' , 'left' );
-			$this->db->where ('torders.OrderUID',$OrderUID);
+			$this->db->select ( 'tOrders.*, mCustomers.CustomerName, mCustomers.CustomerNumber, mProducts.ProductName, mProducts.ProductUID, mSubProducts.SubProductName, mSubProducts.SubProductCode, mOrderTypes.OrderTypeName, mOrderPriority.PriorityName, mOrderStatus.StatusName, GROUP_CONCAT( PRName SEPARATOR "\\\" ) AS BorrowerName, mProducts.IsClosingProduct ');
+			$this->db->from ( 'tOrders' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->join ( 'mSubProducts', 'tOrders.SubProductUID = mSubProducts.SubProductUID' , 'left' );
+			$this->db->join ( 'mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID' , 'left' );
+			$this->db->join ( 'mTemplates', 'tOrders.TemplateUID = mTemplates.TemplateUID' , 'left' );
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
+			$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
+			$this->db->where ('tOrders.OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->row();
 		}
@@ -10839,7 +10837,7 @@ function sendRequest($path, $post)
 
 	function getCountyRowbyUID($CountyUID)
 	{
-		return $this->db->where('CountyUID', $CountyUID)->get('mcounties')->row();
+		return $this->db->where('CountyUID', $CountyUID)->get('mCounties')->row();
 	}
 
 	/**
@@ -10849,7 +10847,7 @@ function sendRequest($path, $post)
 	*/
 	function getProductRowbyUID($ProductUID)
 	{
-		return $this->db->where('ProductUID', $ProductUID)->get('mproducts')->row();
+		return $this->db->where('ProductUID', $ProductUID)->get('mProducts')->row();
 	}
 
 	/**
@@ -10859,7 +10857,7 @@ function sendRequest($path, $post)
 	*/
 	function getSubProductRowbyUID($SubProductUID)
 	{
-		return $this->db->where('SubProductUID', $SubProductUID)->get('msubproducts')->row();
+		return $this->db->where('SubProductUID', $SubProductUID)->get('mSubProducts')->row();
 	}
 
 
@@ -10915,9 +10913,9 @@ function sendRequest($path, $post)
 	function getCountyUIDByStateUIDAndCountyName($StateUID, $CountyName){
 		
 		$this->db->select('CountyUID');
-		$this->db->from('mcounties'); 
-		$this->db->where('mcounties.CountyName', $CountyName);
-		$this->db->where('mcounties.StateUID', $StateUID);
+		$this->db->from('mCounties'); 
+		$this->db->where('mCounties.CountyName', $CountyName);
+		$this->db->where('mCounties.StateUID', $StateUID);
 		return $this->db->get()->row();
 	}
 
@@ -10937,10 +10935,10 @@ function sendRequest($path, $post)
 	function getCityUIDByStateUIDAndCountyUIDAndCityName($StateUID, $CountyUID, $CityName){
 		
 		$this->db->select('CityUID');
-		$this->db->from('mcities'); 
-		$this->db->where('mcities.CityName', $CityName);
-		$this->db->where('mcities.CountyUID', $CountyUID);
-		$this->db->where('mcities.StateUID', $StateUID);
+		$this->db->from('mCities'); 
+		$this->db->where('mCities.CityName', $CityName);
+		$this->db->where('mCities.CountyUID', $CountyUID);
+		$this->db->where('mCities.StateUID', $StateUID);
 		return $this->db->get()->result_array();
 	}
 
@@ -11074,9 +11072,9 @@ function sendRequest($path, $post)
 	function GetRelationalOrdersByID($OrderUID){
 		$order_details = $this->get_orderdetails($OrderUID);
 		$LastNo = explode('-',$order_details->OrderNumber);
-		$this->db->select('torders.OrderUID,torders.OrderNumber,torders.SubProductUID,msubproducts.SubProductName');
-		$this->db->from('torders');
-		$this->db->join('msubproducts','msubproducts.SubProductUID = torders.SubProductUID','left');
+		$this->db->select('tOrders.OrderUID,tOrders.OrderNumber,tOrders.SubProductUID,mSubProducts.SubProductName');
+		$this->db->from('tOrders');
+		$this->db->join('mSubProducts','mSubProducts.SubProductUID = tOrders.SubProductUID','left');
 		$this->db->like('OrderSequence', substr($LastNo[0],1), 'both');
 		$this->db->order_by('OrderUID',"ASC");
 		return $this->db->get()->result();
@@ -11134,24 +11132,24 @@ function sendRequest($path, $post)
 			return [];
 		}
 
-		$this->db->select('torderabstractor.AbstractorOrderUID,torderabstractor.AbstractorUID, torderabstractor.OrderTypeUID, torderabstractor.IsVendorBilled, torderabstractor.VendorBilledDateTime, mabstractor.AbstractorFirstName, torders.OrderUID, torders.SubProductUID, mproducts.ProductUID, torders.CustomerUID');
+		$this->db->select('torderabstractor.AbstractorOrderUID,torderabstractor.AbstractorUID, torderabstractor.OrderTypeUID, torderabstractor.IsVendorBilled, torderabstractor.VendorBilledDateTime, mabstractor.AbstractorFirstName, tOrders.OrderUID, tOrders.SubProductUID, mProducts.ProductUID, tOrders.CustomerUID');
 		$this->db->select('CASE WHEN mabstractor.AbstractorCompanyName IS NOT NULL OR mabstractor.AbstractorCompanyName != "" THEN mabstractor.AbstractorCompanyName ELSE CONCAT_WS(mabstractor.AbstractorFirstName, " ", mabstractor.AbstractorLastName) END AS AbstractorFirstNameOrCompanyName', false);
 
-		$this->db->select('CASE WHEN EXISTS( SELECT tOrderSchedule.AbstractorOrderUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningStateCode FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderSchedule.ScheduleUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE torders.PropertyStateCode END AS StateCode', false);
+		$this->db->select('CASE WHEN EXISTS( SELECT tOrderschedule.AbstractorOrderUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningStateCode FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderschedule.ScheduleUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE tOrders.PropertyStateCode END AS StateCode', false);
 
-		$this->db->select('CASE WHEN EXISTS( SELECT tOrderSchedule.AbstractorOrderUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningCountyName FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderSchedule.ScheduleUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE torders.PropertyCountyName END AS CountyName', false);
+		$this->db->select('CASE WHEN EXISTS( SELECT tOrderschedule.AbstractorOrderUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningCountyName FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderschedule.ScheduleUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE tOrders.PropertyCountyName END AS CountyName', false);
 		
-		$this->db->select('CASE WHEN EXISTS( SELECT tOrderSchedule.AbstractorOrderUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningZipCode FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderSchedule.ScheduleUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE torders.PropertyZipcode END AS ZipCode', false);
+		$this->db->select('CASE WHEN EXISTS( SELECT tOrderschedule.AbstractorOrderUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningZipCode FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderschedule.ScheduleUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE tOrders.PropertyZipcode END AS ZipCode', false);
 		
-		$this->db->select('CASE WHEN EXISTS( SELECT tOrderSchedule.AbstractorOrderUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningCityName FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderSchedule.ScheduleUID FROM tOrderSchedule WHERE tOrderSchedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE torders.PropertyCityName END AS CityName', false);
+		$this->db->select('CASE WHEN EXISTS( SELECT tOrderschedule.AbstractorOrderUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) THEN ( SELECT SigningCityName FROM tOrderClosing WHERE ScheduleUID = ( SELECT tOrderschedule.ScheduleUID FROM tOrderschedule WHERE tOrderschedule.AbstractorOrderUID = torderabstractor.AbstractorOrderUID ) ) ELSE tOrders.PropertyCityName END AS CityName', false);
 		
-		$this->db->from('torders');
-		$this->db->join('msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID');
-		$this->db->join('mproducts', 'msubproducts.ProductUID = mproducts.ProductUID');
-		$this->db->join('torderabstractor', 'torderabstractor.OrderUID = torders.OrderUID');
+		$this->db->from('tOrders');
+		$this->db->join('mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID');
+		$this->db->join('mProducts', 'mSubProducts.ProductUID = mProducts.ProductUID');
+		$this->db->join('torderabstractor', 'torderabstractor.OrderUID = tOrders.OrderUID');
 		$this->db->join('mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID');
 
-		$this->db->where('torders.OrderUID', $OrderUID);
+		$this->db->where('tOrders.OrderUID', $OrderUID);
 		$this->db->where('torderabstractor.IsVendorBilled', 0);
 		$vendororders = $this->db->get()->result();
 
@@ -11403,26 +11401,26 @@ function getDocumentTypeByUID($DocumentTypeUID)
 			if(!empty($String)){
 				$Row = $this->db->select('*')->from('mfields')->where(array('FieldName'=>$String,'IsDocumentNamingConvention'=>1))->get()->row();
 				if(!empty($Row)){
-					if(!empty($Row->TableName) && $Row->TableName != 'torders' && $this->db->field_exists('OrderUID',$Row->TableName)){
+					if(!empty($Row->TableName) && $Row->TableName != 'tOrders' && $this->db->field_exists('OrderUID',$Row->TableName)){
 						// Check from another table having OrderUID as Key
 						$this->db->select($Row->FieldName);
-						$this->db->from('torders');
-						$this->db->join($Row->TableName,''.$Row->TableName.'.OrderUID = torders.OrderUID','left');
+						$this->db->from('tOrders');
+						$this->db->join($Row->TableName,''.$Row->TableName.'.OrderUID = tOrders.OrderUID','left');
 						$this->db->where('OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 					}
-					if(!empty($Row->TableName) && $Row->TableName != 'torders' && !empty($Row->DataFromTableKey) &&  $this->db->field_exists($Row->DataFromTableKey,'torders')){
-						// Check from another table, torders has different key values				
+					if(!empty($Row->TableName) && $Row->TableName != 'tOrders' && !empty($Row->DataFromTableKey) &&  $this->db->field_exists($Row->DataFromTableKey,'tOrders')){
+						// Check from another table, tOrders has different key values				
 						$this->db->select($Row->FieldName);
-						$this->db->from('torders');
-						$this->db->join($Row->TableName,''.$Row->TableName.'.'.$Row->DataFromTableKey.' = torders.'.$Row->DataFromTableKey.'','left');
-						$this->db->where('torders.OrderUID',$OrderUID);
+						$this->db->from('tOrders');
+						$this->db->join($Row->TableName,''.$Row->TableName.'.'.$Row->DataFromTableKey.' = tOrders.'.$Row->DataFromTableKey.'','left');
+						$this->db->where('tOrders.OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 					}
-					else if(!empty($Row->TableName) && $Row->TableName == 'torders' && !empty($Row->FieldName) &&  $this->db->field_exists($Row->FieldName,'torders')){
-						// get from same table - torders
+					else if(!empty($Row->TableName) && $Row->TableName == 'tOrders' && !empty($Row->FieldName) &&  $this->db->field_exists($Row->FieldName,'tOrders')){
+						// get from same table - tOrders
 						$this->db->select($Row->FieldName);
-						$this->db->from('torders');
+						$this->db->from('tOrders');
 						$this->db->where('OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 					}else if(property_exists($order_detail,$Row->FieldName)){
@@ -11487,36 +11485,36 @@ function getDocumentTypeByUID($DocumentTypeUID)
 				
 			$Row = $this->db->select('*')->from('mfields')->where(array('FieldName'=>$String,'IsDocumentNamingConvention'=>1))->get()->row();
 			if(!empty($Row)){	
-					if(!empty($Row->TableName) && $Row->TableName != 'torders' && !empty($Row->DataFromTableKey)){
-						// Check from another table, torders has different key values				
+					if(!empty($Row->TableName) && $Row->TableName != 'tOrders' && !empty($Row->DataFromTableKey)){
+						// Check from another table, tOrders has different key values				
 						$this->db->select($Row->TableName.'.'.$Row->FieldName);
-						$this->db->from('torders');
-						$this->db->join($Row->TableName,''.$Row->TableName.'.'.$Row->DataFromTableKey.' = torders.'.$Row->DataFromTableKey.'','left');
-						$this->db->where('torders.OrderUID',$OrderUID);
+						$this->db->from('tOrders');
+						$this->db->join($Row->TableName,''.$Row->TableName.'.'.$Row->DataFromTableKey.' = tOrders.'.$Row->DataFromTableKey.'','left');
+						$this->db->where('tOrders.OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 						
 					}
-					else if(!empty($Row->TableName) && $Row->TableName != 'torders' && !empty($Row->DifferentKeyName)){
+					else if(!empty($Row->TableName) && $Row->TableName != 'tOrders' && !empty($Row->DifferentKeyName)){
 						// Check from another table having OrderUID as Key
 						$this->db->select($Row->TableName.'.'.$Row->DifferentKeyName);
-						$this->db->from('torders');
-						$this->db->join($Row->TableName,''.$Row->TableName.'.OrderUID = torders.OrderUID','left');
-						$this->db->where('torders.OrderUID',$OrderUID);
+						$this->db->from('tOrders');
+						$this->db->join($Row->TableName,''.$Row->TableName.'.OrderUID = tOrders.OrderUID','left');
+						$this->db->where('tOrders.OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 					
 					}
-					else if(!empty($Row->TableName) && $Row->TableName != 'torders'){
+					else if(!empty($Row->TableName) && $Row->TableName != 'tOrders'){
 						// Check from another table having OrderUID as Key
 						$this->db->select($Row->TableName.'.'.$Row->FieldName);
-						$this->db->from('torders');
-						$this->db->join($Row->TableName,''.$Row->TableName.'.OrderUID = torders.OrderUID','left');
-						$this->db->where('torders.OrderUID',$OrderUID);
+						$this->db->from('tOrders');
+						$this->db->join($Row->TableName,''.$Row->TableName.'.OrderUID = tOrders.OrderUID','left');
+						$this->db->where('tOrders.OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 					}
-					else if(!empty($Row->TableName) && $Row->TableName == 'torders'){
-						// get from same table - torders
+					else if(!empty($Row->TableName) && $Row->TableName == 'tOrders'){
+						// get from same table - tOrders
 						$this->db->select($Row->FieldName);
-						$this->db->from('torders');
+						$this->db->from('tOrders');
 						$this->db->where('OrderUID',$OrderUID);
 						$Output = $this->db->get()->row();
 					}
@@ -11548,7 +11546,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	{
 	  $this->db->where('ProductUID', $ProductUID);
 	  $this->db->where('IsClosingProduct',1);
-	  $IsClosing = $this->db->get('mproducts')->num_rows();
+	  $IsClosing = $this->db->get('mProducts')->num_rows();
 	  if($IsClosing>0)
 	  {
 	  	return 'Closing';
@@ -11670,11 +11668,11 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	function getDocumentsByUID($OrderUID,$DocumentUID)
 	{
 	  if(empty($DocumentUID)) { return []; }	
-	  $this->db->select('torders.OrderDocsPath, torderdocuments.*,mdocumenttypes.DocumentNamingConvention');
+	  $this->db->select('tOrders.OrderDocsPath, torderdocuments.*,mdocumenttypes.DocumentNamingConvention');
 	  $this->db->from('torderdocuments');
-	  $this->db->join('torders', 'torderdocuments.OrderUID = torders.OrderUID');
+	  $this->db->join('tOrders', 'torderdocuments.OrderUID = tOrders.OrderUID');
 	  $this->db->join('mdocumenttypes', 'mdocumenttypes.DocumentTypeUID = torderdocuments.DocumentTypeUID');
-	  $this->db->where('torders.OrderUID', $OrderUID);
+	  $this->db->where('tOrders.OrderUID', $OrderUID);
 	  $this->db->where_in('torderdocuments.OrderDocumentUID', $DocumentUID);
 	  return $this->db->get()->result();
 	}
@@ -11716,8 +11714,8 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	function getClosingCurrentQueue_MobileApp($OrderUID)
 	{
 
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
-		if (!empty($torders) && in_array($torders->StatusUID, [$this->config->item('keywords')['Cancelled']])  ) {
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
+		if (!empty($tOrders) && in_array($tOrders->StatusUID, [$this->config->item('keywords')['Cancelled']])  ) {
 			return $this->config->item('Closign Current Queue')[17];	
 		}
 
@@ -11727,22 +11725,22 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		THEN 1 ELSE 0
 		END AS ScheduleComplete,
 		CASE WHEN EXISTS(
-		SELECT tOrderSchedule.OrderUID FROM tOrderSchedule
-		JOIN torderabstractor ON torderabstractor.AbstractorOrderUID = tOrderSchedule.AbstractorOrderUID 
-		JOIN tOrderScheduleBorrower ON tOrderScheduleBorrower.ScheduleUID=tOrderSchedule.ScheduleUID
-		WHERE tOrderSchedule.OrderUID = $OrderUID AND tOrderSchedule.ScheduleStatus NOT IN ('Cancel', 'Complete')) 
+		SELECT tOrderschedule.OrderUID FROM tOrderschedule
+		JOIN torderabstractor ON torderabstractor.AbstractorOrderUID = tOrderschedule.AbstractorOrderUID 
+		JOIN tOrderscheduleBorrower ON tOrderscheduleBorrower.ScheduleUID=tOrderschedule.ScheduleUID
+		WHERE tOrderschedule.OrderUID = $OrderUID AND tOrderschedule.ScheduleStatus NOT IN ('Cancel', 'Complete')) 
 		THEN 1 ELSE 0 
 		END AS SettlementAgentAssigned,
 		CASE WHEN EXISTS(
-		SELECT OrderUID FROM tOrderSign WHERE OrderUID = $OrderUID AND tOrderSign.SigningStatus IN ('Cancel')) 
+		SELECT OrderUID FROM tOrdersign WHERE OrderUID = $OrderUID AND tOrdersign.SigningStatus IN ('Cancel')) 
 		THEN 1 ELSE 0 
 		END AS SigningCancelled,
 		CASE WHEN EXISTS(
-		SELECT OrderUID FROM tOrderSign WHERE OrderUID = $OrderUID AND tOrderSign.SigningStatus IN ('sign')) 
+		SELECT OrderUID FROM tOrdersign WHERE OrderUID = $OrderUID AND tOrdersign.SigningStatus IN ('sign')) 
 		THEN 1 ELSE 0 
 		END AS SigningCompleted,
 		CASE WHEN EXISTS(
-		SELECT OrderUID FROM tOrderShipping WHERE OrderUID = $OrderUID AND tOrderShipping.IsShipped = 1) 
+		SELECT OrderUID FROM tOrdershipping WHERE OrderUID = $OrderUID AND tOrdershipping.IsShipped = 1) 
 		THEN 1 ELSE 0 
 		END AS ShipmentDone,
 		CASE WHEN EXISTS( 
@@ -11775,7 +11773,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		if ($result->SettlementAgentAssigned == 1 ) {
 
 			/*Individual Signing Status*/
-			$this->db->select('*')->from('tOrderSign');
+			$this->db->select('*')->from('tOrdersign');
 			$this->db->where(['OrderUID'=>$OrderUID]);
 			$this->db->where_not_in('SigningStatus', ['Cancel', 'Sign']);
 			$this->db->order_by('SignUID', 'DESC');
@@ -11894,7 +11892,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	function getMailOrderLevelClientType($OrderUID, $Type)
 	{
 	  $Type = (empty($Type)) ? 0 : $Type;	
-	  return $this->db->query('SELECT CONCAT_WS("", "(", CustomerName, ")", "(Customer) ", mClientContactMethod.Details) AS Email, CustomerName, CustomerNumber FROM (`torders`) LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `mClientContact` ON `mcustomers`.`CustomerUID` = `mClientContact`.`CustomerUID` LEFT JOIN mClientContactMethod ON mClientContactMethod.ClientContactUID = mClientContact.ClientContactUID INNER JOIN mContactMethod ON mContactMethod.ContactMethodUID = mClientContactMethod.ContactMethodUID AND mContactMethod.IsMail = 1 WHERE `mClientContact`.`ContactTypeUID` IN ('.$Type.')  AND `torders`.`OrderUID` = '.$OrderUID.' AND mClientContactMethod.Details != "" GROUP BY `Email`')->result();
+	  return $this->db->query('SELECT CONCAT_WS("", "(", CustomerName, ")", "(Customer) ", mClientContactMethod.Details) AS Email, CustomerName, CustomerNumber FROM (`tOrders`) LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mClientContact` ON `mCustomers`.`CustomerUID` = `mClientContact`.`CustomerUID` LEFT JOIN mClientContactMethod ON mClientContactMethod.ClientContactUID = mClientContact.ClientContactUID INNER JOIN mContactMethod ON mContactMethod.ContactMethodUID = mClientContactMethod.ContactMethodUID AND mContactMethod.IsMail = 1 WHERE `mClientContact`.`ContactTypeUID` IN ('.$Type.')  AND `tOrders`.`OrderUID` = '.$OrderUID.' AND mClientContactMethod.Details != "" GROUP BY `Email`')->result();
 	}
 
 	/** 
@@ -12195,8 +12193,8 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		$ClosingWorkflows = [];
 		$ClosingWorkflows[] = $this->config->item('WorkflowModuleUID')['Scheduling'];
 		$ClosingWorkflows[] = $this->config->item('WorkflowModuleUID')['Signing'];
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
-		$this->db->where(['CustomerUID'=>$torders->CustomerUID, 'SubProductUID'=>$torders->SubProductUID]);
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
+		$this->db->where(['CustomerUID'=>$tOrders->CustomerUID, 'SubProductUID'=>$tOrders->SubProductUID]);
 		$workflows = $this->db->get('mcustomerworkflowmodules')->result_array();
 
 		$CustomerWorkflows = array_filter(array_column($workflows, "WorkflowModuleUID"));
@@ -12230,11 +12228,11 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->where_not_in('ScheduleStatus', ['Cancel', 'Complete']);
-			$tOrderSchedule = $this->db->get('tOrderSchedule')->result();
+			$tOrderschedule = $this->db->get('tOrderschedule')->result();
 
 			/*Complete all scheudles*/
-			foreach ($tOrderSchedule as $key => $value) {
-				$this->common_model->save('tOrderSchedule', ['ScheduleStatus'=>'Complete'], ['ScheduleUID'=>$value->ScheduleUID]);
+			foreach ($tOrderschedule as $key => $value) {
+				$this->common_model->save('tOrderschedule', ['ScheduleStatus'=>'Complete'], ['ScheduleUID'=>$value->ScheduleUID]);
 
 				$this->common_model->save('torderabstractor', ['OrderStatus'=>5, 'CompletedDateTime'=>date('Y-m-d H:i:s')], ['AbstractorOrderUID'=>$value->AbstractorOrderUID]);
 			}
@@ -12245,24 +12243,24 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->where_not_in('SigningStatus', ['Cancel', 'Sign']);
-			$tOrderSign = $this->db->get('tOrderSign')->result();
+			$tOrdersign = $this->db->get('tOrdersign')->result();
 
 			$ScheduleUIDs = [];
-			foreach ($tOrderSign as $key => $value) {
+			foreach ($tOrdersign as $key => $value) {
 				$ScheduleUIDs[] = $value->ScheduleUID;
 			}
 
 
 			/* @author Parthasarathy M insert workflowqueues at triggers */
-			$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
+			$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
 
-			$this->common_model->insertWorkflowQueues($OrderUID, $torders->CustomerUID, $torders->SubProductUID, "Signing Complete", 0);
+			$this->common_model->insertWorkflowQueues($OrderUID, $tOrders->CustomerUID, $tOrders->SubProductUID, "Signing Complete", 0);
 
 
 
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->where_not_in('SigningStatus', ['Cancel', 'Sign']);
-			$this->db->update('tOrderSign', ['SigningStatus'=>'Sign']);
+			$this->db->update('tOrdersign', ['SigningStatus'=>'Sign']);
 
 			//insert sla action details for sign complete
 			$WorkflowUID = $this->config->item('WorkflowModuleUID')['Signing'];
@@ -12277,11 +12275,11 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 			if (!empty($ScheduleUIDs)) {				
 				$this->db->where_in('ScheduleUID', $ScheduleUIDs);
-				$tOrderSchedule = $this->db->get('tOrderSchedule')->result();
+				$tOrderschedule = $this->db->get('tOrderschedule')->result();
 			}
 
-			foreach ($tOrderSchedule as $key => $value) {
-				$this->common_model->save('tOrderSchedule', ['ScheduleStatus'=>'Complete'], ['ScheduleUID'=>$value->ScheduleUID]);
+			foreach ($tOrderschedule as $key => $value) {
+				$this->common_model->save('tOrderschedule', ['ScheduleStatus'=>'Complete'], ['ScheduleUID'=>$value->ScheduleUID]);
 
 				/*insert sla action details for sign complete*/
 				$WorkflowUID = $this->config->item('WorkflowModuleUID')['Scheduling'];
@@ -12346,17 +12344,17 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	*/ 
 	function closingCurrentWorkflow($OrderUID)
 	{
-		$torders = $this->common_model->get_row('torders', ['OrderUID'=>$OrderUID]);
+		$tOrders = $this->common_model->get_row('tOrders', ['OrderUID'=>$OrderUID]);
 		/* @desc Check Cancel Pending Request @author Yagavi G <yagavi.g@avanzegroup.com> @since Sept 3rd 2020 */
 		$PendingCancelRequest = $this->CheckOrderCancelPendingRequest($OrderUID);
 		if(!empty($PendingCancelRequest)){
 			return $this->config->item('Closign Current Queue')[18];
 		}
 
-		if (!empty($torders) && in_array($torders->StatusUID, [$this->config->item('keywords')['Order Completed']])  ) {
+		if (!empty($tOrders) && in_array($tOrders->StatusUID, [$this->config->item('keywords')['Order Completed']])  ) {
 			return $this->config->item('Closign Current Queue')[16];
 		}
-		if (!empty($torders) && in_array($torders->StatusUID, [$this->config->item('keywords')['Cancelled']])  ) {
+		if (!empty($tOrders) && in_array($tOrders->StatusUID, [$this->config->item('keywords')['Cancelled']])  ) {
 			return $this->config->item('Closign Current Queue')[17];
 		}
 
@@ -12449,11 +12447,11 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	{
 		$this->db->select('*');
 		$this->db->from('torderapprovals');
-		$this->db->join('torders','torders.OrderUID = torderapprovals.OrderUID');
+		$this->db->join('tOrders','tOrders.OrderUID = torderapprovals.OrderUID');
 		$this->db->where('torderapprovals.OrderUID',$OrderUID);
 		$this->db->where('torderapprovals.ApprovalStatus', '0');
 		$this->db->where('torderapprovals.ApprovalFunction', 'Order Cancellation');
-		$this->db->where('torders.StatusUID !=', '110');
+		$this->db->where('tOrders.StatusUID !=', '110');
 		return $this->db->get()->row();
 	}
 
@@ -12565,10 +12563,10 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 	function productFiltering($CustomerUID,$Workflow,$ProductCategory){
 
-		$this->db->select('mproducts.ProductUID,mproducts.ProductName');
+		$this->db->select('mProducts.ProductUID,mProducts.ProductName');
 		if(!empty($CustomerUID)){
 			$this->db->from('mcustomerworkflowmodules');
-			$this->db->join('mproducts','mproducts.ProductUID = mcustomerworkflowmodules.ProductUID','LEFT');
+			$this->db->join('mProducts','mProducts.ProductUID = mcustomerworkflowmodules.ProductUID','LEFT');
 			// Condition: Customer
 			if(!empty($CustomerUID) && is_array($CustomerUID))
 			{
@@ -12582,20 +12580,20 @@ function getDocumentTypeByUID($DocumentTypeUID)
 				$this->db->where('mcustomerworkflowmodules.WorkflowModuleUID',$Workflow);
 			}
 		}else{
-			$this->db->from('mproducts');
+			$this->db->from('mProducts');
 		}
 
 		// Condition: ProductCategory
 		if($ProductCategory != '' && $ProductCategory == 'Title')
 		{
-			$this->db->where('(mproducts.IsClosingProduct IS NULL OR mproducts.IsClosingProduct = 0) AND (mproducts.IsRMSProduct IS NULL OR mproducts.IsRMSProduct = 0)',NULL,FALSE);
+			$this->db->where('(mProducts.IsClosingProduct IS NULL OR mProducts.IsClosingProduct = 0) AND (mProducts.IsRMSProduct IS NULL OR mProducts.IsRMSProduct = 0)',NULL,FALSE);
 		}
 		else if($ProductCategory != '' && $ProductCategory == 'Closing')
 		{
-			$this->db->where('mproducts.IsClosingProduct',1);
+			$this->db->where('mProducts.IsClosingProduct',1);
 		}else if($ProductCategory != '' && $ProductCategory == 'RMS')
 		{
-			$this->db->where('mproducts.IsRMSProduct',1);
+			$this->db->where('mProducts.IsRMSProduct',1);
 		}
 		
 		$this->db->group_by('ProductUID');
@@ -12615,46 +12613,46 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 	function subproductFiltering($ProductUID,$CustomerUID='',$ProductCategory='')
 		{
-			$this->db->select('msubproducts.SubProductUID,msubproducts.SubProductName');
-			$this->db->from('msubproducts');
+			$this->db->select('mSubProducts.SubProductUID,mSubProducts.SubProductName');
+			$this->db->from('mSubProducts');
 
 			if(!empty(array_filter($ProductUID))) 
 			{
 			  if(is_array($ProductUID))
 			  {
-			    $this->db->where_in("msubproducts.ProductUID",$ProductUID);
+			    $this->db->where_in("mSubProducts.ProductUID",$ProductUID);
 			  }	else {
-			    $this->db->where("msubproducts.ProductUID",$ProductUID);
+			    $this->db->where("mSubProducts.ProductUID",$ProductUID);
 			  } 
 		 	} 
 		 	if(!empty($CustomerUID))
 		 	{
-		 	  $this->db->join('mcustomerproducts','mcustomerproducts.SubProductUID = msubproducts.SubProductUID','INNER');	
+		 	  $this->db->join('mCustomerProducts','mCustomerProducts.SubProductUID = mSubProducts.SubProductUID','INNER');	
 		 	  if(is_array($CustomerUID))
 		 	  {
-		 	  	$this->db->where_in('mcustomerproducts.CustomerUID',$CustomerUID);
+		 	  	$this->db->where_in('mCustomerProducts.CustomerUID',$CustomerUID);
 		 	  } else {
-		 	    $this->db->where('mcustomerproducts.CustomerUID',$CustomerUID);
+		 	    $this->db->where('mCustomerProducts.CustomerUID',$CustomerUID);
 		 	  }
 			}
 			if(!empty($ProductCategory))
 		 	{
-				$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID','left');	
+				$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID','left');	
 				// Condition: ProductCategory
 				if($ProductCategory != '' && $ProductCategory == 'Title')
 				{
-					$this->db->where('(mproducts.IsClosingProduct IS NULL OR mproducts.IsClosingProduct = 0) AND (mproducts.IsRMSProduct IS NULL OR mproducts.IsRMSProduct = 0)',NULL,FALSE);
+					$this->db->where('(mProducts.IsClosingProduct IS NULL OR mProducts.IsClosingProduct = 0) AND (mProducts.IsRMSProduct IS NULL OR mProducts.IsRMSProduct = 0)',NULL,FALSE);
 				}
 				else if($ProductCategory != '' && $ProductCategory == 'Closing')
 				{
-					$this->db->where('mproducts.IsClosingProduct',1);
+					$this->db->where('mProducts.IsClosingProduct',1);
 				}else if($ProductCategory != '' && $ProductCategory == 'RMS')
 				{
-					$this->db->where('mproducts.IsRMSProduct',1);
+					$this->db->where('mProducts.IsRMSProduct',1);
 				}
 			}
 				
-		 	$this->db->group_by('msubproducts.SubProductUID');
+		 	$this->db->group_by('mSubProducts.SubProductUID');
 			return $this->db->get()->result();
 		}
 
@@ -12880,7 +12878,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	*/ 
 	function GetCustomerProductDetailsByCustomerSubproductUID($where)
 	{
-		$this->db->select('*')->from('mcustomerproducts');
+		$this->db->select('*')->from('mCustomerProducts');
 		$this->db->where($where);
 		return $this->db->get()->row();
 	}
@@ -12900,17 +12898,17 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	function getCustomerProducts($CustomerUID, $ProductUID = NULL){
 		/*Query*/
 		$this->db->select('*');
-		$this->db->from('mcustomerproducts'); 
-		$this->db->join('mproducts', 'mproducts.ProductUID = mcustomerproducts.ProductUID', 'left');
-		$this->db->join('msubproducts', 'mproducts.ProductUID = msubproducts.ProductUID', 'left');
-		$this->db->where('mcustomerproducts.CustomerUID', $CustomerUID);
+		$this->db->from('mCustomerProducts'); 
+		$this->db->join('mProducts', 'mProducts.ProductUID = mCustomerProducts.ProductUID', 'left');
+		$this->db->join('mSubProducts', 'mProducts.ProductUID = mSubProducts.ProductUID', 'left');
+		$this->db->where('mCustomerProducts.CustomerUID', $CustomerUID);
 		if (!empty($ProductUID)) {
-			$this->db->where('mcustomerproducts.ProductUID', $ProductUID);
-			$this->db->group_by('msubproducts.SubProductUID');
+			$this->db->where('mCustomerProducts.ProductUID', $ProductUID);
+			$this->db->group_by('mSubProducts.SubProductUID');
 		}
 		else
 		{
-			$this->db->group_by('mproducts.ProductUID');
+			$this->db->group_by('mProducts.ProductUID');
 		}
 		return $this->db->get()->result();
 	}
@@ -12930,17 +12928,17 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	function getCustomerSubProducts($CustomerUID, $ProductUID = NULL){
 		/*Query*/
 		$this->db->select('*');
-		$this->db->from('mcustomerproducts'); 
-		$this->db->join('mproducts', 'mproducts.ProductUID = mcustomerproducts.ProductUID', 'left');
-		$this->db->join('msubproducts', 'mproducts.ProductUID = msubproducts.ProductUID', 'left');
-		$this->db->where('mcustomerproducts.CustomerUID', $CustomerUID);
+		$this->db->from('mCustomerProducts'); 
+		$this->db->join('mProducts', 'mProducts.ProductUID = mCustomerProducts.ProductUID', 'left');
+		$this->db->join('mSubProducts', 'mProducts.ProductUID = mSubProducts.ProductUID', 'left');
+		$this->db->where('mCustomerProducts.CustomerUID', $CustomerUID);
 		if (!empty($ProductUID)) {
-			$this->db->where_in('mcustomerproducts.ProductUID', $ProductUID);
-			$this->db->group_by('msubproducts.SubProductUID');
+			$this->db->where_in('mCustomerProducts.ProductUID', $ProductUID);
+			$this->db->group_by('mSubProducts.SubProductUID');
 		}
 		else
 		{
-			$this->db->group_by('msubproducts.SubProductUID');
+			$this->db->group_by('mSubProducts.SubProductUID');
 		}
 		return $this->db->get()->result();
 	}
@@ -12958,17 +12956,17 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	*/ 
 	function GetTitleOrdersByOrderUID($OrderUID)
 	{
-		$this->db->select('*')->from('torders')->where('OrderUID',$OrderUID);
-		$torders = $this->db->get()->row();
-		if($torders){
-			$CustomerRefNum = $torders->CustomerRefNum;
+		$this->db->select('*')->from('tOrders')->where('OrderUID',$OrderUID);
+		$tOrders = $this->db->get()->row();
+		if($tOrders){
+			$CustomerRefNum = $tOrders->CustomerRefNum;
 			$this->db->select('*');
-			$this->db->from('torders');
-			$this->db->join('msubproducts','msubproducts.SubProductUID = torders.SubProductUID');
-			$this->db->join('mproducts','mproducts.ProductUID = msubproducts.ProductUID');
-			//$this->db->where('mproducts.IsTitleProduct',1);
-			$this->db->where('torders.OrderUID !=',$OrderUID);
-			$this->db->where('torders.CustomerRefNum',$CustomerRefNum);
+			$this->db->from('tOrders');
+			$this->db->join('mSubProducts','mSubProducts.SubProductUID = tOrders.SubProductUID');
+			$this->db->join('mProducts','mProducts.ProductUID = mSubProducts.ProductUID');
+			//$this->db->where('mProducts.IsTitleProduct',1);
+			$this->db->where('tOrders.OrderUID !=',$OrderUID);
+			$this->db->where('tOrders.CustomerRefNum',$CustomerRefNum);
 			return $this->db->get()->row();
 		}
 	}
@@ -13173,7 +13171,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	  */ 
 
 	function getSettlementsByCustomerSubProduct($CustomerUID,$SubProductUID){
-		return $this->db->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID))->get('mcustomerproducts')->row();
+		return $this->db->where(array('CustomerUID'=>$CustomerUID,'SubProductUID'=>$SubProductUID))->get('mCustomerProducts')->row();
 	}
 
 /**
@@ -13214,7 +13212,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		if (!empty($OrderTypeUID)) {
 			$this->db->where('OrderTypeUID', $OrderTypeUID);
 		}
-		$this->db->delete('tOrderSLAActions');
+		$this->db->delete('tOrdersLAActions');
 
 		return $this->db->affected_rows();
 
@@ -13233,7 +13231,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 	function getAllPropertyRoleDetails($OrderUID,$PropertyRoleUID){
 		$BDetails = '';
-		$BorrowerDetails = $this->db->where(array('OrderUID'=>$OrderUID,'PropertyRoleUID'=>$PropertyRoleUID))->get('torderpropertyroles')->result();
+		$BorrowerDetails = $this->db->where(array('OrderUID'=>$OrderUID,'PropertyRoleUID'=>$PropertyRoleUID))->get('tOrderPropertyRoles')->result();
 		/*if(!empty($BorrowerDetails)){
 			foreach ($BorrowerDetails as $key => $value) {
 				$BDetails .= $value->PRName.', '.$value->MailingAddress1.', '.$value->MailingCityName.', '.$value->MailingStateCode.$value->MailingCountyName;
@@ -13283,7 +13281,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
         * @since 19-08-2020
         * @version Title Commitment
     */
-    function getOrderSubWorkFlowMenus($WorkflowUID)
+    function getOrdersubWorkFlowMenus($WorkflowUID)
     {
     	$this->db->select('*');
     	$this->db->from('msubmenuworkflowmodules');
@@ -13366,8 +13364,8 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	function CheckIntegratedOrder($OrderUID)
 	{
 		$this->db->from('mApiTitlePlatform');
-		$this->db->join ('torders', 'mApiTitlePlatform.OrderSourceUID= torders.OrderSourceUID');
-		$this->db->where(array("torders.APIOrder"=>1,"torders.OrderUID"=>$OrderUID));
+		$this->db->join ('tOrders', 'mApiTitlePlatform.OrderSourceUID= tOrders.OrderSourceUID');
+		$this->db->where(array("tOrders.APIOrder"=>1,"tOrders.OrderUID"=>$OrderUID));
 		return $this->db->get()->row()->OrderSourceName;
 	}
 
