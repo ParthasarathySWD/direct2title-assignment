@@ -63,7 +63,7 @@
     </div>
 
     <!-- start Main menu -->
-    <div id="left-sidebar" class="sidebar">
+    <div id="left-sidebar" class="sidebar" >
         <div class="d-flex justify-content-between brand_name">
             <h5 class="brand-name"><img src="assets/images/logo.png"/></h5>
             <div class="theme_btn">

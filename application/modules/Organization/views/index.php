@@ -99,6 +99,7 @@
                                 </label>
                             </th>
                             <th>Organization Name</th>
+                            <th>Organization WebURL</th>
                             <th>Status</th>
                             <th class="text-center nosort" width="20%">Actions</th>
                         </tr>
@@ -112,6 +113,7 @@
                                 </label>
                             </td>
                             <td>Organization 1</td>
+                            <td>website.com</td>
                             <td>
                                 <label class="custom-switch">
                                     <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
@@ -139,6 +141,7 @@
                                 </label>
                             </td>
                             <td>Organization 2</td>
+                            <td>website.com</td>
                             <td>
                                 <label class="custom-switch">
                                     <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
@@ -166,6 +169,7 @@
                                 </label>
                             </td>
                             <td>Organization 3</td>
+                            <td>website.com</td>
                             <td>
                                 <label class="custom-switch">
                                     <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
@@ -193,6 +197,7 @@
                                 </label>
                             </td>
                             <td>Organization 4</td>
+                            <td>website.com</td>
                             <td>
                                 <label class="custom-switch">
                                     <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
@@ -220,6 +225,7 @@
                                 </label>
                             </td>
                             <td>Organization 5</td>
+                            <td>website.com</td>
                             <td>
                                 <label class="custom-switch">
                                     <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">

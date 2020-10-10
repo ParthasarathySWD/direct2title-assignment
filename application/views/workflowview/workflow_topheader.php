@@ -147,11 +147,11 @@ $order_details = $this->Common_model->get_orderdetails($OrderUID);
 <link rel="stylesheet" href="assets/css/module/order_header/topheader.css" rel="stylesheet" />
 
 <div id="page_top" class="section-body m-0" style="
-background: #f4f5f8;   ">
+background: #33344a;   ">
 <div class="container-fluid">
   <div class="page-header" style="border-bottom:0;">
     <div class="left">
-      <h1 class="page-title" style="color:#212529!important;"># <?php echo $order_details->OrderNumber; ?> <span class="tag tag-indigo ml-2" style="position: relative;top: -2px;"><?php echo  $order_details->StatusName ?></span></h1> 
+      <h1 class="page-title" style="color:#fff!important;"># <?php echo $order_details->OrderNumber; ?> <span class="tag tag-indigo ml-2" style="position: relative;top: -2px;"><?php echo  $order_details->StatusName ?></span></h1> 
     </div>
     <div class="right">
       <div class="notification d-flex">
