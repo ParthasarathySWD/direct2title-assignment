@@ -107,7 +107,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body pb-4 pt-1">
+        <div class="card-body pb-4 pt-1 new-table-search">
             <div class="row">
                 <div class="col-md-12">
                     <ul class="new-custom-main-tab-head">
@@ -147,17 +147,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <div class="input-icon mb-1">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <span class="input-icon-addon"><i class="fe fe-search"></i></span>
-                    </div>
-                </div>
-                <div class="col-md-4 text-right">
+                <div class="col-md-9 text-right">
                     <div class="actions">
-                        <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe-printer"></i></b></button>
-                        <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe-upload"></i></b></button>
-                        <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe fe-settings"></i></b></button>
+                        <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Import"><b><i class=" font-18 fe fe-upload"></i></b></button>
+                        <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Export"><b><i class=" font-18 fa fa-cloud-download"></i></b></button>
+                        <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Print"><b><i class=" font-18 fe fe-printer"></i></b></button>
                     </div>
                 </div>
             </div>
@@ -509,15 +503,25 @@ $(function(){
     $('table.resizable').resizableColumns();
 
     $('.new-datatable1').DataTable({
-            // scrollX:true,
-            paging:false,
-            searching:false,
-            info: false
+      "ordering": false,
+      "lengthChange": false ,
+      "pageLength": 5,
+      "language": {
 
-
-        });
-
-
+        "paginate": {
+          "previous": '<',
+          "next":     '>'
+      },
+  },
+});
 
 })
+$(document).ready(function(){ 
+    $('.new-table-search div.dataTables_wrapper div.dataTables_filter input').each(function(ev)
+    {
+      if(!$(this).val()) { 
+       $(this).attr("placeholder", "Search");
+   }
+});
+});
 </script>

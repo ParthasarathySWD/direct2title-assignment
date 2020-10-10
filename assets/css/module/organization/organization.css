@@ -126,3 +126,21 @@
 .chrome-tab:first-child .chrome-tab-close{
     display:none;
 }
+
+.new-table-search div.dataTables_wrapper div.dataTables_filter{
+    position: absolute;
+    top: -35px;
+    right: 250px;
+    width: 350px;
+}
+.new-table-search div.dataTables_wrapper div.dataTables_filter label{
+    width:100%;
+}
+.new-table-search div.dataTables_wrapper div.dataTables_filter input{
+    width:100%;
+}
+.new-table-search div.dataTables_wrapper .page-link {
+    position: relative;
+    display: block;
+    padding: 3px 8px;
+}

@@ -42,233 +42,227 @@
                                         <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-upload"></i> Import Projects </a>
                                     </div>
                                 </div>
-                                    <div class="card-options" style="display: inline-block; z-index:1;">
-                                      <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><span class="font-14 mr-2" style="position:relative;top:-2px;">View Fullscreen</span><i class="fe fe-maximize"></i></a>
-                                  </div>
+                                <div class="card-options" style="display: inline-block; z-index:1;">
+                                  <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><span class="font-14 mr-2" style="position:relative;top:-2px;">View Fullscreen</span><i class="fe fe-maximize"></i></a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="card-body pb-4 pt-1 new-table-search">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="new-custom-main-tab-head">
+                            <li style="width:50%;">Total</li>
+                            <li style="width:50%;">Active & In Active</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="new-custom-main-tab nav-tabs nav" style="border:0;">
+                            <li style="width:50%;"><a data-toggle="tab" href="#all-1"><span class="count"><i class="icon-doc"></i> 100</span>Total Projects</a></li>
+                            <li style="width:25%;"><a data-toggle="tab" href="#all-3"><span class="count"><i class="fe fe-check-circle"></i> 100</span>Active Projects</a></li>
+                            <li style="width:25%;"><a data-toggle="tab" href="#all-4"><span class="count"><i class="icon-close"></i> 100</span>In Active Projects</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row mt-4 pt-3">
+                    <div class="col-md-3 pl-4">
+                        <div class="dropdown">
+                            <i class="fe fe-corner-left-down font-22" style="    margin-right: 0px;
+                            position: relative;
+                            top: 12px;left:-3px;color: #6c757d;"></i>
+                            <button class=" pl-3 pr-3 btn btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 36px;">
+                                Batch Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Projects </a>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body pb-4 pt-1">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="new-custom-main-tab-head">
-                                <li style="width:50%;">Total</li>
-                                <li style="width:50%;">Active & In Active</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-12">
-                            <ul class="new-custom-main-tab nav-tabs nav" style="border:0;">
-                                <li style="width:50%;"><a data-toggle="tab" href="#all-1"><span class="count"><i class="icon-doc"></i> 100</span>Total Projects</a></li>
-                                <li style="width:25%;"><a data-toggle="tab" href="#all-3"><span class="count"><i class="fe fe-check-circle"></i> 100</span>Active Projects</a></li>
-                                <li style="width:25%;"><a data-toggle="tab" href="#all-4"><span class="count"><i class="icon-close"></i> 100</span>In Active Projects</a></li>
-                            </ul>
+                    <div class="col-md-9 text-right">
+                        <div class="actions">
+                            <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Import"><b><i class=" font-18 fe fe-upload"></i></b></button>
+                            <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Export"><b><i class=" font-18 fa fa-cloud-download"></i></b></button>
+                            <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Print"><b><i class=" font-18 fe fe-printer"></i></b></button>
+                            <!-- <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe fe-settings"></i></b></button> -->
                         </div>
                     </div>
+                </div>
+                <table class="table table-vcenter text-nowrap resizable new-datatable1">
+                    <thead>
+                        <tr>
+                            <th class="nosort" style="width:50px;">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </th>
+                            <th>Project Code</th>
+                            <th>Project Name</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Status</th>
+                            <th class="text-center nosort">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </td>
+                            <td>Metlife 2014 Sale</td>
+                            <td>Metlife 2014 Sale</td>
+                            <td>Goldman Sachs</td>
+                            <td>Assignments</td>
+                            <td>
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            </td>
+                            <td class="text-center">
 
-                    <div class="row mt-4 pt-3">
-                        <div class="col-md-3 pl-4">
-                            <div class="dropdown">
-                                <i class="fe fe-corner-left-down font-22" style="    margin-right: 0px;
-                                position: relative;
-                                top: 12px;left:-3px;color: #6c757d;"></i>
-                                <button class=" pl-3 pr-3 btn btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 36px;">
-                                    Batch Actions
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Projects </a>
+                                <div class="item-action dropdown ml-2">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="input-icon mb-1">
-                                <input type="text" class="form-control" placeholder="Search">
-                                <span class="input-icon-addon"><i class="fe fe-search"></i></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <div class="actions">
-                                <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Import"><b><i class=" font-18 fe fe-upload"></i></b></button>
-                                <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Export"><b><i class=" font-18 fa fa-cloud-download"></i></b></button>
-                                <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Print"><b><i class=" font-18 fe fe-printer"></i></b></button>
-                                <!-- <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe fe-settings"></i></b></button> -->
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-vcenter text-nowrap resizable new-datatable1">
-                        <thead>
-                            <tr>
-                                <th class="nosort" style="width:50px;">
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </th>
-                                <th>Project Code</th>
-                                <th>Project Name</th>
-                                <th>Customer</th>
-                                <th>Product</th>
-                                <th>Status</th>
-                                <th class="text-center nosort">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>Metlife 2014 Sale</td>
-                                <td>Metlife 2014 Sale</td>
-                                <td>Goldman Sachs</td>
-                                <td>Assignments</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </td>
+                            <td>TXR Assignments</td>
+                            <td>TXR Assignments</td>
+                            <td>Goldman Sachs</td>
+                            <td>Assignments</td>
+                            <td>
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            </td>
+                            <td class="text-center">
 
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
+                                <div class="item-action dropdown ml-2">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>TXR Assignments</td>
-                                <td>TXR Assignments</td>
-                                <td>Goldman Sachs</td>
-                                <td>Assignments</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </td>
+                            <td>RMS Assignment</td>
+                            <td>RMS Assignment</td>
+                            <td>Goldman Sachs</td>
+                            <td>Assignments</td>
+                            <td>
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            </td>
+                            <td class="text-center">
 
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
+                                <div class="item-action dropdown ml-2">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>RMS Assignment</td>
-                                <td>RMS Assignment</td>
-                                <td>Goldman Sachs</td>
-                                <td>Assignments</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </td>
+                            <td>Beltway</td>
+                            <td>Beltway RPL March 2019</td>
+                            <td>Goldman Sachs</td>
+                            <td>Assignments</td>
+                            <td>
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            </td>
+                            <td class="text-center">
 
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
+                                <div class="item-action dropdown ml-2">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>Beltway</td>
-                                <td>Beltway RPL March 2019</td>
-                                <td>Goldman Sachs</td>
-                                <td>Assignments</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </td>
+                            <td>LMAT 2018 GS2</td>
+                            <td>LMAT 2018 GS2</td>
+                            <td>Goldman Sachs</td>
+                            <td>Assignments</td>
+                            <td>
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            </td>
+                            <td class="text-center">
 
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
+                                <div class="item-action dropdown ml-2">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
+                                        <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>LMAT 2018 GS2</td>
-                                <td>LMAT 2018 GS2</td>
-                                <td>Goldman Sachs</td>
-                                <td>Assignments</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View Project<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Project </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 
@@ -365,15 +359,25 @@ $(function(){
     $('table.resizable').resizableColumns();
 
     $('.new-datatable1').DataTable({
-            // scrollX:true,
-            paging:false,
-            searching:false,
-            info: false
+      "ordering": false,
+      "lengthChange": false ,
+      "pageLength": 5,
+      "language": {
 
-
-        });
-
-
+        "paginate": {
+          "previous": '<',
+          "next":     '>'
+      },
+  },
+});
 
 })
+$(document).ready(function(){ 
+    $('.new-table-search div.dataTables_wrapper div.dataTables_filter input').each(function(ev)
+    {
+      if(!$(this).val()) { 
+         $(this).attr("placeholder", "Search");
+     }
+ });
+});
 </script>
