@@ -95,6 +95,21 @@
                         <li><a href="Review_orders"><i class="icon-notebook"></i><span data-hover="Review&nbsp;Orders">Review Orders</span></a></li>
                         <li><a href="Printing_Orders"><i class="icon-globe"></i><span data-hover="Printing&nbsp;Orders">Printing Orders</span></a></li>
                         <li><a href="Completed_Orders"><i class="fa fa-list" data-toggle="tooltip" title="" data-original-title="fa fa-list"></i><span data-hover="Completed&nbsp;Orders">Completed Orders</span></a></li>
+                        <li class="g_heading">Product Setup</li>
+                        <li><a href="Clients"><i class="icon-users"></i><span data-hover="Clients">Clients</span></a></li>
+                        <li><a href="Products"><i class="icon-tag"></i><span data-hover="Products">Products</span></a></li>
+                        <li><a href="Subproducts"><i class="icon-docs"></i><span data-hover="Sub&nbsp;Products">Sub Products</span></a></li>
+                        <li><a href="Template"><i class="icon-layers"></i><span data-hover="Templates">Templates</span></a></li>
+                        <li><a href="Projects"><i class="icon-folder-alt"></i><span data-hover="Projects">Projects</span></a></li>
+                        <li>
+                            <a href="javascript:void(0)" class="has-arrow arrow-b"><i class="icon-map"></i><span data-hover="Location">Location</span></a>
+                            <ul>
+                                <li><a href="City"><span data-hover="Cities">Cities</span></a></li>
+                                <li><a href="County"><span data-hover="Counties">Counties</span></a></li>
+                                <li><a href="State"><span data-hover="States">States</span></a></li>
+                            </ul>
+                        </li>   
+                        <li><a href="Organization"><i class="icon-folder-alt"></i><span data-hover="Organization">Organization</span></a></li>             
                     </ul>
                 </nav>
             </div>
@@ -226,6 +241,6 @@
             </div>
         </div>
     </div>
-        <!-- start main body part-->
+    <!-- start main body part-->
     <div class="page">
 

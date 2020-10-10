@@ -54,7 +54,7 @@
             <div class="container">
                 <div class="hleft">
                     <div class="dropdown end-left-menu">
-                        <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="assets/images/user.png" alt=""/></a>
+                        <a href="javascript:void(0)" class="nav-link user_btn"><img style="margin-top: 5px;" class="avatar" src="assets/images/user.png" alt=""/></a>
                         <a href="dashboard" class="with-icon"><i class="fe fe-pie-chart"></i><span>Dashboard</span></a>
                         
                         <a href="Order_entry" class="with-icon"><i class="icon-cloud-upload"></i><span>New Loan</span></a>
