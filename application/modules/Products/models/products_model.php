@@ -11,7 +11,7 @@ class Products_model extends CI_Model {
     function ProductCode()
   {
 
-    $query = $this->db->query("SELECT MAX(`ProductUID`) AS `AUTO_INCREMENT` FROM `mproducts`");
+    $query = $this->db->query("SELECT MAX(`ProductUID`) AS `AUTO_INCREMENT` FROM `mProducts`");
     $res = $query->row();
     $id = sprintf("%03d",$res->AUTO_INCREMENT+1);
     $Product="P";
@@ -25,17 +25,17 @@ class Products_model extends CI_Model {
     
     function GetProductsDetails(){
 
-        $this->db->select("*,mproducts.Active");
-        $this->db->from('mproducts');
+        $this->db->select("*,mProducts.Active");
+        $this->db->from('mProducts');
         $query = $this->db->get();
         return $query->result();
 	}
 
   function GetProductsDetailsById($ProductUID)
   {
-    $this->db->select("*,mproducts.Active");
-    $this->db->from('mproducts');
-    $this->db->where(array("mproducts.ProductUID"=>$ProductUID));
+    $this->db->select("*,mProducts.Active");
+    $this->db->from('mProducts');
+    $this->db->where(array("mProducts.ProductUID"=>$ProductUID));
     $query = $this->db->get();
    
     return $query->row();
@@ -75,7 +75,7 @@ class Products_model extends CI_Model {
 					"Active"=>$Active
 				);
 
-       $res = $this->db->insert('mproducts', $fieldArray);
+       $res = $this->db->insert('mProducts', $fieldArray);
         $Product_id  = $this->db->insert_id();
         // INSERT AUDIT RAIL
         $InsetData = array(
@@ -133,7 +133,7 @@ class Products_model extends CI_Model {
           $Changed = $this->common_model->CheckAudit(
             'ProductUID',
             $PostArray['ProductUID'],
-            'mproducts',
+            'mProducts',
             $keyAA,
             $valueAA
           );
@@ -160,7 +160,7 @@ class Products_model extends CI_Model {
         } 
                
     $this->db->where(array("ProductUID"=>$PostArray['ProductUID']));
-       $res = $this->db->update('mproducts', $fieldArray);
+       $res = $this->db->update('mProducts', $fieldArray);
   
        if($res)
 
@@ -178,14 +178,14 @@ function saveProductEditDetails($PostArray)
     $data1['ModuleName']='product-update';
     $data1['IpAddreess']=$_SERVER['REMOTE_ADDR']; 
     $data1['DateTime']=date('y-m-d H:i:s');
-    $data1['TableName']='mproducts';
+    $data1['TableName']='mProducts';
     $data1['UserUID']=$this->session->userdata('UserUID');                
 
     $this->db->select('*');
-    $this->db->from('mproducts');
+    $this->db->from('mProducts');
     $this->db->where('ProductUID',$PostArray['ProductUID']);
     $oldvalue=$this->db->get('')->row_array();
-    $query = $this->db->query("UPDATE mproducts set " . $PostArray["column"] . " = '".$PostArray["editval"]."' WHERE  ProductUID=".$PostArray["ProductUID"]);
+    $query = $this->db->query("UPDATE mProducts set " . $PostArray["column"] . " = '".$PostArray["editval"]."' WHERE  ProductUID=".$PostArray["ProductUID"]);
       if($query)
       {
         $res = array("validation_error" => 1,'message' => 'Updated Successfully');
@@ -196,7 +196,7 @@ function saveProductEditDetails($PostArray)
       }    
       echo json_encode($res);
     $this->db->select('*');
-    $this->db->from('mproducts');
+    $this->db->from('mProducts');
     $this->db->where('ProductUID',$PostArray['ProductUID']);
     $newvalue = $this->db->get('')->row_array();
     $this->common_model->Audittrail_diff($newvalue,$oldvalue,$data1);
@@ -204,13 +204,13 @@ function saveProductEditDetails($PostArray)
 
   function delete_products($Id)
   {
-    $query = $this->db->query("DELETE FROM mproducts WHERE ProductUID ='$Id' ");
+    $query = $this->db->query("DELETE FROM mProducts WHERE ProductUID ='$Id' ");
     if($this->db->affected_rows() > 0)
     {
                   $data1['ModuleName']='products-delete';
                   $data1['IpAddreess']=$_SERVER['REMOTE_ADDR']; 
                   $data1['DateTime']=date('y-m-d H:i:s');
-                  $data1['TableName']='mproducts';
+                  $data1['TableName']='mProducts';
                   $data1['UserUID']=$this->session->userdata('UserUID');                
                   $this->common_model->Audittrail_insert($data1);
       return true;
@@ -225,8 +225,8 @@ function saveProductEditDetails($PostArray)
 
   function GetProductName($ProductCode = '')
   {
-    $query = $this->db->query("SELECT * FROM `mproducts` 
-      WHERE mproducts.ProductCode = '$ProductCode'");
+    $query = $this->db->query("SELECT * FROM `mProducts` 
+      WHERE mProducts.ProductCode = '$ProductCode'");
 
     return $query->row();
   }
@@ -243,11 +243,11 @@ function saveProductEditDetails($PostArray)
     */ 
     function getproductLogs($ProductUID){
       $this->db->select('*');
-      $this->db->from('taudittrail');
-      $this->db->join('musers','musers.UserUID = taudittrail.UserUID','left');  
+      $this->db->from('tAuditTrail');
+      $this->db->join('mUsers','mUsers.UserUID = tAuditTrail.UserUID','left');  
       $this->db->where('Feature',$ProductUID);
       $this->db->where('ModuleName','ProductLog');
-      $this->db->order_by('taudittrail.AuditUID','DESC');
+      $this->db->order_by('tAuditTrail.AuditUID','DESC');
       return $this->db->get()->result();
     }
 

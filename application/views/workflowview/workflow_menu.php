@@ -36,7 +36,8 @@
       </li> -->
 
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#News"><i class="fe fe-layers menu-icon"></i> History</a>
+        <!-- <a class="nav-link" data-toggle="tab" href="#News"><i class="fe fe-layers menu-icon"></i> History</a> -->
+         <a class="nav-link <?php echo $this->uri->segment(1) == "Order_history" ? 'active' : ''; ?> " href="Order_history?OrderUID=<?php echo $OrderUID; ?>"><i class="fe fe-layers menu-icon"></i> History</a>
       </li>
     </ul>
   </div>

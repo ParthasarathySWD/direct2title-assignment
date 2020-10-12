@@ -57,16 +57,16 @@ class Common_model extends CI_Model {
 	public function updateUser($data, $UserUID)
 	{
 	   $this->db->where('UserUID', $UserUID);
-	   $this->db->update('musers', $data);
+	   $this->db->update('mUsers', $data);
 	}
 
 	public function GetAbstractorOrderDetailsByAbstractorOrderUID($AbstractorOrderUID=0)
 	{
 		$loggedid = $this->session->userdata('UserUID');
 
-		$this->db->select("tOrders.*, torderabstractor.*, torderassignment.*,mSubProducts.*, mProducts.*,mOrderTypes.*,mOrderPriority.PriorityName, mOrderStatus.*, mabstractor.*", false);
+		$this->db->select("tOrders.*, torderabstractor.*, tOrderAssignment.*,mSubProducts.*, mProducts.*,mOrderTypes.*,mOrderPriority.PriorityName, mOrderStatus.*, mabstractor.*", false);
 		$this->db->from ( 'torderabstractor' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
 		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
 		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
@@ -85,9 +85,9 @@ class Common_model extends CI_Model {
 		$loggedid = $this->session->userdata('UserUID');
 		$mabstractor=$this->db->get_where('mabstractor', array('UserUID'=>$loggedid))->row();
 		$AbstractorUID=$mabstractor->AbstractorUID;
-		$this->db->select("tOrders.*, torderabstractorunassign.*, torderassignment.*,mSubProducts.*, mProducts.*,mOrderTypes.*,mOrderPriority.PriorityName, mOrderStatus.*, mabstractor.*", false);
+		$this->db->select("tOrders.*, torderabstractorunassign.*, tOrderAssignment.*,mSubProducts.*, mProducts.*,mOrderTypes.*,mOrderPriority.PriorityName, mOrderStatus.*, mabstractor.*", false);
 		$this->db->from ( 'torderabstractorunassign' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torderabstractorunassign.OrderUID' , 'inner' );
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = torderabstractorunassign.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractorunassign.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
 		$this->db->join ( 'tOrders', 'torderabstractorunassign.OrderUID = tOrders.OrderUID' , 'inner' );
 		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'inner' );
@@ -107,8 +107,8 @@ class Common_model extends CI_Model {
 		$CurrentUser = $this->GetUserDetailsByUser($loggedid);
 		$status[0] = $this->config->item('keywords')['Cancelled'];
 		$this->db->select("tOrders.*, torderabstractor.*, mabstractor.*,mOrderStatus.*,mOrderTypes.*,mOrderPriority.PriorityName", false);
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( '(SELECT * FROM torderabstractor ORDER BY AbstractorOrderUID DESC) AS torderabstractor', 'torderassignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( '(SELECT * FROM torderabstractor ORDER BY AbstractorOrderUID DESC) AS torderabstractor', 'tOrderAssignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'left' );
 		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
 		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
@@ -119,9 +119,9 @@ class Common_model extends CI_Model {
 		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
 		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
-		/*$this->db->where( 'torderassignment.AssignedToUserUID = '.$loggedid.' OR torderabstractor.AbstractorUID = '.$CurrentUser->AbstractorUID.'',NULL,FALSE);*/
-		$this->db->where( 'torderassignment.WorkflowModuleUID', 1);
-		$this->db->where( 'torderassignment.WorkflowStatus <>', 5 );
+		/*$this->db->where( 'tOrderAssignment.AssignedToUserUID = '.$loggedid.' OR torderabstractor.AbstractorUID = '.$CurrentUser->AbstractorUID.'',NULL,FALSE);*/
+		$this->db->where( 'tOrderAssignment.WorkflowModuleUID', 1);
+		$this->db->where( 'tOrderAssignment.WorkflowStatus <>', 5 );
 		$this->db->where('torderabstractor.OrderStatus != 5');
 
 		$this->db->where_not_in('tOrders.StatusUID', $status);
@@ -149,7 +149,7 @@ class Common_model extends CI_Model {
 		$this->db->join ( 'mOrderTypes', 'torderabstractor.OrderTypeUID = mOrderTypes.OrderTypeUID' , 'left' );
 		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
-		//$this->db->where( 'torderassignment.AssignedToUserUID', $loggedid);
+		//$this->db->where( 'tOrderAssignment.AssignedToUserUID', $loggedid);
 		$this->db->where( 'torderabstractor.WorkflowStatus ', 5 );
 		$this->db->order_by('torderabstractor.AbstractorOrderUID', 'DESC');
 		$query = $this->db->get();
@@ -162,8 +162,8 @@ class Common_model extends CI_Model {
 		$mabstractor=$this->db->get_where('mabstractor', array('UserUID'=>$loggedid))->row();
 		$AbstractorUID=$mabstractor->AbstractorUID;
 		$this->db->select("*, torderabstractor.AbstractorActualFee,torderabstractor.AbstractorFee,torderabstractor.AbstractorAdditionalFee,torderabstractor.AbstractorCopyCost,torderabstractor.OperatorType, mabstractor.*", false);
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'torderabstractor', 'torderassignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'torderabstractor', 'tOrderAssignment.OrderUID = torderabstractor.OrderUID' , 'inner' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'inner' );
 		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'inner' );
 		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'inner' );
@@ -175,9 +175,9 @@ class Common_model extends CI_Model {
 		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
 		$this->db->where( 'torderabstractor.OrderUID',$OrderUID);
-		$this->db->where( 'torderassignment.AssignedToUserUID', $loggedid);
-		$this->db->where( 'torderassignment.WorkflowModuleUID', 1);
-		$this->db->where( 'torderassignment.WorkflowStatus <>', 5 );
+		$this->db->where( 'tOrderAssignment.AssignedToUserUID', $loggedid);
+		$this->db->where( 'tOrderAssignment.WorkflowModuleUID', 1);
+		$this->db->where( 'tOrderAssignment.WorkflowStatus <>', 5 );
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -189,7 +189,7 @@ class Common_model extends CI_Model {
 		$AbstractorUID=$mabstractor->AbstractorUID;
 		$this->db->select("*, torderabstractor.AbstractorActualFee,torderabstractor.AbstractorFee,torderabstractor.AbstractorAdditionalFee,torderabstractor.AbstractorCopyCost,torderabstractor.OperatorType, mabstractor.*", false);
 		$this->db->from ( 'torderabstractor' );
-		$this->db->join ( 'torderassignment', 'torderabstractor.OrderUID = torderassignment.OrderUID' , 'left' );
+		$this->db->join ( 'tOrderAssignment', 'torderabstractor.OrderUID = tOrderAssignment.OrderUID' , 'left' );
 		$this->db->join ( 'mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID' , 'left' );
 		$this->db->join ( 'tOrders', 'torderabstractor.OrderUID = tOrders.OrderUID' , 'left' );
 		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
@@ -206,11 +206,11 @@ class Common_model extends CI_Model {
 		$this->db->where( 'torderabstractor.OrderStatus', 5 );
 		//$this->db->where( 'torderabstractor.CompletedDateTime<>','0000-00-00 00:00:00');
 		//$this->db->where( 'torderabstractor.OrderStatus<>',5, false);
-		//$this->db->where( 'torderassignment.WorkflowModuleUID', 1);
+		//$this->db->where( 'tOrderAssignment.WorkflowModuleUID', 1);
 		//$this->db->where( 'torderabstractor.IsOrderComplete', 1 );
-		//$this->db->where( 'torderassignment.WorkflowStatus <>', 5 );
-		//$this->db->where( 'torderassignment.OrderFlag <>', 2 );
-		//$this->db->group_by('torderassignment.OrderUID');
+		//$this->db->where( 'tOrderAssignment.WorkflowStatus <>', 5 );
+		//$this->db->where( 'tOrderAssignment.OrderFlag <>', 2 );
+		//$this->db->group_by('tOrderAssignment.OrderUID');
 		$this->db->order_by('tOrders.OrderNumber', 'DESC');
 		$query = $this->db->get();
 		return $query->row();
@@ -223,7 +223,7 @@ class Common_model extends CI_Model {
 		$AbstractorUID=$mabstractor->AbstractorUID;
 		$this->db->select("*,torderabstractorunassign.AbstractorActualFee,torderabstractorunassign.AbstractorFee,torderabstractorunassign.AbstractorAdditionalFee,torderabstractorunassign.AbstractorCopyCost,torderabstractorunassign.OperatorType, mabstractor.*");
 		$this->db->from ( 'torderabstractorunassign' );
-		$this->db->join ( 'torderassignment', 'torderabstractorunassign.OrderUID = torderassignment.OrderUID' , 'left' );
+		$this->db->join ( 'tOrderAssignment', 'torderabstractorunassign.OrderUID = tOrderAssignment.OrderUID' , 'left' );
 		$this->db->join ( 'mabstractor', 'torderabstractorunassign.AbstractorUID = mabstractor.AbstractorUID' , 'left' );
 		$this->db->join ( 'tOrders', 'torderabstractorunassign.OrderUID = tOrders.OrderUID' , 'left' );
 		$this->db->join ( 'tOrderPropertyRoles', 'tOrders.OrderUID = tOrderPropertyRoles.OrderUID' , 'left' );
@@ -277,7 +277,7 @@ class Common_model extends CI_Model {
 		$this->db->select("*");
 		$this->db->from('texceptions');
 		$this->db->join ( 'mexceptions', 'mexceptions.ExceptionUID = texceptions.ExceptionUID' , 'left' );
-		$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
+		$this->db->join ( 'mUsers', 'mUsers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 		$this->db->where(array("texceptions.OrderUID"=>$OrderUID));
 		$query = $this->db->get();
 		return $query->result();
@@ -286,9 +286,9 @@ class Common_model extends CI_Model {
 	function GetUserRoleTypeDetails($UserUID)
 	{
 		$this->db->select("RoleType,RoleName");
-		$this->db->from('musers');
-		$this->db->join ( 'mroles', 'musers.RoleUID = mroles.RoleUID' , 'inner' );
-		$this->db->where(array("musers.UserUID"=>$UserUID));
+		$this->db->from('mUsers');
+		$this->db->join ( 'mroles', 'mUsers.RoleUID = mroles.RoleUID' , 'inner' );
+		$this->db->where(array("mUsers.UserUID"=>$UserUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -313,7 +313,7 @@ class Common_model extends CI_Model {
 
 	function Verify_Password($UserUID, $Password)
 	{
-		$query = $this->db->query("SELECT * FROM musers WHERE UserUID = '$UserUID' AND Password = '$Password'");
+		$query = $this->db->query("SELECT * FROM mUsers WHERE UserUID = '$UserUID' AND Password = '$Password'");
 		if($query->num_rows() >0)
 		{
 			return 1;
@@ -329,7 +329,7 @@ class Common_model extends CI_Model {
 
 		if($loggedid != ''){
 			$this->db->select ('WorkflowModuleUID');
-			$this->db->from ('torderassignment');
+			$this->db->from ('tOrderAssignment');
 			$this->db->where ('AssignedToUserUID',$loggedid);
 			$this->db->where ('OrderUID',$OrderUID);
 			$query = $this->db->get();
@@ -364,16 +364,16 @@ class Common_model extends CI_Model {
 
 	function GetCompleteDetailsStatusByID($OrderUID,$UserUID)
 	{
-		/*$query = $this->db->query("SELECT * FROM torderassignment
-		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		WHERE torderassignment.WorkflowModuleUID
-		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID' AND torderassignment.AssignedToUserUID = '$UserUID';");
+		/*$query = $this->db->query("SELECT * FROM tOrderAssignment
+		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		WHERE tOrderAssignment.WorkflowModuleUID
+		IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID' AND tOrderAssignment.AssignedToUserUID = '$UserUID';");
 		return $query->result();*/
 
-		$query = $this->db->query("SELECT MAX(CompleteDateTime) AS CompleteDateTime FROM torderassignment
-			LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-			WHERE torderassignment.WorkflowModuleUID
-			IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID' AND torderassignment.AssignedToUserUID = '$UserUID';");
+		$query = $this->db->query("SELECT MAX(CompleteDateTime) AS CompleteDateTime FROM tOrderAssignment
+			LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+			WHERE tOrderAssignment.WorkflowModuleUID
+			IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID' AND tOrderAssignment.AssignedToUserUID = '$UserUID';");
 		return $query->row();
 	}
 
@@ -405,7 +405,7 @@ class Common_model extends CI_Model {
 	function GetCustomerByUserUID($UserUID)
 	{
 		$this->db->select("CustomerUID");
-		$this->db->from('musers');
+		$this->db->from('mUsers');
 		$this->db->where(array("UserUID"=>$UserUID));
 		$query = $this->db->get();
 		return $query->row();
@@ -711,15 +711,15 @@ class Common_model extends CI_Model {
 	function GetUserDetails(){
 
 		$this->db->where(array("Active"=>1));
-		$query = $this->db->get('musers');
+		$query = $this->db->get('mUsers');
 		return $query->result();
 	}
 
 	function GetUserDetailswithRoleName(){
-		$this->db->select('musers.UserUID,musers.UserName,mroles.RoleName');
-		$this->db->from("musers");
-		$this->db->join("mroles","mroles.RoleUID = musers.RoleUID","LEFT");
-		$this->db->where("musers.Active",1);
+		$this->db->select('mUsers.UserUID,mUsers.UserName,mroles.RoleName');
+		$this->db->from("mUsers");
+		$this->db->join("mroles","mroles.RoleUID = mUsers.RoleUID","LEFT");
+		$this->db->where("mUsers.Active",1);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -1142,6 +1142,11 @@ class Common_model extends CI_Model {
 		return $query->row();
 	}
 
+	function DocumentGettOrders($data) {
+		$query = $this->db->get_where('tOrders', array('OrderUID' => $data['OrderUID']));
+		return $query->row();
+	}
+
 	function Chk_Duplicate_entry($data)
 	{
 		$q = $this->db->get_where('mvendors', $data);
@@ -1268,11 +1273,11 @@ class Common_model extends CI_Model {
 
 	function GetTopBarDetails($OrderUID)
 	{
-		/*$query = $this->db->query("SELECT * FROM torderassignment
-		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		WHERE torderassignment.WorkflowModuleUID
-		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID'
+		/*$query = $this->db->query("SELECT * FROM tOrderAssignment
+		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		WHERE tOrderAssignment.WorkflowModuleUID
+		IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID'
 		ORDER BY `MenuPosition`;");
 
 		return $query->result();*/
@@ -1289,19 +1294,19 @@ class Common_model extends CI_Model {
 
 	function GetTopBarDetailsByID($OrderUID,$UserUID)
 	{
-		/*$query = $this->db->query("SELECT * FROM torderassignment
-		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		WHERE torderassignment.WorkflowModuleUID
-		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID' AND torderassignment.AssignedToUserUID = '$UserUID'
+		/*$query = $this->db->query("SELECT * FROM tOrderAssignment
+		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		WHERE tOrderAssignment.WorkflowModuleUID
+		IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID' AND tOrderAssignment.AssignedToUserUID = '$UserUID'
 		ORDER BY `MenuPosition`;");
 		return $query->result();*/
 
-		/* $query = $this->db->query("SELECT * FROM torderassignment
-		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-		WHERE torderassignment.WorkflowModuleUID
-		IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID'
+		/* $query = $this->db->query("SELECT * FROM tOrderAssignment
+		LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		LEFT JOIN `mMenu` ON mMenu.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+		WHERE tOrderAssignment.WorkflowModuleUID
+		IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID'
 		ORDER BY `MenuPosition`;");
 
 		return $query->result();*/
@@ -1320,11 +1325,11 @@ class Common_model extends CI_Model {
 
 	function GetCompleteDetails($OrderUID)
 	{
-		$query = $this->db->query("SELECT * FROM torderassignment
-			LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-			LEFT JOIN `msubmenuworkflowmodules` ON msubmenuworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-			WHERE torderassignment.WorkflowModuleUID
-			IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID'
+		$query = $this->db->query("SELECT * FROM tOrderAssignment
+			LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+			LEFT JOIN `msubmenuworkflowmodules` ON msubmenuworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+			WHERE tOrderAssignment.WorkflowModuleUID
+			IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID'
 			ORDER BY `MenuPosition`;");
 
 		return $query->result();
@@ -1332,11 +1337,11 @@ class Common_model extends CI_Model {
 
 	function GetCompleteDetailsByID($OrderUID,$UserUID)
 	{
-		$query = $this->db->query("SELECT * FROM torderassignment
-			LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-			LEFT JOIN `msubmenuworkflowmodules` ON msubmenuworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID
-			WHERE torderassignment.WorkflowModuleUID
-			IN (1,2,3) AND torderassignment.OrderUID = '$OrderUID' AND torderassignment.AssignedToUserUID = '$UserUID'
+		$query = $this->db->query("SELECT * FROM tOrderAssignment
+			LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+			LEFT JOIN `msubmenuworkflowmodules` ON msubmenuworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID
+			WHERE tOrderAssignment.WorkflowModuleUID
+			IN (1,2,3) AND tOrderAssignment.OrderUID = '$OrderUID' AND tOrderAssignment.AssignedToUserUID = '$UserUID'
 			ORDER BY `MenuPosition`;");
 
 		return $query->result();
@@ -1372,9 +1377,9 @@ class Common_model extends CI_Model {
 	function GetWorkflowstatusByID($OrderUID,$UserUID)
 	{
 
-		/* $query = $this->db->query("SELECT COUNT(*) as  Workflowstatus FROM `torderassignment` WHERE WorkflowStatus = 5 AND OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");*/
+		/* $query = $this->db->query("SELECT COUNT(*) as  Workflowstatus FROM `tOrderAssignment` WHERE WorkflowStatus = 5 AND OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");*/
 
-		$query = $this->db->query("SELECT COUNT(*) as  Workflowstatus FROM `torderassignment` WHERE WorkflowStatus = 5 AND OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
+		$query = $this->db->query("SELECT COUNT(*) as  Workflowstatus FROM `tOrderAssignment` WHERE WorkflowStatus = 5 AND OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
 
 		return $query->row();
 	}
@@ -1382,7 +1387,7 @@ class Common_model extends CI_Model {
 	function GetTotalWorkflowByID($OrderUID,$UserUID)
 	{
 
-		$query = $this->db->query("SELECT COUNT(*) as  TotalWorkflow FROM `torderassignment` WHERE  OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
+		$query = $this->db->query("SELECT COUNT(*) as  TotalWorkflow FROM `tOrderAssignment` WHERE  OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
 
 		return $query->row();
 	}
@@ -1391,7 +1396,7 @@ class Common_model extends CI_Model {
 	function GetWorkflowstatus($OrderUID,$UserUID)
 	{
 
-		$query = $this->db->query("SELECT COUNT(*) as  Workflowstatus FROM `torderassignment` WHERE WorkflowStatus = 5 AND OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
+		$query = $this->db->query("SELECT COUNT(*) as  Workflowstatus FROM `tOrderAssignment` WHERE WorkflowStatus = 5 AND OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
 
 		return $query->row();
 	}
@@ -1399,7 +1404,7 @@ class Common_model extends CI_Model {
 	function GetTotalWorkflow($OrderUID,$UserUID)
 	{
 
-		$query = $this->db->query("SELECT COUNT(*) as  TotalWorkflow FROM `torderassignment` WHERE  OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
+		$query = $this->db->query("SELECT COUNT(*) as  TotalWorkflow FROM `tOrderAssignment` WHERE  OrderUID = '$OrderUID' AND AssignedToUserUID = '$UserUID' AND WorkflowModuleUID IN (1,2,3) ");
 
 		return $query->row();
 	}
@@ -1639,11 +1644,11 @@ class Common_model extends CI_Model {
 
 		$loggedid = $this->session->userdata('UserUID');
 		$this->db->select ( 'Group_concat(WorkflowModuleName) as WorkflowModuleName,WorkflowStatus' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID' , 'inner' );
-	//$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where('torderassignment.WorkflowStatus',4);
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID' , 'inner' );
+	//$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.WorkflowStatus',4);
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 
 		$query = $this->db->get();
 		$res =  $query->row();
@@ -1844,7 +1849,7 @@ class Common_model extends CI_Model {
 	function is_selfassign($loggedid){
 		$is_selfassign = 0;
 		$this->db->select ( '*' );
-		$this->db->from ('musers');
+		$this->db->from ('mUsers');
 		$this->db->where ('UserUID',$loggedid);
 		$query = $this->db->get();
 		$result = $query->row();
@@ -2019,7 +2024,7 @@ class Common_model extends CI_Model {
 
 	function Get_OrderBy_UserUID($loggedid){
 		$this->db->select ('OrderUID as AssignOrderUID');
-		$this->db->from ('torderassignment');
+		$this->db->from ('tOrderAssignment');
 		$this->db->where ('AssignedToUserUID',$loggedid);
 		$query = $this->db->get();
 		$result = $query->result();
@@ -2044,8 +2049,8 @@ class Common_model extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->from ( 'mCustomers' );
-		$this->db->join ( 'musers', 'musers.CustomerUID = mCustomers.CustomerUID' , 'left' );
-		$this->db->where('musers.UserUID',$UserUID);
+		$this->db->join ( 'mUsers', 'mUsers.CustomerUID = mCustomers.CustomerUID' , 'left' );
+		$this->db->where('mUsers.UserUID',$UserUID);
 		$query = $this->db->get();
 		$value = $query->row();
 		if($value->CustomerUID == 12)
@@ -2053,8 +2058,8 @@ class Common_model extends CI_Model {
 
 			$this->db->select('CustomerPContactName');
 			$this->db->from ( 'mCustomers' );
-			$this->db->join ( 'musers', 'musers.CustomerUID = mCustomers.CustomerUID' , 'left' );
-			$this->db->where('musers.UserUID',$UserUID);
+			$this->db->join ( 'mUsers', 'mUsers.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->where('mUsers.UserUID',$UserUID);
 			$query = $this->db->get();
 			$value = $query->row();
 			return $value->CustomerPContactName;
@@ -2062,7 +2067,7 @@ class Common_model extends CI_Model {
 		else{
 			$this->db->select('UserName AS CustomerPContactName');
 			$this->db->where('UserUID',$UserUID);
-			$q = $this->db->get('musers')->row();
+			$q = $this->db->get('mUsers')->row();
 			return $q->CustomerPContactName;
 		}
 	}
@@ -2070,10 +2075,10 @@ class Common_model extends CI_Model {
 //SideBar Functions
 	function GetDocumentFileName($OrderUID)
 	{
-		$this->db->select('torderdocuments.*, tOrders.OrderDocsPath, tOrders.OrderNumber, mdocumenttypes.*, musers.UserName,torderdocuments.UploadedDate')->from('torderdocuments');
+		$this->db->select('torderdocuments.*, tOrders.OrderDocsPath, tOrders.OrderNumber, mdocumenttypes.*, mUsers.UserName,torderdocuments.UploadedDate')->from('torderdocuments');
 		$this->db->join('tOrders', 'tOrders.OrderUID=torderdocuments.OrderUID', 'left');
 		$this->db->join('mdocumenttypes', 'mdocumenttypes.DocumentTypeUID=torderdocuments.DocumentTypeUID', 'left');
-		$this->db->join('musers', 'musers.UserUID=torderdocuments.UploadedUserUID', 'left');
+		$this->db->join('mUsers', 'mUsers.UserUID=torderdocuments.UploadedUserUID', 'left');
     $this->db->where('torderdocuments.TypeOfDocument <>','Screenshot');
 		$this->db->where('torderdocuments.OrderUID', $OrderUID);
 		$this->db->order_by('DisplayFileName');
@@ -2141,7 +2146,7 @@ class Common_model extends CI_Model {
 	function GetWorkflowModules($OrderUID)
 	{
 		$this->db->order_by('WorkflowModuleUId');
-		$result = $this->db->get_where('torderassignment', array('OrderUID'=> $OrderUID));
+		$result = $this->db->get_where('tOrderAssignment', array('OrderUID'=> $OrderUID));
 		return $result->result();
 
 	}
@@ -2219,7 +2224,7 @@ class Common_model extends CI_Model {
 	function Audittrail_insert($data){
 	// $this->set_lastactivitydatetime($this->session->userdata('UserUID'));
          
-		$this->db->insert('taudittrail',$data);
+		$this->db->insert('tAuditTrail',$data);
 	// echo '<pre>';print_r($data);exit;
 
 	}
@@ -2281,9 +2286,9 @@ class Common_model extends CI_Model {
 
 	function get_customerbyuser($loggedid){
 
-		$this->db->select('*,musers.CustomerUID')->from('musers');
+		$this->db->select('*,mUsers.CustomerUID')->from('mUsers');
 		$this->db->where('UserUID',$loggedid);
-		$this->db->join('mCustomers','musers.CustomerUID = mCustomers.CustomerUID','LEFT');
+		$this->db->join('mCustomers','mUsers.CustomerUID = mCustomers.CustomerUID','LEFT');
 		return $this->db->get()->row();
 	}
 
@@ -2313,12 +2318,12 @@ class Common_model extends CI_Model {
 
 	function is_workflow_completed($OrderUID,$WorkflowUID)
 	{
-		$this->db->select ( 'torderassignment.OrderUID' );
-		$this->db->from ( 'torderassignment' );
-		// $this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where ('torderassignment.WorkflowModuleUID',$WorkflowUID);
-		$this->db->where ('torderassignment.WorkflowStatus',5);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->select ( 'tOrderAssignment.OrderUID' );
+		$this->db->from ( 'tOrderAssignment' );
+		// $this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID',$WorkflowUID);
+		$this->db->where ('tOrderAssignment.WorkflowStatus',5);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -2335,22 +2340,22 @@ class Common_model extends CI_Model {
 
 
 	function get_assigned_workflows($OrderUID,$loggedid){
-		$this->db->select ( 'torderassignment.OrderUID,WorkflowModuleUID' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where ('torderassignment.WorkflowModuleUID !=',4);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->select ( 'tOrderAssignment.OrderUID,WorkflowModuleUID' );
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID !=',4);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
 	function get_completed_workflows($OrderUID,$loggedid){
-		$this->db->select ( 'torderassignment.OrderUID,WorkflowModuleUID' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where ('torderassignment.WorkflowModuleUID !=',4);
-		$this->db->where ('torderassignment.WorkflowStatus',5);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->select ( 'tOrderAssignment.OrderUID,WorkflowModuleUID' );
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID !=',4);
+		$this->db->where ('tOrderAssignment.WorkflowStatus',5);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -2431,9 +2436,9 @@ class Common_model extends CI_Model {
 
 	function is_summary_enabled($OrderUID,$loggedid){
 		$this->db->select('*');
-		$this->db->from ( 'torderassignment' );
-		$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -2451,11 +2456,11 @@ class Common_model extends CI_Model {
 
 	function check_useris_assigned($OrderUID,$WorkflowModuleUID,$UserUID){
 		$this->db->select('*');
-		$this->db->from('torderassignment');
-		$this->db->where ('torderassignment.AssignedToUserUID',$UserUID);
-		$this->db->where ('torderassignment.WorkflowModuleUID',$WorkflowModuleUID);
-	//$this->db->where ('torderassignment.WorkflowStatus',5);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->from('tOrderAssignment');
+		$this->db->where ('tOrderAssignment.AssignedToUserUID',$UserUID);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID',$WorkflowModuleUID);
+	//$this->db->where ('tOrderAssignment.WorkflowStatus',5);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -2463,19 +2468,19 @@ class Common_model extends CI_Model {
 	function check_is_assigned($OrderUID,$WorkflowModuleUID)
 	{
 		$this->db->select('IsReviewed,AssignedToUserUID');
-		$this->db->from('torderassignment');
-		$this->db->where ('torderassignment.WorkflowModuleUID',$WorkflowModuleUID);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->from('tOrderAssignment');
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID',$WorkflowModuleUID);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->row();
 	}
 	function check_order_assigned($OrderUID,$WorkflowModuleUID)
 	{
 		$this->db->select('IsReviewed,AssignedToUserUID');
-		$this->db->from('torderassignment');
-		$this->db->where ('torderassignment.WorkflowModuleUID',$WorkflowModuleUID);
+		$this->db->from('tOrderAssignment');
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID',$WorkflowModuleUID);
 		$this->db->where('AssignedToUserUID IS NOT NULL', NULL, FALSE);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -2483,20 +2488,20 @@ class Common_model extends CI_Model {
 	function is_holdorder($OrderUID,$WorkflowModuleUID){
 
 		$this->db->select('*');
-		$this->db->from ( 'torderassignment' );
-		$this->db->where('torderassignment.WorkflowModuleUID',$WorkflowModuleUID);
-		$this->db->where('torderassignment.Workflowstatus',4);
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->where('tOrderAssignment.WorkflowModuleUID',$WorkflowModuleUID);
+		$this->db->where('tOrderAssignment.Workflowstatus',4);
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
 	function is_reviewholdorder($OrderUID,$WorkflowModuleUID){
 		$this->db->select('*');
-		$this->db->from ( 'torderassignment' );
-		$this->db->where('torderassignment.WorkflowModuleUID',$WorkflowModuleUID);
-		$this->db->where('torderassignment.Workflowstatus',4);
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->where('tOrderAssignment.WorkflowModuleUID',$WorkflowModuleUID);
+		$this->db->where('tOrderAssignment.Workflowstatus',4);
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -2512,8 +2517,8 @@ class Common_model extends CI_Model {
 		$this->db->select('DATE_FORMAT(tOrders.OrderDueDateTime, "%m-%d-%Y %H:%i:%s") as OrderDueDateTime', FALSE);
 		$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 		$this->db->from ( 'tOrders' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = tOrders.OrderUID','left');
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID','left');
 		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
 		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
 		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID','left');
@@ -2543,14 +2548,14 @@ class Common_model extends CI_Model {
 		{
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, `mStates`.`StateCode`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`tOrders`) LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID` JOIN `mStates` ON `tOrders`.`PropertyStateUID` = `mStates`.`StateUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
+			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, `mStates`.`StateCode`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID` JOIN `mStates` ON `tOrders`.`PropertyStateUID` = `mStates`.`StateUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 		}
 		else
 		{
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 			','.$this->config->item('keywords')['Cancelled'];
 
-			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, `mStates`.`StateCode`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`tOrders`)  LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID` JOIN `mStates` ON `tOrders`.`PropertyStateUID` = `mStates`.`StateUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.")  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
+			$sql = "SELECT `CustomerName`, `OrderNumber`, `StateName`, `StatusName`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, `mStates`.`StateCode`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID` JOIN `mStates` ON `tOrders`.`PropertyStateUID` = `mStates`.`StateUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.")  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 		}
 
 		$query = $this->db->query($sql);
@@ -2635,7 +2640,7 @@ class Common_model extends CI_Model {
 				{
 					$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`) LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 $where GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC";
+					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 $where GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC";
 				}
 				else
 				{
@@ -2662,14 +2667,14 @@ class Common_model extends CI_Model {
 								$subproductuids = rtrim($subproductuids,  ', ');
 
 
-								$where .= " AND (tOrders.SubProductUID IN (".$subproductuids.") OR `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4) ";
+								$where .= " AND (tOrders.SubProductUID IN (".$subproductuids.") OR `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4) ";
 					// echo $where; exit;
 							}*/
 							/*End*/
 						}
 					}
 
-					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`)  LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $where GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC";
+					$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $where GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC";
 
 				}
 
@@ -2732,7 +2737,7 @@ class Common_model extends CI_Model {
 
 		function GetAssignedWorkflowByWorkflowUID($OrderUID, $WorkflowModuleUID)
 		{
-			$this->db->select('*')->from('torderassignment');
+			$this->db->select('*')->from('tOrderAssignment');
 			$this->db->where(array('OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$WorkflowModuleUID,'WorkflowStatus'=>5));
 			$this->db->where('(IsRevision IS NULL OR IsRevision=0)', NULL, false);
 			return $this->db->get()->row();
@@ -2740,33 +2745,33 @@ class Common_model extends CI_Model {
 
 		function CheckIsWorkflowAssigned($OrderUID, $WorkflowModuleUID)
 		{
-			$this->db->select('*')->from('torderassignment');
+			$this->db->select('*')->from('tOrderAssignment');
 			$this->db->where(array('OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$WorkflowModuleUID,'AssignedToUserUID'=>$this->session->userdata('UserUID')));
 			return $this->db->get()->row();
 		}
 
 		function CheckReviseEnabledForUser($OrderUID, $WorkflowModuleUID)
 		{
-			$this->db->select('torderassignment.*, torderrevision.*, musers.UserName')->from('torderassignment');
-			$this->db->join('torderrevision','torderassignment.OrderUID=torderrevision.OrderUID AND torderassignment.WorkflowModuleUID=torderrevision.WorkflowModuleUID');
-			$this->db->join('musers','musers.UserUID=torderrevision.AssignedToUserUID', 'left');
-			$this->db->where('torderassignment.IsRevision', 1);
-			$this->db->where('torderassignment.OrderUID', $OrderUID);
-			$this->db->where('torderassignment.WorkflowModuleUID', $WorkflowModuleUID);
-			$this->db->where('torderrevision.AssignedToUserUID', $this->loggedid);
-			$this->db->where('torderrevision.CompleteDateTime IS NULL',NULL, false);
+			$this->db->select('tOrderAssignment.*, tOrderRevision.*, mUsers.UserName')->from('tOrderAssignment');
+			$this->db->join('tOrderRevision','tOrderAssignment.OrderUID=tOrderRevision.OrderUID AND tOrderAssignment.WorkflowModuleUID=tOrderRevision.WorkflowModuleUID');
+			$this->db->join('mUsers','mUsers.UserUID=tOrderRevision.AssignedToUserUID', 'left');
+			$this->db->where('tOrderAssignment.IsRevision', 1);
+			$this->db->where('tOrderAssignment.OrderUID', $OrderUID);
+			$this->db->where('tOrderAssignment.WorkflowModuleUID', $WorkflowModuleUID);
+			$this->db->where('tOrderRevision.AssignedToUserUID', $this->loggedid);
+			$this->db->where('tOrderRevision.CompleteDateTime IS NULL',NULL, false);
 			return $this->db->get()->row();
 		}
 
 		function CheckReviseEnabled($OrderUID, $WorkflowModuleUID)
 		{
-			$this->db->select('torderassignment.*, torderrevision.*, musers.UserName')->from('torderassignment');
-			$this->db->join('torderrevision','torderassignment.OrderUID=torderrevision.OrderUID AND torderassignment.WorkflowModuleUID=torderrevision.WorkflowModuleUID');
-			$this->db->join('musers','musers.UserUID=torderrevision.AssignedToUserUID', 'left');
-			$this->db->where('torderassignment.IsRevision', 1);
-			$this->db->where('torderassignment.OrderUID', $OrderUID);
-			$this->db->where('torderassignment.WorkflowModuleUID', $WorkflowModuleUID);
-			$this->db->where('torderrevision.CompleteDateTime IS NULL',NULL, false);
+			$this->db->select('tOrderAssignment.*, tOrderRevision.*, mUsers.UserName')->from('tOrderAssignment');
+			$this->db->join('tOrderRevision','tOrderAssignment.OrderUID=tOrderRevision.OrderUID AND tOrderAssignment.WorkflowModuleUID=tOrderRevision.WorkflowModuleUID');
+			$this->db->join('mUsers','mUsers.UserUID=tOrderRevision.AssignedToUserUID', 'left');
+			$this->db->where('tOrderAssignment.IsRevision', 1);
+			$this->db->where('tOrderAssignment.OrderUID', $OrderUID);
+			$this->db->where('tOrderAssignment.WorkflowModuleUID', $WorkflowModuleUID);
+			$this->db->where('tOrderRevision.CompleteDateTime IS NULL',NULL, false);
 			return $this->db->get()->row();
 		}
 		function get_vendor_countall_orders($loggedid,$VendorUID)
@@ -2776,14 +2781,14 @@ class Common_model extends CI_Model {
 
 				$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`) LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from torderassignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
+				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 AND tOrderAssignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 			}
 			else{
 
 				$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 				','.$this->config->item('keywords')['Cancelled'];
 
-				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`)  LEFT JOIN `torderassignment` ON `tOrders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND torderassignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from torderassignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)    GROUP BY `OrderUID`  ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
+				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDateTime, '%m-%d-%Y %H:%i:%s') as OrderDueDateTime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND tOrderAssignment.SendToVendor = '1' AND VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)    GROUP BY `OrderUID`  ORDER BY FIELD(tOrders.PriorityUID,1,3,2),OrderEntryDatetime DESC,tOrders.OrderUID ASC ";
 
 			}
 
@@ -2856,7 +2861,7 @@ class Common_model extends CI_Model {
 
 			foreach ($Workflows as $key => $Workflow) {
 
-				$query=$this->db->query("SELECT LoginID,SendToVendor,torderassignment.VendorUID as  AssignedVendorUID,VendorName,musers.VendorUID as VendorUID FROM `torderassignment` LEFT JOIN musers on musers.UserUID = torderassignment.AssignedToUserUID LEFT JOIN mvendors ON mvendors.VendorUID = torderassignment.VendorUID WHERE `OrderUID` = '".$data['OrderUID']."' AND AssignedToUserUID IS NOT NULL AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' ");
+				$query=$this->db->query("SELECT LoginID,SendToVendor,tOrderAssignment.VendorUID as  AssignedVendorUID,VendorName,mUsers.VendorUID as VendorUID FROM `tOrderAssignment` LEFT JOIN mUsers on mUsers.UserUID = tOrderAssignment.AssignedToUserUID LEFT JOIN mvendors ON mvendors.VendorUID = tOrderAssignment.VendorUID WHERE `OrderUID` = '".$data['OrderUID']."' AND AssignedToUserUID IS NOT NULL AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' ");
 				$result = $query->row();
 				if(count($result) > 0){
 
@@ -3008,16 +3013,16 @@ class Common_model extends CI_Model {
 			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID');
 			if ($is_permission->ReviewQueue == 2){
 
-				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID','left');
+				$this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID','left');
 
 			}else{
 
-				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID','left');
-				$this->db->where('torderassignment.WorkflowModuleUID',4);
+				$this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID','left');
+				$this->db->where('tOrderAssignment.WorkflowModuleUID',4);
 				/*if($cus_id){
 					$this->db->where_in ('tOrders.CustomerUID',$cus_id);
 				}*/
-				$this->db->where("torderassignment.AssignedToUserUID = $loggedid");
+				$this->db->where("tOrderAssignment.AssignedToUserUID = $loggedid");
 			}
 
 			/*FOR SUPERVISOR CHECK*/
@@ -3053,11 +3058,11 @@ class Common_model extends CI_Model {
 
 				$query = $this->db->query("SELECT COUNT(DISTINCT(OrderNumber)) AS CancelOrdersCount,tordercancel.OrderUID,tordercancel.Remarks,tordercancel.CancelStatus,PriorityName FROM tordercancel
 					LEFT JOIN tOrders ON tordercancel.OrderUID = tOrders.OrderUID
-					LEFT JOIN torderassignment ON torderassignment.OrderUID = tordercancel.OrderUID
+					LEFT JOIN tOrderAssignment ON tOrderAssignment.OrderUID = tordercancel.OrderUID
 					LEFT JOIN mOrderPriority ON mOrderPriority.PriorityUID = tOrders.PriorityUID
 					WHERE
 					tordercancel.CancelStatus != 0
-					AND torderassignment.AssignedToUserUID = '$loggedid'");
+					AND tOrderAssignment.AssignedToUserUID = '$loggedid'");
 			}
 			$res = $query->row();
 			return $res->CancelOrdersCount;
@@ -3080,11 +3085,11 @@ class Common_model extends CI_Model {
 			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID' , 'left' );
 			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
-			$this->db->join ('torderassignment','torderassignment.OrderUID = tOrders.OrderUID','left');
+			$this->db->join ('tOrderAssignment','tOrderAssignment.OrderUID = tOrders.OrderUID','left');
 			$this->db->where_in('tOrders.StatusUID',$status);
 			if($this->common_model->GetCompletedQueue() == 1)
 			{
-				$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
+				$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
 			}
 			$this->db->group_by('OrderUID');
 			$query = $this->db->get();
@@ -3105,40 +3110,40 @@ class Common_model extends CI_Model {
 			$this->db->select('count(DISTINCT(OrderNumber)) AS OnHoldOrdersCount');
 			$this->db->select ( 'tOrders.OrderUID,OrderNumber,tOrders.CustomerUID,CustomerName,OrderTypeName,PriorityName,tOrders.SubProductUID,mSubProducts.SubProductName,mProducts.ProductUID,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,
 				tOrders.PropertyStateCode as StateCode, tOrders.PropertyStateCode as StateName ,WorkflowModuleName,StatusName,mOrderPriority.PriorityUID' );
-			$this->db->select('DATE_FORMAT(torderassignment.AssignedDatetime, "%m-%d-%Y %H:%i:%s") as AssignedDatetime', FALSE);
+			$this->db->select('DATE_FORMAT(tOrderAssignment.AssignedDatetime, "%m-%d-%Y %H:%i:%s") as AssignedDatetime', FALSE);
 			$this->db->select("DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime", FALSE);
 			$this->db->select('DATE_FORMAT(tOrders.OrderDueDateTime, "%m-%d-%Y %H:%i:%s") as OrderDueDateTime', FALSE);
-			//$this->db->select('DATE_FORMAT((TIMEDIFF(NOW(),torderassignment.OnholdDateTime)),"%H:%i:%s") as OnholdTime',FALSE);
+			//$this->db->select('DATE_FORMAT((TIMEDIFF(NOW(),tOrderAssignment.OnholdDateTime)),"%H:%i:%s") as OnholdTime',FALSE);
 			//$this->db->select("CONCAT(
-			//  FLOOR(HOUR(TIMEDIFF(NOW(), torderassignment.OnholdDateTime)) / 24), ' days ',
-			//  MOD(HOUR(TIMEDIFF(NOW(), torderassignment.OnholdDateTime)), 24), ' hours ',
-			//  MINUTE(TIMEDIFF(NOW(), torderassignment.OnholdDateTime)), ' minutes') as OnholdTime",FALSE);
+			//  FLOOR(HOUR(TIMEDIFF(NOW(), tOrderAssignment.OnholdDateTime)) / 24), ' days ',
+			//  MOD(HOUR(TIMEDIFF(NOW(), tOrderAssignment.OnholdDateTime)), 24), ' hours ',
+			//  MINUTE(TIMEDIFF(NOW(), tOrderAssignment.OnholdDateTime)), ' minutes') as OnholdTime",FALSE);
 			$this->db->select ( 'Group_concat(WorkflowModuleName) as WorkflowModuleNamess' );
 
 
-			$this->db->from ( 'torderassignment' );
-			$this->db->join ( 'tOrders', 'torderassignment.OrderUID = tOrders.OrderUID','left');
-			$this->db->join ( 'musers', 'torderassignment.AssignedToUserUID = musers.UserUID','left');
-			$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
+			$this->db->from ( 'tOrderAssignment' );
+			$this->db->join ( 'tOrders', 'tOrderAssignment.OrderUID = tOrders.OrderUID','left');
+			$this->db->join ( 'mUsers', 'tOrderAssignment.AssignedToUserUID = mUsers.UserUID','left');
+			$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID','left');
 			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
 			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
 			$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID');
 			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID');
 			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID');
 			$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID');
-		//$this->db->join('mreportsections','torderassignment.SectionUID=mreportsections.SectionUID');
+		//$this->db->join('mreportsections','tOrderAssignment.SectionUID=mreportsections.SectionUID');
 
 			$this->db->where_in('tOrders.StatusUID', $status);
-			$this->db->where('torderassignment.WorkflowStatus',4);
+			$this->db->where('tOrderAssignment.WorkflowStatus',4);
 
 		// if (in_array($this->session->userdata('RoleType'),array('1','2','3','4','5','6','10')) == 0) {
-		//  $this->db->where('torderassignment.AssignedToUserUID',$loggedid);
+		//  $this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
 		// }
 
 			if($this->common_model->GetOnHoldQueue() == 1)
 			{
 
-				$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
+				$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
 			}
 
 			$this->db->group_by('tOrders.OrderUID');
@@ -3169,7 +3174,7 @@ class Common_model extends CI_Model {
 			$Workflowstatus[1] = 3;
 			$Workflowstatus[2] = 5;
 
-			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
+			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,mUsers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
 			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 			$this->db->from ( 'texceptions');
 			$this->db->join ( 'tOrders', 'texceptions.OrderUID = tOrders.OrderUID' , 'left' );
@@ -3177,19 +3182,19 @@ class Common_model extends CI_Model {
 			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
 			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
-			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 	// if($this->common_model->GetExceptionQueue() == 1)
 	// {
 	//    $userid = $this->session->userdata('UserUID');
-	//    $this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-	//    $this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
-	//    $this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+	//    $this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+	//    $this->db->where("tOrderAssignment.AssignedToUserUID = $userid AND tOrderAssignment.WorkflowModuleUID = 4");
+	//    $this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 	// }
 	// else if($this->common_model->GetExceptionQueue() == 2)
 	// {
-	//    $this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-	//    // $this->db->where("torderassignment.AssignedToUserUID = torderassignment.WorkflowModuleUID = 4");
-	//    $this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+	//    $this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+	//    // $this->db->where("tOrderAssignment.AssignedToUserUID = tOrderAssignment.WorkflowModuleUID = 4");
+	//    $this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 	// }
 
 			if($cus_id){
@@ -3207,7 +3212,7 @@ class Common_model extends CI_Model {
 			$this->db->select('*')->from('torderapprovals');
 			$this->db->join('tOrders','tOrders.OrderUID = torderapprovals.OrderUID','left');
 			$this->db->join('mCustomers','tOrders.CustomerUID = mCustomers.CustomerUID','left');
-			$this->db->join('torderassignment','torderassignment.OrderUID = torderapprovals.OrderUID','left');
+			$this->db->join('tOrderAssignment','tOrderAssignment.OrderUID = torderapprovals.OrderUID','left');
 			$this->db->where('ApprovalStatus',0);
 			$this->db->where('ApprovalFunction NOT IN ("Order Cancellation")');
 			$this->db->where('torderapprovals.ExceptionType',0);
@@ -3219,7 +3224,7 @@ class Common_model extends CI_Model {
 
 		public function GetSearchCompleteStatus_ByOrderUID($OrderUID='')
 		{
-			$searchstatus=$this->db->get_where('torderassignment', array('OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>'1', 'WorkflowStatus'=>5));
+			$searchstatus=$this->db->get_where('tOrderAssignment', array('OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>'1', 'WorkflowStatus'=>5));
 			$rowcount=$searchstatus->num_rows();
 			if($rowcount>0)
 			{
@@ -3237,8 +3242,8 @@ class Common_model extends CI_Model {
 		public function GetSearchCompleteStatus_ByOrderUID_WithAbstractor($OrderUID='')
 		{
 			$this->db->select('*')->from('torderabstractor');
-			$this->db->join('torderassignment','torderabstractor.OrderUID=torderassignment.OrderUID','inner');
-			$this->db->where(array('torderassignment.OrderUID'=>$OrderUID, 'torderassignment.WorkflowModuleUID'=>'1', 'torderassignment.WorkflowStatus'=>5));
+			$this->db->join('tOrderAssignment','torderabstractor.OrderUID=tOrderAssignment.OrderUID','inner');
+			$this->db->where(array('tOrderAssignment.OrderUID'=>$OrderUID, 'tOrderAssignment.WorkflowModuleUID'=>'1', 'tOrderAssignment.WorkflowStatus'=>5));
 			$this->db->where(array('torderabstractor.OrderUID'=>$OrderUID, 'DocumentReceived'=>1));
 			$searchstatus=$this->db->get();
 			$rowcount=$searchstatus->num_rows();
@@ -3252,7 +3257,7 @@ class Common_model extends CI_Model {
 		function set_loggedin($UserUID){
 			$sessiontime = $this->session->sess_expiration;
 			$LoggedDateTime = date("Y-m-d H:i:s", time() + $sessiontime);
-			$this->db->query("UPDATE musers SET LastActivityDateTime = '".$LoggedDateTime."',LoggedDateTime = '".Date('Y-m-d H:i:s',strtotime('now'))."' WHERE UserUID = '".$UserUID."' ");
+			$this->db->query("UPDATE mUsers SET LastActivityDateTime = '".$LoggedDateTime."',LoggedDateTime = '".Date('Y-m-d H:i:s',strtotime('now'))."' WHERE UserUID = '".$UserUID."' ");
 			if($this->db->affected_rows() > 0)
 			{
 				return true;
@@ -3265,7 +3270,7 @@ class Common_model extends CI_Model {
 
 
 		function set_lastactivitydatetime($UserUID){
-			$this->db->query("UPDATE musers SET LastActivityDateTime = '".Date('Y-m-d H:i:s',strtotime('now'))."' WHERE UserUID = '".$UserUID."' ");
+			$this->db->query("UPDATE mUsers SET LastActivityDateTime = '".Date('Y-m-d H:i:s',strtotime('now'))."' WHERE UserUID = '".$UserUID."' ");
 			if($this->db->affected_rows() > 0)
 			{
 				return true;
@@ -3277,7 +3282,7 @@ class Common_model extends CI_Model {
 		}
 
 		function check_user_online($UserUID){
-			$user = $this->db->query("SELECT * FROM musers WHERE UserUID = '".$UserUID."' ")->row();
+			$user = $this->db->query("SELECT * FROM mUsers WHERE UserUID = '".$UserUID."' ")->row();
 			$current_time = strtotime(date("Y-m-d H:i:s"));
 			$time_period = floor(round(abs($current_time - strtotime($user->LastActivityDateTime))/60,2));
 			$Organization_lastactivityinterval = $this->db->query("SELECT ActivityInterval FROM morganizations WHERE OrgUID = 1")->row();
@@ -3294,7 +3299,7 @@ class Common_model extends CI_Model {
 
 
 		function completed_status_order($OrderUID){
-			$query = $this->db->query("SELECT GROUP_CONCAT(WorkflowModuleName) AS WorkflowModuleName FROM tOrders LEFT JOIN torderassignment ON tOrders.OrderUID = torderassignment.OrderUID AND torderassignment.WorkflowModuleUID NOT IN (SELECT WorkflowModuleUID FROM torderassignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND (QCCompletedDateTime IS NULL OR torderassignment.QCCompletedDateTime = '0000-00-00 00:00:00')) LEFT JOIN mworkflowmodules ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE  WorkflowStatus = 5 AND tOrders.OrderUID = $OrderUID");
+			$query = $this->db->query("SELECT GROUP_CONCAT(WorkflowModuleName) AS WorkflowModuleName FROM tOrders LEFT JOIN tOrderAssignment ON tOrders.OrderUID = tOrderAssignment.OrderUID AND tOrderAssignment.WorkflowModuleUID NOT IN (SELECT WorkflowModuleUID FROM tOrderAssignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND (QCCompletedDateTime IS NULL OR tOrderAssignment.QCCompletedDateTime = '0000-00-00 00:00:00')) LEFT JOIN mworkflowmodules ON tOrderAssignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE  WorkflowStatus = 5 AND tOrders.OrderUID = $OrderUID");
 			$res = $query->row();
 			return $res;
 		}
@@ -3302,10 +3307,10 @@ class Common_model extends CI_Model {
 		function check_order_is_assignedtouser($OrderUID){
 			$loggedid = $this->session->userdata('UserUID');
 			$this->db->select('*');
-			$this->db->from('torderassignment');
-			$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-			$this->db->where ('torderassignment.Workflowstatus',0);
-			$this->db->where ('torderassignment.OrderUID',$OrderUID);
+			$this->db->from('tOrderAssignment');
+			$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+			$this->db->where ('tOrderAssignment.Workflowstatus',0);
+			$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->num_rows();
 		}
@@ -3397,7 +3402,7 @@ class Common_model extends CI_Model {
 					$assign_data['QCAssignedToUserUID'] = NULL;
 					$assign_data['QCAssignedDateTime'] = NULL;
 				}
-				$inserted = $this->db->insert('torderassignment',$assign_data);
+				$inserted = $this->db->insert('tOrderAssignment',$assign_data);
 				if($this->db->affected_rows()>0)
 				{
 					//insert sla action details for workflow completed start
@@ -3439,7 +3444,7 @@ class Common_model extends CI_Model {
 		{
 			$selfassign='';
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('OrderUID',$OrderUID);
 			$this->db->where('WorkflowModuleUID',$WorkflowUID);
 			$result=$this->db->get()->row();
@@ -3489,7 +3494,7 @@ class Common_model extends CI_Model {
 				$where['OrderUID'] = $OrderUID;
 				$where['WorkflowModuleUID'] = $WorkflowUID;
 				$this->db->where($where);
-				$inserted = $this->db->update('torderassignment',$assign_data);
+				$inserted = $this->db->update('tOrderAssignment',$assign_data);
 
 				//insert sla action details for workflow completed start
 				if($WorkflowUID == $this->config->item('WorkflowModuleUID')['OrderSearch'])
@@ -3531,9 +3536,9 @@ class Common_model extends CI_Model {
 		function check_order_is_assigned($OrderUID, $WorkflowModuleUID = "")
 		{
 			$this->db->select('*');
-			$this->db->from('torderassignment');
-			$this->db->where ('torderassignment.OrderUID',$OrderUID);
-			$this->db->where ('(torderassignment.AssignedToUserUID IS NOT NULL OR torderassignment.AssignedToUserUID != 0)');
+			$this->db->from('tOrderAssignment');
+			$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
+			$this->db->where ('(tOrderAssignment.AssignedToUserUID IS NOT NULL OR tOrderAssignment.AssignedToUserUID != 0)');
 			$this->db->group_by('WorkflowModuleUID');
 			$query = $this->db->get();
 			return $query->num_rows();
@@ -3542,12 +3547,12 @@ class Common_model extends CI_Model {
 		function check_order_is_assigned_to_workflow($OrderUID, $WorkflowModuleUID = "")
 		{
 			$this->db->select('*');
-			$this->db->from('torderassignment');
-			$this->db->where ('torderassignment.OrderUID',$OrderUID);
+			$this->db->from('tOrderAssignment');
+			$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 
 			if ($WorkflowModuleUID) {
-				$this->db->where('torderassignment.WorkflowModuleUID', $WorkflowModuleUID);
-				$this->db->where('torderassignment.AssignedToUserUID IS NOT NULL');
+				$this->db->where('tOrderAssignment.WorkflowModuleUID', $WorkflowModuleUID);
+				$this->db->where('tOrderAssignment.AssignedToUserUID IS NOT NULL');
 			}
 			$query = $this->db->get();
 			return $query->num_rows();
@@ -3557,17 +3562,17 @@ class Common_model extends CI_Model {
 		{
 			$Workflow = implode(',', $WorkflowUID);
 			$Status = implode(',', $WorkflowStatus);
-			$q = $this->db->query("SELECT * FROM torderassignment WHERE OrderUID = $OrderUID AND WorkflowModuleUID IN ($Workflow) AND WorkflowStatus IN ($Status)")->num_rows();
+			$q = $this->db->query("SELECT * FROM tOrderAssignment WHERE OrderUID = $OrderUID AND WorkflowModuleUID IN ($Workflow) AND WorkflowStatus IN ($Status)")->num_rows();
 			return $q;
 		}
 
 		function check_is_assignedforreview($OrderUID,$WorkflowModuleUID,$loggedid)
 		{
 			$this->db->select('AssignedToUserUID');
-			$this->db->from('torderassignment');
-			$this->db->where ('torderassignment.OrderUID',$OrderUID);
-			$this->db->where ('torderassignment.WorkflowModuleUID',$WorkflowModuleUID);
-			$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
+			$this->db->from('tOrderAssignment');
+			$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
+			$this->db->where ('tOrderAssignment.WorkflowModuleUID',$WorkflowModuleUID);
+			$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
 			$this->db->where('AssignedToUserUID IS NOT NULL', NULL, FALSE);
 			$query = $this->db->get();
 			return $query->num_rows();
@@ -3577,8 +3582,8 @@ class Common_model extends CI_Model {
 		{
 			$this->db->select("OrderCancel");
 			$this->db->from('mroles');
-			$this->db->join('musers','musers.RoleUID=mroles.RoleUID');
-			$this->db->where(array("musers.UserUID"=>$UserUID));
+			$this->db->join('mUsers','mUsers.RoleUID=mroles.RoleUID');
+			$this->db->where(array("mUsers.UserUID"=>$UserUID));
 			$query = $this->db->get();
 			$res =  $query->row();
 			return $res->OrderCancel;
@@ -3587,7 +3592,7 @@ class Common_model extends CI_Model {
 		function check_has_workflow($UserUID,$WorkflowModuleUID){
 
 
-			$query = $this->db->query("SELECT * FROM `mroles` JOIN musers on musers.RoleUID = mroles.RoleUID  WHERE  musers.UserUID = '".$UserUID."' ");
+			$query = $this->db->query("SELECT * FROM `mroles` JOIN mUsers on mUsers.RoleUID = mroles.RoleUID  WHERE  mUsers.UserUID = '".$UserUID."' ");
 			$result =  $query->row();
 
 			$has_workflow = FALSE;
@@ -3634,12 +3639,12 @@ class Common_model extends CI_Model {
 		// Reverse Workflow Functions Starts
 		function GetCompletedWorkflows($OrderUID){
 
-			$query=$this->db->query("SELECT * FROM `torderassignment`
-				LEFT JOIN `mworkflowmodules` ON `torderassignment`.`WorkflowModuleUID`=`mworkflowmodules`.`WorkflowModuleUID`
-				WHERE `torderassignment`.`WorkflowModuleUID`!=4
-				AND `torderassignment`.`WorkflowStatus` =  5
-				AND `torderassignment`.`AssignedToUserUID`!= ''
-				AND `torderassignment`.`OrderUID` =  '$OrderUID'");
+			$query=$this->db->query("SELECT * FROM `tOrderAssignment`
+				LEFT JOIN `mworkflowmodules` ON `tOrderAssignment`.`WorkflowModuleUID`=`mworkflowmodules`.`WorkflowModuleUID`
+				WHERE `tOrderAssignment`.`WorkflowModuleUID`!=4
+				AND `tOrderAssignment`.`WorkflowStatus` =  5
+				AND `tOrderAssignment`.`AssignedToUserUID`!= ''
+				AND `tOrderAssignment`.`OrderUID` =  '$OrderUID'");
 			return $query->result();
 		}
 
@@ -3651,7 +3656,7 @@ class Common_model extends CI_Model {
 			$this->db->distinct();
 			$this->db->select ( 'mgroups.GroupUID,mgroups.GroupName,UserUID,UserName' );
 			$this->db->from ( 'mgroupusers' );
-			$this->db->join ( 'musers', 'musers.UserUID = mgroupusers.GroupUserUID');
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = mgroupusers.GroupUserUID');
 			$this->db->join ( 'mgroups', 'mgroups.GroupUID = mgroupusers.GroupUID');
 			if(count($grp_id) > 0){
 				$this->db->where_in ('mgroupusers.GroupUID',$grp_id);
@@ -3687,7 +3692,7 @@ class Common_model extends CI_Model {
 			$this->db->distinct();
 			$this->db->select ( 'mgroups.GroupUID,mgroups.GroupName' );
 			$this->db->from ( 'mgroupusers' );
-			$this->db->join ( 'musers', 'musers.UserUID = mgroupusers.GroupUserUID');
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = mgroupusers.GroupUserUID');
 			$this->db->join ( 'mgroups', 'mgroupusers.GroupUID = mgroups.GroupUID');
 			$this->db->where ('mgroupusers.GroupUserUID',$loggedid);
 			$this->db->where ('mgroups.Active',1);
@@ -3726,7 +3731,7 @@ class Common_model extends CI_Model {
 		{
 			$this->db->select ( 'mgroups.GroupUID,mgroups.GroupName,UserUID,UserName' );
 			$this->db->from ( 'mgroupusers' );
-			$this->db->join ( 'musers', 'musers.UserUID = mgroupusers.GroupUserUID');
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = mgroupusers.GroupUserUID');
 			$this->db->join ( 'mgroups', 'mgroups.GroupUID = mgroupusers.GroupUID');
 			if($groupids){
 				$this->db->where_in ('mgroupusers.GroupUID',$groupids);
@@ -3751,7 +3756,7 @@ class Common_model extends CI_Model {
 			if($UserUID !=''){
 
 				$where = 'AND a.UserUID IN ('.$UserUID.')';
-				$query = $this->db->query("select * from (select * from musers)a LEFT JOIN(select * from mroles where RoleType IN (1,2,3,4,5,6))b ON a.RoleUID=b.RoleUID where b.RoleUID IS NOT NULL UNION ALL select * from (select * from musers)a LEFT JOIN(select * from mroles where RoleType=7)b ON a.RoleUID=b.RoleUID where b.RoleType IS NOT NULL ".$where." ORDER BY UserName ASC");
+				$query = $this->db->query("select * from (select * from mUsers)a LEFT JOIN(select * from mroles where RoleType IN (1,2,3,4,5,6))b ON a.RoleUID=b.RoleUID where b.RoleUID IS NOT NULL UNION ALL select * from (select * from mUsers)a LEFT JOIN(select * from mroles where RoleType=7)b ON a.RoleUID=b.RoleUID where b.RoleType IS NOT NULL ".$where." ORDER BY UserName ASC");
 
 				return  $query->result();
 			}
@@ -3786,19 +3791,19 @@ class Common_model extends CI_Model {
 					{
 						$is_any_workflowreassigned++;
 						$this->db->set($data)->where(array('OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$workflow->WorkflowModuleUID))
-						->update('torderassignment');
+						->update('tOrderAssignment');
 					}
 					else
 					{
 						$is_any_workflowreassigned++;
 						$data['OrderUID']=$OrderUID;
 						$data['WorkflowModuleUID']=$workflow->WorkflowModuleUID;
-						$this->db->insert('torderassignment', $data);
+						$this->db->insert('tOrderAssignment', $data);
 					}
 
 					if($Workflow_selected[$workflow->WorkflowModuleUID]!="")
 					{
-						$UserName=$this->db->get_where('musers', array('UserUID'=>$data['AssignedToUserUID']))->row()->UserName;
+						$UserName=$this->db->get_where('mUsers', array('UserUID'=>$data['AssignedToUserUID']))->row()->UserName;
 						$Note= $workflow->WorkflowModuleName . ' Module Reassigned to ' . $UserName;
 													 //order reassignment
 						$data1['ModuleName']=$workflow->WorkflowModuleName.' '.'Reverse Workflow_add';
@@ -3840,7 +3845,7 @@ class Common_model extends CI_Model {
 
 		function check_previous_assigned_workflow($WorkflowModuleUID, $OrderUID)
 		{
-			$this->db->select('WorkflowModuleUID')->from('torderassignment');
+			$this->db->select('WorkflowModuleUID')->from('tOrderAssignment');
 			$this->db->where('WorkflowModuleUID', $WorkflowModuleUID);
 			$this->db->where('OrderUID', $OrderUID);
 			$query=$this->db->get();
@@ -3946,7 +3951,7 @@ class Common_model extends CI_Model {
 		}
 
 		function Getworkflow($OrderUID){
-			$query = $this->db->query("SELECT COUNT(*) as  TotalWorkflow FROM `torderassignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) ");
+			$query = $this->db->query("SELECT COUNT(*) as  TotalWorkflow FROM `tOrderAssignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) ");
 
 			return $query->row();
 		}
@@ -3989,19 +3994,19 @@ class Common_model extends CI_Model {
 				//Change Review
 				$this->db->where('OrderUID', $OrderUID);
 				$this->db->where( 'WorkflowModuleUID',4);
-				$this->db->update('torderassignment', array('WorkflowStatus'=>3));
+				$this->db->update('tOrderAssignment', array('WorkflowStatus'=>3));
 
 			}
 		}
 
 		function GetAssigneddworkflow($OrderUID){
-			$query = $this->db->query("SELECT COUNT(*) as  AssignedWorkflow FROM `torderassignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) AND WorkflowStatus='0'");
+			$query = $this->db->query("SELECT COUNT(*) as  AssignedWorkflow FROM `tOrderAssignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) AND WorkflowStatus='0'");
 			return $query->row();
 
 		}
 
 		function GetAssignedDate($OrderUID){
-			$query = $this->db->query("SELECT MAX(DATE_FORMAT(AssignedDatetime, '%Y-%m-%d')) as  AssignedDatetime FROM `torderassignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) AND WorkflowStatus='0'");
+			$query = $this->db->query("SELECT MAX(DATE_FORMAT(AssignedDatetime, '%Y-%m-%d')) as  AssignedDatetime FROM `tOrderAssignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) AND WorkflowStatus='0'");
 			return $query->row();
 		}
 
@@ -4009,7 +4014,7 @@ class Common_model extends CI_Model {
 		function is_vendorlogin(){
 			$loggedid = $this->session->userdata('UserUID');
 
-			$query = $this->db->query("SELECT EXISTS(SELECT RoleType FROM `mroles` JOIN musers on `musers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `musers`.`UserUID` = '".$loggedid."' AND RoleType IN ('13','14') LIMIT 1) AS is_vendor");
+			$query = $this->db->query("SELECT EXISTS(SELECT RoleType FROM `mroles` JOIN mUsers on `mUsers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `mUsers`.`UserUID` = '".$loggedid."' AND RoleType IN ('13','14') LIMIT 1) AS is_vendor");
 			$result =  $query->row();
 
 
@@ -4023,7 +4028,7 @@ class Common_model extends CI_Model {
 
 		function get_logged_details(){
 			$loggedid = $this->session->userdata('UserUID');
-			$query = $this->db->query("SELECT musers.VendorUID,musers.UserUID,UserName,RoleName,RoleType FROM `mroles` JOIN musers on `musers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `musers`.`UserUID` = '".$loggedid."' AND RoleType IN ('13','14') LIMIT 1");
+			$query = $this->db->query("SELECT mUsers.VendorUID,mUsers.UserUID,UserName,RoleName,RoleType FROM `mroles` JOIN mUsers on `mUsers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `mUsers`.`UserUID` = '".$loggedid."' AND RoleType IN ('13','14') LIMIT 1");
 			$result =  $query->row();
 			return $result;
 		}
@@ -4034,7 +4039,7 @@ class Common_model extends CI_Model {
 		}
 
 		function get_vendor_assigned_workflow($VendorUID,$OrderUID){
-			$query = $this->db->query("SELECT mworkflowmodules.WorkflowModuleUID, mworkflowmodules.WorkflowModuleName FROM mworkflowmodules JOIN torderassignment ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE torderassignment.VendorUID = '".$VendorUID."' AND torderassignment.SendToVendor = '1' AND torderassignment.Workflowstatus != '5' AND  torderassignment.OrderUID='".$OrderUID."' GROUP BY mworkflowmodules.WorkflowModuleUID ");
+			$query = $this->db->query("SELECT mworkflowmodules.WorkflowModuleUID, mworkflowmodules.WorkflowModuleName FROM mworkflowmodules JOIN tOrderAssignment ON tOrderAssignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE tOrderAssignment.VendorUID = '".$VendorUID."' AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.Workflowstatus != '5' AND  tOrderAssignment.OrderUID='".$OrderUID."' GROUP BY mworkflowmodules.WorkflowModuleUID ");
 			return $result = $query->result();
 		}
 
@@ -4078,7 +4083,7 @@ class Common_model extends CI_Model {
 			$Workflowstatus[2] = 5;
 
 			$this->db->select('count(DISTINCT(OrderNumber)) AS ExceptionOrderCount');
-			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
+			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,mUsers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
 			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 			$this->db->from ( 'texceptions' );
 			$this->db->join ( 'tOrders', 'texceptions.OrderUID = tOrders.OrderUID' , 'left' );
@@ -4086,30 +4091,30 @@ class Common_model extends CI_Model {
 			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
 			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
-			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 
 
 		// if(in_array($this->session->userdata('RoleType'),array(7)))
 		// {
 		//   $userid = $this->session->userdata('UserUID');
-		//   $this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-		//   $this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
-		//   $this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+		//   $this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+		//   $this->db->where("tOrderAssignment.AssignedToUserUID = $userid AND tOrderAssignment.WorkflowModuleUID = 4");
+		//   $this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 		// }
 
 			// if(tOrders.StatusUID != 0){
 			if($this->common_model->GetExceptionQueue() == 1)
 			{
 				$userid = $this->session->userdata('UserUID');
-				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-				$this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
-				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+				$this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+				$this->db->where("tOrderAssignment.AssignedToUserUID = $userid AND tOrderAssignment.WorkflowModuleUID = 4");
+				$this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 			}
 			else if($this->common_model->GetExceptionQueue() == 2)
 			{
-				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-			 // $this->db->where("torderassignment.AssignedToUserUID = torderassignment.WorkflowModuleUID = 4");
-				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+				$this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+			 // $this->db->where("tOrderAssignment.AssignedToUserUID = tOrderAssignment.WorkflowModuleUID = 4");
+				$this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 			}
 			// }
 
@@ -4146,7 +4151,7 @@ class Common_model extends CI_Model {
 			$Workflowstatus[2] = 5;
 
 			$this->db->select('count(DISTINCT(OrderNumber)) AS ExceptionOrderCount');
-			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,musers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
+			$this->db->select ("tOrders.OrderNumber,tOrders.OrderUID,tOrders.StatusUID,tOrders.CustomerUID,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName,mOrderStatus.StatusColor, tOrders.OrderUID,texceptions.RaisedByUserUID,texceptions.RaisedOn,mUsers.UserName,mOrderPriority.PriorityUID,LoanNumber,PropertyAddress1,tOrders.PropertyStateCode,tOrders.PropertyCountyName");
 			$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 			$this->db->from ( 'texceptions' );
 			$this->db->join ( 'tOrders', 'texceptions.OrderUID = tOrders.OrderUID' , 'left' );
@@ -4154,19 +4159,19 @@ class Common_model extends CI_Model {
 			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
 			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
 			$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
-			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 
 			if($this->common_model->GetExceptionQueue() == 1)
 			{
 				$userid = $this->session->userdata('UserUID');
-				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-				$this->db->where("torderassignment.AssignedToUserUID = $userid AND torderassignment.WorkflowModuleUID = 4");
-				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+				$this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+				$this->db->where("tOrderAssignment.AssignedToUserUID = $userid AND tOrderAssignment.WorkflowModuleUID = 4");
+				$this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 			}
 			else if($this->common_model->GetExceptionQueue() == 2)
 			{
-				$this->db->join('torderassignment','tOrders.OrderUID = torderassignment.OrderUID');
-				$this->db->where_in ('torderassignment.Workflowstatus',$Workflowstatus);
+				$this->db->join('tOrderAssignment','tOrders.OrderUID = tOrderAssignment.OrderUID');
+				$this->db->where_in ('tOrderAssignment.Workflowstatus',$Workflowstatus);
 			}
 
 			if($cus_id)
@@ -4201,7 +4206,7 @@ class Common_model extends CI_Model {
 
 		function check_workflow($OrderUID,$WorkflowModuleUID){
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('WorkflowModuleUID',$WorkflowModuleUID);
 			$this->db->where('Workflowstatus',3);
 			$this->db->where('OrderUID',$OrderUID);
@@ -4220,15 +4225,15 @@ class Common_model extends CI_Model {
 		}
 		function check_revieworder_is_assignedtouser($OrderUID){
 			$loggedid = $this->session->userdata('UserUID');
-			$Completed=$this->db->query("SELECT COUNT(*) as  CompletedWorkflow FROM `torderassignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) AND WorkflowStatus IN(5) ")->num_rows();
+			$Completed=$this->db->query("SELECT COUNT(*) as  CompletedWorkflow FROM `tOrderAssignment` WHERE  OrderUID = '$OrderUID'  AND WorkflowModuleUID IN (1,2,3) AND WorkflowStatus IN(5) ")->num_rows();
 
 			if($Completed > 0){
 				$this->db->select('*');
-				$this->db->from('torderassignment');
-				$this->db->join('texceptions','texceptions.OrderUID=torderassignment.OrderUID','inner');
-				$this->db->join('tOrders','tOrders.OrderUID=torderassignment.OrderUID','inner');
-				$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-				$this->db->where ('torderassignment.OrderUID',$OrderUID);
+				$this->db->from('tOrderAssignment');
+				$this->db->join('texceptions','texceptions.OrderUID=tOrderAssignment.OrderUID','inner');
+				$this->db->join('tOrders','tOrders.OrderUID=tOrderAssignment.OrderUID','inner');
+				$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+				$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 				$this->db->where ('tOrders.StatusUID',35);
 				$this->db->where ('texceptions.IsClear',0);
 				$query = $this->db->get();
@@ -4266,9 +4271,9 @@ class Common_model extends CI_Model {
 
 		function  check_order_completed($OrderUID,$VendorUID,$WorkflowModuleUID){
 			$this->db->select ( '*' );
-			$this->db->from ( 'torderassignment' );
-			$this->db->where (array('torderassignment.WorkflowModuleUID !='=>'4','torderassignment.WorkflowModuleUID'=>$WorkflowModuleUID,'torderassignment.WorkflowStatus'=>'5','torderassignment.SendToVendor'=>'1','torderassignment.VendorUID'=>$VendorUID,'torderassignment.OrderUID'=>$OrderUID));
-			$this->db->where("(torderassignment.QCCompletedDateTime IS NULL OR torderassignment.QCCompletedDateTime='0000-00-00 00:00:00')");
+			$this->db->from ( 'tOrderAssignment' );
+			$this->db->where (array('tOrderAssignment.WorkflowModuleUID !='=>'4','tOrderAssignment.WorkflowModuleUID'=>$WorkflowModuleUID,'tOrderAssignment.WorkflowStatus'=>'5','tOrderAssignment.SendToVendor'=>'1','tOrderAssignment.VendorUID'=>$VendorUID,'tOrderAssignment.OrderUID'=>$OrderUID));
+			$this->db->where("(tOrderAssignment.QCCompletedDateTime IS NULL OR tOrderAssignment.QCCompletedDateTime='0000-00-00 00:00:00')");
 			$query = $this->db->get();
 			return  $query->num_rows();
 
@@ -4277,7 +4282,7 @@ class Common_model extends CI_Model {
 
 		function get_vendor_workflowfororder($OrderUID,$VendorUID){
 
-			$query = $this->db->query("SELECT * FROM (`torderassignment`) LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID  WHERE `torderassignment`.`WorkflowModuleUID` != '4' AND `torderassignment`.`WorkflowStatus` = '5' AND `torderassignment`.`SendToVendor` = '1' AND `torderassignment`.`VendorUID`  = '".$VendorUID."'  AND (torderassignment.QCCompletedDateTime IS NULL OR torderassignment.QCCompletedDateTime='0000-00-00 00:00:00') AND `torderassignment`.`OrderUID` = '".$OrderUID."' GROUP BY torderassignment.WorkflowModuleUID ");
+			$query = $this->db->query("SELECT * FROM (`tOrderAssignment`) LEFT JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID  WHERE `tOrderAssignment`.`WorkflowModuleUID` != '4' AND `tOrderAssignment`.`WorkflowStatus` = '5' AND `tOrderAssignment`.`SendToVendor` = '1' AND `tOrderAssignment`.`VendorUID`  = '".$VendorUID."'  AND (tOrderAssignment.QCCompletedDateTime IS NULL OR tOrderAssignment.QCCompletedDateTime='0000-00-00 00:00:00') AND `tOrderAssignment`.`OrderUID` = '".$OrderUID."' GROUP BY tOrderAssignment.WorkflowModuleUID ");
 			return  $query->result();
 		}
 
@@ -4321,8 +4326,8 @@ class Common_model extends CI_Model {
 		{
 			$loggedid = $this->session->userdata('UserUID');
 			$this->db->select ( '*' );
-			$this->db->from ( 'torderassignment' );
-			$this->db->where (array('torderassignment.QCAssignedToUserUID'=>$loggedid,'torderassignment.WorkflowModuleUID !='=>'4','torderassignment.WorkflowModuleUID '=>$WorkflowModuleUID,'torderassignment.WorkflowStatus'=>'5','torderassignment.SendToVendor'=>'1','torderassignment.VendorUID'=>$VendorUID,'torderassignment.QCCompletedDateTime'=>null,'torderassignment.OrderUID'=>$OrderUID));
+			$this->db->from ( 'tOrderAssignment' );
+			$this->db->where (array('tOrderAssignment.QCAssignedToUserUID'=>$loggedid,'tOrderAssignment.WorkflowModuleUID !='=>'4','tOrderAssignment.WorkflowModuleUID '=>$WorkflowModuleUID,'tOrderAssignment.WorkflowStatus'=>'5','tOrderAssignment.SendToVendor'=>'1','tOrderAssignment.VendorUID'=>$VendorUID,'tOrderAssignment.QCCompletedDateTime'=>null,'tOrderAssignment.OrderUID'=>$OrderUID));
 			$query = $this->db->get();
 			return  $query->num_rows();
 		}
@@ -4337,7 +4342,7 @@ class Common_model extends CI_Model {
 
 		function GetVendorUIDbyWorkflow($workflowModuleUID,$OrderUID){
 			$this->db->select ( 'VendorUID' );
-			$this->db->from ( 'torderassignment' );
+			$this->db->from ( 'tOrderAssignment' );
 			$this->db->where (array('WorkflowModuleUID '=>$workflowModuleUID,'SendToVendor'=>'1','OrderUID'=>$OrderUID));
 			$query = $this->db->get();
 			//print $this->db->last_query();
@@ -4354,21 +4359,21 @@ class Common_model extends CI_Model {
 		}
 
 		function vendor_completed_status_order($OrderUID,$VendorUID){
-			$query = $this->db->query("SELECT GROUP_CONCAT( DISTINCT (WorkflowModuleName)) AS WorkflowModuleName FROM tOrders LEFT JOIN torderassignment ON tOrders.OrderUID = torderassignment.OrderUID LEFT JOIN mworkflowmodules ON torderassignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE WorkflowStatus = 5 AND tOrders.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID IN ( SELECT WorkflowModuleUID FROM torderassignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND VendorUID = $VendorUID AND ( QCCompletedDateTime IS NOT NULL OR torderassignment.QCCompletedDateTime != '0000-00-00 00:00:00' ))");
+			$query = $this->db->query("SELECT GROUP_CONCAT( DISTINCT (WorkflowModuleName)) AS WorkflowModuleName FROM tOrders LEFT JOIN tOrderAssignment ON tOrders.OrderUID = tOrderAssignment.OrderUID LEFT JOIN mworkflowmodules ON tOrderAssignment.WorkflowModuleUID = mworkflowmodules.WorkflowModuleUID WHERE WorkflowStatus = 5 AND tOrders.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID IN ( SELECT WorkflowModuleUID FROM tOrderAssignment WHERE OrderUID = $OrderUID AND SendToVendor = '1' AND VendorUID = $VendorUID AND ( QCCompletedDateTime IS NOT NULL OR tOrderAssignment.QCCompletedDateTime != '0000-00-00 00:00:00' ))");
 			$res = $query->row();
 			return $res;
 		}
 
 		function is_abstractorassign($OrderUID){
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('SelfManualAssign','External');
 			$this->db->where('WorkflowModuleUID','1');
 			$this->db->where('OrderUID',$OrderUID);
 			$assign=$this->db->get()->num_rows();
 			if($assign > 0){
 				$this->db->select('*');
-				$this->db->from('torderassignment');
+				$this->db->from('tOrderAssignment');
 				$this->db->where('WorkflowStatus','5');
 				$this->db->where('WorkflowModuleUID','1');
 				$this->db->where('OrderUID',$OrderUID);
@@ -4479,19 +4484,19 @@ class Common_model extends CI_Model {
 
 			//search
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('OrderUID',$OrderUID);
 			$this->db->where('WorkflowModuleUID',1);
 			$search= $this->db->get()->row();
 			//tax
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('OrderUID',$OrderUID);
 			$this->db->where('WorkflowModuleUID',2);
 			$type= $this->db->get()->row();
 					//tax
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('OrderUID',$OrderUID);
 			$this->db->where('WorkflowModuleUID',3);
 			$tax= $this->db->get()->row();
@@ -4574,8 +4579,8 @@ class Common_model extends CI_Model {
 			$this->db->from('texceptions');
 			$this->db->join ( 'tOrders', 'tOrders.OrderUID = texceptions.OrderUID');
 			$this->db->join ( 'mexceptions', 'mexceptions.ExceptionUID = texceptions.ExceptionUID' , 'left' );
-			$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
-			$this->db->join ( 'mroles', 'mroles.RoleUID = musers.RoleUID');
+			$this->db->join ( 'mUsers', 'mUsers.UserUID = texceptions.RaisedByUserUID' , 'left' );
+			$this->db->join ( 'mroles', 'mroles.RoleUID = mUsers.RoleUID');
 			$this->db->where(array("texceptions.OrderUID"=>$OrderUID,'RoleType'=>'8'));
 			$this->db->order_by('ExceptionSNo','DESC');
 			$query = $this->db->get();
@@ -4620,7 +4625,7 @@ class Common_model extends CI_Model {
 		public function IsAbstractorAssigned($OrderUID)
 		{
 			$this->db->select('*');
-			$this->db->from('torderassignment');
+			$this->db->from('tOrderAssignment');
 			$this->db->where('WorkflowModuleUID', 1);
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->where('SelfManualAssign', 'External');
@@ -4780,7 +4785,7 @@ class Common_model extends CI_Model {
 	}
 
 	function is_vendor_assigned_workflow($OrderUID,$WorkflowModuleUID){
-		$query = $this->db->query ("SELECT * FROM `torderassignment` LEFT JOIN `mvendors` ON `mvendors`.`VendorUID` = `torderassignment`.`VendorUID` WHERE  `OrderUID` = $OrderUID AND `WorkflowModuleUID` = $WorkflowModuleUID AND SendToVendor = '1' ");
+		$query = $this->db->query ("SELECT * FROM `tOrderAssignment` LEFT JOIN `mvendors` ON `mvendors`.`VendorUID` = `tOrderAssignment`.`VendorUID` WHERE  `OrderUID` = $OrderUID AND `WorkflowModuleUID` = $WorkflowModuleUID AND SendToVendor = '1' ");
 		$result =  $query->num_rows();
 		if($result > 0){
 			return true;
@@ -4789,7 +4794,7 @@ class Common_model extends CI_Model {
 	}
 
 	function is_abstractor_assigned_workflow($OrderUID,$WorkflowModuleUID){
-		$query = $this->db->query ("SELECT * FROM `torderassignment`  WHERE  `OrderUID` = $OrderUID AND `WorkflowModuleUID` = $WorkflowModuleUID AND SelfManualAssign = 'EXTERNAL' ");
+		$query = $this->db->query ("SELECT * FROM `tOrderAssignment`  WHERE  `OrderUID` = $OrderUID AND `WorkflowModuleUID` = $WorkflowModuleUID AND SelfManualAssign = 'EXTERNAL' ");
 		$result =  $query->num_rows();
 		if($result > 0){
 			return true;
@@ -4799,7 +4804,7 @@ class Common_model extends CI_Model {
 
 	function is_abstractor_login(){
 		$UserUID = $this->session->userdata('UserUID');
-		$query = $this->db->query("SELECT EXISTS (SELECT `RoleType`, `RoleName` FROM (`musers`) INNER JOIN `mroles` ON `musers`.`RoleUID` = `mroles`.`RoleUID` WHERE `musers`.`UserUID` = $UserUID AND RoleType='15') AS abstractor_login ");
+		$query = $this->db->query("SELECT EXISTS (SELECT `RoleType`, `RoleName` FROM (`mUsers`) INNER JOIN `mroles` ON `mUsers`.`RoleUID` = `mroles`.`RoleUID` WHERE `mUsers`.`UserUID` = $UserUID AND RoleType='15') AS abstractor_login ");
 		return $query->row();
 	}
 
@@ -4815,8 +4820,8 @@ class Common_model extends CI_Model {
 	function GetavatarById($UserUID)
 	{
 		$this->db->select("Avatar");
-		$this->db->from('musers');
-		$this->db->where(array("musers.UserUID"=>$UserUID));
+		$this->db->from('mUsers');
+		$this->db->where(array("mUsers.UserUID"=>$UserUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -4825,7 +4830,7 @@ class Common_model extends CI_Model {
 	function is_customerlogin(){
 		$loggedid = $this->session->userdata('UserUID');
 
-		$query = $this->db->query("SELECT EXISTS(SELECT RoleType FROM `mroles` JOIN musers on `musers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `musers`.`UserUID` = '".$loggedid."' AND RoleType IN ('8') LIMIT 1) AS is_vendor");
+		$query = $this->db->query("SELECT EXISTS(SELECT RoleType FROM `mroles` JOIN mUsers on `mUsers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `mUsers`.`UserUID` = '".$loggedid."' AND RoleType IN ('8') LIMIT 1) AS is_vendor");
 		$result =  $query->row();
 
 
@@ -4838,7 +4843,7 @@ class Common_model extends CI_Model {
 
 	function getcustomer_logged_details(){
 		$loggedid = $this->session->userdata('UserUID');
-		$query = $this->db->query("SELECT musers.CustomerUID,musers.UserUID,UserName,RoleName,RoleType FROM `mroles` JOIN musers on `musers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `musers`.`UserUID` = '".$loggedid."' AND RoleType = '8' LIMIT 1");
+		$query = $this->db->query("SELECT mUsers.CustomerUID,mUsers.UserUID,UserName,RoleName,RoleType FROM `mroles` JOIN mUsers on `mUsers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `mUsers`.`UserUID` = '".$loggedid."' AND RoleType = '8' LIMIT 1");
 		$result =  $query->row();
 		return $result;
 	}
@@ -4878,8 +4883,8 @@ class Common_model extends CI_Model {
 
 	function GetUserDetailsByUser($UserUID){
 		$this->db->select("*");
-		$this->db->from('musers');
-		$this->db->where(array("musers.UserUID"=>$UserUID));
+		$this->db->from('mUsers');
+		$this->db->where(array("mUsers.UserUID"=>$UserUID));
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -4977,7 +4982,7 @@ class Common_model extends CI_Model {
 				ELSE `a`.`UserName`
 				END as UserName,
 				torderfollowup.UserUID AS UserUID
-				 FROM (`torderfollowup`) JOIN tOrders ON tOrders.OrderUID = torderfollowup.OrderUID LEFT JOIN `musers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `musers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `musers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `musers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE   DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) AND FollowUpStatus IN ('New','Started','Completed')
+				 FROM (`torderfollowup`) JOIN tOrders ON tOrders.OrderUID = torderfollowup.OrderUID LEFT JOIN `mUsers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `mUsers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `mUsers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `mUsers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE   DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) AND FollowUpStatus IN ('New','Started','Completed')
 				AND FollowUpPriority IN ('Rush', 'ASAP', 'Normal') ORDER BY FIELD(FollowUpPriority,'Rush', 'ASAP', 'Normal')
 
 				  ,IsRead ASC LIMIT 25
@@ -4993,7 +4998,7 @@ class Common_model extends CI_Model {
 				ELSE `a`.`UserName`
 				END as UserName,
 				torderfollowup.UserUID AS UserUID
-				 FROM (`torderfollowup`) JOIN tOrders ON tOrders.OrderUID = torderfollowup.OrderUID LEFT JOIN `musers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `musers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `musers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `musers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE  FollowUpStatus IN ('New','Started','Completed') AND (`torderfollowup`.`CreatedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`CompletedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`StartedByUserUID` = ".$this->loggedid.") AND DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) 
+				 FROM (`torderfollowup`) JOIN tOrders ON tOrders.OrderUID = torderfollowup.OrderUID LEFT JOIN `mUsers` a ON `a`.`UserUID` = `torderfollowup`.`UserUID` LEFT JOIN `mUsers` b ON `b`.`UserUID` = `torderfollowup`.`CreatedByUserUID` LEFT JOIN `mUsers` c ON `c`.`UserUID` = `torderfollowup`.`CompletedByUserUID` LEFT JOIN `mUsers` d ON `d`.`UserUID` = `torderfollowup`.`StartedByUserUID` WHERE  FollowUpStatus IN ('New','Started','Completed') AND (`torderfollowup`.`CreatedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`CompletedByUserUID` = ".$this->loggedid." OR `torderfollowup`.`StartedByUserUID` = ".$this->loggedid.") AND DATE(NOW()) = DATE(torderfollowup.FollowupDateTime) 
 				 AND FollowUpPriority IN ('Rush', 'ASAP', 'Normal') ORDER BY FIELD(FollowUpPriority,'Rush', 'ASAP', 'Normal')
 				,IsRead ASC LIMIT 25
 				");
@@ -5034,9 +5039,9 @@ class Common_model extends CI_Model {
 	}
 
 	function get_approval_notifications(){
-		$this->db->select('torderapprovals.*, musers.UserName as RequestedUserName');
+		$this->db->select('torderapprovals.*, mUsers.UserName as RequestedUserName');
 		$this->db->from('torderapprovals');
-		$this->db->join('musers','torderapprovals.RaisedByUserUID = musers.UserUID','left');
+		$this->db->join('mUsers','torderapprovals.RaisedByUserUID = mUsers.UserUID','left');
 		$this->db->where('ApprovalFunction','Group Assignment');
 		$this->db->where('RequestedToUserUID',$this->loggedid);
 		$this->db->where('IsReviewed',1);
@@ -5083,8 +5088,8 @@ class Common_model extends CI_Model {
 	function Get_customavatarById($UserUID)
 	{
 		$this->db->select("Avatar");
-		$this->db->from('musers');
-		$this->db->where(array("musers.UserUID"=>$UserUID));
+		$this->db->from('mUsers');
+		$this->db->where(array("mUsers.UserUID"=>$UserUID));
 		$query = $this->db->get();
 		if(count($result  = $query->row()) > 0){
 			return $result->Avatar;
@@ -5259,7 +5264,7 @@ function CheckFinalReportExist($OrderUID){
 		$this->db->select ("OrderNumber,tOrders.CustomerUID,CustomerNumber,CustomerName,OrderTypeName,StatusColor,PriorityName,mOrderStatus.StatusName, tOrders.OrderUID,mOrderPriority.PriorityUID,PriorityName,PropertyStateCode, tOrders.LoanNumber, CompleteDateTime AS ReviewCompleteDateTime", false);
 		$this->db->select('DATE_FORMAT(tOrders.OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 		$this->db->from ( 'tOrders' );
-		$this->db->join ( 'torderassignment', 'tOrders.OrderUID = torderassignment.OrderUID');
+		$this->db->join ( 'tOrderAssignment', 'tOrders.OrderUID = tOrderAssignment.OrderUID');
 		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID','left');
 		$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID','left');
 		$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID','left');
@@ -5527,7 +5532,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function GetUserName($id)
 	{
-		$query = $this->db->query("SELECT UserName FROM musers WHERE UserUID ='$id' ");
+		$query = $this->db->query("SELECT UserName FROM mUsers WHERE UserUID ='$id' ");
 		$res = $query->row();
 		return $res->UserName;
 	}
@@ -5536,7 +5541,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 		$this->db->select("*");
 		$this->db->from('texceptions');
 		$this->db->join ( 'mexceptions', 'mexceptions.ExceptionUID = texceptions.ExceptionUID' , 'left' );
-		$this->db->join ( 'musers', 'musers.UserUID = texceptions.RaisedByUserUID' , 'left' );
+		$this->db->join ( 'mUsers', 'mUsers.UserUID = texceptions.RaisedByUserUID' , 'left' );
 		$this->db->where(array("texceptions.OrderUID"=>$OrderUID));
 		$this->db->where(array("texceptions.RaisedByAPI"=> 0));
 		$this->db->where(array("texceptions.IsClear"=> 0));
@@ -5602,12 +5607,12 @@ function GetNotaryByNotaryUID($NotaryUID)
 		
 		$query=$this->db->query("
 		SELECT mworkflowmodules.WorkflowModuleUID, mworkflowmodules.WorkflowModuleName 
-		FROM `torderassignment`
-		LEFT JOIN `mworkflowmodules` ON `torderassignment`.`WorkflowModuleUID`=`mworkflowmodules`.`WorkflowModuleUID`
-		WHERE `torderassignment`.`WorkflowStatus` =  5
-		AND `torderassignment`.`AssignedToUserUID`!= ''
-		AND `torderassignment`.`WorkflowModuleUID` != 5 
-		AND `torderassignment`.`OrderUID` =  '$OrderUID'
+		FROM `tOrderAssignment`
+		LEFT JOIN `mworkflowmodules` ON `tOrderAssignment`.`WorkflowModuleUID`=`mworkflowmodules`.`WorkflowModuleUID`
+		WHERE `tOrderAssignment`.`WorkflowStatus` =  5
+		AND `tOrderAssignment`.`AssignedToUserUID`!= ''
+		AND `tOrderAssignment`.`WorkflowModuleUID` != 5 
+		AND `tOrderAssignment`.`OrderUID` =  '$OrderUID'
 		UNION ALL
 		SELECT mcustomerworkflowmodules.WorkflowModuleUID, mworkflowmodules.WorkflowModuleName
 		FROM `tOrders`
@@ -6075,7 +6080,7 @@ function GetNotaryByNotaryUID($NotaryUID)
   		$assign_data['QCAssignedToUserUID'] = NULL;
   		$assign_data['QCAssignedDateTime'] = NULL;
   	}
-  	$inserted = $this->db->insert('torderassignment',$assign_data);
+  	$inserted = $this->db->insert('tOrderAssignment',$assign_data);
   	if($this->db->affected_rows()>0)
   	{
   		return 1;
@@ -6085,9 +6090,9 @@ function GetNotaryByNotaryUID($NotaryUID)
   }
  
 
-  //check workflow completed in torderassignment table
+  //check workflow completed in tOrderAssignment table
   function isworkflow_completed($OrderUID, $WorkflowModuleUID){
-  	$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM torderassignment WHERE OrderUID = '".$OrderUID."' AND WorkflowModuleUID = '".$WorkflowModuleUID."' AND Workflowstatus = 5) AS completed ");
+  	$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM tOrderAssignment WHERE OrderUID = '".$OrderUID."' AND WorkflowModuleUID = '".$WorkflowModuleUID."' AND Workflowstatus = 5) AS completed ");
   	return $query->row()->completed;
   }
 
@@ -6323,7 +6328,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 	function get_plainorderenabled()
 	{	
-		$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM musers WHERE UserUID = '".$this->loggedid."' AND IsNewMyOrder = 1 ) AS IsNewMyOrder ");
+		$query = $this->db->query("SELECT EXISTS (SELECT 1 FROM mUsers WHERE UserUID = '".$this->loggedid."' AND IsNewMyOrder = 1 ) AS IsNewMyOrder ");
 		return $query->row()->IsNewMyOrder;
 	}
 
@@ -6474,11 +6479,11 @@ function GetNotaryByNotaryUID($NotaryUID)
 		$this->db->from('mcustomerworkflowmodules');
 		$this->db->join('mworkflowmodules', 'mcustomerworkflowmodules.workflowmoduleUID = mworkflowmodules.WorkflowModuleUID');
 		$this->db->join('tOrders', 'mcustomerworkflowmodules.CustomerUID = tOrders.CustomerUID AND mcustomerworkflowmodules.SubProductUID = tOrders.SubProductUID', 'left');
-		$this->db->join('torderassignment', 'tOrders.OrderUID = torderassignment.OrderUID AND mcustomerworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID', 'left');
+		$this->db->join('tOrderAssignment', 'tOrders.OrderUID = tOrderAssignment.OrderUID AND mcustomerworkflowmodules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID', 'left');
 		$this->db->where('mcustomerworkflowmodules.CustomerUID', $CustomerUID);
 		$this->db->where('mcustomerworkflowmodules.SubProductUID', $SubProductUID);
 		$this->db->where('tOrders.OrderUID', $OrderUID);
-		$this->db->where('torderassignment.WorkflowStatus != 5', NULL, FALSE);
+		$this->db->where('tOrderAssignment.WorkflowStatus != 5', NULL, FALSE);
 		$this->db->where_not_in('mcustomerworkflowmodules.WorkflowModuleUID', $this->config->item('NotAssignableWorkflows'));
 		$query = $this->db->get();
 		return $query->result();
@@ -6874,7 +6879,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 
 		/*Check is Schedule is completed*/
 		$sql = "SELECT CASE WHEN EXISTS(
-		SELECT OrderUID FROM torderassignment WHERE OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Scheduling']."' AND WorkflowStatus = 5)
+		SELECT OrderUID FROM tOrderAssignment WHERE OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Scheduling']."' AND WorkflowStatus = 5)
 		THEN 1 ELSE 0
 		END AS ScheduleComplete,
 		CASE WHEN EXISTS(
@@ -6897,20 +6902,20 @@ function GetNotaryByNotaryUID($NotaryUID)
 		THEN 1 ELSE 0 
 		END AS ShipmentDone,
 		CASE WHEN EXISTS( 
-		SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND torderassignment.WorkflowStatus = 5)
+		SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND tOrderAssignment.WorkflowStatus = 5)
 		THEN 1 ELSE 0
 		END AS SigningWorkflowCompleted,
 		CASE WHEN 
-			NOT EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."')
+			NOT EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."')
 		THEN 1 ELSE 0
 		END AS Signing_NotAssigned,
-		CASE WHEN EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND torderassignment.WorkflowStatus = 5)
+		CASE WHEN EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND tOrderAssignment.WorkflowStatus = 5)
 		THEN 1 ELSE 0 
 		END AS Signing_Completed,
-		CASE WHEN EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' )
+		CASE WHEN EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' )
 		THEN 1 ELSE 0 
 		END AS Shipment_of_title,
-		CASE WHEN EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' AND torderassignment.WorkflowStatus = 5)
+		CASE WHEN EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' AND tOrderAssignment.WorkflowStatus = 5)
 		THEN 1 ELSE 0 
 		END AS Shipment_complete";
 		$result = $this->db->query($sql)->row();
@@ -6989,7 +6994,7 @@ function GetNotaryByNotaryUID($NotaryUID)
 		}
 
 		$this->db->select('WorkflowModuleUID');
-		$this->db->from('torderassignment');
+		$this->db->from('tOrderAssignment');
 		$this->db->where('OrderUID',$OrderUID);
 		$this->db->where('WorkflowStatus',5);
 		$this->db->order_by('WorkflowModuleUID','DESC');
@@ -7074,7 +7079,7 @@ function GetNotaryByNotaryUID($NotaryUID)
   function getLoggedDetails()
   {
   	$UserUID = $this->session->userdata('UserUID');
-  	return $this->db->query("SELECT musers.VendorUID,musers.UserUID,musers.UserName,mroles.RoleName,mroles.RoleType FROM `mroles` JOIN musers on `musers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `musers`.`UserUID` = '".$UserUID . "'")->row();
+  	return $this->db->query("SELECT mUsers.VendorUID,mUsers.UserUID,mUsers.UserName,mroles.RoleName,mroles.RoleType FROM `mroles` JOIN mUsers on `mUsers`.`RoleUID` = `mroles`.`RoleUID`  WHERE `mUsers`.`UserUID` = '".$UserUID . "'")->row();
   }
 
 
@@ -7262,7 +7267,7 @@ function CheckAudit($PrimaryKey,$PrimaryKeyValue,$TableName,$FieldName,$CurrentV
 
 	function GetUserSignature($UserUID){
 		$this->db->select('EmailSignatureText,EmailSignatureFile,DrawnEmailSignature');
-		$this->db->from('musers');
+		$this->db->from('mUsers');
 		$this->db->where('UserUID',$UserUID);
 		return $this->db->get()->row();
 	}
@@ -9577,11 +9582,11 @@ function sendRequest($path, $post)
 
 
 				if (!empty($WorkflowModuleUID_OR_ModuleName) && !empty($OrderUID)) {
-					if ( !empty($this->common_model->get_row('torderassignment', ['OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$WorkflowModuleUID_OR_ModuleName, 'AssignedToUserUID'=>$this->loggedid] ) ) ) {
+					if ( !empty($this->common_model->get_row('tOrderAssignment', ['OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$WorkflowModuleUID_OR_ModuleName, 'AssignedToUserUID'=>$this->loggedid] ) ) ) {
 						return true;
 						
 					}
-					else if ( !empty($this->common_model->get_row('torderassignment', ['OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$this->config->item('WorkflowModuleUID')['Review'], 'AssignedToUserUID'=>$this->loggedid] ) ) ) {
+					else if ( !empty($this->common_model->get_row('tOrderAssignment', ['OrderUID'=>$OrderUID, 'WorkflowModuleUID'=>$this->config->item('WorkflowModuleUID')['Review'], 'AssignedToUserUID'=>$this->loggedid] ) ) ) {
 						return true;
 						
 					}
@@ -9675,9 +9680,9 @@ function sendRequest($path, $post)
 				return false;
 			}
 
-			$this->db->select('tOrderEditProcess.OrderUID, musers.UserName', false);
+			$this->db->select('tOrderEditProcess.OrderUID, mUsers.UserName', false);
 			$this->db->from('tOrderEditProcess'); 
-			$this->db->join('musers', 'musers.UserUID = tOrderEditProcess.UserUID');
+			$this->db->join('mUsers', 'mUsers.UserUID = tOrderEditProcess.UserUID');
 			$this->db->where('OrderUID', $OrderUID);
 			if ($Nonworkflowmodule == false) 
 			{
@@ -10632,7 +10637,7 @@ function sendRequest($path, $post)
 		"LoginExpiry"=>date('Y-m-d', strtotime(date('Y-m-d'). ' + 45 days'))
 		);
 
-		$this->db->insert('musers', $datas);
+		$this->db->insert('mUsers', $datas);
 		$UserUID =  $this->db->insert_id();
 
 		// Audit User Insert
@@ -10947,7 +10952,7 @@ function sendRequest($path, $post)
 
 		$currentuser = $this->GetUserDetailsByUser($this->loggedid);
 		if(empty($currentuser)){ // API User
-			$this->db->select('*')->from('musers')->where('LoginID', 'isgn');
+			$this->db->select('*')->from('mUsers')->where('LoginID', 'isgn');
 			$query=$this->db->get();
 			$currentuser=$query->row();
 		}
@@ -11099,10 +11104,10 @@ function sendRequest($path, $post)
   function getAssignedAbstractorDetails($AbstractorOrderUID){
   	
 
-  	$this->db->select('torderabstractor.*, mabstractor.*, musers.UserName AS BilledByUserName', false);
+  	$this->db->select('torderabstractor.*, mabstractor.*, mUsers.UserName AS BilledByUserName', false);
   	$this->db->from('torderabstractor');
   	$this->db->join('mabstractor', 'torderabstractor.AbstractorUID = mabstractor.AbstractorUID');
-  	$this->db->join('musers', 'torderabstractor.VendorBilledByUserUID = musers.UserUID', 'left');
+  	$this->db->join('mUsers', 'torderabstractor.VendorBilledByUserUID = mUsers.UserUID', 'left');
   	$this->db->where('AbstractorOrderUID', $AbstractorOrderUID);
 
   	return $this->db->get()->row();
@@ -11358,9 +11363,9 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 	function getDocNotes($OrderUID,$OrderDocumentUID)
 	{
-		$this->db->select('tOrderDocumentNotes.*,musers.UserName,mdocumenttypes.DocumentTypeName');
+		$this->db->select('tOrderDocumentNotes.*,mUsers.UserName,mdocumenttypes.DocumentTypeName');
 		$this->db->from('tOrderDocumentNotes');
-		$this->db->join('musers','musers.UserUID = tOrderDocumentNotes.CreatedByUserUID','LEFT');
+		$this->db->join('mUsers','mUsers.UserUID = tOrderDocumentNotes.CreatedByUserUID','LEFT');
 		$this->db->join('torderdocuments','torderdocuments.OrderDocumentUID = tOrderDocumentNotes.OrderDocumentUID','LEFT');
 		$this->db->join('mdocumenttypes','mdocumenttypes.DocumentTypeUID = torderdocuments.DocumentTypeUID','LEFT');
 		$this->db->where(array('tOrderDocumentNotes.OrderUID'=>$OrderUID,'tOrderDocumentNotes.OrderDocumentUID'=>$OrderDocumentUID));
@@ -11721,7 +11726,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 		/*Check is Schedule is completed*/
 		$sql = "SELECT CASE WHEN EXISTS(
-		SELECT OrderUID FROM torderassignment WHERE OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Scheduling']."' AND WorkflowStatus = 5)
+		SELECT OrderUID FROM tOrderAssignment WHERE OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Scheduling']."' AND WorkflowStatus = 5)
 		THEN 1 ELSE 0
 		END AS ScheduleComplete,
 		CASE WHEN EXISTS(
@@ -11744,20 +11749,20 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		THEN 1 ELSE 0 
 		END AS ShipmentDone,
 		CASE WHEN EXISTS( 
-		SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND torderassignment.WorkflowStatus = 5)
+		SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND tOrderAssignment.WorkflowStatus = 5)
 		THEN 1 ELSE 0
 		END AS SigningWorkflowCompleted,
 		CASE WHEN 
-			NOT EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."')
+			NOT EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."')
 		THEN 1 ELSE 0
 		END AS Signing_NotAssigned,
-		CASE WHEN EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND torderassignment.WorkflowStatus = 5)
+		CASE WHEN EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Signing']."' AND tOrderAssignment.WorkflowStatus = 5)
 		THEN 1 ELSE 0 
 		END AS Signing_Completed,
-		CASE WHEN EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' )
+		CASE WHEN EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' )
 		THEN 1 ELSE 0 
 		END AS Shipment_of_title,
-		CASE WHEN EXISTS( SELECT OrderUID FROM torderassignment WHERE torderassignment.OrderUID = $OrderUID AND torderassignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' AND torderassignment.WorkflowStatus = 5)
+		CASE WHEN EXISTS( SELECT OrderUID FROM tOrderAssignment WHERE tOrderAssignment.OrderUID = $OrderUID AND tOrderAssignment.WorkflowModuleUID = '".$this->config->item('WorkflowModuleUID')['Shipping']."' AND tOrderAssignment.WorkflowStatus = 5)
 		THEN 1 ELSE 0 
 		END AS Shipment_complete";
 		$result = $this->db->query($sql)->row();
@@ -11836,7 +11841,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		}
 
 		$this->db->select('WorkflowModuleUID');
-		$this->db->from('torderassignment');
+		$this->db->from('tOrderAssignment');
 		$this->db->where('OrderUID',$OrderUID);
 		$this->db->where('WorkflowStatus',5);
 		$this->db->order_by('WorkflowModuleUID','DESC');
@@ -12219,9 +12224,9 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		$workflowstatus = array("WorkflowStatus"=>5,"CompleteDateTime"=>Date('Y-m-d H:i:s',strtotime("now")));
 
 		
-		$this->db->where(array("torderassignment.OrderUID"=>$OrderUID,"torderassignment.WorkflowModuleUID !=" => 4));
-		$this->db->where_in("torderassignment.WorkflowModuleUID",$WorkflowModuleUID);
-		$this->db->update('torderassignment',$workflowstatus);
+		$this->db->where(array("tOrderAssignment.OrderUID"=>$OrderUID,"tOrderAssignment.WorkflowModuleUID !=" => 4));
+		$this->db->where_in("tOrderAssignment.WorkflowModuleUID",$WorkflowModuleUID);
+		$this->db->update('tOrderAssignment',$workflowstatus);
 
 		
 		if (in_array($this->config->item('WorkflowModuleUID')['Scheduling'], [$WorkflowModuleUID])) {
@@ -12306,7 +12311,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 			$data1['ModuleName']=$mworkflowmodules->WorkflowModuleName.' '.'Complete-Status';
 			$data1['IpAddreess']=$_SERVER['REMOTE_ADDR']; 
 			$data1['DateTime']=date('y-m-d H:i:s');
-			$data1['TableName']='torderassignment';
+			$data1['TableName']='tOrderAssignment';
 			$data1['OrderUID']=$OrderUID;
 			$data1['UserUID']=$this->loggedid; 
 			$data1['OldValue']=''; 
@@ -12458,9 +12463,9 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	// @Desc Group User Mail D2T-631 @Uba @On Jun 27 2020
 	function GetGroupUserEmails($GroupUIDs){
 		if(!empty($GroupUIDs)){
-			$this->db->select('musers.UserEmailID as Email');
+			$this->db->select('mUsers.UserEmailID as Email');
 			$this->db->from('mgroupusers');
-			$this->db->join('musers','musers.UserUID = mgroupusers.GroupUserUID');
+			$this->db->join('mUsers','mUsers.UserUID = mgroupusers.GroupUserUID');
 			$this->db->where_in('mgroupusers.GroupUID',$GroupUIDs);
 			$GroupUsers = $this->db->get()->result();
 			return array_unique(array_column($GroupUsers,'Email'));
@@ -12545,7 +12550,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 
 	function GetUserDefaultQueue($UserUID)
 	{
-		return $this->db->select('DefaultQueue')->from('musers')->where('UserUID',$UserUID)->get()->row()->DefaultQueue;
+		return $this->db->select('DefaultQueue')->from('mUsers')->where('UserUID',$UserUID)->get()->row()->DefaultQueue;
 
 	}
 
@@ -12779,7 +12784,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 			$UserUID = $this->session->userdata('UserUID');
 
 			if(empty($UserUID)){
-				$this->db->select('*')->from('musers')->where('LoginID', 'isgn');
+				$this->db->select('*')->from('mUsers')->where('LoginID', 'isgn');
 				$query=$this->db->get();
 				$UserUID = $query->row()->UserUID;
 			}
@@ -13156,7 +13161,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 		$this->db->where('AbstractorUID',0);
 		$this->db->where('VendorUID',0);
 		$this->db->where('CustomerUID',0);
-		return $this->db->get('musers')->result();
+		return $this->db->get('mUsers')->result();
 	}
 
 
@@ -13250,7 +13255,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	* @since  Sept 3rd 2020
 	*/ 
 	function GetIsgnUser(){
-		$this->db->select('*')->from('musers');
+		$this->db->select('*')->from('mUsers');
 		$this->db->where('LoginID', 'isgn');
 		$query=$this->db->get();
 		$UserUID=$query->row()->UserUID;
@@ -13265,7 +13270,7 @@ function getDocumentTypeByUID($DocumentTypeUID)
 	* @since  Sept 4th 2020
 	*/ 
 	function GetLoginIdByUserUID($UserUID){
-		$this->db->select('*')->from('musers');
+		$this->db->select('*')->from('mUsers');
 		$this->db->where('UserUID', $UserUID);
 		$query=$this->db->get();
 		$LoginID=$query->row()->LoginID;

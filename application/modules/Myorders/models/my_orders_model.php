@@ -10,34 +10,34 @@ class My_orders_model extends CI_Model {
 
 	function GetRoles(){
 
-		$query = $this->db->get('mroles');
+		$query = $this->db->get('mRoles');
 		return $query->result();
 	}
 
 	function GetCheckCustomFields($UserUID){
 
-		$query = $this->db->query("SELECT EXISTS(SELECT * FROM mcustomsortcolumns WHERE CustomSortByUserUID = '$UserUID') as CheckCustomFields;
+		$query = $this->db->query("SELECT EXISTS(SELECT * FROM mCustomSortColumns WHERE CustomSortByUserUID = '$UserUID') as CheckCustomFields;
 			");
 		return $query->row();
 	}
 
 	function GetUserByRoleUID($RoleUID = '')
 	{
-		$User = $this->db->query("SELECT * FROM `musers` 
-			WHERE musers.RoleUID = '$RoleUID'")->result_array(); 
+		$User = $this->db->query("SELECT * FROM `mUsers` 
+			WHERE mUsers.RoleUID = '$RoleUID'")->result_array(); 
 		return array('User'=>$User);
 	}
 
 	function GetUserName($UserUID = '')
 	{
-		$query = $this->db->query("SELECT * FROM `musers` 
-			WHERE musers.UserUID = '$UserUID'");
+		$query = $this->db->query("SELECT * FROM `mUsers` 
+			WHERE mUsers.UserUID = '$UserUID'");
 		return $query->row();
 	}
 
 	function GetCustomerByUserUID($UserUID){
 		$this->db->select("CustomerUID");
-		$this->db->from('musers');
+		$this->db->from('mUsers');
 		$this->db->where(array("UserUID"=>$UserUID));
 		$query = $this->db->get();
 		return $query->row();
@@ -54,29 +54,29 @@ class My_orders_model extends CI_Model {
 		
     //$status[2] = $this->config->item('keywords')['Complete'];
 
-		$this->db->select ( 'CustomerName,OrderNumber,StatusName,StatusColor,torders.StatusUID,torderassignment.OrderUID,mproducts.ProductName,mproducts.ProductCode,msubproducts.SubProductCode,PropertyStateCode,VendorAssignedDateTime' );
-		$this->db->select('DATE_FORMAT(torderassignment.AssignedDatetime, "%m-%d-%Y %H:%i:%s") as AssignedDatetime', FALSE);
+		$this->db->select ( 'CustomerName,OrderNumber,StatusName,StatusColor,tOrders.StatusUID,tOrderAssignment.OrderUID,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,PropertyStateCode,VendorAssignedDateTime' );
+		$this->db->select('DATE_FORMAT(tOrderAssignment.AssignedDatetime, "%m-%d-%Y %H:%i:%s") as AssignedDatetime', FALSE);
 		$this->db->select("DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime", FALSE);
-		$this->db->select('DATE_FORMAT(torders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'torders', 'torderassignment.OrderUID = torders.OrderUID' , 'left' );
-		$this->db->join ( 'musers', 'torderassignment.AssignedToUserUID = musers.UserUID' , 'left' );
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID' , 'left' );
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID' , 'left' );
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID' , 'left' );
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID' , 'left' );
+		$this->db->select('DATE_FORMAT(tOrders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'tOrders', 'tOrderAssignment.OrderUID = tOrders.OrderUID' , 'left' );
+		$this->db->join ( 'mUsers', 'tOrderAssignment.AssignedToUserUID = mUsers.UserUID' , 'left' );
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID' , 'left' );
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID' , 'left' );
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID' , 'left' );
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID' , 'left' );
 
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID' , 'left' );
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID' , 'left' );
 
-		$this->db->where_in('torders.StatusUID', $status);
+		$this->db->where_in('tOrders.StatusUID', $status);
 
 		/*FOR SUPERVISOR CHECK*/
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $this->db->where('mproducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mproducts.ProductUID IN (0)', null, false); endif;
+			if($UserProducts): $this->db->where('mProducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mProducts.ProductUID IN (0)', null, false); endif;
 		}
 
-		$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
 		
 		$this->db->group_by('OrderUID,AssignedToUserUID');
 		$query = $this->db->get();
@@ -90,16 +90,16 @@ function GetCustomerProducts($CustomerUID='')
 if($this->session->userdata('RoleType') == 6){
 $UserProducts = $this->common_model->_get_product_bylogin();
 if($UserProducts){
-$this->db->select('mproducts.ProductUID, mproducts.ProductName,msubproducts.SubProductUID,msubproducts.SubProductName');
-$this->db->from('msubproducts');
-$this->db->join ('mcustomerproducts','mcustomerproducts.SubProductUID = msubproducts.SubProductUID','left');
-$this->db->join ('mproducts','mcustomerproducts.ProductUID = mproducts.ProductUID','left');
+$this->db->select('mProducts.ProductUID, mProducts.ProductName,mSubProducts.SubProductUID,mSubProducts.SubProductName');
+$this->db->from('mSubProducts');
+$this->db->join ('mCustomerProducts','mCustomerProducts.SubProductUID = mSubProducts.SubProductUID','left');
+$this->db->join ('mProducts','mCustomerProducts.ProductUID = mProducts.ProductUID','left');
 if($CustomerUID!='all')
 {
 $this->db->where('CustomerUID IN ('.$CustomerUID.')');
 }
-$this->db->where('mcustomerproducts.ProductUID IN ('.$UserProducts.')');
-$this->db->group_by("mproducts.ProductUID"); 
+$this->db->where('mCustomerProducts.ProductUID IN ('.$UserProducts.')');
+$this->db->group_by("mProducts.ProductUID"); 
 return $this->db->get()->result(); 
 }
 else{
@@ -108,12 +108,12 @@ return [];
 }else{
 if($CustomerUID!='')
 {
-$this->db->select('mproducts.ProductUID, mproducts.ProductName,msubproducts.SubProductUID,msubproducts.SubProductName');
-$this->db->from('msubproducts');
-$this->db->join ('mcustomerproducts','mcustomerproducts.SubProductUID = msubproducts.SubProductUID','left');
-$this->db->join ('mproducts','mcustomerproducts.ProductUID = mproducts.ProductUID','left');
+$this->db->select('mProducts.ProductUID, mProducts.ProductName,mSubProducts.SubProductUID,mSubProducts.SubProductName');
+$this->db->from('mSubProducts');
+$this->db->join ('mCustomerProducts','mCustomerProducts.SubProductUID = mSubProducts.SubProductUID','left');
+$this->db->join ('mProducts','mCustomerProducts.ProductUID = mProducts.ProductUID','left');
 $this->db->where('CustomerUID IN ('.$CustomerUID.')');
-$this->db->group_by("mproducts.ProductUID"); 
+$this->db->group_by("mProducts.ProductUID"); 
 return $this->db->get()->result(); 
 } else {
 return [];
@@ -142,20 +142,20 @@ function GetsubproductCustomer($customer,$ProductUID)
 {
   if($customer!='')
   {
-    $this->db->select('msubproducts.SubProductUID,msubproducts.SubProductName');
-    $this->db->from('mcustomerproducts');
-    $this->db->join ('msubproducts','mcustomerproducts.SubProductUID = msubproducts.SubProductUID','LEFT'); 
-    $this->db->where('mcustomerproducts.CustomerUID IN ('.$customer.')');
-    $this->db->where('mcustomerproducts.ProductUID IN ('.$ProductUID.')');
-    $this->db->where('msubproducts.Active',1);
-    $this->db->group_by('msubproducts.SubProductUID');
+    $this->db->select('mSubProducts.SubProductUID,mSubProducts.SubProductName');
+    $this->db->from('mCustomerProducts');
+    $this->db->join ('mSubProducts','mCustomerProducts.SubProductUID = mSubProducts.SubProductUID','LEFT'); 
+    $this->db->where('mCustomerProducts.CustomerUID IN ('.$customer.')');
+    $this->db->where('mCustomerProducts.ProductUID IN ('.$ProductUID.')');
+    $this->db->where('mSubProducts.Active',1);
+    $this->db->group_by('mSubProducts.SubProductUID');
     return $this->db->get()->result(); 
   } else {
     $this->db->select('SubProductUID, SubProductName');
     $this->db->where('ProductUID IN ('.$ProductUID.')');
     $this->db->where('Active',1);
     $this->db->group_by('SubProductUID');
-    $q = $this->db->get('msubproducts');
+    $q = $this->db->get('mSubProducts');
     return $q->result();
   }
 }
@@ -165,49 +165,49 @@ function GetsubproductCustomer($customer,$ProductUID)
 		/*vendor change Starts*/
 		$where = '';
 		if($VendorUID != ''){
-			$where = "AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'";
+			$where = "AND tOrderAssignment.WorkflowModuleUID !=4 AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'";
 		}
 		/*vendor change Ends*/
 
 		if($this->common_model->GetMyOrdersQueue() == 1)
 		{
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'].','.$this->config->item('keywords')['Reopened Order'];
-			$query = $this->db->query("SELECT torders.OrderUID,morderpriority.TAT,morderpriority.PriorityUID,morderstatus.StatusName,morderstatus.StatusColor,torders.StatusUID,".$DynTable."
-				FROM (`torders`) 
-				LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID` 
-				LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID`
-				LEFT JOIN `mtemplates` ON `torders`.`TemplateUID` = `mtemplates`.`TemplateUID` 
-				LEFT JOIN `mordertypes` ON `torders`.`OrderTypeUID` = `mordertypes`.`OrderTypeUID` 
-				LEFT JOIN `musers` ON `torderassignment`.`AssignedToUserUID` = `musers`.`UserUID` 
-				LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` 
-				LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` 
-				LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` 
-				LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` 
-				LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` 
-				WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$UserUID." ".$where." 
-				AND torderassignment.WorkflowModuleUID !=4 
-				GROUP BY torders.`OrderUID` 
-				ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC ,".$Sort."");
+			$query = $this->db->query("SELECT tOrders.OrderUID,mOrderPriority.TAT,mOrderPriority.PriorityUID,mOrderStatus.StatusName,mOrderStatus.StatusColor,tOrders.StatusUID,".$DynTable."
+				FROM (`tOrders`) 
+				LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID` 
+				LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID`
+				LEFT JOIN `mTemplates` ON `tOrders`.`TemplateUID` = `mTemplates`.`TemplateUID` 
+				LEFT JOIN `mOrderTypes` ON `tOrders`.`OrderTypeUID` = `mOrderTypes`.`OrderTypeUID` 
+				LEFT JOIN `mUsers` ON `tOrderAssignment`.`AssignedToUserUID` = `mUsers`.`UserUID` 
+				LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` 
+				LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` 
+				LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` 
+				LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` 
+				LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` 
+				WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$UserUID." ".$where." 
+				AND tOrderAssignment.WorkflowModuleUID !=4 
+				GROUP BY tOrders.`OrderUID` 
+				ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC ,".$Sort."");
 		}
 		else
 		{
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].','.$this->config->item('keywords')['Cancelled'].','.$this->config->item('keywords')['Exception Raised'];
 
-			$query = $this->db->query("SELECT torders.OrderUID,morderpriority.TAT,morderpriority.PriorityUID,morderstatus.StatusName,morderstatus.StatusColor,torders.StatusUID,".$DynTable."
-				FROM (`torders`)  
-				LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID` 
-				LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` 
-				LEFT JOIN `mtemplates` ON `torders`.`TemplateUID` = `mtemplates`.`TemplateUID` 
-				LEFT JOIN `mordertypes` ON `torders`.`OrderTypeUID` = `mordertypes`.`OrderTypeUID` 
-				LEFT JOIN `musers` ON `torderassignment`.`AssignedToUserUID` = `musers`.`UserUID` 
-				LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  
-				LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` 
-				LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` 
-				LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` 
-				LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` 
-				WHERE `torders`.`StatusUID` NOT IN (".$statuses.") ".$where."  
-				GROUP BY torders.`OrderUID` 
-				ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC,".$Sort."");
+			$query = $this->db->query("SELECT tOrders.OrderUID,mOrderPriority.TAT,mOrderPriority.PriorityUID,mOrderStatus.StatusName,mOrderStatus.StatusColor,tOrders.StatusUID,".$DynTable."
+				FROM (`tOrders`)  
+				LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID` 
+				LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` 
+				LEFT JOIN `mTemplates` ON `tOrders`.`TemplateUID` = `mTemplates`.`TemplateUID` 
+				LEFT JOIN `mOrderTypes` ON `tOrders`.`OrderTypeUID` = `mOrderTypes`.`OrderTypeUID` 
+				LEFT JOIN `mUsers` ON `tOrderAssignment`.`AssignedToUserUID` = `mUsers`.`UserUID` 
+				LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  
+				LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` 
+				LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` 
+				LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` 
+				LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` 
+				WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") ".$where."  
+				GROUP BY tOrders.`OrderUID` 
+				ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC,".$Sort."");
 		}
 
 		return $query->result_array();
@@ -217,9 +217,9 @@ function GetsubproductCustomer($customer,$ProductUID)
 	{
 		$this->db->distinct();
 		$this->db->select ( '*' );
-		$this->db->from ( 'mcustomsortcolumns' );
-		$this->db->where('mcustomsortcolumns.CustomSortByUserUID',$UserUID);
-		$this->db->order_by('mcustomsortcolumns.FieldPosition');
+		$this->db->from ( 'mCustomSortColumns' );
+		$this->db->where('mCustomSortColumns.CustomSortByUserUID',$UserUID);
+		$this->db->order_by('mCustomSortColumns.FieldPosition');
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -227,16 +227,16 @@ function GetsubproductCustomer($customer,$ProductUID)
 	function GetTHeadContent($UserUID)
 	{
 		$this->db->select ( 'FieldFormName' );
-		$this->db->from ( 'mcustomsortcolumns' );
-		$this->db->where('mcustomsortcolumns.CustomSortByUserUID',$UserUID);
-		$this->db->order_by('mcustomsortcolumns.FieldPosition');
+		$this->db->from ( 'mCustomSortColumns' );
+		$this->db->where('mCustomSortColumns.CustomSortByUserUID',$UserUID);
+		$this->db->order_by('mCustomSortColumns.FieldPosition');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
 	function GetCustomTablevalues($UserUID){
 
-		$sql = "SELECT COUNT(1) AS COUNT FROM mcustomsortcolumns WHERE CustomSortByUserUID = $UserUID";
+		$sql = "SELECT COUNT(1) AS COUNT FROM mCustomSortColumns WHERE CustomSortByUserUID = $UserUID";
 		$query = $this->db->query($sql);
 		$res= $query->result();
 		return $res;
@@ -245,9 +245,9 @@ function GetsubproductCustomer($customer,$ProductUID)
 	function GetCustomFieldNameByUserUID($UserUID){
 
 		$this->db->select ( 'FieldName' );
-		$this->db->from ( 'mcustomsortcolumns' );
-		$this->db->where('mcustomsortcolumns.CustomSortByUserUID',$UserUID);
-		$this->db->order_by('mcustomsortcolumns.FieldPosition');
+		$this->db->from ( 'mCustomSortColumns' );
+		$this->db->where('mCustomSortColumns.CustomSortByUserUID',$UserUID);
+		$this->db->order_by('mCustomSortColumns.FieldPosition');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -255,9 +255,9 @@ function GetsubproductCustomer($customer,$ProductUID)
 	function GetCustomFieldName($UserUID){
 
 		$this->db->select ( '*' );
-		$this->db->from ( 'mcustomsortcolumns' );
-		$this->db->where('mcustomsortcolumns.CustomSortByUserUID',$UserUID);
-		$this->db->order_by('mcustomsortcolumns.FieldPosition');
+		$this->db->from ( 'mCustomSortColumns' );
+		$this->db->where('mCustomSortColumns.CustomSortByUserUID',$UserUID);
+		$this->db->order_by('mCustomSortColumns.FieldPosition');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -270,28 +270,28 @@ function GetsubproductCustomer($customer,$ProductUID)
 		$status[2] = $this->config->item('keywords')['Exception Raised'];
 
 
-		$this->db->select ( 'CustomerName,torders.OrderUID,OrderNumber,StatusName,torders.StatusUID,StatusColor,mproducts.ProductName,mproducts.ProductCode,msubproducts.SubProductCode,msubproducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName' );
-		$this->db->select('DATE_FORMAT(torders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
+		$this->db->select ( 'CustomerName,tOrders.OrderUID,OrderNumber,StatusName,tOrders.StatusUID,StatusColor,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,mSubProducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName' );
+		$this->db->select('DATE_FORMAT(tOrders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
 		$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 		$this->db->select('DATE_FORMAT(OrderCompleteDateTime, "%m-%d-%Y %H:%i:%s") as OrderCompleteDateTime', FALSE);
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torders.OrderUID','left');
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID','left');
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID','left');
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID','left');
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID','left');
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID','left');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID','left');
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID','left');
 
-		$this->db->where_not_in('torders.StatusUID', $status);
-		$this->db->where('torders.CustomerUID',$CustomerUID);
+		$this->db->where_not_in('tOrders.StatusUID', $status);
+		$this->db->where('tOrders.CustomerUID',$CustomerUID);
 
 		/*FOR SUPERVISOR CHECK*/
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $this->db->where('mproducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mproducts.ProductUID IN (0)', null, false); endif;
+			if($UserProducts): $this->db->where('mProducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mProducts.ProductUID IN (0)', null, false); endif;
 		}
 
-		$this->db->group_by('torders.OrderUID');
+		$this->db->group_by('tOrders.OrderUID');
 		$this->db->order_by('OrderUID,OrderNumber', 'DESC');
 		$query = $this->db->get();
 		return $query->num_rows();
@@ -304,28 +304,28 @@ function GetsubproductCustomer($customer,$ProductUID)
 		$status[1] = $this->config->item('keywords')['Order Completed'];
 		$status[2] = $this->config->item('keywords')['Exception Raised'];
 
-		$this->db->select ( 'CustomerName,torders.OrderUID,OrderNumber,StatusName,torders.StatusUID,StatusColor,mproducts.ProductName,mproducts.ProductCode,msubproducts.SubProductCode,msubproducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName' );
-		$this->db->select('DATE_FORMAT(torders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
+		$this->db->select ( 'CustomerName,tOrders.OrderUID,OrderNumber,StatusName,tOrders.StatusUID,StatusColor,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,mSubProducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName' );
+		$this->db->select('DATE_FORMAT(tOrders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
 		$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 		$this->db->select('DATE_FORMAT(OrderCompleteDateTime, "%m-%d-%Y %H:%i:%s") as OrderCompleteDateTime', FALSE);
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torders.OrderUID','left');
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
-		$this->db->join ( 'torderpropertyroles', 'torderpropertyroles.OrderUID = torders.OrderUID','left');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID','left');
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID','left');
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID','left');
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID','left');
-		$this->db->where_not_in('torders.StatusUID', $status);
-		$this->db->where('torders.CustomerUID',$CustomerUID);
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID','left');
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrderPropertyRoles.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID','left');
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID','left');
+		$this->db->where_not_in('tOrders.StatusUID', $status);
+		$this->db->where('tOrders.CustomerUID',$CustomerUID);
 
 		/*FOR SUPERVISOR CHECK*/
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $this->db->where('mproducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mproducts.ProductUID IN (0)', null, false); endif;
+			if($UserProducts): $this->db->where('mProducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mProducts.ProductUID IN (0)', null, false); endif;
 		}
 
-		$this->db->group_by('torders.OrderUID');
+		$this->db->group_by('tOrders.OrderUID');
 		$this->db->order_by('OrderUID,OrderNumber', 'DESC');
 		
 		if (!empty($post['search_value'])) {
@@ -355,29 +355,29 @@ function GetsubproductCustomer($customer,$ProductUID)
 		$status[2] = $this->config->item('keywords')['Exception Raised'];
 
 
-		$this->db->select ( 'CustomerName,torders.OrderUID,OrderNumber,StatusName,torders.StatusUID,StatusColor,mproducts.ProductName,mproducts.ProductCode,msubproducts.SubProductCode,msubproducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName' );
-		$this->db->select('DATE_FORMAT(torders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
+		$this->db->select ( 'CustomerName,tOrders.OrderUID,OrderNumber,StatusName,tOrders.StatusUID,StatusColor,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,mSubProducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName' );
+		$this->db->select('DATE_FORMAT(tOrders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
 		$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 		$this->db->select('DATE_FORMAT(OrderCompleteDateTime, "%m-%d-%Y %H:%i:%s") as OrderCompleteDateTime', FALSE);
-		$this->db->select('torders.OrderDueDatetime AS Ymd_OrderDueDatetime', FALSE);
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torders.OrderUID','left');
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
-		$this->db->join ( 'torderpropertyroles', 'torderpropertyroles.OrderUID = torders.OrderUID','left');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID','left');
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID','left');
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID','left');
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID','left');
-		$this->db->where_not_in('torders.StatusUID', $status);
-		$this->db->where('torders.CustomerUID',$CustomerUID);
+		$this->db->select('tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime', FALSE);
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID','left');
+		$this->db->join ( 'tOrderPropertyRoles', 'tOrderPropertyRoles.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID','left');
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID','left');
+		$this->db->where_not_in('tOrders.StatusUID', $status);
+		$this->db->where('tOrders.CustomerUID',$CustomerUID);
 
 		/*FOR SUPERVISOR CHECK*/
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $this->db->where('mproducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mproducts.ProductUID IN (0)', null, false); endif;
+			if($UserProducts): $this->db->where('mProducts.ProductUID IN ('.$UserProducts.')', null, false); else: return $this->db->where('mProducts.ProductUID IN (0)', null, false); endif;
 		}
 
-		$this->db->group_by('torders.OrderUID');
+		$this->db->group_by('tOrders.OrderUID');
 		$this->db->order_by('OrderUID,OrderNumber', 'DESC');
 
 		if ($post['length']!='') {
@@ -428,7 +428,7 @@ function GetsubproductCustomer($customer,$ProductUID)
 			'WorkflowStatus' => 0,
 		);
 
-		$this->db->set($set_data)->where($where)->update('torderassignment');
+		$this->db->set($set_data)->where($where)->update('tOrderAssignment');
 		if($this->db->affected_rows() > 0)
 		{
 			$this->common_model->insert_slaaction($OrderUID,$this->config->item('SLAaction')['WorkflowModuleUID'][$workflowuid]['Assigned'],$UserUID);
@@ -454,7 +454,7 @@ function GetsubproductCustomer($customer,$ProductUID)
 	function RejectAssignedOrder($OrderUID,$UserUID,$VendorUID,$Remarks,$Reason){
 		$this->db->trans_begin();
 
-		$filter_workflow = $this->db->query("SELECT GROUP_CONCAT(WorkflowModuleUID) AS WorkflowModuleUIDS FROM `torderassignment` WHERE OrderUID = '".$OrderUID."' AND VendorUID = '".$VendorUID."' ")->row()->WorkflowModuleUIDS;
+		$filter_workflow = $this->db->query("SELECT GROUP_CONCAT(WorkflowModuleUID) AS WorkflowModuleUIDS FROM `tOrderAssignment` WHERE OrderUID = '".$OrderUID."' AND VendorUID = '".$VendorUID."' ")->row()->WorkflowModuleUIDS;
 		$set_data = array(
 			'AssignedToUserUID' => NULL,
 			'AssignedDatetime' => NULL,
@@ -470,7 +470,7 @@ function GetsubproductCustomer($customer,$ProductUID)
 			'VendorUID' => $VendorUID
 		);
 
-		$this->db->set($set_data)->where($where)->update('torderassignment');
+		$this->db->set($set_data)->where($where)->update('tOrderAssignment');
 		$reject_data = array(
 			'OrderUID' => $OrderUID,
 			'VendorUID' => $VendorUID,
@@ -497,11 +497,11 @@ function GetsubproductCustomer($customer,$ProductUID)
 	function get_notes_count($loggedid,$OrderUID)
 	{
 
-		$query = $this->db->query("SELECT count(*) AS unread FROM `tordernotes` LEFT JOIN `tordernotifications` ON `tordernotifications`.`NoteUID` = `tordernotes`.`NoteUID` WHERE `tordernotifications`.`ReadStatus` = '0' AND `tordernotifications`.`RecepientUserUID` = '$loggedid' AND `tordernotes`.`SectionUID` != '' AND `tordernotes`.`OrderUID` = '$OrderUID' ");
+		$query = $this->db->query("SELECT count(*) AS unread FROM `tordernotes` LEFT JOIN `tOrderNotifications` ON `tOrderNotifications`.`NoteUID` = `tordernotes`.`NoteUID` WHERE `tOrderNotifications`.`ReadStatus` = '0' AND `tOrderNotifications`.`RecepientUserUID` = '$loggedid' AND `tordernotes`.`SectionUID` != '' AND `tordernotes`.`OrderUID` = '$OrderUID' ");
 
 		$unread =  $query->row();
 
-		$query1 = $this->db->query("SELECT count(*) AS filecount FROM `tordernotes` LEFT JOIN `tordernotifications` ON `tordernotifications`.`NoteUID` = `tordernotes`.`NoteUID` WHERE `tordernotifications`.`ReadStatus` = '0' AND `tordernotifications`.`RecepientUserUID` = '$loggedid' AND `tordernotes`.`SectionUID` != '' AND `tordernotes`.`OrderUID` = '$OrderUID' AND `tordernotes`.`AttachedFile` IS NOT NULL  ");
+		$query1 = $this->db->query("SELECT count(*) AS filecount FROM `tordernotes` LEFT JOIN `tOrderNotifications` ON `tOrderNotifications`.`NoteUID` = `tordernotes`.`NoteUID` WHERE `tOrderNotifications`.`ReadStatus` = '0' AND `tOrderNotifications`.`RecepientUserUID` = '$loggedid' AND `tordernotes`.`SectionUID` != '' AND `tordernotes`.`OrderUID` = '$OrderUID' AND `tordernotes`.`AttachedFile` IS NOT NULL  ");
 		$filecount =  $query1->row();
 
 		$unread1 = count($unread) > 0 ? $unread->unread : NULL ;
@@ -515,10 +515,10 @@ function GetsubproductCustomer($customer,$ProductUID)
 
 		$loggedid = $this->session->userdata('UserUID');
 		$this->db->select ( 'Group_concat(WorkflowModuleName) as WorkflowModuleName,WorkflowStatus' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID' , 'inner' );
-		$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID' , 'inner' );
+		$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 
 		$query = $this->db->get();
 		$res =  $query->row();
@@ -531,9 +531,9 @@ function GetsubproductCustomer($customer,$ProductUID)
 
 		$loggedid = $this->session->userdata('UserUID');
 		$this->db->select ( 'Group_concat(WorkflowModuleName) as WorkflowModuleName' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID' , 'inner' );
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID' , 'inner' );
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 
 		$query = $this->db->get();
 		$res =  $query->row();
@@ -549,18 +549,18 @@ function GetsubproductCustomer($customer,$ProductUID)
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
 			
-			if($UserProducts): $where .= ' AND `mproducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
+			if($UserProducts): $where .= ' AND `mProducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
 		$filter = '';
 		if (!empty($post['CustomerUID'])) {
-			$filter .= ' AND torders.CustomerUID IN ('.$post['CustomerUID'].')';
+			$filter .= ' AND tOrders.CustomerUID IN ('.$post['CustomerUID'].')';
 		}
 		if (!empty($post['ProjectUID'])) {
-			$filter .= ' AND torders.ProjectUID IN ('.$post['ProjectUID'].')';
+			$filter .= ' AND tOrders.ProjectUID IN ('.$post['ProjectUID'].')';
 		}
 		if (!empty($post['SubProductUID'])) {
-			$filter .= ' AND torders.SubProductUID IN ('.$post['SubProductUID'].')';
+			$filter .= ' AND tOrders.SubProductUID IN ('.$post['SubProductUID'].')';
 		}
 
 		if($this->common_model->GetMyOrdersQueue() == 1)
@@ -568,7 +568,7 @@ function GetsubproductCustomer($customer,$ProductUID)
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'].','.$this->config->item('keywords')['Reopened Order'];
 
 
-			$sql = "SELECT `torders`.`OrderUID`, `torderassignment`.`WorkflowModuleUID` FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4  $where $filter GROUP BY `OrderUID`";
+			$sql = "SELECT `tOrders`.`OrderUID`, `tOrderAssignment`.`WorkflowModuleUID` FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4  $where $filter GROUP BY `OrderUID`";
 		} else {
 
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
@@ -593,25 +593,25 @@ function GetsubproductCustomer($customer,$ProductUID)
 						$subproductuids = rtrim($subproductuids,  ', ');
 
 
-						$where .= " AND (torders.SubProductUID1 IN (".$subproductuids.") OR `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4) ";
+						$where .= " AND (tOrders.SubProductUID1 IN (".$subproductuids.") OR `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4) ";
 					// echo $where; exit;
 					}*/
 					/*End*/
 				}
 			}
 
-			$sql = "SELECT  `torders`.`OrderUID`, `torderassignment`.`WorkflowModuleUID` FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") $where $filter GROUP BY `OrderUID` "; 
+			$sql = "SELECT  `tOrders`.`OrderUID`, `tOrderAssignment`.`WorkflowModuleUID` FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $where $filter GROUP BY `OrderUID` "; 
 
 		}
 
 		$checkorders = $this->db->query($sql)->result_array();
-		$mroles = $this->common_model->get_roles($this->RoleUID);
+		$mRoles = $this->common_model->get_roles($this->RoleUID);
 		foreach ($checkorders as $key => $value) 
 		{
 
 			if(in_array($this->session->userdata('RoleType'),array(1,2,3,4,5,6,13)) == False)
 			{
-				if (!empty($mroles) && $mroles[0]['MyOrdersQueue'] == 1) {
+				if (!empty($mRoles) && $mRoles[0]['MyOrdersQueue'] == 1) {
 					$assigned = $this->common_model->get_assigned_workflows($value['OrderUID'],$this->loggedid);
 					$completed = $this->common_model->get_completed_workflows($value['OrderUID'],$this->loggedid);
 					$assigned_orderss = [];
@@ -666,20 +666,20 @@ function GetsubproductCustomer($customer,$ProductUID)
 
 		$filter = '';
 		if (!empty($post['CustomerUID'])) {
-			$filter .= ' AND torders.CustomerUID IN ('.$post['CustomerUID'].')';
+			$filter .= ' AND tOrders.CustomerUID IN ('.$post['CustomerUID'].')';
 		}
 		if (!empty($post['ProjectUID'])) {
-			$filter .= ' AND torders.ProjectUID IN ('.$post['ProjectUID'].')';
+			$filter .= ' AND tOrders.ProjectUID IN ('.$post['ProjectUID'].')';
 		}
 		if (!empty($post['SubProductUID'])) {
-			$filter .= ' AND torders.SubProductUID IN ('.$post['SubProductUID'].')';
+			$filter .= ' AND tOrders.SubProductUID IN ('.$post['SubProductUID'].')';
 		}
 
 		/*FOR SUPERVISOR CHECK*/
 		$where = '';
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $where .= ' AND `mproducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
+			if($UserProducts): $where .= ' AND `mProducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
 		}  
 
 
@@ -687,7 +687,7 @@ function GetsubproductCustomer($customer,$ProductUID)
 		{
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'].','.$this->config->item('keywords')['Reopened Order'];
 
-			$sql = "SELECT `torders`.`OrderUID`, `torderassignment`.`WorkflowModuleUID` FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `torderpropertyroles` ON (`torderpropertyroles`.`OrderUID` = `torders`.`OrderUID`  AND `torderpropertyroles`.`PropertyRoleUID` = ".$this->config->item('Propertyroles')['Borrowers'].")  LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4  $where $like $filter GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC";
+			$sql = "SELECT `tOrders`.`OrderUID`, `tOrderAssignment`.`WorkflowModuleUID` FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `tOrderPropertyRoles` ON (`tOrderPropertyRoles`.`OrderUID` = `tOrders`.`OrderUID`  AND `tOrderPropertyRoles`.`PropertyRoleUID` = ".$this->config->item('Propertyroles')['Borrowers'].")  LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4  $where $like $filter GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC";
 		}
 		else{
 
@@ -714,24 +714,24 @@ function GetsubproductCustomer($customer,$ProductUID)
 						$subproductuids = rtrim($subproductuids,  ', ');
 
 
-						$where .= " AND (torders.SubProductUID IN (".$subproductuids.") OR `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4) ";
+						$where .= " AND (tOrders.SubProductUID IN (".$subproductuids.") OR `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4) ";
 					// echo $where; exit;
 					}*/
 					/*End*/
 				}
 			}
-			$sql = "SELECT `torders`.`OrderUID`, `torderassignment`.`WorkflowModuleUID` FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `torderpropertyroles` ON (`torderpropertyroles`.`OrderUID` = `torders`.`OrderUID`  AND `torderpropertyroles`.`PropertyRoleUID` = ".$this->config->item('Propertyroles')['Borrowers'].")  LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") $where $like $filter GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC"; 
+			$sql = "SELECT `tOrders`.`OrderUID`, `tOrderAssignment`.`WorkflowModuleUID` FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `tOrderPropertyRoles` ON (`tOrderPropertyRoles`.`OrderUID` = `tOrders`.`OrderUID`  AND `tOrderPropertyRoles`.`PropertyRoleUID` = ".$this->config->item('Propertyroles')['Borrowers'].")  LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $where $like $filter GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC"; 
 
 		}
 
 		$checkorders = $this->db->query($sql)->result_array();
-		$mroles = $this->common_model->get_roles($this->RoleUID);
+		$mRoles = $this->common_model->get_roles($this->RoleUID);
 
 		foreach ($checkorders as $key => $value) 
 		{
 			if(in_array($this->session->userdata('RoleType'),array(1,2,3,4,5,6,13)) == False)
 			{
-				if (!empty($mroles) && $mroles[0]['MyOrdersQueue'] == 1) {
+				if (!empty($mRoles) && $mRoles[0]['MyOrdersQueue'] == 1) {
 					$assigned = $this->common_model->get_assigned_workflows($value['OrderUID'],$this->loggedid);
 					$completed = $this->common_model->get_completed_workflows($value['OrderUID'],$this->loggedid);
 					$assigned_orderss = [];
@@ -787,12 +787,12 @@ function GetsubproductCustomer($customer,$ProductUID)
 				if (empty($order_by)) 
 				{
 					
-					$order_by = ' ORDER BY ( CASE WHEN `torders`.`PriorityUID` = 1 THEN 1 ELSE 0 END ) DESC,  '.$post['overrideworkflowprioritization'];
+					$order_by = ' ORDER BY ( CASE WHEN `tOrders`.`PriorityUID` = 1 THEN 1 ELSE 0 END ) DESC,  '.$post['overrideworkflowprioritization'];
 				}
 				else
 				{
 									
-					$order_by .= ' , ( CASE WHEN `torders`.`PriorityUID` = 1 THEN 1 ELSE 0 END ) DESC, '.$post['overrideworkflowprioritization'];
+					$order_by .= ' , ( CASE WHEN `tOrders`.`PriorityUID` = 1 THEN 1 ELSE 0 END ) DESC, '.$post['overrideworkflowprioritization'];
 
 				}
 
@@ -801,12 +801,12 @@ function GetsubproductCustomer($customer,$ProductUID)
 			/*Override Rush End*/
 
 
-			$order_by .= ' , FIELD(`torders`.`PriorityUID`,3,1) DESC  , `torders`.`OrderEntryDatetime` ASC';
+			$order_by .= ' , FIELD(`tOrders`.`PriorityUID`,3,1) DESC  , `tOrders`.`OrderEntryDatetime` ASC';
 
 
 		} else {
 
-			$order_by = 'ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC';
+			$order_by = 'ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC';
 
 		}
 
@@ -817,12 +817,12 @@ function GetsubproductCustomer($customer,$ProductUID)
 			if (empty($order_by)) 
 			{
 				
-				$order_by = ' ORDER BY '.$post['overrideworkflowprioritization'].',FIELD(`torders`.`PriorityUID`,3,1) DESC  , `torders`.`OrderEntryDatetime` ASC';
+				$order_by = ' ORDER BY '.$post['overrideworkflowprioritization'].',FIELD(`tOrders`.`PriorityUID`,3,1) DESC  , `tOrders`.`OrderEntryDatetime` ASC';
 			}
 			else
 			{
 								
-				$order_by = ' ,'.$post['overrideworkflowprioritization'].',FIELD(`torders`.`PriorityUID`,3,1) DESC  , `torders`.`OrderEntryDatetime` ASC';
+				$order_by = ' ,'.$post['overrideworkflowprioritization'].',FIELD(`tOrders`.`PriorityUID`,3,1) DESC  , `tOrders`.`OrderEntryDatetime` ASC';
 
 			}
 
@@ -853,20 +853,20 @@ function GetsubproductCustomer($customer,$ProductUID)
 
 		$filter = '';
 		if (!empty($post['CustomerUID'])) {
-			$filter .= ' AND torders.CustomerUID IN ('.$post['CustomerUID'].')';
+			$filter .= ' AND tOrders.CustomerUID IN ('.$post['CustomerUID'].')';
 		}
 		if (!empty($post['ProjectUID'])) {
-			$filter .= ' AND torders.ProjectUID IN ('.$post['ProjectUID'].')';
+			$filter .= ' AND tOrders.ProjectUID IN ('.$post['ProjectUID'].')';
 		}
 		if (!empty($post['SubProductUID'])) {
-			$filter .= ' AND torders.SubProductUID IN ('.$post['SubProductUID'].')';
+			$filter .= ' AND tOrders.SubProductUID IN ('.$post['SubProductUID'].')';
 		}
 
 		/*FOR SUPERVISOR CHECK*/
 		$where = '';
 		if ($this->session->userdata('RoleType') == 6){
 			$UserProducts = $this->common_model->_get_product_bylogin();
-			if($UserProducts): $where .= ' AND `mproducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
+			if($UserProducts): $where .= ' AND `mProducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
 		if($this->common_model->GetMyOrdersQueue() == 1)
@@ -876,7 +876,7 @@ function GetsubproductCustomer($customer,$ProductUID)
 
 
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`,`torders`.`CustomerUID`,`torders`.`SubProductUID`,`mproducts`.`IsSelfAssign`,`LoanNumber`, `OrderNumber`, `AltORderNumber`, `StatusName`,`StatusName`,`torders`.`StatusUID`,`torders`.`PropertyZipcode`,`StatusColor`, `torders`.`OrderUID`, `torders`.`OrderEntryDatetime` as OrderEntryDatetime, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`,`msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime ,TRIM(CONCAT_WS(' ',TRIM(torders.PropertyAddress1),TRIM(torders.PropertyAddress2))) AS whole_name , torders.PropertyStateCode,torders.IsInhouseExternal,torders.PropertyCityName,torders.PropertyCountyName,mabstractor.AbstractorNo,mabstractor.AbstractorCompanyName,mabstractor.AbstractorFirstName,torders.AbstractorFee,torders.CustomerAmount,`mordertypes`.`OrderTypeName`,VendorAssignedDateTime, `mProjects`.`ProjectName`,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mabstractor` ON `mabstractor`.`AbstractorUID` = `torders`.`AbstractorUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` LEFT JOIN `mordertypes` ON `mordertypes`.`OrderTypeUID` = `torders`.`OrderTypeUID`  LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `torders`.`ProjectUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 $where $like $filter GROUP BY `OrderUID` ".$order_by." ";
+			$sql = "SELECT `CustomerNumber`,`CustomerName`,`tOrders`.`CustomerUID`,`tOrders`.`SubProductUID`,`mProducts`.`IsSelfAssign`,`LoanNumber`, `OrderNumber`, `AltORderNumber`, `StatusName`,`StatusName`,`tOrders`.`StatusUID`,`tOrders`.`PropertyZipcode`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`,`mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime ,TRIM(CONCAT_WS(' ',TRIM(tOrders.PropertyAddress1),TRIM(tOrders.PropertyAddress2))) AS whole_name , tOrders.PropertyStateCode,tOrders.IsInhouseExternal,tOrders.PropertyCityName,tOrders.PropertyCountyName,mabstractor.AbstractorNo,mabstractor.AbstractorCompanyName,mabstractor.AbstractorFirstName,tOrders.AbstractorFee,tOrders.CustomerAmount,`mOrderTypes`.`OrderTypeName`,VendorAssignedDateTime, `mProjects`.`ProjectName`,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mabstractor` ON `mabstractor`.`AbstractorUID` = `tOrders`.`AbstractorUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` LEFT JOIN `mOrderTypes` ON `mOrderTypes`.`OrderTypeUID` = `tOrders`.`OrderTypeUID`  LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `tOrders`.`ProjectUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 $where $like $filter GROUP BY `OrderUID` ".$order_by." ";
 		} else {
 
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
@@ -901,13 +901,13 @@ function GetsubproductCustomer($customer,$ProductUID)
 						$subproductuids = rtrim($subproductuids,  ', ');
 
 
-						$where .= " AND (torders.SubProductUID IN (".$subproductuids.") OR `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4) ";
+						$where .= " AND (tOrders.SubProductUID IN (".$subproductuids.") OR `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4) ";
 					// echo $where; exit;
 					}*/
 				}
 			}
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`,`AltORderNumber`,`torders`.`CustomerUID`,`torders`.`SubProductUID`,`mproducts`.`IsSelfAssign`,`LoanNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`,`torders`.`PropertyZipcode`, `torders`.`OrderEntryDatetime` as OrderEntryDatetime, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, TRIM(CONCAT_WS(' ',TRIM(torders.PropertyAddress1),TRIM(torders.PropertyAddress2))) AS whole_name ,torders.PropertyStateCode,torders.PropertyCityName,torders.IsInhouseExternal,torders.PropertyCountyName,mabstractor.AbstractorNo,mabstractor.AbstractorCompanyName,mabstractor.AbstractorFirstName,torders.AbstractorFee,torders.CustomerAmount,mordertypes.OrderTypeName,torders.PropertyZipcode,VendorAssignedDateTime, `mProjects`.`ProjectName`,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mabstractor` ON `mabstractor`.`AbstractorUID` = `torders`.`AbstractorUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` LEFT JOIN `mordertypes` ON `mordertypes`.`OrderTypeUID` = `torders`.`OrderTypeUID` LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `torders`.`ProjectUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") $where $like $filter GROUP BY `OrderUID` ".$order_by." "; 
+			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`,`AltORderNumber`,`tOrders`.`CustomerUID`,`tOrders`.`SubProductUID`,`mProducts`.`IsSelfAssign`,`LoanNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`,`tOrders`.`PropertyZipcode`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, TRIM(CONCAT_WS(' ',TRIM(tOrders.PropertyAddress1),TRIM(tOrders.PropertyAddress2))) AS whole_name ,tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.IsInhouseExternal,tOrders.PropertyCountyName,mabstractor.AbstractorNo,mabstractor.AbstractorCompanyName,mabstractor.AbstractorFirstName,tOrders.AbstractorFee,tOrders.CustomerAmount,mOrderTypes.OrderTypeName,tOrders.PropertyZipcode,VendorAssignedDateTime, `mProjects`.`ProjectName`,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mabstractor` ON `mabstractor`.`AbstractorUID` = `tOrders`.`AbstractorUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` LEFT JOIN `mOrderTypes` ON `mOrderTypes`.`OrderTypeUID` = `tOrders`.`OrderTypeUID` LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `tOrders`.`ProjectUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $where $like $filter GROUP BY `OrderUID` ".$order_by." "; 
 
 		}
 
@@ -919,13 +919,13 @@ function GetSelectedCustomProducts($RoleUID)
 {
   if($RoleUID==8)
   {
-    $this->db->select('mproducts.ProductUID, mproducts.ProductName,msubproducts.SubProductUID,msubproducts.SubProductName');
-    $this->db->from('mcustomerproducts');
-    $this->db->join ('mproducts','mcustomerproducts.ProductUID = mproducts.ProductUID','left');
-    $this->db->join ('msubproducts','mcustomerproducts.SubProductUID = msubproducts.SubProductUID','left');
-    $this->db->join ('musers','musers.CustomerUID=mcustomerproducts.CustomerUID','inner');
-    $this->db->where('musers.UserUID',$this->session->userdata('UserUID'));
-    $this->db->group_by('mproducts.ProductUID');
+    $this->db->select('mProducts.ProductUID, mProducts.ProductName,mSubProducts.SubProductUID,mSubProducts.SubProductName');
+    $this->db->from('mCustomerProducts');
+    $this->db->join ('mProducts','mCustomerProducts.ProductUID = mProducts.ProductUID','left');
+    $this->db->join ('mSubProducts','mCustomerProducts.SubProductUID = mSubProducts.SubProductUID','left');
+    $this->db->join ('mUsers','mUsers.CustomerUID=mCustomerProducts.CustomerUID','inner');
+    $this->db->where('mUsers.UserUID',$this->session->userdata('UserUID'));
+    $this->db->group_by('mProducts.ProductUID');
     return $this->db->get()->result(); 
   } else {
     return '';
@@ -950,26 +950,26 @@ function GetSelectedCustomProducts($RoleUID)
 				$productwhere = '';
 				if ($this->session->userdata('RoleType') == 6){
 					$UserProducts = $this->common_model->_get_product_bylogin();
-					if($UserProducts): $productwhere .= ' AND `mproducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
+					if($UserProducts): $productwhere .= ' AND `mProducts`.`ProductUID` IN ('.$UserProducts.')'; else: return array(); endif;
 				}
 $where='';
 				if($this->common_model->GetMyOrdersQueue() == 1)
 				{
 
 					$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'].','.$this->config->item('keywords')['Reopened Order'];
-					$where .= "WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torders`.`OrderUID` IN (".$OrderUIDs.") $productwhere GROUP BY `OrderUID` ORDER BY FIELD(torders.OrderUID,".$OrderUIDs."),FIELD(torders.PriorityUID,'3','1') DESC,PriorityUID, `torders`.`OrderEntryDatetime` ASC LIMIT 10";
+					$where .= "WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrders`.`OrderUID` IN (".$OrderUIDs.") $productwhere GROUP BY `OrderUID` ORDER BY FIELD(tOrders.OrderUID,".$OrderUIDs."),FIELD(tOrders.PriorityUID,'3','1') DESC,PriorityUID, `tOrders`.`OrderEntryDatetime` ASC LIMIT 10";
 					
 				}else{
 
 					$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].','.$this->config->item('keywords')['Cancelled'].','.$this->config->item('keywords')['Exception Raised'];
-					$where .= "WHERE `torders`.`StatusUID` NOT IN (".$statuses.") AND `torders`.`OrderUID` IN (".$OrderUIDs.") $productwhere GROUP BY `OrderUID` ORDER BY FIELD(torders.OrderUID,".$OrderUIDs."),FIELD(torders.PriorityUID,'3','1') DESC,PriorityUID, `torders`.`OrderEntryDatetime` ASC LIMIT 10";
+					$where .= "WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND `tOrders`.`OrderUID` IN (".$OrderUIDs.") $productwhere GROUP BY `OrderUID` ORDER BY FIELD(tOrders.OrderUID,".$OrderUIDs."),FIELD(tOrders.PriorityUID,'3','1') DESC,PriorityUID, `tOrders`.`OrderEntryDatetime` ASC LIMIT 10";
 					
 				}
 
 
 
 
-				$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `StatusName`, `torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` ".$where." ";
+				$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `StatusName`, `tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` ".$where." ";
 
 
 
@@ -994,13 +994,13 @@ $where='';
 		if($OrderUID){
 			$this->db->select ( '*' ); 
 			$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y") as OrderEntryDatetime', FALSE);
-			$this->db->from ( 'torders' );
-			$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID' , 'left' );
-			$this->db->join ( 'mordertypes', 'mordertypes.OrderTypeUID = torders.OrderTypeUID' , 'left' );
-			$this->db->join ( 'morderpriority', 'morderpriority.PriorityUID = torders.PriorityUID' , 'left' );
-			$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID' , 'left' );
-			$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID' , 'left' );
-			$this->db->where ('torders.OrderUID',$OrderUID);
+			$this->db->from ( 'tOrders' );
+			$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID' , 'left' );
+			$this->db->join ( 'mOrderTypes', 'mOrderTypes.OrderTypeUID = tOrders.OrderTypeUID' , 'left' );
+			$this->db->join ( 'mOrderPriority', 'mOrderPriority.PriorityUID = tOrders.PriorityUID' , 'left' );
+			$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID' , 'left' );
+			$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID' , 'left' );
+			$this->db->where ('tOrders.OrderUID',$OrderUID);
 			$query = $this->db->get();
 			return $query->row();
 		}
@@ -1009,11 +1009,11 @@ $where='';
 
 	function customer_workflow($CustomerUID,$SubProductUID){
 		$this->db->distinct();
-		$this->db->select ('CustomerUID,WorkflowModuleName,mcustomerworkflowmodules.workflowmoduleUID'); 
-		$this->db->from ( 'mcustomerworkflowmodules' );
-		$this->db->join ( 'mworkflowmodules', 'mcustomerworkflowmodules.workflowmoduleUID = mworkflowmodules.WorkflowModuleUID' , 'left' );
-		$this->db->where ('mcustomerworkflowmodules.CustomerUID',$CustomerUID);
-		$this->db->where ('mcustomerworkflowmodules.SubProductUID',$SubProductUID);
+		$this->db->select ('CustomerUID,WorkflowModuleName,mCustomerWorkflowModules.workflowmoduleUID'); 
+		$this->db->from ( 'mCustomerWorkflowModules' );
+		$this->db->join ( 'mWorkflowModules', 'mCustomerWorkflowModules.workflowmoduleUID = mWorkflowModules.WorkflowModuleUID' , 'left' );
+		$this->db->where ('mCustomerWorkflowModules.CustomerUID',$CustomerUID);
+		$this->db->where ('mCustomerWorkflowModules.SubProductUID',$SubProductUID);
 		$query = $this->db->get();
 		$workflowmodules =  $query->result_array();
 		return $workflowmodules;
@@ -1022,7 +1022,7 @@ $where='';
 	function is_workflow_assigned($OrderUID,$WorkflowUID){
 
 		$this->db->select ( '*' ); 
-		$this->db->from ( 'torderassignment');
+		$this->db->from ( 'tOrderAssignment');
 		$this->db->where ( 'WorkflowModuleUID',$WorkflowUID);
 		$this->db->where('AssignedToUserUID is NOT NULL', NULL, FALSE);
 		$this->db->where ( 'OrderUID',$OrderUID);
@@ -1047,11 +1047,11 @@ $where='';
 
 
 
-					$this->db->where('torderassignment.AssignedToUserUID IS NULL');
-					$this->db->where('torderassignment.OrderUID',$orderUID);
-					$this->db->where('torderassignment.WorkflowModuleUID',$filter_workflow);
-					$this->db->where('torderassignment.WorkflowStatus !=',5);
-					$q = $this->db->get('torderassignment');
+					$this->db->where('tOrderAssignment.AssignedToUserUID IS NULL');
+					$this->db->where('tOrderAssignment.OrderUID',$orderUID);
+					$this->db->where('tOrderAssignment.WorkflowModuleUID',$filter_workflow);
+					$this->db->where('tOrderAssignment.WorkflowStatus !=',5);
+					$q = $this->db->get('tOrderAssignment');
 
 
 					if ( $q->num_rows() > 0 ) 
@@ -1064,9 +1064,9 @@ $where='';
 							'SelfManualAssign'=>'SELF'
 
 						);
-						$this->db->where('torderassignment.WorkflowModuleUID',$filter_workflow);
-						$this->db->where('torderassignment.OrderUID',$orderUID);
-						$inserted = $this->db->update('torderassignment',$updatedata);
+						$this->db->where('tOrderAssignment.WorkflowModuleUID',$filter_workflow);
+						$this->db->where('tOrderAssignment.OrderUID',$orderUID);
+						$inserted = $this->db->update('tOrderAssignment',$updatedata);
 					} else {
 
 						$assign_data = array(
@@ -1079,7 +1079,7 @@ $where='';
 							'SelfManualAssign'=>'SELF'
 
 						);
-						$inserted = $this->db->insert('torderassignment',$assign_data);
+						$inserted = $this->db->insert('tOrderAssignment',$assign_data);
 
 					}
 
@@ -1098,7 +1098,7 @@ $where='';
 					if(isset($inserted)){
 						$this->db->set($orders_data)
 						->where('OrderUID', $orderUID)
-						->update('torders');
+						->update('tOrders');
 					}
 
 				}
@@ -1127,14 +1127,14 @@ $where='';
 
 		$this->db->select('*');
 
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'mcustomers', 'torders.CustomerUID = mcustomers.CustomerUID');
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'mCustomers', 'tOrders.CustomerUID = mCustomers.CustomerUID');
 
-		$this->db->where("torders.OrderUID NOT IN (SELECT DISTINCT `torderassignment`.`OrderUID` FROM `torderassignment`)",NULL, false);
+		$this->db->where("tOrders.OrderUID NOT IN (SELECT DISTINCT `tOrderAssignment`.`OrderUID` FROM `tOrderAssignment`)",NULL, false);
 
-		$this->db->where ( 'torders.CustomerUID',$CustomerUID);
+		$this->db->where ( 'tOrders.CustomerUID',$CustomerUID);
 
-		$this->db->where ("torders.StatusUID",$status);
+		$this->db->where ("tOrders.StatusUID",$status);
 
 		$query = $this->db->get();
 
@@ -1148,11 +1148,11 @@ $where='';
 
 
 		$this->db->distinct();
-		$this->db->select ('CustomerUID,WorkflowModuleName,mcustomerworkflowmodules.workflowmoduleUID'); 
-		$this->db->from ( 'mcustomerworkflowmodules' );
-		$this->db->join ( 'mworkflowmodules', 'mcustomerworkflowmodules.workflowmoduleUID = mworkflowmodules.WorkflowModuleUID' , 'left' );
-		$this->db->where ('mcustomerworkflowmodules.CustomerUID',$CustomerUID);
-      // $this->db->where ('mcustomerworkflowmodules.SubProductUID',$SubProductUID);
+		$this->db->select ('CustomerUID,WorkflowModuleName,mCustomerWorkflowModules.workflowmoduleUID'); 
+		$this->db->from ( 'mCustomerWorkflowModules' );
+		$this->db->join ( 'mWorkflowModules', 'mCustomerWorkflowModules.workflowmoduleUID = mWorkflowModules.WorkflowModuleUID' , 'left' );
+		$this->db->where ('mCustomerWorkflowModules.CustomerUID',$CustomerUID);
+      // $this->db->where ('mCustomerWorkflowModules.SubProductUID',$SubProductUID);
 		$query = $this->db->get();
 
 
@@ -1174,7 +1174,7 @@ $where='';
 
 			$groupIDs = $group_id->group_id; 
 
-			$cust_id = $this->db->query("SELECT GROUP_CONCAT(DISTINCT GroupCustomerUID SEPARATOR ',') as cust_id FROM mgroupcustomers where GroupUID IN ($groupIDs)")->row();
+			$cust_id = $this->db->query("SELECT GROUP_CONCAT(DISTINCT GroupCustomerUID SEPARATOR ',') as cust_id FROM mGroupCustomers where GroupUID IN ($groupIDs)")->row();
 
 			if($cust_id->cust_id != '')
 			{
@@ -1184,10 +1184,10 @@ $where='';
 
 				$this->db->select ( "*"); 
 				$this->db->select("DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime", FALSE);
-				$this->db->from ( "torders" );
-				$this->db->join ( "mcustomers", "torders.CustomerUID = mcustomers.CustomerUID");
-				$this->db->where("torders.CustomerUID IN (".$customer_id.")",NULL, false);
-				$this->db->where ("torders.StatusUID",$status);
+				$this->db->from ( "tOrders" );
+				$this->db->join ( "mCustomers", "tOrders.CustomerUID = mCustomers.CustomerUID");
+				$this->db->where("tOrders.CustomerUID IN (".$customer_id.")",NULL, false);
+				$this->db->where ("tOrders.StatusUID",$status);
 				$query = $this->db->get();
 
 				return $query->result_array();
@@ -1211,7 +1211,7 @@ $where='';
 
 			$groupIDs = $group_id->group_id; 
 
-			$cust_id = $this->db->query("SELECT GROUP_CONCAT(DISTINCT GroupCustomerUID SEPARATOR ',') as cust_id FROM mgroupcustomers where GroupUID IN ($groupIDs)")->row();
+			$cust_id = $this->db->query("SELECT GROUP_CONCAT(DISTINCT GroupCustomerUID SEPARATOR ',') as cust_id FROM mGroupCustomers where GroupUID IN ($groupIDs)")->row();
 
 			if($cust_id->cust_id != '')
 			{
@@ -1221,8 +1221,8 @@ $where='';
 
 				$this->db->distinct(); 
 				$this->db->select ("CustomerUID,CustomerName"); 
-				$this->db->from ( "mcustomers" );
-				$this->db->where("mcustomers.CustomerUID IN (".$customer_id.")",NULL, false);
+				$this->db->from ( "mCustomers" );
+				$this->db->where("mCustomers.CustomerUID IN (".$customer_id.")",NULL, false);
 				$query = $this->db->get();
 
 				return $query->result_array();
@@ -1291,7 +1291,7 @@ $where='';
 		$query = $this->db->query('INSERT INTO tordercancel(OrderUID,Remarks,ReasonUID,RequestedBy,ApprovedBy,CancelStatus,CancellationRequestTime,CancellationApproveDeclineTime)VALUES("'.$orderUID.'","'.$Remarks.'","'.$Reason.'","'.$loggedid.'","'.$loggedid.'",1,"'.$CancellationRequestDateTime.'","'.$CancellationRequestDateTime.'")'); //@Desc Reason added @Author Jainulabdeen @Updated on 4-7-2020
 		if($this->db->affected_rows() > 0)
 		{
-			$this->db->set('StatusUID','110')->where('OrderUID',$orderUID)->update('torders');
+			$this->db->set('StatusUID','110')->where('OrderUID',$orderUID)->update('tOrders');
 			$this->real_ec_model->CancelApiOrder($orderUID,$Remarks);
 
 			$this->load->model('api_abstractor/Api_abstractor_model');
@@ -1347,7 +1347,7 @@ $where='';
 
 	function getSearchCompleteStatus($orderUID)
 	{
-		$query = $this->db->query("SELECT WorkflowStatus FROM `torderassignment` WHERE WorkflowModuleUID = 1 and WorkflowStatus = 5 and OrderUID = $orderUID ");
+		$query = $this->db->query("SELECT WorkflowStatus FROM `tOrderAssignment` WHERE WorkflowModuleUID = 1 and WorkflowStatus = 5 and OrderUID = $orderUID ");
 		if($query->num_rows() > 0)
 		{
 			return true;
@@ -1379,15 +1379,15 @@ $where='';
 		$status[5] = $this->config->item('keywords')['Reopened Order'];
     //$status[2] = $this->config->item('keywords')['New Order'];
 
-		$this->db->select ( 'torderassignment.OrderUID,OrderAssignmentUID' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'torders', 'torderassignment.OrderUID = torders.OrderUID');
+		$this->db->select ( 'tOrderAssignment.OrderUID,OrderAssignmentUID' );
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'tOrders', 'tOrderAssignment.OrderUID = tOrders.OrderUID');
 
-		$this->db->where_in('torders.StatusUID', $status);
-		$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where('torderassignment.WorkflowStatus',4);
-		$this->db->where('torderassignment.WorkflowModuleUID !=',4);
-		$this->db->group_by('torders.OrderUID');
+		$this->db->where_in('tOrders.StatusUID', $status);
+		$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.WorkflowStatus',4);
+		$this->db->where('tOrderAssignment.WorkflowModuleUID !=',4);
+		$this->db->group_by('tOrders.OrderUID');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -1404,18 +1404,18 @@ $where='';
     //$status[2] = $this->config->item('keywords')['New Order'];
 
 		$this->db->select ( '*' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'torders', 'torderassignment.OrderUID = torders.OrderUID');
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'tOrders', 'tOrderAssignment.OrderUID = tOrders.OrderUID');
 
-		$this->db->where_in('torders.StatusUID', $status);
+		$this->db->where_in('tOrders.StatusUID', $status);
 
 		if(count($OnholdUIDs) > 0){
-			$this->db->where_not_in('torders.OrderUID', $OnholdUIDs);
+			$this->db->where_not_in('tOrders.OrderUID', $OnholdUIDs);
 		}
-		$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where('torderassignment.WorkflowStatus !=',4);
-		$this->db->where('torderassignment.WorkflowStatus !=',5);
-		$this->db->group_by('torders.OrderUID');
+		$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.WorkflowStatus !=',4);
+		$this->db->where('tOrderAssignment.WorkflowStatus !=',5);
+		$this->db->group_by('tOrders.OrderUID');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -1437,7 +1437,7 @@ $where='';
 
 		$subproduct_where  = '';
 		if($SubProductUID != ''){
-			$subproduct_where  .= "AND mgroupcustomers.GroupCustomerSubProductUID = '".$SubProductUID."' ";
+			$subproduct_where  .= "AND mGroupCustomers.GroupCustomerSubProductUID = '".$SubProductUID."' ";
 		}else{
 			$customer_ids = $this->get_customeringroup($GroupUID);
 			$cus_subproducts = [];
@@ -1449,7 +1449,7 @@ $where='';
 
 			if(count($cus_subproducts) > 0){
 				if($cus_subproducts->SubProductUIDs !='' ){
-					$subproduct_where .= 'AND mgroupcustomers.GroupCustomerSubProductUID IN ('.$cus_subproducts->SubProductUIDs.')';
+					$subproduct_where .= 'AND mGroupCustomers.GroupCustomerSubProductUID IN ('.$cus_subproducts->SubProductUIDs.')';
 				}
 			}
 			
@@ -1462,7 +1462,7 @@ $where='';
 
 			if($check_workflow_permissions->DependentWorkflowModule != ''){
 
-				$where .= "AND `torders`.`OrderUID` IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID`  = $check_workflow_permissions->DependentWorkflowModule AND WorkflowStatus  = 5)";
+				$where .= "AND `tOrders`.`OrderUID` IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID`  = $check_workflow_permissions->DependentWorkflowModule AND WorkflowStatus  = 5)";
 			}
 		}
 
@@ -1473,28 +1473,28 @@ $where='';
 
 		if ( $unassigned->OrderUID != '' ) 
 		{
-			$where .= "AND torders.OrderUID NOT IN ($unassigned->OrderUID)";
+			$where .= "AND tOrders.OrderUID NOT IN ($unassigned->OrderUID)";
 		}
 
 		/*--- INHOUSE ORDERS FOR SEARCH ----*/
 		if($filter_workflow == '1' ){
-			$where .= "AND torders.IsInhouseExternal = '0' ";
+			$where .= "AND tOrders.IsInhouseExternal = '0' ";
 		}
 
 		//orderby processing workflow prioritization
 		$workflowprioritization = $this->common_model->getnextorderworkflowprioritization($filter_workflow);
 		if(isset($workflowprioritization) && !empty($workflowprioritization)) {
 
-			$order_by = ' ORDER BY '.$workflowprioritization.',FIELD(`torders`.`PriorityUID`,3,1) DESC  , `torders`.`OrderEntryDatetime` ASC';
+			$order_by = ' ORDER BY '.$workflowprioritization.',FIELD(`tOrders`.`PriorityUID`,3,1) DESC  , `tOrders`.`OrderEntryDatetime` ASC';
 
 		} else {
 
-			$order_by = 'ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC';
+			$order_by = 'ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC';
 
 		}
 
 
-      $query = $this->db->query("SELECT `torders`.`OrderUID`, `OrderNumber`, `torders`.`CustomerUID`, `CustomerName`, `OrderTypeName`, `StateName`, `PriorityName`, `torders`.`SubProductUID`, `msubproducts`.`SubProductName`, `mproducts`.`ProductUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `mstates`.`StateCode`, `morderstatus`.`StatusName`, DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, DATE_FORMAT(`torders`.`OrderDueDatetime`, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime ,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `mstates` ON `PropertyStateUID` = `mstates`.`StateUID` JOIN `mcustomers` ON `torders`.`CustomerUID` = `mcustomers`.`CustomerUID` LEFT JOIN `mordertypes` ON `mordertypes`.`OrderTypeUID` = `torders`.`OrderTypeUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `torderassignment` ON  `torderassignment`.`OrderUID` = `torders`.`OrderUID` LEFT JOIN `mgroupcustomers` ON  `mgroupcustomers`.`GroupCustomerSubProductUID` = `torders`.`SubProductUID` WHERE `torders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND AssignedToUserUID IS NOT NULL) AND torders.OrderUID NOT IN (SELECT torderabstractor.OrderUID FROM torderabstractor LEFT JOIN torderassignment ON torderassignment.OrderUID = torderabstractor.OrderUID WHERE DocumentReceived = 0 AND (torderassignment.WorkflowModuleUID = 1 AND torderassignment.WorkflowStatus != 5)) AND torders.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID  AND mgroupcustomers.GroupUID = '".$GroupUID."' ".$subproduct_where." AND `torders`.`StatusUID` IN ('".$status1."', '".$status2."', '".$status3."','".$status4."','".$status5."','".$status6."') ".$where."  ".$order_by." ");
+      $query = $this->db->query("SELECT `tOrders`.`OrderUID`, `OrderNumber`, `tOrders`.`CustomerUID`, `CustomerName`, `OrderTypeName`, `StateName`, `PriorityName`, `tOrders`.`SubProductUID`, `mSubProducts`.`SubProductName`, `mProducts`.`ProductUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mstates`.`StateCode`, `mOrderStatus`.`StatusName`, DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, DATE_FORMAT(`tOrders`.`OrderDueDatetime`, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime ,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `mstates` ON `PropertyStateUID` = `mstates`.`StateUID` JOIN `mCustomers` ON `tOrders`.`CustomerUID` = `mCustomers`.`CustomerUID` LEFT JOIN `mOrderTypes` ON `mOrderTypes`.`OrderTypeUID` = `tOrders`.`OrderTypeUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `tOrderAssignment` ON  `tOrderAssignment`.`OrderUID` = `tOrders`.`OrderUID` LEFT JOIN `mGroupCustomers` ON  `mGroupCustomers`.`GroupCustomerSubProductUID` = `tOrders`.`SubProductUID` WHERE `tOrders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND AssignedToUserUID IS NOT NULL) AND tOrders.OrderUID NOT IN (SELECT tOrderAbstractor.OrderUID FROM tOrderAbstractor LEFT JOIN tOrderAssignment ON tOrderAssignment.OrderUID = tOrderAbstractor.OrderUID WHERE DocumentReceived = 0 AND (tOrderAssignment.WorkflowModuleUID = 1 AND tOrderAssignment.WorkflowStatus != 5)) AND tOrders.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID  AND mGroupCustomers.GroupUID = '".$GroupUID."' ".$subproduct_where." AND `tOrders`.`StatusUID` IN ('".$status1."', '".$status2."', '".$status3."','".$status4."','".$status5."','".$status6."') ".$where."  ".$order_by." ");
 
 		$result =  $query->result();
 
@@ -1519,14 +1519,14 @@ $where='';
 		$status[4] = $this->config->item('keywords')['Review In Progress'];
 		$status[5] = $this->config->item('keywords')['Reopened Order'];
 
-		$this->db->select ( 'torders.OrderUID' ); 
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'torders', 'torderassignment.OrderUID = torders.OrderUID');
-		$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where_in('torders.StatusUID', $status);
-		$this->db->where ('torderassignment.WorkflowModuleUID !=',4);
-		$this->db->where ('torderassignment.WorkflowStatus !=',5);
-		$this->db->group_by('torderassignment.OrderUID');
+		$this->db->select ( 'tOrders.OrderUID' ); 
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'tOrders', 'tOrderAssignment.OrderUID = tOrders.OrderUID');
+		$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where_in('tOrders.StatusUID', $status);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID !=',4);
+		$this->db->where ('tOrderAssignment.WorkflowStatus !=',5);
+		$this->db->group_by('tOrderAssignment.OrderUID');
 		$query = $this->db->get();
 		return $query->result();
 	}  
@@ -1534,14 +1534,14 @@ $where='';
 	function check_workflow_completed($OrderUID,$WorkflowUID,$loggedid)
 	{
 
-		$this->db->select ( 'torderassignment.OrderUID' ); 
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'torders', 'torderassignment.OrderUID = torders.OrderUID');
-      //$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where ('torderassignment.WorkflowModuleUID',$WorkflowUID);
-		$this->db->where ('torderassignment.WorkflowStatus',5);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
-		$this->db->group_by('torderassignment.OrderUID');
+		$this->db->select ( 'tOrderAssignment.OrderUID' ); 
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'tOrders', 'tOrderAssignment.OrderUID = tOrders.OrderUID');
+      //$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID',$WorkflowUID);
+		$this->db->where ('tOrderAssignment.WorkflowStatus',5);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
+		$this->db->group_by('tOrderAssignment.OrderUID');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -1567,7 +1567,7 @@ $where='';
 
 		$subproduct_where  = '';
 		if($SubProductUID != ''){
-			$subproduct_where  .= "AND mgroupcustomers.GroupCustomerSubProductUID = '".$SubProductUID."' ";
+			$subproduct_where  .= "AND mGroupCustomers.GroupCustomerSubProductUID = '".$SubProductUID."' ";
 		}else{
 			$customer_ids = $this->get_customeringroup($GroupUID);
 			$cus_subproducts = [];
@@ -1579,7 +1579,7 @@ $where='';
 
 			if(count($cus_subproducts) > 0){
 				if($cus_subproducts->SubProductUIDs !='' ){
-					$subproduct_where .= 'AND mgroupcustomers.GroupCustomerSubProductUID IN ('.$cus_subproducts->SubProductUIDs.')';
+					$subproduct_where .= 'AND mGroupCustomers.GroupCustomerSubProductUID IN ('.$cus_subproducts->SubProductUIDs.')';
 				}
 			}
 			
@@ -1594,7 +1594,7 @@ $where='';
 
 			if($check_workflow_permissions->DependentWorkflowModule != ''){
 
-				$where .= "AND `torders`.`OrderUID` IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID`  = $check_workflow_permissions->DependentWorkflowModule AND WorkflowStatus  = 5)";
+				$where .= "AND `tOrders`.`OrderUID` IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID`  = $check_workflow_permissions->DependentWorkflowModule AND WorkflowStatus  = 5)";
 			}
 		}
 
@@ -1612,13 +1612,13 @@ $where='';
 			if ( $unassigned->OrderUID != '' ) 
 			{
 
-				$where .= "AND torders.OrderUID NOT IN ($unassigned->OrderUID)";
+				$where .= "AND tOrders.OrderUID NOT IN ($unassigned->OrderUID)";
 
 			}
 
 			$groupIDs = $group_id->group_id; 
 
-			$cust_id = $this->db->query("SELECT GROUP_CONCAT(DISTINCT GroupCustomerUID SEPARATOR ',') as cust_id FROM mgroupcustomers where GroupUID IN ($groupIDs)")->row();
+			$cust_id = $this->db->query("SELECT GROUP_CONCAT(DISTINCT GroupCustomerUID SEPARATOR ',') as cust_id FROM mGroupCustomers where GroupUID IN ($groupIDs)")->row();
 
 			if($cust_id->cust_id != '')
 			{
@@ -1635,21 +1635,21 @@ $where='';
 
 				/*--- INHOUSE ORDERS FOR SEARCH ----*/
 				if($filter_workflow == '1' ){
-					$where .= "AND torders.IsInhouseExternal = '0' ";
+					$where .= "AND tOrders.IsInhouseExternal = '0' ";
 				}
 				//orderby processing workflow prioritization
 				$workflowprioritization = $this->common_model->getnextorderworkflowprioritization($filter_workflow);
 				if(isset($workflowprioritization) && !empty($workflowprioritization)) {
 
-					$order_by = ' ORDER BY '.$workflowprioritization.',FIELD(`torders`.`PriorityUID`,3,1) DESC  , `torders`.`OrderEntryDatetime` ASC';
+					$order_by = ' ORDER BY '.$workflowprioritization.',FIELD(`tOrders`.`PriorityUID`,3,1) DESC  , `tOrders`.`OrderEntryDatetime` ASC';
 
 				} else {
 
-					$order_by = 'ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC';
+					$order_by = 'ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC';
 				}
 
-				$query = $this->db->query("SELECT `torders`.`OrderUID`, `OrderNumber`, `torders`.`CustomerUID`, `CustomerName`, `OrderTypeName`, `PriorityName`, `torders`.`SubProductUID`, `msubproducts`.`SubProductName`, `mproducts`.`ProductUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `morderstatus`.`StatusName`, DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, DATE_FORMAT(`torders`.`OrderDueDatetime`, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  JOIN `mcustomers` ON `torders`.`CustomerUID` = `mcustomers`.`CustomerUID` LEFT JOIN `mordertypes` ON `mordertypes`.`OrderTypeUID` = `torders`.`OrderTypeUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `torderassignment` ON  `torderassignment`.`OrderUID` = `torders`.`OrderUID` JOIN `mgroupcustomers` ON `mgroupcustomers`.`GroupCustomerUID` = `torders`.`CustomerUID` WHERE `torders`.`CustomerUID` IN ($customer_id) AND `torders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND AssignedToUserUID IS NOT NULL ) 
-					AND `torders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND SendToVendor = '1') AND torders.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID AND mgroupcustomers.GroupUID = '".$GroupUID."'  ".$subproduct_where." AND `torders`.`StatusUID` IN ('".$status1."', '".$status2."', '".$status3."','".$status4."','".$status5."','".$status6."','".$status7."') ".$where." AND torders.OrderUID NOT IN (SELECT torderabstractor.OrderUID FROM torderabstractor LEFT JOIN torderassignment ON torderassignment.OrderUID = torderabstractor.OrderUID WHERE DocumentReceived = 0 AND (torderassignment.WorkflowModuleUID = 1 AND torderassignment.WorkflowStatus != 5))  GROUP BY `torders`.`OrderUID`  ".$order_by."");
+				$query = $this->db->query("SELECT `tOrders`.`OrderUID`, `OrderNumber`, `tOrders`.`CustomerUID`, `CustomerName`, `OrderTypeName`, `PriorityName`, `tOrders`.`SubProductUID`, `mSubProducts`.`SubProductName`, `mProducts`.`ProductUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mOrderStatus`.`StatusName`, DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, DATE_FORMAT(`tOrders`.`OrderDueDatetime`, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  JOIN `mCustomers` ON `tOrders`.`CustomerUID` = `mCustomers`.`CustomerUID` LEFT JOIN `mOrderTypes` ON `mOrderTypes`.`OrderTypeUID` = `tOrders`.`OrderTypeUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `tOrderAssignment` ON  `tOrderAssignment`.`OrderUID` = `tOrders`.`OrderUID` JOIN `mGroupCustomers` ON `mGroupCustomers`.`GroupCustomerUID` = `tOrders`.`CustomerUID` WHERE `tOrders`.`CustomerUID` IN ($customer_id) AND `tOrders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND AssignedToUserUID IS NOT NULL ) 
+					AND `tOrders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND SendToVendor = '1') AND tOrders.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID AND mGroupCustomers.GroupUID = '".$GroupUID."'  ".$subproduct_where." AND `tOrders`.`StatusUID` IN ('".$status1."', '".$status2."', '".$status3."','".$status4."','".$status5."','".$status6."','".$status7."') ".$where." AND tOrders.OrderUID NOT IN (SELECT tOrderAbstractor.OrderUID FROM tOrderAbstractor LEFT JOIN tOrderAssignment ON tOrderAssignment.OrderUID = tOrderAbstractor.OrderUID WHERE DocumentReceived = 0 AND (tOrderAssignment.WorkflowModuleUID = 1 AND tOrderAssignment.WorkflowStatus != 5))  GROUP BY `tOrders`.`OrderUID`  ".$order_by."");
 
 				$Orders =  $query->result();
 				if(count($Orders)>0){
@@ -1684,19 +1684,19 @@ $where='';
 	{
 
 		$this->db->select ( 'Group_concat(LoginID) as LoginID' ); 
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'musers', 'musers.UserUID = torderassignment.AssignedToUserUID');
-    //$this->db->where ('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where ('torderassignment.WorkflowModuleUID !=',4);
-		$this->db->where ('torderassignment.OrderUID',$OrderUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'mUsers', 'mUsers.UserUID = tOrderAssignment.AssignedToUserUID');
+    //$this->db->where ('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where ('tOrderAssignment.WorkflowModuleUID !=',4);
+		$this->db->where ('tOrderAssignment.OrderUID',$OrderUID);
 		$query = $this->db->get();
 		return $query->row();
 	}
 
 	function check_workflow_permissions($WorkflowModuleUID){
 		$this->db->select ( "a.WorkflowModuleUID,a.WorkflowModuleName,a.CanIndependentWorkflowModule,a.DependentWorkflowModule,b.WorkflowModuleName as DependentWorkflowModulename" ); 
-		$this->db->from ( "mworkflowmodules as a" );
-		$this->db->join ( 'mworkflowmodules as b', 'b.workflowmoduleUID = a.DependentWorkflowModule' , 'left' );
+		$this->db->from ( "mWorkflowModules as a" );
+		$this->db->join ( 'mWorkflowModules as b', 'b.workflowmoduleUID = a.DependentWorkflowModule' , 'left' );
 		$this->db->where ("a.WorkflowModuleUID",$WorkflowModuleUID);
 		$query = $this->db->get();
 		return $query->row();
@@ -1718,7 +1718,7 @@ $where='';
 			if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
-		$query = $this->db->query("SELECT DISTINCT mgroups.GroupUID,GroupName FROM mgroups LEFT JOIN mgroupusers on mgroupusers.GroupUID = mgroups.GroupUID LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID WHERE mgroups.Active=1 and GroupType = 'C' ".$where." ORDER BY GroupName ASC ");
+		$query = $this->db->query("SELECT DISTINCT mgroups.GroupUID,GroupName FROM mgroups LEFT JOIN mgroupusers on mgroupusers.GroupUID = mgroups.GroupUID LEFT JOIN mGroupCustomers ON mGroupCustomers.GroupUID = mgroups.GroupUID WHERE mgroups.Active=1 and GroupType = 'C' ".$where." ORDER BY GroupName ASC ");
 		$result =  $query->result();
 		return $result;
 
@@ -1736,7 +1736,7 @@ $where='';
 			if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
-		$query = $this->db->query("SELECT mgroupcustomers.GroupCustomerProductUID as ProductUID,mgroupcustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID  LEFT JOIN msubproducts on msubproducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID LEFT JOIN mproducts on mproducts.ProductUID = mgroupcustomers.GroupCustomerProductUID WHERE mgroups.GroupUID = $GroupUID $where  Group by mgroupcustomers.GroupCustomerProductUID");
+		$query = $this->db->query("SELECT mGroupCustomers.GroupCustomerProductUID as ProductUID,mGroupCustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mGroupCustomers ON mGroupCustomers.GroupUID = mgroups.GroupUID  LEFT JOIN mSubProducts on mSubProducts.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID LEFT JOIN mProducts on mProducts.ProductUID = mGroupCustomers.GroupCustomerProductUID WHERE mgroups.GroupUID = $GroupUID $where  Group by mGroupCustomers.GroupCustomerProductUID");
 		return $query->result();
 	}
 
@@ -1748,7 +1748,7 @@ $where='';
 			if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
-		$query = $this->db->query("SELECT mgroupcustomers.GroupCustomerProductUID as ProductUID,mgroupcustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID  LEFT JOIN msubproducts on msubproducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID LEFT JOIN mproducts on mproducts.ProductUID = mgroupcustomers.GroupCustomerProductUID WHERE mgroups.GroupUID IN ($GroupUIDs) $where  Group by mgroupcustomers.GroupCustomerProductUID");
+		$query = $this->db->query("SELECT mGroupCustomers.GroupCustomerProductUID as ProductUID,mGroupCustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mGroupCustomers ON mGroupCustomers.GroupUID = mgroups.GroupUID  LEFT JOIN mSubProducts on mSubProducts.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID LEFT JOIN mProducts on mProducts.ProductUID = mGroupCustomers.GroupCustomerProductUID WHERE mgroups.GroupUID IN ($GroupUIDs) $where  Group by mGroupCustomers.GroupCustomerProductUID");
 		return $query->result();
 	}
 
@@ -1760,7 +1760,7 @@ $where='';
 			if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 		/*@Desc Group Setup Changed @Author Jainulabdeen @Updated Aug 8 2020*/
-		/*$query = $this->db->query("SELECT mgroupcustomers.GroupCustomerProductUID as ProductUID,mgroupcustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID  LEFT JOIN msubproducts on msubproducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID LEFT JOIN mproducts on mproducts.ProductUID = mgroupcustomers.GroupCustomerProductUID WHERE mgroups.GroupUID IN ($GroupUIDs) $where  Group by mgroupcustomers.GroupCustomerSubProductUID");
+		/*$query = $this->db->query("SELECT mGroupCustomers.GroupCustomerProductUID as ProductUID,mGroupCustomers.GroupCustomerSubProductUID As SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mGroupCustomers ON mGroupCustomers.GroupUID = mgroups.GroupUID  LEFT JOIN mSubProducts on mSubProducts.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID LEFT JOIN mProducts on mProducts.ProductUID = mGroupCustomers.GroupCustomerProductUID WHERE mgroups.GroupUID IN ($GroupUIDs) $where  Group by mGroupCustomers.GroupCustomerSubProductUID");
 		return $query->result();*/
 
 		$where_new = [];
@@ -1781,7 +1781,7 @@ $where='';
 			if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
-		$query = $this->db->query("SELECT mgroupcustomers.GroupCustomerProductUID as ProductUID,mgroupcustomers.GroupCustomerSubProductUID as SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mgroupcustomers ON mgroupcustomers.GroupUID = mgroups.GroupUID  LEFT JOIN msubproducts on msubproducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID LEFT JOIN mproducts on mproducts.ProductUID = mgroupcustomers.GroupCustomerProductUID WHERE mgroups.GroupUID = $GroupUID AND mgroupcustomers.GroupCustomerProductUID = $ProductUID  $where GROUP BY msubproducts.SubProductUID");
+		$query = $this->db->query("SELECT mGroupCustomers.GroupCustomerProductUID as ProductUID,mGroupCustomers.GroupCustomerSubProductUID as SubProductUID,ProductName,SubProductName FROM mgroups LEFT JOIN mGroupCustomers ON mGroupCustomers.GroupUID = mgroups.GroupUID  LEFT JOIN mSubProducts on mSubProducts.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID LEFT JOIN mProducts on mProducts.ProductUID = mGroupCustomers.GroupCustomerProductUID WHERE mgroups.GroupUID = $GroupUID AND mGroupCustomers.GroupCustomerProductUID = $ProductUID  $where GROUP BY mSubProducts.SubProductUID");
 		$SubProducts =  $query->result();
 
 
@@ -1789,7 +1789,7 @@ $where='';
 		$workflowroles = $this->common_model->getrole_workflows();
 		$where = '';
 		if($workflowroles != ''){
-			$where .= 'AND mcustomerworkflowmodules.WorkflowModuleUID IN ('.$workflowroles.')';
+			$where .= 'AND mCustomerWorkflowModules.WorkflowModuleUID IN ('.$workflowroles.')';
 		}
 
 		/*FOR SUPERVISOR CHECK*/
@@ -1798,7 +1798,7 @@ $where='';
 			if($UserProducts): $where .= ' AND GroupCustomerProductUID IN ('.$UserProducts.')'; else: return array(); endif;
 		}
 
-		$query1 = $this->db->query("SELECT mworkflowmodules.WorkflowModuleUID,mworkflowmodules.WorkflowModuleName FROM mgroupcustomers LEFT JOIN mcustomerworkflowmodules ON mcustomerworkflowmodules.ProductUID = mgroupcustomers.GroupCustomerProductUID LEFT JOIN mworkflowmodules ON  mworkflowmodules.WorkflowModuleUID = mcustomerworkflowmodules.WorkflowModuleUID  WHERE mgroupcustomers.GroupUID = $GroupUID AND mgroupcustomers.GroupCustomerProductUID = $ProductUID AND mgroupcustomers.GroupCustomerUID = mcustomerworkflowmodules.CustomerUID AND mworkflowmodules.WorkflowModuleUID !=4 ".$where." GROUP BY mcustomerworkflowmodules.workflowModuleUID");
+		$query1 = $this->db->query("SELECT mWorkflowModules.WorkflowModuleUID,mWorkflowModules.WorkflowModuleName FROM mGroupCustomers LEFT JOIN mCustomerWorkflowModules ON mCustomerWorkflowModules.ProductUID = mGroupCustomers.GroupCustomerProductUID LEFT JOIN mWorkflowModules ON  mWorkflowModules.WorkflowModuleUID = mCustomerWorkflowModules.WorkflowModuleUID  WHERE mGroupCustomers.GroupUID = $GroupUID AND mGroupCustomers.GroupCustomerProductUID = $ProductUID AND mGroupCustomers.GroupCustomerUID = mCustomerWorkflowModules.CustomerUID AND mWorkflowModules.WorkflowModuleUID !=4 ".$where." GROUP BY mCustomerWorkflowModules.workflowModuleUID");
 		$workflows =  $query1->result();
 		return array($SubProducts,$workflows);
 	}
@@ -1817,9 +1817,9 @@ $where='';
 		}
 
 		if($workflowroles != ''){
-			$where .= ' AND mcustomerworkflowmodules.WorkflowModuleUID IN ('.$workflowroles.')';
+			$where .= ' AND mCustomerWorkflowModules.WorkflowModuleUID IN ('.$workflowroles.')';
 
-      $query = $this->db->query("SELECT mworkflowmodules.WorkflowModuleUID,WorkflowModuleName FROM mgroupcustomers LEFT JOIN mcustomerworkflowmodules ON mcustomerworkflowmodules.CustomerUID = mgroupcustomers.GroupCustomerUID LEFT JOIN mproducts on mproducts.ProductUID = mgroupcustomers.GroupCustomerProductUID LEFT JOIN msubproducts on msubproducts.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = mcustomerworkflowmodules.WorkflowModuleUID WHERE mcustomerworkflowmodules.ProductUID = $ProductUID AND mcustomerworkflowmodules.SubProductUID = $SubProductUID AND mcustomerworkflowmodules.WorkflowModuleUID !=4 AND mgroupcustomers.GroupUID = $GroupUID ".$where." GROUP BY mcustomerworkflowmodules.WorkflowModuleUID");
+      $query = $this->db->query("SELECT mWorkflowModules.WorkflowModuleUID,WorkflowModuleName FROM mGroupCustomers LEFT JOIN mCustomerWorkflowModules ON mCustomerWorkflowModules.CustomerUID = mGroupCustomers.GroupCustomerUID LEFT JOIN mProducts on mProducts.ProductUID = mGroupCustomers.GroupCustomerProductUID LEFT JOIN mSubProducts on mSubProducts.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID JOIN mWorkflowModules ON mWorkflowModules.WorkflowModuleUID = mCustomerWorkflowModules.WorkflowModuleUID WHERE mCustomerWorkflowModules.ProductUID = $ProductUID AND mCustomerWorkflowModules.SubProductUID = $SubProductUID AND mCustomerWorkflowModules.WorkflowModuleUID !=4 AND mGroupCustomers.GroupUID = $GroupUID ".$where." GROUP BY mCustomerWorkflowModules.WorkflowModuleUID");
 		    return $query->result();
     }
 
@@ -1830,11 +1830,11 @@ $where='';
 	function get_Workflowassignedseperation($OrderUID){
 
 		$loggedid = $this->session->userdata('UserUID');
-		$this->db->select ( 'torderassignment.WorkflowModuleUID,WorkflowModuleName,WorkflowStatus' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID' , 'inner' );
-		$this->db->where('torderassignment.AssignedToUserUID',$loggedid);
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
+		$this->db->select ( 'tOrderAssignment.WorkflowModuleUID,WorkflowModuleName,WorkflowStatus' );
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID' , 'inner' );
+		$this->db->where('tOrderAssignment.AssignedToUserUID',$loggedid);
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
 
 		$query = $this->db->get();
 		$res =  $query->result();
@@ -1845,7 +1845,7 @@ $where='';
 
 	function get_all_Workflows(){
 
-		$query = $this->db->get('mworkflowmodules');
+		$query = $this->db->get('mWorkflowModules');
 		return $query->result_array();
 	}
 
@@ -1858,7 +1858,7 @@ $where='';
 
 		foreach ($Workflows as $key => $Workflow) {
 
-			$query=$this->db->query("SELECT OrderUID,WorkflowModuleUID,LoginID,SendToVendor,torderassignment.VendorUID as  AssignedVendorUID,VendorName,musers.VendorUID as VendorUID FROM `torderassignment` LEFT JOIN musers on musers.UserUID = torderassignment.AssignedToUserUID LEFT JOIN mvendors ON mvendors.VendorUID = torderassignment.VendorUID WHERE `OrderUID` = '".$data['OrderUID']."' AND (AssignedToUserUID IS NOT NULL OR SendToVendor = '1') AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' ");
+			$query=$this->db->query("SELECT OrderUID,WorkflowModuleUID,LoginID,SendToVendor,tOrderAssignment.VendorUID as  AssignedVendorUID,VendorName,mUsers.VendorUID as VendorUID FROM `tOrderAssignment` LEFT JOIN mUsers on mUsers.UserUID = tOrderAssignment.AssignedToUserUID LEFT JOIN mvendors ON mvendors.VendorUID = tOrderAssignment.VendorUID WHERE `OrderUID` = '".$data['OrderUID']."' AND (AssignedToUserUID IS NOT NULL OR SendToVendor = '1') AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' ");
 			$result = $query->row();
 
 
@@ -1906,13 +1906,7 @@ $where='';
 		{
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'].','.$this->config->item('keywords')['Reopened Order'];
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `AltORderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `torders`.`OrderEntryDatetime` as OrderEntryDatetime, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,VendorAssignedDateTime,mProjects.ProjectName,torders.LoanNumber,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `torders`.`ProjectUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 $like GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC";
-		} else {
-
-			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
-			','.$this->config->item('keywords')['Cancelled'].','.$this->config->item('keywords')['Exception Raised'];
-
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`,`AltORderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `torders`.`OrderEntryDatetime` as OrderEntryDatetime, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,VendorAssignedDateTime,mProjects.ProjectName,torders.LoanNumber,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `torders`.`ProjectUID`  WHERE `torders`.`StatusUID` NOT IN (".$statuses.") $like GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC"; 
+			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `AltORderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `tOrders`.`OrderEntryDatetime` as OrderEntryDatetime, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,VendorAssignedDateTime,mProjects.ProjectName,tOrders.LoanNumber,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `tOrders`.`ProjectUID` WHEREmCustomersme`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,VendorAssignedDateTime,mProjects.ProjectName,tOrders.LoanNumber,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` LEFT JOIN `mProjects` ON `mProjects`.`ProjectUID` = `tOrders`.`ProjectUID`  WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") $like GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC"; 
 
 		}
 
@@ -1929,23 +1923,23 @@ $where='';
 		$status[2] = $this->config->item('keywords')['Exception Raised'];
 
 
-		$this->db->select ( 'CustomerName,torders.OrderUID,OrderNumber, AltORderNumber,StatusName,torders.StatusUID,StatusColor,mproducts.ProductName,mproducts.ProductCode,msubproducts.SubProductCode,msubproducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,mProjects.ProjectName,torders.LoanNumber' );
-		$this->db->select('DATE_FORMAT(torders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
+		$this->db->select ( 'CustomerName,tOrders.OrderUID,OrderNumber, AltORderNumber,StatusName,tOrders.StatusUID,StatusColor,mProducts.ProductName,mProducts.ProductCode,mSubProducts.SubProductCode,mSubProducts.SubProductName,PropertyAddress1,PropertyZipcode,LoanNumber,tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,mProjects.ProjectName,tOrders.LoanNumber' );
+		$this->db->select('DATE_FORMAT(tOrders.OrderDueDatetime, "%m-%d-%Y %H:%i:%s") as OrderDueDatetime', FALSE);    
 		$this->db->select('DATE_FORMAT(OrderEntryDatetime, "%m-%d-%Y %H:%i:%s") as OrderEntryDatetime', FALSE);
 		$this->db->select('DATE_FORMAT(OrderCompleteDateTime, "%m-%d-%Y %H:%i:%s") as OrderCompleteDateTime', FALSE);
-		$this->db->select('torders.OrderDueDatetime AS Ymd_OrderDueDatetime', FALSE);
-		$this->db->from ( 'torders' );
-		$this->db->join ( 'torderassignment', 'torderassignment.OrderUID = torders.OrderUID','left');
-		$this->db->join ( 'mworkflowmodules', 'mworkflowmodules.WorkflowModuleUID = torderassignment.WorkflowModuleUID','left');
-		$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = torders.CustomerUID','left');
-		$this->db->join ( 'morderstatus', 'morderstatus.StatusUID = torders.StatusUID','left');
-		$this->db->join ( 'msubproducts', 'msubproducts.SubProductUID = torders.SubProductUID','left');
-		$this->db->join ( 'mproducts', 'mproducts.ProductUID = msubproducts.ProductUID','left');
-		$this->db->join ( 'mProjects', 'mProjects.ProjectUID = torders.ProjectUID','left');
-		$this->db->where_not_in('torders.StatusUID', $status);
-		$this->db->where('torders.CustomerUID',$CustomerUID);
+		$this->db->select('tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime', FALSE);
+		$this->db->from ( 'tOrders' );
+		$this->db->join ( 'tOrderAssignment', 'tOrderAssignment.OrderUID = tOrders.OrderUID','left');
+		$this->db->join ( 'mWorkflowModules', 'mWorkflowModules.WorkflowModuleUID = tOrderAssignment.WorkflowModuleUID','left');
+		$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = tOrders.CustomerUID','left');
+		$this->db->join ( 'mOrderStatus', 'mOrderStatus.StatusUID = tOrders.StatusUID','left');
+		$this->db->join ( 'mSubProducts', 'mSubProducts.SubProductUID = tOrders.SubProductUID','left');
+		$this->db->join ( 'mProducts', 'mProducts.ProductUID = mSubProducts.ProductUID','left');
+		$this->db->join ( 'mProjects', 'mProjects.ProjectUID = tOrders.ProjectUID','left');
+		$this->db->where_not_in('tOrders.StatusUID', $status);
+		$this->db->where('tOrders.CustomerUID',$CustomerUID);
 
-		$this->db->group_by('torders.OrderUID');
+		$this->db->group_by('tOrders.OrderUID');
 		$this->db->order_by('OrderUID,OrderNumber', 'DESC');
 		$query = $this->db->get();
 		return $query->result_array();
@@ -2006,13 +2000,13 @@ $where='';
 					/*vendor Supervisor*/
 
 
-					$query  = $this->db->query("SELECT mgroupvendors.GroupUID,GroupName FROM mgroupvendors LEFT JOIN mgroups ON mgroups.GroupUID =  mgroupvendors.GroupUID WHERE GroupType = 'V' AND mgroups.Active = 1 AND VendorUID IN (".$VendorUIDS.")   ");
+					$query  = $this->db->query("SELECT mGroupVendors.GroupUID,GroupName FROM mGroupVendors LEFT JOIN mgroups ON mgroups.GroupUID =  mGroupVendors.GroupUID WHERE GroupType = 'V' AND mgroups.Active = 1 AND VendorUID IN (".$VendorUIDS.")   ");
 
 					return $query->result();
 				}elseif(in_array($this->session->userdata('RoleType'),array('14'))){
 					/*Vendor Agent */
 
-					$query  =$this->db->query("SELECT DISTINCT `mgroups`.`GroupUID`, `mgroups`.`GroupName` FROM (`mgroupusers`) JOIN `musers` ON `musers`.`UserUID` = `mgroupusers`.`GroupUserUID` LEFT JOIN `mgroups` ON `mgroupusers`.`GroupUID` = `mgroups`.`GroupUID` WHERE `mgroupusers`.`GroupUserUID` = '".$loggedid."' AND `mgroups`.`Active` = 1 AND GroupType = 'V' GROUP BY `mgroupusers`.`GroupUID` ORDER BY `mgroups`.`GroupName` ");
+					$query  =$this->db->query("SELECT DISTINCT `mgroups`.`GroupUID`, `mgroups`.`GroupName` FROM (`mgroupusers`) JOIN `mUsers` ON `mUsers`.`UserUID` = `mgroupusers`.`GroupUserUID` LEFT JOIN `mgroups` ON `mgroupusers`.`GroupUID` = `mgroups`.`GroupUID` WHERE `mgroupusers`.`GroupUserUID` = '".$loggedid."' AND `mgroups`.`Active` = 1 AND GroupType = 'V' GROUP BY `mgroupusers`.`GroupUID` ORDER BY `mgroups`.`GroupName` ");
 
 					return $query->result();
 
@@ -2038,14 +2032,14 @@ $where='';
 		if($is_vendor_login){
 
 			if(count($vendors) > 0){
-				$query = $this->db->query("SELECT * FROM musers JOIN mgroupvendors ON mgroupvendors.VendorUID = musers.VendorUID LEFT JOIN mroles on mroles.RoleUID = musers.RoleUID WHERE musers.Active = 1 AND mgroupvendors.VendorUID = '".$vendors[0]->VendorUID."' GROUP BY musers.UserUID");
+				$query = $this->db->query("SELECT * FROM mUsers JOIN mGroupVendors ON mGroupVendors.VendorUID = mUsers.VendorUID LEFT JOIN mRoles on mRoles.RoleUID = mUsers.RoleUID WHERE mUsers.Active = 1 AND mGroupVendors.VendorUID = '".$vendors[0]->VendorUID."' GROUP BY mUsers.UserUID");
 
 				return  $query->result();
 			}else{
 				return (object)[];
 			}
 		}else{
-			$query = $this->db->query("SELECT mgroupvendors.VendorUID,VendorName,OrderSearch,OrderTyping,OrderTaxCert,OrderReview FROM mgroupvendors LEFT JOIN mvendors on mvendors.VendorUID = mgroupvendors.VendorUID LEFT JOIN musers ON musers.VendorUID = mgroupvendors.VendorUID LEFT JOIN mroles ON mroles.RoleUID = musers.RoleUID  WHERE mgroupvendors.GroupUID = '".$GroupUID."' GROUP BY mvendors.VendorUID ");
+			$query = $this->db->query("SELECT mGroupVendors.VendorUID,VendorName,OrderSearch,OrderTyping,OrderTaxCert,OrderReview FROM mGroupVendors LEFT JOIN mvendors on mvendors.VendorUID = mGroupVendors.VendorUID LEFT JOIN mUsers ON mUsers.VendorUID = mGroupVendors.VendorUID LEFT JOIN mRoles ON mRoles.RoleUID = mUsers.RoleUID  WHERE mGroupVendors.GroupUID = '".$GroupUID."' GROUP BY mvendors.VendorUID ");
 			return  $query->result();
 		}
 	}
@@ -2057,11 +2051,11 @@ $where='';
 		if(count($groupids) > 0){
 			$this->db->distinct();
 			$this->db->select ( 'CustomerName,CustomerUID' ); 
-			$this->db->from ( 'mgroupcustomers' );
-			$this->db->join ( 'mcustomers', 'mcustomers.CustomerUID = mgroupcustomers.GroupCustomerUID');
-			$this->db->where_in ('mgroupcustomers.GroupUID',$groupids);
-			$this->db->group_by('mgroupcustomers.GroupCustomerUID');
-			$this->db->order_by('mcustomers.CustomerName');
+			$this->db->from ( 'mGroupCustomers' );
+			$this->db->join ( 'mCustomers', 'mCustomers.CustomerUID = mGroupCustomers.GroupCustomerUID');
+			$this->db->where_in ('mGroupCustomers.GroupUID',$groupids);
+			$this->db->group_by('mGroupCustomers.GroupCustomerUID');
+			$this->db->order_by('mCustomers.CustomerName');
 			$query = $this->db->get();
 			return $query->result();
 		}else{
@@ -2089,7 +2083,7 @@ $where='';
 
 		$subproduct_where  = '';
 		if($SubProductUID != ''){
-			$subproduct_where  .= "AND mgroupcustomers.GroupCustomerSubProductUID = '".$SubProductUID."' ";
+			$subproduct_where  .= "AND mGroupCustomers.GroupCustomerSubProductUID = '".$SubProductUID."' ";
 		}else{
 			$customer_ids = $this->get_customeringroup($GroupUID);
 			$cus_subproducts = [];
@@ -2101,7 +2095,7 @@ $where='';
 
 			if(count($cus_subproducts) > 0){
 				if($cus_subproducts->SubProductUIDs !='' ){
-					$subproduct_where .= 'AND mgroupcustomers.GroupCustomerSubProductUID IN ('.$cus_subproducts->SubProductUIDs.')';
+					$subproduct_where .= 'AND mGroupCustomers.GroupCustomerSubProductUID IN ('.$cus_subproducts->SubProductUIDs.')';
 				}
 			}
 		}
@@ -2112,7 +2106,7 @@ $where='';
 
 			if($check_workflow_permissions->DependentWorkflowModule != ''){
 
-				$where .= "AND `torders`.`OrderUID` IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID`  = $check_workflow_permissions->DependentWorkflowModule AND WorkflowStatus  = 5)";
+				$where .= "AND `tOrders`.`OrderUID` IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID`  = $check_workflow_permissions->DependentWorkflowModule AND WorkflowStatus  = 5)";
 			}
 		}
 
@@ -2123,7 +2117,7 @@ $where='';
 
 		if ( $unassigned->OrderUID != '' ) 
 		{
-			$where .= "AND torders.OrderUID NOT IN ($unassigned->OrderUID)";
+			$where .= "AND tOrders.OrderUID NOT IN ($unassigned->OrderUID)";
 		}
 
 
@@ -2140,11 +2134,11 @@ $where='';
 
 			/*--- INHOUSE ORDERS FOR SEARCH ----*/
 			if($filter_workflow == '1' ){
-				$where .= "AND torders.IsInhouseExternal = '0' ";
+				$where .= "AND tOrders.IsInhouseExternal = '0' ";
 			}
 
 
-			$query = $this->db->query("SELECT `torders`.`OrderUID`, `OrderNumber`, `torders`.`CustomerUID`, `CustomerName`, `OrderTypeName`, `PriorityName`, `torders`.`SubProductUID`, `msubproducts`.`SubProductName`, `mproducts`.`ProductUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `morderstatus`.`StatusName`, DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, DATE_FORMAT(`torders`.`OrderDueDatetime`, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  JOIN `mcustomers` ON `torders`.`CustomerUID` = `mcustomers`.`CustomerUID` LEFT JOIN `mordertypes` ON `mordertypes`.`OrderTypeUID` = `torders`.`OrderTypeUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `torderassignment` ON  `torderassignment`.`OrderUID` = `torders`.`OrderUID` LEFT JOIN `mgroupcustomers` ON  `mgroupcustomers`.`GroupCustomerSubProductUID` = `torders`.`SubProductUID` WHERE  `torders`.`CustomerUID` IN ($customer_id) AND `torders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `torderassignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND AssignedToUserUID IS NOT NULL) AND `torders`.`StatusUID` IN ('".$status1."', '".$status2."', '".$status3."','".$status4."','".$status5."','".$status6."') ".$where." AND torders.OrderUID NOT IN (SELECT torderabstractor.OrderUID FROM torderabstractor LEFT JOIN torderassignment ON torderassignment.OrderUID = torderabstractor.OrderUID WHERE DocumentReceived = 0 AND (torderassignment.WorkflowModuleUID ='".$filter_workflow."' AND torderassignment.WorkflowStatus != 5)) AND torders.OrderUID IN (SELECT OrderUID FROM torderassignment WHERE WorkflowModuleUID = '".$filter_workflow."' AND SendToVendor = '1' AND VendorUID =  '".$VendorUID."' AND OrderFlag <>2) AND torders.SubProductUID = mgroupcustomers.GroupCustomerSubProductUID AND mgroupcustomers.GroupUID = '".$GroupUID."'  ".$subproduct_where." ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC");
+			$query = $this->db->query("SELECT `tOrders`.`OrderUID`, `OrderNumber`, `tOrders`.`CustomerUID`, `CustomerName`, `OrderTypeName`, `PriorityName`, `tOrders`.`SubProductUID`, `mSubProducts`.`SubProductName`, `mProducts`.`ProductUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mOrderStatus`.`StatusName`, DATE_FORMAT(OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, DATE_FORMAT(`tOrders`.`OrderDueDatetime`, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  JOIN `mCustomers` ON `tOrders`.`CustomerUID` = `mCustomers`.`CustomerUID` LEFT JOIN `mOrderTypes` ON `mOrderTypes`.`OrderTypeUID` = `tOrders`.`OrderTypeUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `tOrderAssignment` ON  `tOrderAssignment`.`OrderUID` = `tOrders`.`OrderUID` LEFT JOIN `mGroupCustomers` ON  `mGroupCustomers`.`GroupCustomerSubProductUID` = `tOrders`.`SubProductUID` WHERE  `tOrders`.`CustomerUID` IN ($customer_id) AND `tOrders`.`OrderUID` NOT IN (SELECT `OrderUID` FROM `tOrderAssignment` WHERE  `WorkflowModuleUID` ='".$filter_workflow."' AND AssignedToUserUID IS NOT NULL) AND `tOrders`.`StatusUID` IN ('".$status1."', '".$status2."', '".$status3."','".$status4."','".$status5."','".$status6."') ".$where." AND tOrders.OrderUID NOT IN (SELECT tOrderAbstractor.OrderUID FROM tOrderAbstractor LEFT JOIN tOrderAssignment ON tOrderAssignment.OrderUID = tOrderAbstractor.OrderUID WHERE DocumentReceived = 0 AND (tOrderAssignment.WorkflowModuleUID ='".$filter_workflow."' AND tOrderAssignment.WorkflowStatus != 5)) AND tOrders.OrderUID IN (SELECT OrderUID FROM tOrderAssignment WHERE WorkflowModuleUID = '".$filter_workflow."' AND SendToVendor = '1' AND VendorUID =  '".$VendorUID."' AND OrderFlag <>2) AND tOrders.SubProductUID = mGroupCustomers.GroupCustomerSubProductUID AND mGroupCustomers.GroupUID = '".$GroupUID."'  ".$subproduct_where." ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC");
 
 			$Orders =  $query->result();
 
@@ -2207,14 +2201,14 @@ $where='';
 
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `AltORderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,VendorAssignedDateTime,PropertyZipcode,TRIM(CONCAT_WS(' ',TRIM(torders.PropertyAddress1),TRIM(torders.PropertyAddress2))) AS whole_name,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."' AND torders.OrderUID IN (select OrderUID from torderassignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2) $like GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC ";
+			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `AltORderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,VendorAssignedDateTime,PropertyZipcode,TRIM(CONCAT_WS(' ',TRIM(tOrders.PropertyAddress1),TRIM(tOrders.PropertyAddress2))) AS whole_name,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2) $like GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC ";
 		}
 		else{
 
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 			','.$this->config->item('keywords')['Cancelled'];
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`,`AltORderNumber`,`StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,VendorAssignedDateTime,PropertyZipcode,TRIM(CONCAT_WS(' ',TRIM(torders.PropertyAddress1),TRIM(torders.PropertyAddress2))) AS whole_name,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'  AND torders.OrderUID IN (select OrderUID from torderassignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  $like  GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC"; 
+			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`,`AltORderNumber`,`StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,VendorAssignedDateTime,PropertyZipcode,TRIM(CONCAT_WS(' ',TRIM(tOrders.PropertyAddress1),TRIM(tOrders.PropertyAddress2))) AS whole_name,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'  AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  $like  GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC"; 
 
 		}
 
@@ -2251,14 +2245,14 @@ $where='';
 
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-			$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'  AND torders.OrderUID IN (select OrderUID from torderassignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL)  AND OrderFlag <>2)  $like GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC ";
+			$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'  AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL)  AND OrderFlag <>2)  $like GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC ";
 		}
 		else{
 
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 			','.$this->config->item('keywords')['Cancelled'];
 
-			$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'  AND torders.OrderUID IN (select OrderUID from torderassignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  $like  GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC"; 
+			$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'  AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  $like  GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC"; 
 
 		}
 
@@ -2310,14 +2304,14 @@ $where='';
 
 			$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,VendorAssignedDateTime,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID` LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` IN (".$statuses.") AND `torderassignment`.`AssignedToUserUID` = ".$loggedid." AND torderassignment.WorkflowModuleUID !=4 AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."' AND torders.OrderUID IN (select OrderUID from torderassignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2) GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC ";
+			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime , tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,VendorAssignedDateTime,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID` LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrderAssignment`.`AssignedToUserUID` = ".$loggedid." AND tOrderAssignment.WorkflowModuleUID !=4 AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."' AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where AssignedToUserUID=$loggedid and SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2) GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC ";
 		}
 		else{
 
 			$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 			','.$this->config->item('keywords')['Cancelled'];
 
-			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `StatusName`,`torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`,DATE_FORMAT(torderassignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,VendorAssignedDateTime,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`)  LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID`  LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `torderpropertyroles` ON `torders`.`OrderUID` = `torderpropertyroles`.`OrderUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE `torders`.`StatusUID` NOT IN (".$statuses.") AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'  AND torders.OrderUID IN (select OrderUID from torderassignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  GROUP BY `OrderUID` ORDER BY FIELD(`torders`.`PriorityUID`,3,1) DESC, `torders`.`OrderEntryDatetime` ASC"; 
+			$sql = "SELECT `CustomerNumber`,`CustomerName`, `OrderNumber`, `StatusName`,`tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`,DATE_FORMAT(tOrderAssignment.AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,VendorAssignedDateTime,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`)  LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID`  LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `tOrderPropertyRoles` ON `tOrders`.`OrderUID` = `tOrderPropertyRoles`.`OrderUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE `tOrders`.`StatusUID` NOT IN (".$statuses.") AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'  AND tOrders.OrderUID IN (select OrderUID from tOrderAssignment where SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2)  GROUP BY `OrderUID` ORDER BY FIELD(`tOrders`.`PriorityUID`,3,1) DESC, `tOrders`.`OrderEntryDatetime` ASC"; 
 
 		}
 
@@ -2382,18 +2376,18 @@ $where='';
 
 					$statuses = $this->config->item('keywords')['Order Assigned'].','.$this->config->item('keywords')['Order Work In Progress'].','.$this->config->item('keywords')['New Order'].','.$this->config->item('keywords')['Partial Review Complete'].','.$this->config->item('keywords')['Partial Draft Complete'].','.$this->config->item('keywords')['Review In Progress'];
 
-					$where = "AND `torders`.`StatusUID` IN (".$statuses.") AND `torders`.`OrderUID` IN (".$OrderUIDs.") AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'  GROUP BY `OrderUID` ORDER BY FIELD(torders.OrderUID,".$OrderUIDs."),FIELD(torders.PriorityUID,1,3,2) LIMIT 10";
+					$where = "AND `tOrders`.`StatusUID` IN (".$statuses.") AND `tOrders`.`OrderUID` IN (".$OrderUIDs.") AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.OrderUID,".$OrderUIDs."),FIELD(tOrders.PriorityUID,1,3,2) LIMIT 10";
 
 				}else{
 
 					$statuses = $this->config->item('keywords')['Order Exported'].','.$this->config->item('keywords')['Order Completed'].
 					','.$this->config->item('keywords')['Cancelled'];
 
-					$where = "AND `torders`.`StatusUID` NOT IN (".$statuses.") AND `torders`.`OrderUID` IN (".$OrderUIDs.") AND torderassignment.SendToVendor = '1' AND torderassignment.VendorUID  = '".$VendorUID."'  GROUP BY `OrderUID` ORDER BY FIELD(torders.OrderUID,".$OrderUIDs."),FIELD(torders.PriorityUID,1,3,2) LIMIT 10";
+					$where = "AND `tOrders`.`StatusUID` NOT IN (".$statuses.") AND `tOrders`.`OrderUID` IN (".$OrderUIDs.") AND tOrderAssignment.SendToVendor = '1' AND tOrderAssignment.VendorUID  = '".$VendorUID."'  GROUP BY `OrderUID` ORDER BY FIELD(tOrders.OrderUID,".$OrderUIDs."),FIELD(tOrders.PriorityUID,1,3,2) LIMIT 10";
 
 				}
 
-				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`, `torders`.`StatusUID`,`StatusColor`, `torders`.`OrderUID`, `morderpriority`.`PriorityName`,`morderpriority`.`TAT`,`morderpriority`.`PriorityUID`, `mproducts`.`ProductName`, `mproducts`.`ProductCode`, `msubproducts`.`SubProductCode`, `msubproducts`.`SubProductName`, DATE_FORMAT(torders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(torders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, torders.PropertyStateCode,torders.PropertyCityName,torders.PropertyCountyName,torders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`torders`) LEFT JOIN `torderassignment` ON `torders`.`OrderUID` = `torderassignment`.`OrderUID` LEFT JOIN `morderpriority` ON `morderpriority`.`PriorityUID` = `torders`.`PriorityUID`  LEFT JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `torders`.`CustomerUID` LEFT JOIN `msubproducts` ON `msubproducts`.`SubProductUID` = `torders`.`SubProductUID` LEFT JOIN `mproducts` ON `mproducts`.`ProductUID` = `msubproducts`.`ProductUID` LEFT JOIN `morderstatus` ON `morderstatus`.`StatusUID` = `torders`.`StatusUID` WHERE torders.OrderUID IN (select OrderUID from torderassignment where  SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2) ".$where." ";
+				$sql = "SELECT `CustomerName`, `OrderNumber`, `StatusName`, `tOrders`.`StatusUID`,`StatusColor`, `tOrders`.`OrderUID`, `mOrderPriority`.`PriorityName`,`mOrderPriority`.`TAT`,`mOrderPriority`.`PriorityUID`, `mProducts`.`ProductName`, `mProducts`.`ProductCode`, `mSubProducts`.`SubProductCode`, `mSubProducts`.`SubProductName`, DATE_FORMAT(tOrders.OrderDueDatetime, '%m-%d-%Y %H:%i:%s') as OrderDueDatetime, DATE_FORMAT(tOrders.OrderEntryDatetime, '%m-%d-%Y %H:%i:%s') as OrderEntryDatetime, tOrders.PropertyStateCode,tOrders.PropertyCityName,tOrders.PropertyCountyName,tOrders.OrderDueDatetime AS Ymd_OrderDueDatetime FROM (`tOrders`) LEFT JOIN `tOrderAssignment` ON `tOrders`.`OrderUID` = `tOrderAssignment`.`OrderUID` LEFT JOIN `mOrderPriority` ON `mOrderPriority`.`PriorityUID` = `tOrders`.`PriorityUID`  LEFT JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `tOrders`.`CustomerUID` LEFT JOIN `mSubProducts` ON `mSubProducts`.`SubProductUID` = `tOrders`.`SubProductUID` LEFT JOIN `mProducts` ON `mProducts`.`ProductUID` = `mSubProducts`.`ProductUID` LEFT JOIN `mOrderStatus` ON `mOrderStatus`.`StatusUID` = `tOrders`.`StatusUID` WHERE tOrders.OrderUID IN (select OrderUID from tOrderAssignment where  SendToVendor='1' and (QCCompletedDateTime='0000-00-00 00:00:00' OR QCCompletedDateTime IS NULL) AND OrderFlag <>2) ".$where." ";
 
 
 
@@ -2418,7 +2412,7 @@ $where='';
 
 		foreach ($Workflows as $key => $Workflow) {
 
-			$query=$this->db->query("SELECT torderassignment.VendorUID,SendToVendor,DATE_FORMAT(AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime FROM `torderassignment` LEFT JOIN mvendors ON mvendors.VendorUID = torderassignment.VendorUID WHERE `OrderUID` = '".$OrderUID."' AND AssignedToUserUID IS NOT NULL AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' ");
+			$query=$this->db->query("SELECT tOrderAssignment.VendorUID,SendToVendor,DATE_FORMAT(AssignedDatetime, '%m-%d-%Y %H:%i:%s') as AssignedDatetime FROM `tOrderAssignment` LEFT JOIN mvendors ON mvendors.VendorUID = tOrderAssignment.VendorUID WHERE `OrderUID` = '".$OrderUID."' AND AssignedToUserUID IS NOT NULL AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' ");
 			$result = $query->row();
 			
 			$ret_data = '--';
@@ -2444,7 +2438,7 @@ $where='';
 	}
 
 	function get_vendorworkflow($VendorUID){
-		$query = $this->db->query("SELECT mworkflowmodules.WorkflowModuleUID,mworkflowmodules.WorkflowModuleName,CanIndependentWorkflowModule,DependentWorkflowModule,IsExternalAbstraction FROM mvendorsworkflowmodules JOIN mvendors ON mvendors.VendorUID = mvendorsworkflowmodules.VendorUID JOIN mworkflowmodules ON mworkflowmodules.WorkflowModuleUID = mvendorsworkflowmodules.WorkflowModuleUID WHERE mvendorsworkflowmodules.VendorUID = '".$VendorUID."' GROUP BY mworkflowmodules.WorkflowModuleUID ");
+		$query = $this->db->query("SELECT mWorkflowModules.WorkflowModuleUID,mWorkflowModules.WorkflowModuleName,CanIndependentWorkflowModule,DependentWorkflowModule,IsExternalAbstraction FROM mvendorsworkflowmodules JOIN mvendors ON mvendors.VendorUID = mvendorsworkflowmodules.VendorUID JOIN mWorkflowModules ON mWorkflowModules.WorkflowModuleUID = mvendorsworkflowmodules.WorkflowModuleUID WHERE mvendorsworkflowmodules.VendorUID = '".$VendorUID."' GROUP BY mWorkflowModules.WorkflowModuleUID ");
 		return $result = $query->result_array();
 	}
 
@@ -2464,7 +2458,7 @@ $where='';
 
 		foreach ($Workflows as $key => $Workflow) {
 
-			$query=$this->db->query("SELECT RoleType,LoginID,SendToVendor,torderassignment.VendorUID as  AssignedVendorUID,VendorName,musers.VendorUID as VendorUID  FROM `torderassignment` LEFT JOIN musers on musers.UserUID  = torderassignment.AssignedToUserUID LEFT JOIN mvendors ON mvendors.VendorUID = torderassignment.VendorUID LEFT JOIN mroles ON mroles.RoleUID = musers.RoleUID WHERE `OrderUID` = '".$OrderUID."'  AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' AND ( AssignedToUserUID IS NOT NULL OR SendToVendor = '1' ) ");
+			$query=$this->db->query("SELECT RoleType,LoginID,SendToVendor,tOrderAssignment.VendorUID as  AssignedVendorUID,VendorName,mUsers.VendorUID as VendorUID  FROM `tOrderAssignment` LEFT JOIN mUsers on mUsers.UserUID  = tOrderAssignment.AssignedToUserUID LEFT JOIN mvendors ON mvendors.VendorUID = tOrderAssignment.VendorUID LEFT JOIN mRoles ON mRoles.RoleUID = mUsers.RoleUID WHERE `OrderUID` = '".$OrderUID."'  AND `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' AND ( AssignedToUserUID IS NOT NULL OR SendToVendor = '1' ) ");
 			$result = $query->row();
 			$ret_data = '--';
 			if(count($result) > 0){
@@ -2514,7 +2508,7 @@ $where='';
 
 		foreach ($Workflows as $key => $Workflow) {
 
-			$query=$this->db->query("SELECT torderassignment.VendorUID,SendToVendor,DATE_FORMAT(VendorAssignedDateTime, '%m-%d-%Y %H:%i:%s') as VendorAssignedDateTime FROM `torderassignment` LEFT JOIN mvendors ON mvendors.VendorUID = torderassignment.VendorUID WHERE `OrderUID` = '".$OrderUID."' AND  `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' AND ( AssignedToUserUID IS NOT NULL OR SendToVendor = '1' )");
+			$query=$this->db->query("SELECT tOrderAssignment.VendorUID,SendToVendor,DATE_FORMAT(VendorAssignedDateTime, '%m-%d-%Y %H:%i:%s') as VendorAssignedDateTime FROM `tOrderAssignment` LEFT JOIN mvendors ON mvendors.VendorUID = tOrderAssignment.VendorUID WHERE `OrderUID` = '".$OrderUID."' AND  `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' AND ( AssignedToUserUID IS NOT NULL OR SendToVendor = '1' )");
 			$result = $query->row();
 			
 			$ret_data = '--';
@@ -2545,7 +2539,7 @@ $where='';
 
 		foreach ($Workflows as $key => $Workflow) {
 
-			$query=$this->db->query("SELECT torderassignment.VendorUID,SendToVendor,DATE_FORMAT(VendorDueDate, '%m-%d-%Y %H:%i:%s') as VendorDueDate FROM `torderassignment` LEFT JOIN mvendors ON mvendors.VendorUID = torderassignment.VendorUID WHERE `OrderUID` = '".$OrderUID."' AND  `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' AND ( AssignedToUserUID IS NOT NULL OR SendToVendor = '1' )");
+			$query=$this->db->query("SELECT tOrderAssignment.VendorUID,SendToVendor,DATE_FORMAT(VendorDueDate, '%m-%d-%Y %H:%i:%s') as VendorDueDate FROM `tOrderAssignment` LEFT JOIN mvendors ON mvendors.VendorUID = tOrderAssignment.VendorUID WHERE `OrderUID` = '".$OrderUID."' AND  `WorkflowModuleUID` = '".$Workflow['WorkflowModuleUID']."' AND ( AssignedToUserUID IS NOT NULL OR SendToVendor = '1' )");
 			$result = $query->row();
 			
 			$ret_data = '--';
@@ -2572,7 +2566,7 @@ $where='';
 
 	function get_customerproductandsubproduct($Customers){
 		if($Customers->CustomerUIDs != ''){
-			$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID) AS SubProductUIDs FROM `mcustomerproducts` WHERE CustomerUID IN ($Customers->CustomerUIDs)");
+			$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT SubProductUID) AS SubProductUIDs FROM `mCustomerProducts` WHERE CustomerUID IN ($Customers->CustomerUIDs)");
 			return $query->row();
 		}
 		return array();
@@ -2580,16 +2574,16 @@ $where='';
 
 	function get_customeringroup($GroupUID){
 		
-		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT `mcustomers`.`CustomerUID`) AS CustomerUIDs FROM (`mgroupcustomers`) JOIN `mcustomers` ON `mcustomers`.`CustomerUID` = `mgroupcustomers`.`GroupCustomerUID` WHERE `mgroupcustomers`.`GroupUID`  =  $GroupUID  AND mcustomers.Active = 1 ORDER BY `mcustomers`.`CustomerName`  ");
+		$query = $this->db->query("SELECT GROUP_CONCAT(DISTINCT `mCustomers`.`CustomerUID`) AS CustomerUIDs FROM (`mGroupCustomers`) JOIN `mCustomers` ON `mCustomers`.`CustomerUID` = `mGroupCustomers`.`GroupCustomerUID` WHERE `mGroupCustomers`.`GroupUID`  =  $GroupUID  AND mCustomers.Active = 1 ORDER BY `mCustomers`.`CustomerName`  ");
 		return $query->row();
 	}
 
 	function check_assigned_to_agent($OrderUID,$logged_details){
 		$this->db->select ( '*' );
-		$this->db->from ( 'torderassignment' );
-		$this->db->where('torderassignment.AssignedToUserUID !=', 'NULL');
-		$this->db->where('torderassignment.OrderUID',$OrderUID);
-		$this->db->where('torderassignment.VendorUID',$logged_details->VendorUID);
+		$this->db->from ( 'tOrderAssignment' );
+		$this->db->where('tOrderAssignment.AssignedToUserUID !=', 'NULL');
+		$this->db->where('tOrderAssignment.OrderUID',$OrderUID);
+		$this->db->where('tOrderAssignment.VendorUID',$logged_details->VendorUID);
 
 		$query = $this->db->get();
 		$res =  $query->num_rows();
@@ -2599,7 +2593,7 @@ $where='';
 	 function SearchCheckWorkflowStatus($OrderUID){
 
   $this->db->select('*');
-  $this->db->from('torderassignment');
+  $this->db->from('tOrderAssignment');
   $this->db->where('OrderUID',$OrderUID);
   $this->db->where('WorkflowModuleUID',1);
   return $this->db->get()->row();
@@ -2608,7 +2602,7 @@ $where='';
 function TypingCheckWorkflowStatus($OrderUID){
 
   $this->db->select('*');
-  $this->db->from('torderassignment');
+  $this->db->from('tOrderAssignment');
   $this->db->where('OrderUID',$OrderUID);
   $this->db->where('WorkflowModuleUID',2);
   return $this->db->get()->row();
@@ -2617,21 +2611,21 @@ function TypingCheckWorkflowStatus($OrderUID){
 function TaxingCheckWorkflowStatus($OrderUID){
 
   $this->db->select('*');
-  $this->db->from('torderassignment');
+  $this->db->from('tOrderAssignment');
   $this->db->where('OrderUID',$OrderUID);
   $this->db->where('WorkflowModuleUID',3);
   return $this->db->get()->row();
 }
 function SearchStatus($OrderUID){
 	$this->db->select('*');
-	$this->db->from('torders');
+	$this->db->from('tOrders');
 	$this->db->where('OrderUID',$OrderUID);
 	return $this->db->get()->row();
 
 }
 
 function GetPRNAME($OrderUID){
-	$query=$this->db->query('SELECT GROUP_CONCAT(DISTINCT `torderpropertyroles`.`PRName`) AS Borrower FROM torderpropertyroles WHERE OrderUID='.$OrderUID.'');
+	$query=$this->db->query('SELECT GROUP_CONCAT(DISTINCT `tOrderPropertyRoles`.`PRName`) AS Borrower FROM tOrderPropertyRoles WHERE OrderUID='.$OrderUID.'');
 	return $query->row();
 	
 }
@@ -2641,14 +2635,14 @@ function GetPRNAME($OrderUID){
 function get_customer_workflow($CustomerUID = '', $SubProductUID = '', $Filtered_Workflow = [])
 {
 	$this->db->distinct();
-	$this->db->select('CustomerUID,WorkflowModuleName,mcustomerworkflowmodules.workflowmoduleUID');
-	$this->db->from('mcustomerworkflowmodules');
-	$this->db->join('mworkflowmodules', 'mcustomerworkflowmodules.workflowmoduleUID = mworkflowmodules.WorkflowModuleUID');
-	$this->db->where('mcustomerworkflowmodules.CustomerUID', $CustomerUID);
-	$this->db->where('mcustomerworkflowmodules.SubProductUID', $SubProductUID);
-	$this->db->where('mcustomerworkflowmodules.SubProductUID', $SubProductUID);
+	$this->db->select('CustomerUID,WorkflowModuleName,mCustomerWorkflowModules.workflowmoduleUID');
+	$this->db->from('mCustomerWorkflowModules');
+	$this->db->join('mWorkflowModules', 'mCustomerWorkflowModules.workflowmoduleUID = mWorkflowModules.WorkflowModuleUID');
+	$this->db->where('mCustomerWorkflowModules.CustomerUID', $CustomerUID);
+	$this->db->where('mCustomerWorkflowModules.SubProductUID', $SubProductUID);
+	$this->db->where('mCustomerWorkflowModules.SubProductUID', $SubProductUID);
 	if (!empty($Filtered_Workflow)) {
-		$this->db->where_in('mcustomerworkflowmodules.WorkflowModuleUID', $Filtered_Workflow);
+		$this->db->where_in('mCustomerWorkflowModules.WorkflowModuleUID', $Filtered_Workflow);
 	}
 	$query = $this->db->get();
 	return $query->result();
@@ -2656,30 +2650,30 @@ function get_customer_workflow($CustomerUID = '', $SubProductUID = '', $Filtered
 
 function getassignmentbyorderworkflow($OrderUID, $WorkflowModuleUID)
 {
-	$this->db->select('*')->from('torderassignment');
-	$this->db->join('musers','musers.UserUID = torderassignment.AssignedToUserUID', 'left');
-	$this->db->where('torderassignment.OrderUID', $OrderUID);
-	$this->db->where('torderassignment.WorkflowModuleUID', $WorkflowModuleUID);
-	$this->db->where('(torderassignment.AssignedToUserUID IS NOT NULL OR torderassignment.AssignedToUserUID != 0)', NULL, false);
+	$this->db->select('*')->from('tOrderAssignment');
+	$this->db->join('mUsers','mUsers.UserUID = tOrderAssignment.AssignedToUserUID', 'left');
+	$this->db->where('tOrderAssignment.OrderUID', $OrderUID);
+	$this->db->where('tOrderAssignment.WorkflowModuleUID', $WorkflowModuleUID);
+	$this->db->where('(tOrderAssignment.AssignedToUserUID IS NOT NULL OR tOrderAssignment.AssignedToUserUID != 0)', NULL, false);
 	return $this->db->get()->row();
 }
 
-function selfassign_order($torderassignment, $OrderUID, $workflowuid)
+function selfassign_order($tOrderAssignment, $OrderUID, $workflowuid)
 {
 	$this->db->where('OrderUID', $OrderUID);
 	$this->db->where('WorkflowModuleUID', $workflowuid);
-	$is_assigned = $this->db->get('torderassignment')->row();
+	$is_assigned = $this->db->get('tOrderAssignment')->row();
 
 	$this->db->trans_begin();
 	if (empty($is_assigned)) {
-		$this->db->insert('torderassignment', $torderassignment);
+		$this->db->insert('tOrderAssignment', $tOrderAssignment);
 	}
 	else{
 
 		if (empty($is_assigned->AssignedToUserUID)) {
 			$this->db->where('OrderUID', $OrderUID);
 			$this->db->where('WorkflowModuleUID', $workflowuid);
-			$this->db->update('torderassignment', $torderassignment);			
+			$this->db->update('tOrderAssignment', $tOrderAssignment);			
 		}
 		else{
 			$this->db->trans_rollback();
@@ -2699,7 +2693,7 @@ function selfassign_order($torderassignment, $OrderUID, $workflowuid)
 
 function GetProducts()
 {
-	$q = $this->db->get_where('mproducts',array('Active'=>1));
+	$q = $this->db->get_where('mProducts',array('Active'=>1));
 	return $q->result();
 }
 
@@ -2708,25 +2702,25 @@ function GetProducts()
   {
     if(in_array($this->session->userdata('RoleType'),array(7,9))) 
     {
-      $this->db->select('mcustomers.CustomerUID,mcustomers.CustomerName,mcustomers.CustomerNumber');
+      $this->db->select('mCustomers.CustomerUID,mCustomers.CustomerName,mCustomers.CustomerNumber');
       $this->db->from('mgroupusers');
-      $this->db->join ('mgroupcustomers','mgroupcustomers.GroupUID = mgroupusers.GroupUID','left');
-      $this->db->join ('mcustomers','mcustomers.CustomerUID = mgroupcustomers.GroupCustomerUID','left');
-      $this->db->where('GroupUserUID = '.$login_id.' AND mcustomers.Active = 1');
-      $this->db->group_by('mcustomers.CustomerUID');
+      $this->db->join ('mGroupCustomers','mGroupCustomers.GroupUID = mgroupusers.GroupUID','left');
+      $this->db->join ('mCustomers','mCustomers.CustomerUID = mGroupCustomers.GroupCustomerUID','left');
+      $this->db->where('GroupUserUID = '.$login_id.' AND mCustomers.Active = 1');
+      $this->db->group_by('mCustomers.CustomerUID');
       return $this->db->get()->result();
     } 
     else if(in_array($this->session->userdata('RoleType'),array(8)))
     {
-      $this->db->select('mcustomers.CustomerUID,mcustomers.CustomerName,mcustomers.CustomerNumber');
-      $this->db->from('mcustomers');
-      $this->db->join ('musers','musers.CustomerUID = mcustomers.CustomerUID','left');
-      $this->db->where('musers.UserUID',$login_id);
-      $this->db->group_by('mcustomers.CustomerUID');
+      $this->db->select('mCustomers.CustomerUID,mCustomers.CustomerName,mCustomers.CustomerNumber');
+      $this->db->from('mCustomers');
+      $this->db->join ('mUsers','mUsers.CustomerUID = mCustomers.CustomerUID','left');
+      $this->db->where('mUsers.UserUID',$login_id);
+      $this->db->group_by('mCustomers.CustomerUID');
       return $this->db->get()->result();
     } else {
       $this->db->where('Active',1);
-      return $this->db->get('mcustomers')->result();
+      return $this->db->get('mCustomers')->result();
     }
 
   }
@@ -2737,8 +2731,8 @@ function GetProducts()
 		$where = [];
 
 			$this->db->select('*');
-			$this->db->from('mgroupcustomers');
-			$this->db->where('mgroupcustomers.GroupUID',$post);
+			$this->db->from('mGroupCustomers');
+			$this->db->where('mGroupCustomers.GroupUID',$post);
 			$groupparams  = $this->db->get()->result_array();
 			if(!empty($groupparams)) {
 				foreach ($groupparams as $groupparamvalue) {
@@ -2763,48 +2757,48 @@ function GetProducts()
 	{
 		$where = [];
 		if(isset($post['CustomerUID']) && !empty($post['CustomerUID'])) {
-			$where[] = '(torders.CustomerUID = '.$post['CustomerUID'].')';
+			$where[] = '(tOrders.CustomerUID = '.$post['CustomerUID'].')';
 		}
 
 		if(isset($post['ProductUID']) && !empty($post['ProductUID'])) {
-			$where[] = '(msubproducts.ProductUID = '.$post['ProductUID'].')';
+			$where[] = '(mSubProducts.ProductUID = '.$post['ProductUID'].')';
 			$this->db->select('GROUP_CONCAT(GroupCustomerUID) AS GroupCustomerUID');
-			$this->db->from('mgroupcustomers');
-			$this->db->where('mgroupcustomers.GroupUID',$post['GroupUID']);
-			$this->db->where('mgroupcustomers.GroupCustomerProductUID',$post['ProductUID']);
+			$this->db->from('mGroupCustomers');
+			$this->db->where('mGroupCustomers.GroupUID',$post['GroupUID']);
+			$this->db->where('mGroupCustomers.GroupCustomerProductUID',$post['ProductUID']);
 			$groupparams  = $this->db->get()->row();
 			if(!empty($groupparams) && !empty($groupparams->GroupCustomerUID)) {
-				$where[] = '(torders.CustomerUID IN ('.$groupparams->GroupCustomerUID.'))';
+				$where[] = '(tOrders.CustomerUID IN ('.$groupparams->GroupCustomerUID.'))';
 			}
 		}
 
 		if(isset($post['SubProductUID']) && !empty($post['SubProductUID'])) {
-			$where[] = '(msubproducts.SubProductUID = '.$post['SubProductUID'].')';
+			$where[] = '(mSubProducts.SubProductUID = '.$post['SubProductUID'].')';
 		}
 
 		if(isset($post['StateUID']) && !empty($post['StateUID'])) {
 			$State = $this->common_model->getStateRowbyUID($post['StateUID']);
 			if(!empty($State) && !empty($State->StateCode)) {
-				$where[] = '(torders.PropertyStateCode = "'.$State->StateCode.'")';
+				$where[] = '(tOrders.PropertyStateCode = "'.$State->StateCode.'")';
 			}
 		} 
 
 		if(isset($post['CountyUID']) && !empty($post['CountyUID'])) {
 			$County = $this->common_model->getCountyRowbyUID($post['CountyUID']);
 			if(!empty($County) && !empty($County->CountyName)) {
-				$where[] = '(torders.PropertyCountyName = "'.$County->CountyName.'")';
+				$where[] = '(tOrders.PropertyCountyName = "'.$County->CountyName.'")';
 			}
 		} 
 
 		if(isset($post['CityUID']) && !empty($post['CityUID'])) {
 			$city = $this->common_model->getCityRowbyUID($post['CityUID']);
 			if(!empty($city) && !empty($city->CityName)) {
-				$where[] = '(torders.PropertyCityName = "'.$city->CityName.'")';
+				$where[] = '(tOrders.PropertyCityName = "'.$city->CityName.'")';
 			}
 		} 
 
 		if(isset($post['ZipCode']) && !empty($post['ZipCode'])) {
-			$where[] = '(torders.PropertyZipcode = '.$post['ZipCode'].')';
+			$where[] = '(tOrders.PropertyZipcode = '.$post['ZipCode'].')';
 		} 
 
 		return implode(' AND  ', $where);
@@ -2813,13 +2807,14 @@ function GetProducts()
 
 function assignmentOrders(){
 	$this->db->select("*");
-	$this->db->from('torders');
-	$this->db->join ('msubproducts','msubproducts.SubProductUID = torders.SubProductUID','left');
-    $this->db->join ('mproducts','mproducts.ProductUID = msubproducts.ProductUID','left');
-    $this->db->join ('morderstatus','morderstatus.StatusUID = torders.StatusUID','left');
-	$this->db->join ('morderpriority','morderpriority.PriorityUID = torders.PriorityUID','left');
+	$this->db->from('tOrders');
+	$this->db->join ('mSubProducts','mSubProducts.SubProductUID = tOrders.SubProductUID','left');
+    $this->db->join ('mProducts','mProducts.ProductUID = mSubProducts.ProductUID','left');
+    $this->db->join ('mOrderStatus','mOrderStatus.StatusUID = tOrders.StatusUID','left');
+	$this->db->join ('mOrderPriority','mOrderPriority.PriorityUID = tOrders.PriorityUID','left');
 	$ProductUID=7;
-	$this->db->where('mproducts.ProductUID',$ProductUID);
+	$this->db->where('mProducts.ProductUID',$ProductUID);
+	$this->db->order_by('OrderUID', 'asc');
 	$query = $this->db->get();
 	return $query->result();
 

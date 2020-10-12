@@ -157,8 +157,14 @@ class Order_info_model extends CI_Model {
   }
   
   function Gettordersby_UID($orderUID) {
-    $query = $this->db->get_where('torders', array('OrderUID' => $orderUID));
-    return $query->result();
+    // $query = $this->db->get_where('torders', array('OrderUID' => $orderUID));
+    // return $query->result();
+
+    $this->db->select ( '*' );
+    $this->db->from ( 'tOrders' );
+    $this->db->where ('OrderUID',$orderUID);
+    $query = $this->db->get()->result();
+    return $query;
   }
 
   function GetTemplateMappingByOrderUID($torders)
@@ -172,15 +178,15 @@ class Order_info_model extends CI_Model {
     $countyuid = $CountyStateDetails->CountyUID;
     $stateuid = $CountyStateDetails->StateUID;
 
-    $Templatemapping=$this->db->get_where('mtemplatemapping', array('SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>$countyuid))->row();
+    $Templatemapping=$this->db->get_where('mTemplateMapping', array('SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>$countyuid))->row();
 
     if(empty($Templatemapping))
     {
-      $Templatemapping=$this->db->get_where('mtemplatemapping', array('SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>'0'))->row();
+      $Templatemapping=$this->db->get_where('mTemplateMapping', array('SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>'0'))->row();
 
       if(empty($Templatemapping))
       {
-        $Templatemapping=$this->db->get_where('mtemplatemapping', array('SubProductUID' => $subproductuid, 'StateUID'=>'0', 'CountyUID'=>'0'))->row();
+        $Templatemapping=$this->db->get_where('mTemplateMapping', array('SubProductUID' => $subproductuid, 'StateUID'=>'0', 'CountyUID'=>'0'))->row();
       }
     }
 
@@ -199,15 +205,15 @@ class Order_info_model extends CI_Model {
     $countyuid = $CountyStateDetails->CountyUID;
     $stateuid = $CountyStateDetails->StateUID;
 
-    $Templatemapping=$this->db->get_where('mtemplatemapping', array('FieldRow' => $FieldRow,'SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>$countyuid))->row();
+    $Templatemapping=$this->db->get_where('mTemplateMapping', array('FieldRow' => $FieldRow,'SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>$countyuid))->row();
 
     if(empty($Templatemapping))
     {
-      $Templatemapping=$this->db->get_where('mtemplatemapping', array('FieldRow' => $FieldRow,'SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>'0'))->row();
+      $Templatemapping=$this->db->get_where('mTemplateMapping', array('FieldRow' => $FieldRow,'SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>'0'))->row();
 
       if(empty($Templatemapping))
       {
-        $Templatemapping=$this->db->get_where('mtemplatemapping', array('FieldRow' => $FieldRow,'SubProductUID' => $subproductuid, 'StateUID'=>'0', 'CountyUID'=>'0'))->row();
+        $Templatemapping=$this->db->get_where('mTemplateMapping', array('FieldRow' => $FieldRow,'SubProductUID' => $subproductuid, 'StateUID'=>'0', 'CountyUID'=>'0'))->row();
       }
     }
 
@@ -360,8 +366,8 @@ function GetTableValue($TableName,$FieldName,$OrderUID){
     $stateuid = $CountyStateDetails->StateUID;
 
     $this->db->select ( '*' ); 
-    $this->db->from ( 'mtemplatemapping' );
-    $this->db->join('mtemplates','mtemplates.TemplateUID=mtemplatemapping.TemplateUID');
+    $this->db->from ( 'mTemplateMapping' );
+    $this->db->join('mtemplates','mtemplates.TemplateUID=mTemplateMapping.TemplateUID');
     $this->db->join('mTemplateProject','mTemplateProject.TemplateUID=mtemplates.TemplateUID');
     $this->db->where(array('mTemplateProject.ProjectUID' => $ProjectUID,'SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>$countyuid));
     $query = $this->db->get();
@@ -371,8 +377,8 @@ function GetTableValue($TableName,$FieldName,$OrderUID){
     {
 
       $this->db->select ( '*' ); 
-      $this->db->from ( 'mtemplatemapping' );
-      $this->db->join('mtemplates','mtemplates.TemplateUID=mtemplatemapping.TemplateUID');
+      $this->db->from ( 'mTemplateMapping' );
+      $this->db->join('mtemplates','mtemplates.TemplateUID=mTemplateMapping.TemplateUID');
       $this->db->join('mTemplateProject','mTemplateProject.TemplateUID=mtemplates.TemplateUID');
       $this->db->where(array('mTemplateProject.ProjectUID' => $ProjectUID,'SubProductUID' => $subproductuid, 'StateUID'=>$stateuid, 'CountyUID'=>'0'));
       $query = $this->db->get();
@@ -381,8 +387,8 @@ function GetTableValue($TableName,$FieldName,$OrderUID){
       if(empty($Templatemapping))
       {
         $this->db->select ( '*' ); 
-        $this->db->from ( 'mtemplatemapping' );
-        $this->db->join('mtemplates','mtemplates.TemplateUID=mtemplatemapping.TemplateUID');
+        $this->db->from ( 'mTemplateMapping' );
+        $this->db->join('mtemplates','mtemplates.TemplateUID=mTemplateMapping.TemplateUID');
         $this->db->join('mTemplateProject','mTemplateProject.TemplateUID=mtemplates.TemplateUID');
         $this->db->where(array('mTemplateProject.ProjectUID' => $ProjectUID,'SubProductUID' => $subproductuid, 'StateUID'=>'0', 'CountyUID'=>'0'));
         $query = $this->db->get();
@@ -395,7 +401,7 @@ function GetTableValue($TableName,$FieldName,$OrderUID){
 
   function GetTemplateMappingFields($TemplatesMappingUID){
     $this->db->select ( '*' ); 
-    $this->db->from ( 'mtemplatemapping' );
+    $this->db->from ( 'mTemplateMapping' );
     $this->db->where(array('TemplatesMappingUID' => $TemplatesMappingUID));
     $query = $this->db->get();
     $Templatemapping = $query->row();
