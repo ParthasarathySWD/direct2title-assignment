@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-vcenter text-nowrap resizable new-datatable1">
+                    <table  class="table table-vcenter text-nowrap resizable new-datatable1">
                         <thead>
                             <tr>
                                 <th class="nosort" style="width:50px;">
@@ -107,127 +107,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>PORTSMOUTH</td>
-                                <td>ROCKINGHAM</td>
-                                <td>New Hampshire</td>
-                                <td>210</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View City<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View City </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>PLEASANTVILLE</td>
-                                <td>WESTCHESTER</td>
-                                <td>New York</td>
-                                <td>401</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View City<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View City </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>HOLTSVILLE</td>
-                                <td>SUFFOLK</td>
-                                <td>New York</td>
-                                <td>501</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View City<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View City </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-check-circle"></i> Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>ADJUNTAS</td>
-                                <td>ADJUNTAS</td>
-                                <td>Puerto Rico</td>
-                                <td>601</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View City<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View City </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
+                          
+                           <!--  <tr>
                                 <td>
                                     <label class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
@@ -256,7 +137,7 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -358,18 +239,43 @@ $(function(){
   (jQuery))
     $('table.resizable').resizableColumns();
 
-    $('.new-datatable1').DataTable({
-      "ordering": false,
-      "lengthChange": false ,
-      "pageLength": 5,
-      "language": {
+//     $('.new-datatable1').DataTable({
+//       "ordering": false,
+//       "lengthChange": false ,
+//       "pageLength": 5,
+//       "language": {
 
-        "paginate": {
-          "previous": '<',
-          "next":     '>'
-      },
-  },
-});
+//         "paginate": {
+//           "previous": '<',
+//           "next":     '>'
+//       },
+//   },
+// });
+
+    datatable = $('.new-datatable1').DataTable({
+        "processing": true, //Feature control the processing indicator.
+        "serverSide": false, //Feature control DataTables' server-side processing mode.
+        "scrollX": true, 
+        "order": [], //Initial no order.
+        "pageLength": 15, // Set Page Length
+        "lengthMenu":[[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+        "language": {
+         processing: '<span class="progrss"><i class="fa fa-spinner fa-spin fa-1x fa-fw"></i> Processing...</span>'
+        },
+
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": "<?php echo base_url('City/ajax_list')?>",
+            "type": "POST" 
+        }, 
+        //Set column definition initialisation properties.
+        "columnDefs": [
+            {
+               "targets": [0,5,6], //first, Fourth, seventh column
+               "orderable": false //set not orderable
+            }
+        ]
+    });
 
 })
 $(document).ready(function(){ 
@@ -380,4 +286,164 @@ $(document).ready(function(){
      }
  });
 });
+
+
+    // datatable = $('#example').DataTable({
+    //     "processing": true, //Feature control the processing indicator.
+    //     "serverSide": true, //Feature control DataTables' server-side processing mode.
+    //     "scrollX": true, 
+    //     "order": [], //Initial no order.
+    //     "pageLength": 15, // Set Page Length
+    //     "lengthMenu":[[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+    //     "language": {
+    //      processing: '<span class="progrss"><i class="fa fa-spinner fa-spin fa-1x fa-fw"></i> Processing...</span>'
+    //     },
+    //     // Load data for the table's content from an Ajax source
+    //     "ajax": {
+    //         "url": "<?php echo base_url('City/ajax_list')?>",
+    //         "type": "POST" 
+    //     }, 
+    //     //Set column definition initialisation properties.
+    //     "columnDefs": [
+    //         {
+    //            "targets": [0,5,6], //first, Fourth, seventh column
+    //            "orderable": false //set not orderable
+    //         }
+    //     ]
+    // });
+
+    $(document).on("click",".delete", function(){
+      $("#alert-model").modal({
+       backdrop: 'static',
+       keyboard: false
+     });
+     var ID = $(this).attr('data-value');
+     $('.Yes').attr('data-ID',ID);
+     return false;
+    });     
+
+    $('.Yes').click(function(){
+        var Id = $(this).attr('data-ID');
+        $.ajax({
+          url: '<?php echo base_url();?>City/delete_city',
+          type: "POST",
+          data: {id:Id}, 
+          dataType:'json',
+          cache: false,
+          success: function(data)
+          {
+            if(data.validation_error == 0)
+            {
+              $.gritter.add({
+                title: data['message'],
+                class_name: 'color success',
+                fade: true,
+                time: 1000,
+                speed:'slow',
+                after_close:function(){
+                  window.location.reload(); 
+                }
+              });
+             $('#alert-model').modal('hide');
+            }
+            else{
+             $.gritter.add({
+               title: data['message'],
+               class_name: 'color danger',
+               fade: true,
+               time: 3000,
+               speed:'slow',
+              });
+            }
+          },
+          error:function(jqXHR, textStatus, errorThrown)
+          {
+            console.log(jqXHR.responseText);
+          }
+       });
+    });
+
+    // function showEdit(editableObj) {
+    //  //$(editableObj).css("background","#FFF");
+    // } 
+    
+    // function saveToDatabase(editableObj,column,id) {
+
+    //  /*alert(editableObj);*/
+
+    //  $.ajax({
+    //      url: '<?php echo base_url();?>city/saveedit',
+    //      type: "POST",
+    //      data:'column='+column+'&editval='+editableObj.innerHTML+'&CityUID='+id,
+    //      success: function(data){
+                
+    //      }        
+    //    });
+    // }
+
+    function showEditStatus(id,editableObj) {
+        $.ajax({
+            url: '<?php echo base_url();?>City/UpdateCityStatus',
+            type: "POST",
+            data:'editval='+editableObj+'&CityUID='+id,
+            dataType:'json',
+            success: function(data){
+                //alert(data);
+                    // $.gritter.add({
+                    //  title: data.message,
+                    //  class_name: 'color success',
+                    //  fade: true,
+                    //  time: 3000,
+                    //  speed:'slow',
+                    // });          
+                window.location.replace('<?php echo base_url(); ?>city');   
+            }        
+       });
+        return false;
+    } 
+        
+    $('#example tfoot th').each( function () {
+        var title = $('#example thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+
+     
+
+
+    $('#edit').click(function(){
+      $('#edit').hide();
+      $('td').each(function(){
+        var content = $(this).html();
+        $(this).html('<textarea>' + content + '</textarea>');
+      });  
+      
+      $('#save').show();
+    });
+
+    $('#save').click(function(){
+      $('#save').hide();
+      $('textarea').each(function(){
+        var content = $(this).val();//.replace(/\n/g,"<br>");
+        $(this).html(content);
+        $(this).contents().unwrap();    
+      }); 
+
+      $('#edit').show(); 
+    });
+ 
+     
+    // Apply the filter
+    $("#example tfoot input").on( 'keyup change', function () {
+        var table = $('#example').DataTable();
+        table
+            .column( $(this).parent().index()+':visible' )
+            .search( this.value )
+            .draw();
+    } );
+
+
+    
+
+
+    
 </script>

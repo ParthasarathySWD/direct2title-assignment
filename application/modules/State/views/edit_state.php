@@ -33,6 +33,7 @@
                         <div class="col-md-12 col-lg-12 p-0">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item"><a class="nav-link active pt-2 pb-3" data-toggle="tab" href="#add-template" aria-expanded="true">Edit State</a></li>
+                                <li class="nav-item"><a class="nav-link pt-2 pb-3" data-toggle="tab" href="#audit-log" aria-expanded="false">Audit Logs</a></li>
                             </ul>
                         </div>
                         <div class="card-options" style="position: absolute;right: 20px;top: 20px;z-index:1;">
@@ -40,7 +41,7 @@
                       </div>
                   </div>
                  <form action="#" name="frm_state" id="frm_state">
-                    <input type="hidden" name="StateUID" id="StateUID" value="0" />
+                  <input type="hidden" name="StateUID" id="StateUID" value="<?php echo $StateDetails->StateUID?>" />
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="add-template">
                             <div class="card-header pb-0">
@@ -59,24 +60,25 @@
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">State Name <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="StateName" name="StateName" value="" maxlength="50" >
+                                                <input class="form-control input-xs" type="text" id="StateName" name="StateName" value="<?php echo $StateDetails->StateName?>" maxlength="50" >
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">State Code <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="StateCode" name="StateCode" value="" maxlength="50">
+                                                <input class="form-control input-xs" type="text" id="StateCode" name="StateCode" value="<?php echo $StateDetails->StateCode?>" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">FIPS Code <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="FIPSCode" name="FIPSCode" value="" maxlength="50">
+                                                <input class="form-control input-xs" type="text" id="FIPSCode" name="FIPSCode" value="<?php echo $StateDetails->FIPSCode?>" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-lg-3 mt-4 pl-4">
                                             <label class="custom-switch">
-                                                <input type="checkbox" name="Active" id="Active" class="custom-switch-input">
+                                                <?php  $Checklist = ($StateDetails->Active == 1) ? 'checked' : ''; ?>
+                                                <input type="checkbox" name="Active" id="Active" class="custom-switch-input" value="<?php echo $StateDetails->Active; ?>" checked="<?php echo $Checklist;  ?>">
                                                 <span class="custom-switch-indicator"></span>
                                                 <span class="custom-switch-description">Is Active</span>
                                             </label>
@@ -85,7 +87,7 @@
                                         <div class="col-md-12 col-lg-12 mb-3 mt-3">
                                             <div class="btn-list  text-right">
                                                 <a href="State" class="btn btn-secondary">Cancel</a>
-                                                <button  type="submit" class="btn btn-success" id="BtnSaveState" >Save State</button>
+                                                <button  type="submit" class="btn btn-primary" id="BtnUpdate" >Update State</button>
                                             </div>
                                         </div>
 
@@ -95,6 +97,33 @@
 
 
                         </div>
+
+                        <div class="tab-pane fade" id="audit-log">
+                            <div class="card-body pb-4 pt-3">
+                                <div class="col-md-12 col-lg-12">
+                                    <table class="table table-vcenter table-new new-datatable1 text-nowrap" cellspacing="0" id="" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Module Name</th>
+                                                <th>Activity</th>
+                                                <th>DateTime</th>
+                                                <th style="width:50px">User</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($Auditlog as $key => $value) { ?>
+                                             <tr>
+                                                <td><?php echo $value->ModuleName; ?></td>
+                                                <td><?php echo $value->Content; ?></td>
+                                                <td><?php echo $value->DateTime; ?></td>
+                                                <td><?php echo $value->UserUID; ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -103,9 +132,13 @@
 </div>
 </div>
 <script type="text/javascript">
+   $(document).ready(function(e) {
+    $('.new-datatable1').DataTable({
 
+    });
+});
 
- $('#BtnSaveState').click(function(event)
+   $('#BtnUpdate').click(function(event)
  {
 
   event.preventDefault();
@@ -117,7 +150,7 @@
     var formData=$('#frm_state').serialize();
     $.ajax({
      type: "POST",
-     url: '<?php echo base_url();?>State/save_state',
+     url: '<?php echo base_url();?>State/update_state',
      data: formData, 
      dataType:'json',
      cache: false,

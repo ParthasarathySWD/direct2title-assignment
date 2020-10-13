@@ -32,8 +32,8 @@
                     <div class="card-header">
                         <div class="col-md-12 col-lg-12 p-0">
                             <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item"><a class="nav-link active pt-2 pb-3" data-toggle="tab" href="#add-template" aria-expanded="true">Add County</a></li>
-                                <!-- <li class="nav-item"><a class="nav-link pt-2 pb-3" data-toggle="tab" href="#audit-log" aria-expanded="false">Audit Logs</a></li> -->
+                                <li class="nav-item"><a class="nav-link active pt-2 pb-3" data-toggle="tab" href="#add-template" aria-expanded="true">Edit County</a></li>
+                                <li class="nav-item"><a class="nav-link pt-2 pb-3" data-toggle="tab" href="#audit-log" aria-expanded="false">Audit Logs</a></li>
                             </ul>
                         </div>
                         <div class="card-options" style="position: absolute;right: 20px;top: 20px;z-index:1;">
@@ -41,7 +41,7 @@
                       </div>
                   </div>
                   <form action="#" name="frm_county" id="frm_county">
-                    <input type="hidden" name="CountyUID" id="CountyUID" value="0" />
+                    <input type="hidden" name="CountyUID" id="CountyUID" value="<?php echo $CountyDetails->CountyUID?>" />
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="add-template">
                             <div class="card-header pb-0">
@@ -60,13 +60,13 @@
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">County Name <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="CountyName" name="CountyName" value="" maxlength="50">
+                                                <input class="form-control input-xs" type="text" id="CountyName" name="CountyName" value="<?php echo $CountyDetails->CountyName?>" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">County Code </label>
-                                                <input class="form-control input-xs" type="text" id="CountyCode" name="CountyCode" value="" maxlength="50">
+                                                <input class="form-control input-xs" type="text" id="CountyCode" name="CountyCode" value="<?php echo $CountyDetails->CountyCode?>" maxlength="50" >
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-lg-3">
@@ -74,10 +74,14 @@
                                                 <label class="form-label">State Name <sup style="color:red;">*</sup></label>
                                                 <select id="StateUID" name="StateUID" class="form-control select2">
                                                     <option></option>
-                                                    <?php
-                                                        foreach($StateDetails as $row){
+                                                    <?php 
+                                                    foreach ($StateDetails as $row) 
+                                                    {
+                                                        if($row->StateUID==$CountyDetails->StateUID)
+                                                            echo "<option value='".$row->StateUID."' selected>".$row->StateName."</option>";
+                                                        else
                                                             echo "<option value='".$row->StateUID."'>".$row->StateName."</option>";
-                                                        }
+                                                    }
                                                     ?>
                                                 </select>
                                             </div>
@@ -85,13 +89,17 @@
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">Time Zone <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="TimeZone" name="TimeZone" value="" maxlength="50">
+                                                <input class="form-control input-xs" type="text" id="TimeZone" name="TimeZone" value="<?php echo $CountyDetails->TimeZone?>" maxlength="50">
                                             </div>
                                         </div>
 
                                         <div class="col-md-3 col-lg-3 mt-2">
                                             <label class="custom-switch">
-                                                <input type="checkbox" id="Active" name="custom-switch-checkbox Active" class="custom-switch-input">
+                                                <?php if($CountyDetails->Active==0): ?>
+                                                <input type="checkbox" name="custom-switch-checkbox Active" class="custom-switch-input" id="Active" >
+                                                <?php elseif($CountyDetails->Active==1): ?>
+                                                <input type="checkbox" id="Active" name="custom-switch-checkbox Active" class="custom-switch-input" checked="true">
+                                                <?php endif; ?>
                                                 <span class="custom-switch-indicator"></span>
                                                 <span class="custom-switch-description">Is Active</span>
                                             </label>
@@ -99,8 +107,8 @@
 
                                         <div class="col-md-12 col-lg-12 mb-3 mt-3">
                                             <div class="btn-list  text-right">
-                                                <a href="<?php echo base_url(); ?>County" class="btn btn-secondary">Cancel</a>
-                                                <button  type="submit" class="btn btn-success" id="BtnSaveCounty">Save County</button>
+                                                <a href="County" class="btn btn-secondary">Cancel</a>
+                                                <button  type="submit" class="btn btn-success" id="BtnUpdate" value="1">Update</button>
                                             </div>
                                         </div>
 
@@ -111,7 +119,7 @@
 
                         </div>
 
-                        <!-- <div class="tab-pane fade" id="audit-log">
+                        <div class="tab-pane fade" id="audit-log">
 
                             <div class="card-body pb-4 pt-3">
 
@@ -137,7 +145,7 @@
                                     </table>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </form>
             </div>
@@ -151,43 +159,42 @@
 
         });
     });
- /* 
-     * Save the State Details 
+    /* 
+     * Update the State Details 
      *author sathis kannan(sathish.kannan@avanzegroup.com)
      *since Date:12-Oct-2020
      */
-     $('#BtnSaveCounty').click(function(event)
+
+     $('#BtnUpdate').click(function(event)
      {
 
       event.preventDefault();
-
-      if($('#CountyName').val()!=0){
-
-          var form=$('#frm_county');
-
-          var formData=$('#frm_county').serialize();
-
-          $.ajax({
-           type: "POST",
-           url: '<?php echo base_url();?>County/save_county',
-           data: formData, 
-           dataType:'json',
-           cache: false,
-           success: function(data)
-           {
-                        //$('#frm_county')[0].reset();
-                        toastr["success"]("", data.message);
-                        window.location.replace('<?php echo base_url(); ?>county');
-                        
-                    }
-                });
-      }
-      else
-
-      {
-          toastr["error"]("", 'Required Fields are Empty !! Please Check !!');
-      }
-  });
-
+      
+      var formdata = $('#frm_county').serializeArray();
+      var Active = $('#Active').prop('checked') ? 1 : 0;
+      
+      formdata.push({ 'name':'Active', 'value':Active });
+      $.ajax({
+        url: '<?php echo base_url();?>county/UpdateCountyStatus',
+        type: "POST",
+        data:formdata,
+        dataType:'json',
+        success: function(data){
+            if(data.validation_error == 1)
+            {
+                window.location.replace('<?php echo base_url(); ?>county');
+            }
+            else{
+               $.gritter.add({
+                 title: data['message'],
+                 class_name: 'color danger',
+                 fade: true,
+                 time: 3000,
+                 speed:'slow',
+             });
+           }           
+       }        
+   });
+  } );
 </script>
 

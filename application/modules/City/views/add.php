@@ -32,15 +32,16 @@
                     <div class="card-header">
                         <div class="col-md-12 col-lg-12 p-0">
                             <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item"><a class="nav-link active pt-2 pb-3" data-toggle="tab" href="#add-template" aria-expanded="true">Edit City</a></li>
-                                <li class="nav-item"><a class="nav-link pt-2 pb-3" data-toggle="tab" href="#audit-log" aria-expanded="false">Audit Logs</a></li>
+                                <li class="nav-item"><a class="nav-link active pt-2 pb-3" data-toggle="tab" href="#add-template" aria-expanded="true">Add City</a></li>
+                                <!--  <li class="nav-item"><a class="nav-link pt-2 pb-3" data-toggle="tab" href="#audit-log" aria-expanded="false">Audit Logs</a></li> -->
                             </ul>
                         </div>
                         <div class="card-options" style="position: absolute;right: 20px;top: 20px;z-index:1;">
                           <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><span class="font-14 mr-2" style="position:relative;top:-2px;">View Fullscreen</span><i class="fe fe-maximize"></i></a>
                       </div>
                   </div>
-                  <form action="#" name="update_Template" id="update_Template" class="frmTemplate">
+                  <form action="#" name="frm_city" id="frm_city">
+                    <input type="hidden" name="CityUID" id="CityUID" value="0" />
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="add-template">
                             <div class="card-header pb-0">
@@ -59,100 +60,117 @@
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
                                                 <label class="form-label">City Name <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="" name="Code" value="">
+                                                <input class="form-control input-xs" type="text" id="CityName" name="CityName" value="" maxlength="50">
                                             </div>
                                         </div>
 
                                         <div class="col-md-3 col-lg-3">
                                             <div class="form-group">
-                                                <label class="form-label">County Name <sup style="color:red;">*</sup></label>
-                                                <select name="beast" class="form-control select2">
-                                                    <option></option>
-                                                    <option value="1">ANCHORAGE</option>
-                                                    <option value="1">ANCHORAGE BOROUGH</option>
-                                                    <option value="1">BETHEL</option>
-                                                </select>
-                                            </div>
+                                                <label class="form-label" for="CountyUID">County Name <sup style="color:red;">*</sup></label>
+                                                <select  class="form-control select2" id="CountyUID" name="CountyUID">
+                                                   <option></option>
+                                                   <?php
+                                                   foreach($CountyDetails as $row){
+                                                    echo "<option value='".$row->CountyUID."'>".$row->CountyName."</option>";
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
-                                        <div class="col-md-3 col-lg-3">
-                                            <div class="form-group">
-                                                <label class="form-label">State Name <sup style="color:red;">*</sup></label>
-                                                <select name="beast" class="form-control select2">
-                                                    <option></option>
-                                                    <option value="1">North Dakota</option>
-                                                    <option value="1">Nebraska</option>
-                                                    <option value="1">New Hampshire</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 col-lg-3">
-                                            <div class="form-group">
-                                                <label class="form-label">ZipCode <sup style="color:red;">*</sup></label>
-                                                <input class="form-control input-xs" type="text" id="" name="Code" value="">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3 col-lg-3 mt-2">
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description">Is Active</span>
-                                            </label>
-                                        </div>
-
-                                        <div class="col-md-12 col-lg-12 mb-3 mt-3">
-                                            <div class="btn-list  text-right">
-                                                <a href="City" class="btn btn-secondary">Cancel</a>
-                                                <button  type="submit" class="btn btn-success" id="BtnUpdate" value="1">Update</button>
-                                            </div>
-                                        </div>
-
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label" for="StateUID">State Name <sup style="color:red;">*</sup></label>
+                                            <select  class="form-control select2" id="StateUID" name="StateUID">
+                                                <option></option>
+                                                <?php
+                                                foreach($StateDetails as $row){
+                                                    echo "<option value='".$row->StateUID."'>".$row->StateName."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label">ZipCode <sup style="color:red;">*</sup></label>
+                                            <input class="form-control input-xs" type="text" id="ZipCode" name="ZipCode" value="" maxlength="50">
+                                        </div>
+                                    </div>
 
+                                    <div class="col-md-3 col-lg-3 mt-2">
+                                        <label class="custom-switch">
+                                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="Active" name="Active">
+                                            <span class="custom-switch-indicator"></span>
+                                            <span class="custom-switch-description">Is Active</span>
+                                        </label>
+                                    </div>
 
-                        </div>
+                                    <div class="col-md-12 col-lg-12 mb-3 mt-3">
+                                        <div class="btn-list  text-right">
+                                            <a href="<?php echo base_url(); ?>City" class="btn btn-secondary">Cancel</a>
+                                            <button  type="submit" class="btn btn-success" id="BtnSaveCity" value="1">Save</button>
+                                        </div>
+                                    </div>
 
-                        <div class="tab-pane fade" id="audit-log">
-
-                            <div class="card-body pb-4 pt-3">
-
-                                <div class="col-md-12 col-lg-12">
-                                    <table class="table table-vcenter table-new new-datatable1 text-nowrap" cellspacing="0" id="" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Module Name</th>
-                                                <th>Activity</th>
-                                                <th>DateTime</th>
-                                                <th style="width:50px">User</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Edit City</td>
-                                                <td>City Edit Active to In Active</td>
-                                                <td>2020-06-13 07:34:10</td>
-                                                <td>James</td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 </div>
+</div>
+
 <script type="text/javascript">
-   $(document).ready(function(e) {
+ $(document).ready(function(e) {
     $('.new-datatable1').DataTable({
 
     });
 });
+
+        /**
+        * @author Sathis Kannan P
+        * @purpose Save City Details function
+        * @param nothing
+        * click event for #BtnSaveCity
+        * @date 12-10-2020
+        * @version New Assignment
+        */
+
+
+        $('#BtnSaveCity').click(function(event)
+        {
+          event.preventDefault();
+
+          if($('#CityName').val()!=0){
+
+              var form=$('#frm_city');
+
+              var formData=$('#frm_city').serialize();
+
+              $.ajax({
+                 type: "POST",
+                 url: '<?php echo base_url();?>City/save_city',
+                 data: formData, 
+                 dataType:'json',
+                 cache: false,
+                 success: function(data)
+                 {
+                     toastr["success"]("", data.message);
+                     window.location.replace('<?php echo base_url(); ?>city/add');
+                 }
+             });
+          }
+          else
+
+          {
+
+            toastr["error"]("", 'Required Fields are Empty !! Please Check !!');
+        }
+    });
+
 </script>
 

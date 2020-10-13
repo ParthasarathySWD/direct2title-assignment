@@ -42,221 +42,76 @@
                                         <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-upload"></i> Import Cities </a>
                                     </div>
                                 </div>
-                                    <div class="card-options" style="display: inline-block; z-index:1;">
-                                      <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><span class="font-14 mr-2" style="position:relative;top:-2px;">View Fullscreen</span><i class="fe fe-maximize"></i></a>
-                                  </div>
+                                <div class="card-options" style="display: inline-block; z-index:1;">
+                                  <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><span class="font-14 mr-2" style="position:relative;top:-2px;">View Fullscreen</span><i class="fe fe-maximize"></i></a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="card-body pb-4 pt-1 new-table-search">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="new-custom-main-tab-head">
+                            <li style="width:50%;">Total</li>
+                            <li style="width:50%;">Active & In Active</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="new-custom-main-tab nav-tabs nav" style="border:0;">
+                            <li style="width:50%;"><a data-toggle="tab" href="#all-1"><span class="count"><i class="icon-doc"></i> 100</span>Total Counties</a></li>
+                            <li style="width:25%;"><a data-toggle="tab" href="#all-3"><span class="count"><i class="fe fe-check-circle"></i> 100</span>Active Counties</a></li>
+                            <li style="width:25%;"><a data-toggle="tab" href="#all-4"><span class="count"><i class="icon-close"></i> 100</span>In Active Counties</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row mt-4 pt-3">
+                    <div class="col-md-3 pl-4">
+                        <div class="dropdown">
+                            <i class="fe fe-corner-left-down font-22" style="    margin-right: 0px;
+                            position: relative;
+                            top: 12px;left:-3px;color: #6c757d;"></i>
+                            <button class=" pl-3 pr-3 btn btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 36px;">
+                                Batch Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Counties </a>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <div class="actions">
+                            <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Import"><b><i class=" font-18 fe fe-upload"></i></b></button>
+                            <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Export"><b><i class=" font-18 fa fa-cloud-download"></i></b></button>
+                            <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Print"><b><i class=" font-18 fe fe-printer"></i></b></button>
+                            <!-- <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe fe-settings"></i></b></button> -->
                         </div>
                     </div>
                 </div>
-                <div class="card-body pb-4 pt-1 new-table-search">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="new-custom-main-tab-head">
-                                <li style="width:50%;">Total</li>
-                                <li style="width:50%;">Active & In Active</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-12">
-                            <ul class="new-custom-main-tab nav-tabs nav" style="border:0;">
-                                <li style="width:50%;"><a data-toggle="tab" href="#all-1"><span class="count"><i class="icon-doc"></i> 100</span>Total Counties</a></li>
-                                <li style="width:25%;"><a data-toggle="tab" href="#all-3"><span class="count"><i class="fe fe-check-circle"></i> 100</span>Active Counties</a></li>
-                                <li style="width:25%;"><a data-toggle="tab" href="#all-4"><span class="count"><i class="icon-close"></i> 100</span>In Active Counties</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4 pt-3">
-                        <div class="col-md-3 pl-4">
-                            <div class="dropdown">
-                                <i class="fe fe-corner-left-down font-22" style="    margin-right: 0px;
-                                position: relative;
-                                top: 12px;left:-3px;color: #6c757d;"></i>
-                                <button class=" pl-3 pr-3 btn btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 36px;">
-                                    Batch Actions
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Counties </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-9 text-right">
-                            <div class="actions">
-                                <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Import"><b><i class=" font-18 fe fe-upload"></i></b></button>
-                                <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Export"><b><i class=" font-18 fa fa-cloud-download"></i></b></button>
-                                <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Print"><b><i class=" font-18 fe fe-printer"></i></b></button>
-                                <!-- <button class="btn btn-sm btn-icon text-primary pl-0 mt-1" title="Delete"><b><i class=" font-18 fe fe fe-settings"></i></b></button> -->
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-vcenter text-nowrap resizable new-datatable1">
-                        <thead>
-                            <tr>
-                                <th class="nosort" style="width:50px;">
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </th>
-                                <th>County Name</th>
-                                <th>State Name</th>
-                                <th>Time Zone</th>
-                                <th>Status</th>
-                                <th class="text-center nosort">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>ALEUTIAN ISLANDS</td>
-                                <td>Alaska</td>
-                                <td>AKST</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View County<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View County </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>ALEUTIANS EAST</td>
-                                <td>Alaska</td>
-                                <td>AKST</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View County<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View County </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>ANCHORAGE</td>
-                                <td>Alaska</td>
-                                <td>AKST</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View County<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View County </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>ANCHORAGE BOROUGH</td>
-                                <td>Alaska</td>
-                                <td>AKST</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View County<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View County </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>BRISTOL BAY BOROUGH</td>
-                                <td>Alaska</td>
-                                <td>AKST</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View County<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View County </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-vcenter text-nowrap resizable new-datatable1">
+                    <thead>
+                        <tr>
+                            <th class="nosort" style="width:50px;">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
+                                    <span class="custom-control-label"></span>
+                                </label>
+                            </th>
+                            <th>County Name</th>
+                            <th>State Name</th>
+                            <th>Time Zone</th>
+                            <th>Status</th>
+                            <th class="text-center nosort">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 
@@ -352,26 +207,49 @@ $(function(){
   (jQuery))
     $('table.resizable').resizableColumns();
 
-    $('.new-datatable1').DataTable({
-      "ordering": false,
-      "lengthChange": false ,
-      "pageLength": 5,
-      "language": {
+//     $('.new-datatable1').DataTable({
+//       "ordering": false,
+//       "lengthChange": false ,
+//       "pageLength": 5,
+//       "language": {
 
-        "paginate": {
-          "previous": '<',
-          "next":     '>'
-      },
-  },
-});
+//         "paginate": {
+//           "previous": '<',
+//           "next":     '>'
+//       },
+//   },
+// });
+
+$('.new-datatable1').DataTable({
+        "processing": true, //Feature control the processing indicator.
+        "serverSide": true, //Feature control DataTables' server-side processing mode.
+        "order": [], //Initial no order.
+        "pageLength": 15, // Set Page Length
+        "lengthMenu":[[10, 15, 25, 50, 100], [10, 15, 25, 50, 100]],
+        "language": {
+           processing: '<span class="progrss"><i class="fa fa-spinner fa-spin fa-1x fa-fw"></i> Processing...</span>'
+       },
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": "<?php echo base_url('County/ajax_list')?>",
+            "type": "POST" 
+        }, 
+        //Set column definition initialisation properties.
+        "columnDefs": [
+        {
+               "targets": [4,5], //first, Fourth, seventh column
+               "orderable": false //set not orderable
+           }
+           ]
+       });
 
 })
 $(document).ready(function(){ 
     $('.new-table-search div.dataTables_wrapper div.dataTables_filter input').each(function(ev)
     {
       if(!$(this).val()) { 
-         $(this).attr("placeholder", "Search");
-     }
- });
+       $(this).attr("placeholder", "Search");
+   }
+});
 });
 </script>

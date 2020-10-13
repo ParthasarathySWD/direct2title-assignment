@@ -106,6 +106,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach($StateDetails as $row): ?>
                             <tr>
                                 <td>
                                     <label class="custom-control custom-checkbox">
@@ -113,12 +114,14 @@
                                         <span class="custom-control-label"></span>
                                     </label>
                                 </td>
-                                <td>Alabama</td>
-                                <td>AL</td>
-                                <td>01</td>
+                                
+                                <td><?php echo $row->StateName; ?></td>
+                                <td><?php echo $row->StateCode; ?></td>
+                                <td><?php echo $row->FIPSCode; ?></td>
                                 <td>
+                                    <?php  $Checklist = ($StateDetails->Active == 1) ? 'checked' : ''; ?>
                                     <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
+                                        <input type="checkbox"  class="custom-switch-input" value="<?php echo $StateDetails->Active;  ?>" checked="<?php echo $Checklist; ?>">
                                         <span class="custom-switch-indicator"></span>
                                     </label>
                                 </td>
@@ -127,7 +130,7 @@
                                     <div class="item-action dropdown ml-2">
                                         <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View State<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View State </a>
+                                            <a href="<?php echo base_url()."State/edit/".$row->StateUID; ?>" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View State </a>
                                             <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
                                             <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
                                             <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
@@ -135,122 +138,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>Alaska</td>
-                                <td>AK</td>
-                                <td>02</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View State<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View State </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>American Samoa</td>
-                                <td>AS</td>
-                                <td>60</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View State<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View State </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-check-circle"></i> Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>Arizona</td>
-                                <td>AZ</td>
-                                <td>04</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" checked="">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View State<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View State </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-check-circle"></i> Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
-                                        <span class="custom-control-label"></span>
-                                    </label>
-                                </td>
-                                <td>Arkansas</td>
-                                <td>AR</td>
-                                <td>05</td>
-                                <td>
-                                    <label class="custom-switch">
-                                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                        <span class="custom-switch-indicator"></span>
-                                    </label>
-                                </td>
-                                <td class="text-center">
-
-                                    <div class="item-action dropdown ml-2">
-                                        <a href="javascript:void(0)" data-toggle="dropdown" style="font-weight: bold; color: #464bac; ">View State<i class="fe fe-more-vertical" style="vertical-align: middle; font-size: 20px !important;"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-new-menu" style="margin-top: 10px;">
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View State </a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Export</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-copy"></i> Copy to</a>
-                                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon icon-close"></i> In Active</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -355,7 +243,7 @@ $(function(){
     $('.new-datatable1').DataTable({
       "ordering": false,
       "lengthChange": false ,
-      "pageLength": 5,
+      "pageLength": 10,
       "language": {
 
         "paginate": {
