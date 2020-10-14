@@ -1246,7 +1246,7 @@ function GetMiscellaneousNotes($OrderUID)
       return $this->db->get()->row()->MiscellaneousNotes;
 }
 
-
+  
 function InsertNewFollowupType($type){
   $this->db->select('name');
   $this->db->from('mFollowupTypes');
@@ -1262,6 +1262,118 @@ function InsertNewFollowupType($type){
   }
 }
 
+/**
+  * @description Get Notes Details
+  * @param 
+  * @throws no exception
+  * @author Sathis Kannan <sathish.kannan@avanzegroup.com>
+  * @since  13/10/2020
+  * @version  
+  */
+
+function GetNotesDetails($OrderUID){
+  $this->db->select("*");
+  $this->db->from('tordernotes');
+  $this->db->join('musers','tordernotes.CreatedByUserUID=musers.UserUID','left');
+  $this->db->join('mreportsections','tordernotes.SectionUID=mreportsections.SectionUID','left');
+  $this->db->where(array("tordernotes.OrderUID"=>$OrderUID));
+  $query = $this->db->get();
+  return $query->result();
+}
+/**
+  * @description Save Notes 
+  * @param 
+  * @throws no exception
+  * @author Sathis Kannan <sathish.kannan@avanzegroup.com>
+  * @since  13/10/2020
+  * @version  
+  */
+
+ function Save_Notes($PostArray)
+  {
+
+    $fieldArray = array(
+      "OrderUID"=>$PostArray['OrderUID'],
+      "Note"=>$PostArray['NoteCmt'],
+      "SectionUID"=>$PostArray['NoteType'],
+      "OrgUID"=>"1",
+      "RoleType"=>"1,2,3,4,5,6,7,9,11,12",
+      "CreatedByUserUID"=>$this->session->userdata('UserUID'),
+      "CreatedOn"=>date('y-m-d H:i:s')
+    );
+    $res = $this->db->insert('tordernotes', $fieldArray);
+    $data1['ModuleName']='notes_add';
+    $data1['Content'] = 'note information added';
+    $data1['IpAddreess']=$_SERVER['REMOTE_ADDR']; 
+    $data1['DateTime']=date('y-m-d H:i:s');
+    $data1['TableName']='tordernotes';
+    $data1['UserUID']=$this->session->userdata('UserUID');                
+    $this->common_model->Audittrail_insert($data1);
+
+    if($res){
+      $data=array("msg"=>"Notes are Added Successfully","type"=>"color success");
+    }
+    else{
+      $data=array("msg"=>"error","type"=>"error");
+    }
+    echo json_encode($data);
+  }
+/**
+  * @description Save Notes Comment
+  * @param 
+  * @throws no exception
+  * @author Sathis Kannan <sathish.kannan@avanzegroup.com>
+  * @since  13/10/2020
+  * @version  
+  */
+
+function Save_Notes_Comment($PostArray)
+  {
+
+    $fieldArray = array(
+      "OrderUID"=>$PostArray['OrderUID'],
+      "NotesUID"=>$PostArray['NoteUID'],
+      "Comment"=>$PostArray['Noteinfo'],
+      "OrgUID"=>"1",
+      "CreatedByUserUID"=>$this->session->userdata('UserUID'),
+      "CreatedOn"=>date('y-m-d H:i:s')
+    );
+    $res = $this->db->insert('tOrderNotesComments', $fieldArray);
+    $data1['ModuleName']='notes_comment';
+    $data1['Content'] = 'note comments added';
+    $data1['IpAddreess']=$_SERVER['REMOTE_ADDR']; 
+    $data1['DateTime']=date('y-m-d H:i:s');
+    $data1['TableName']='tOrderNotesComments';
+    $data1['UserUID']=$this->session->userdata('UserUID');                
+    $this->common_model->Audittrail_insert($data1);
+
+    if($res){
+      $data=array("msg"=>"Comments are Added Successfully","type"=>"color success");
+    }
+    else{
+      $data=array("msg"=>"error","type"=>"error");
+    }
+    echo json_encode($data);
+  }
+
+
+/**
+  * @description Comment Fetch
+  * @param 
+  * @throws no exception
+  * @author Sathis Kannan <sathish.kannan@avanzegroup.com>
+  * @since  13/10/2020
+  * @version  
+  */ 
+public function CommentAdd($PostArray){
+
+ $this->db->select("*");
+  $this->db->from('tOrderNotesComments');
+  $this->db->join('musers','tOrderNotesComments.CreatedByUserUID=musers.UserUID','left');
+  $this->db->where(array("tOrderNotesComments.NotesUID"=>$PostArray['NoteAttr']));
+  $query = $this->db->get();
+  return $query->result();
+}
 
 
 }

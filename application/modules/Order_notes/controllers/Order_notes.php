@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 class Order_notes extends MY_Controller {
 
 	function __construct()
@@ -10,15 +11,15 @@ class Order_notes extends MY_Controller {
 		// 	redirect(base_url().'users');
 		// }else{
 		// 	$this->load->model('users/Mlogin');
-			$this->loggedid = $this->session->userdata('UserUID');
-			$this->RoleUID = $this->session->userdata('RoleUID');
-			$this->UserName = $this->session->userdata('UserName');
-			$this->load->model('Notes_model');
-			$this->load->model('Common_model');
-			$this->load->model('real_ec_model');
-			$this->load->model('Api_common_model');
-			$this->load->model('Pabs_model');
-			$this->load->library('Excel');
+		$this->loggedid = $this->session->userdata('UserUID');
+		$this->RoleUID = $this->session->userdata('RoleUID');
+		$this->UserName = $this->session->userdata('UserName');
+		$this->load->model('Notes_model');
+		$this->load->model('Common_model');
+		$this->load->model('real_ec_model');
+		$this->load->model('Api_common_model');
+		$this->load->model('Pabs_model');
+		$this->load->library('Excel');
 			// if (($this->session->userdata('scope_order_id') == NULL)) {
 			// 	redirect(base_url().'my_orders');
 			// }	
@@ -46,6 +47,7 @@ class Order_notes extends MY_Controller {
 			$OrderUID = str_replace('/', '', $OrderrUID);
 			
 			$data['OrderUID'] = $OrderUID;
+			$data['NotesInfo'] = $this->Notes_model->GetNotesDetails($OrderUID);
 
 			$RelationalOrders = $this->Common_model->GetRelationalOrdersByID($OrderUID);
 			$data['RelationalOrders'] = $RelationalOrders;
@@ -53,7 +55,9 @@ class Order_notes extends MY_Controller {
 			// $filter = 'All';
 			// $notes = $this->Notes_model->get_notes($OrderUID,$this->session->userdata('UserUID'),$filter);
 			// $data['notes'] = $notes;
-			// $data['sections'] = $this->Notes_model->get_Sections();
+			$data['sections'] = $this->Notes_model->get_Sections();
+
+
 
 			// $data['AuditHistories'] = $this->Notes_model->getOrderAuditHistorys($OrderUID);
 			$data['content'] = 'index';
@@ -82,7 +86,57 @@ class Order_notes extends MY_Controller {
 		}
 		else
 		{
-			redirect(base_url().'my_orders');	
+			redirect(base_url().'Myorders');	
 		}
+
 	}
+	/*
+	 * Function to Save Note Function
+	 * @throws no exception
+	 * @return Array
+	 * @author Sathis Kannan<sathish.kannan@avanzegroup.com>
+	 * @since OCT 12 2020
+	 */
+	public function SaveNote(){
+		$this->Notes_model->Save_Notes($_POST);
+	}
+
+	/*
+	 * Function to Save Note Comment Function
+	 * @throws no exception
+	 * @return Array
+	 * @author Sathis Kannan<sathish.kannan@avanzegroup.com>
+	 * @since OCT 12 2020
+	 */
+	public function SaveNoteComment(){
+
+		$this->Notes_model->Save_Notes_Comment($_POST);
+	}
+
+	/*
+	 * Function to Comments Fetch Function
+	 * @throws no exception
+	 * @return Array
+	 * @author Sathis Kannan<sathish.kannan@avanzegroup.com>
+	 * @since OCT 12 2020
+	 */
+	public function CommentsAdd(){
+
+		$result =$this->Notes_model->CommentAdd($_POST);
+
+		foreach ($result as $key => $value) {
+			$CommentHtml ='<li>
+			<div class="avatar_img">
+			<img class="rounded img-fluid" src="assets/images/icon.png" alt="">
+			</div>
+			<div class="comment_body">
+			<h6>'.$value->UserName.'<small class="float-right font-14">Just now</small></h6>
+			<p>'.$value->Comment.'</p>
+			</div>
+			</li>';
+		}
+		echo json_encode($CommentHtml);
+	}
+
+	
 }
